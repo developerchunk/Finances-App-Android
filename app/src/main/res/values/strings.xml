@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Finances App</string>
+    <string name="splash_screen_title">Finances are easy</string>
+    <string name="splash_screen_text">With a simple app…</string>
+    <string name="create_profile_screen_text_1">Lets get started with \nbasic details</string>
+    <string name="create_profile_screen_text_2">Set amount as per your \nmonthly basis</string>
+    <string name="create_profile_screen_name">Name*</string>
+    <string name="create_profile_screen_amount">Total Amount*</string>
+    <string name="create_profile_screen_currency">Currency*</string>
+    <string name="create_profile_screen_2_spending">Spending*</string>
+    <string name="create_profile_screen_2_savings">Savings(optional)</string>
+    <string name="profile">Profile</string>
+
+    <string name="home_bottom_nav">Home</string>
+    <string name="activity_bottom_nav">Activity</string>
+    <string name="profile_bottom_nav">Profile</string>
+
+<!--    Currencies-->
+    <string-array name="currencies">
+        <item>Indian Rupee- ₹</item>
+        <item>Dollar- $</item>
+        <item>Euro- €</item>
+    </string-array>
+
+    <!--    onBoarding 1-->
+    <string name="on_boarding_title_1">Save Your Finances</string>
+    <string name="on_boarding_text_1">Now you can save finances any time \ninstantly right from your mobile</string>
+    <string name="on_boarding_button_1">Next</string>
+    <!--    onBoarding 2-->
+    <string name="on_boarding_title_2">Track Your Finances</string>
+    <string name="on_boarding_text_2">Get detailed track report of your finances \nright from your mobile</string>
+    <string name="on_boarding_button_2">Next</string>
+    <!--    onBoarding 3-->
+    <string name="on_boarding_title_3">Manage Your Finances</string>
+    <string name="on_boarding_text_3">Helps to manage your finances and \nview them any time</string>
+    <string name="on_boarding_button_3">Next</string>
+    <!--    onBoarding 4-->
+    <string name="on_boarding_title_4">Lets Get Started</string>
+    <string name="on_boarding_text_4">Start saving, managing, and tracking \nyour finances</string>
+    <string name="on_boarding_button_4">Done</string>
+</resources>
