@@ -8,6 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.developerstring.financesapp.navigation.RootNavGraph
+import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.FinancesAppTheme
 import com.developerstring.financesapp.ui.theme.backgroundColor
@@ -17,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     lateinit var navController: NavHostController
+    private val profileViewModel: ProfileViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,7 @@ class MainActivity : ComponentActivity() {
                 navController = rememberNavController()
                 RootNavGraph(
                     navController = navController,
+                    profileViewModel = profileViewModel,
                     sharedViewModel = sharedViewModel
                 )
 

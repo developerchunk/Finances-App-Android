@@ -9,11 +9,13 @@ import com.developerstring.financesapp.navigation.navgraph.navGraph
 import com.developerstring.financesapp.screen.navscreens.ActivityScreen
 import com.developerstring.financesapp.screen.navscreens.HomeScreen
 import com.developerstring.financesapp.screen.navscreens.ProfileScreen
+import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 
 @Composable
 fun BottomNavGraph(
     navController: NavHostController,
+    profileViewModel: ProfileViewModel,
     sharedViewModel: SharedViewModel
 ) {
 
@@ -22,7 +24,11 @@ fun BottomNavGraph(
         route = Graph.BOTTOM_NAV_GRAPH,
         startDestination = BottomNavRoute.Home.route
     ) {
-        navGraph(navController = navController, sharedViewModel = sharedViewModel)
+        navGraph(
+            navController = navController,
+            profileViewModel = profileViewModel,
+            sharedViewModel = sharedViewModel
+        )
         // MainSetUpNavRoute
         composable(route = BottomNavRoute.Home.route) {
             HomeScreen(navController = navController)

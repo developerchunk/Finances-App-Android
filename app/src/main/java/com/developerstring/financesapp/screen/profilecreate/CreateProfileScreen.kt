@@ -32,13 +32,13 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
-import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
+import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
 
 @Composable
 fun CreateProfileScreen(
     navController: NavController,
-    sharedViewModel: SharedViewModel
+    profileViewModel: ProfileViewModel
 ) {
 
     //context
@@ -280,7 +280,7 @@ fun CreateProfileScreen(
                         amount.value.isNotEmpty() &&
                         selectedCurrency.isNotEmpty()
                     ) {
-                        sharedViewModel.saveProfileDetails1(
+                        profileViewModel.saveProfileDetails1(
                             context = context,
                             name = name.value,
                             amount = amount.value.toInt(),
@@ -314,7 +314,7 @@ fun CreateProfileScreen(
 fun CreateProfileScreenPreview() {
     CreateProfileScreen(
         navController = rememberNavController(),
-        sharedViewModel = SharedViewModel()
+        profileViewModel = ProfileViewModel()
     )
 }
 
@@ -324,7 +324,7 @@ fun CreateProfileScreenPreviewDark() {
     FinancesAppTheme(darkTheme = true) {
         CreateProfileScreen(
             navController = rememberNavController(),
-            sharedViewModel = SharedViewModel()
+            profileViewModel = ProfileViewModel()
         )
     }
 }

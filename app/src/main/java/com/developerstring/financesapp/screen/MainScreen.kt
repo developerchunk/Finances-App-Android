@@ -22,6 +22,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.developerstring.financesapp.navigation.bottomnav.BottomNavGraph
 import com.developerstring.financesapp.navigation.bottomnav.BottomNavRoute
+import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.UIBlue
 import com.developerstring.financesapp.ui.theme.backgroundColor
@@ -29,7 +30,8 @@ import com.developerstring.financesapp.ui.theme.textColorBW
 
 @Composable
 fun MainScreen(
-    sharedViewModel: SharedViewModel,
+    profileViewModel: ProfileViewModel,
+    sharedViewModel: SharedViewModel
 ) {
 
     val nav = rememberNavController()
@@ -41,7 +43,11 @@ fun MainScreen(
                 modifier = Modifier
                     .padding(padding)
             ) {
-                BottomNavGraph(navController = nav, sharedViewModel = sharedViewModel)
+                BottomNavGraph(
+                    navController = nav,
+                    profileViewModel = profileViewModel,
+                    sharedViewModel = sharedViewModel
+                )
             }
         }
     )
@@ -50,7 +56,7 @@ fun MainScreen(
 
 @Composable
 fun BottomNavBar(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     val screens = listOf(
         BottomNavRoute.Home,

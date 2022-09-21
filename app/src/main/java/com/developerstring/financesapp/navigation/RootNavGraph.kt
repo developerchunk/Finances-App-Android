@@ -4,14 +4,15 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.developerstring.financesapp.navigation.navgraph.navGraph
 import com.developerstring.financesapp.navigation.setupnav.onStartNavGraph
 import com.developerstring.financesapp.screen.MainScreen
+import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 
 @Composable
 fun RootNavGraph(
     navController: NavHostController,
+    profileViewModel: ProfileViewModel,
     sharedViewModel: SharedViewModel
 ) {
 
@@ -20,9 +21,16 @@ fun RootNavGraph(
         route = Graph.ROOT_NAV_GRAPH,
         startDestination = Graph.ON_START_NAV_GRAPH
     ) {
-        onStartNavGraph(navController = navController, sharedViewModel = sharedViewModel)
-        composable(route = Graph.BOTTOM_NAV_GRAPH ) {
-            MainScreen(sharedViewModel = sharedViewModel)
+        onStartNavGraph(
+            navController = navController,
+            profileViewModel = profileViewModel,
+            sharedViewModel = sharedViewModel
+        )
+        composable(route = Graph.BOTTOM_NAV_GRAPH) {
+            MainScreen(
+                profileViewModel = profileViewModel,
+                sharedViewModel = sharedViewModel
+            )
         }
     }
 

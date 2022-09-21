@@ -6,10 +6,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.developerstring.financesapp.navigation.Graph
 import com.developerstring.financesapp.screen.transaction.AddTransaction
+import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 
 fun NavGraphBuilder.navGraph(
     navController: NavHostController,
+    profileViewModel: ProfileViewModel,
     sharedViewModel: SharedViewModel
 ) {
 
@@ -18,7 +20,11 @@ fun NavGraphBuilder.navGraph(
         startDestination = NavRoute.AddTransactionScreen.route
     ) {
         composable(NavRoute.AddTransactionScreen.route) {
-            AddTransaction(navController = navController)
+            AddTransaction(
+                navController = navController,
+                sharedViewModel = sharedViewModel,
+                profileViewModel = profileViewModel
+            )
         }
     }
 

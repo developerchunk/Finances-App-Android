@@ -8,16 +8,18 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(Singleton::class)
-class TransactionDatabaseModule {
+@InstallIn(SingletonComponent::class)
+object TransactionDatabaseModule {
 
     @Singleton
     @Provides
     fun provideDatabase(
-        @ActivityContext context: Context
+        @ApplicationContext context: Context
     ) = Room.databaseBuilder(
         context,
         TransactionDatabase::class.java,

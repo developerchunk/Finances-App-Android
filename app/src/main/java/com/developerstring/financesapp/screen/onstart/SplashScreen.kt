@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
-import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
+import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.YES
 import kotlinx.coroutines.delay
@@ -26,18 +26,18 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(
     navController: NavController,
-    sharedViewModel: SharedViewModel
+    profileViewModel: ProfileViewModel
 ) {
     val context = LocalContext.current
 
     SplashScreenContent()
 
     // calling the functions to collect the value form the data store
-    sharedViewModel.getOnBoardingStatus(context = context)
-    sharedViewModel.getProfileCreatedStatus(context = context)
-    // getting and saving the data got from the data store of OnBoardingStatus using a variable in SharedViewModel
-    val onBoarding = sharedViewModel.onBoardingStatus.collectAsState()
-    val profileCreate = sharedViewModel.profileCreatedStatus.collectAsState()
+    profileViewModel.getOnBoardingStatus(context = context)
+    profileViewModel.getProfileCreatedStatus(context = context)
+    // getting and saving the data got from the data store of OnBoardingStatus using a variable in ProfileViewModel
+    val onBoarding = profileViewModel.onBoardingStatus.collectAsState()
+    val profileCreate = profileViewModel.profileCreatedStatus.collectAsState()
 
     LaunchedEffect(key1 = true) {
         delay(2000)

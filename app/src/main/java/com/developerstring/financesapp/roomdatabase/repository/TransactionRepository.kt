@@ -2,9 +2,11 @@ package com.developerstring.financesapp.roomdatabase.repository
 
 import com.developerstring.financesapp.roomdatabase.dao.TransactionDao
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
+@ViewModelScoped
 class TransactionRepository @Inject constructor(private val transactionDao: TransactionDao) {
 
     val getAllTransactions: Flow<List<TransactionModel>> = transactionDao.getAllTransactions()

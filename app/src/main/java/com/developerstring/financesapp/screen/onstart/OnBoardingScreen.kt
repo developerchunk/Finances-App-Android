@@ -22,7 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
-import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
+import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.YES
 
@@ -30,7 +30,7 @@ import com.developerstring.financesapp.util.Constants.YES
 @Composable
 fun BoardingScreen1(
     navController: NavController,
-    sharedViewModel: SharedViewModel
+    profileViewModel: ProfileViewModel
 ) {
     OnBoardingContent(
         image = if (isSystemInDarkTheme()) R.drawable.ic_on_boarding_dark_1
@@ -40,7 +40,7 @@ fun BoardingScreen1(
         button = stringResource(id = R.string.on_boarding_button_1),
         page = 1,
         navController = navController,
-        sharedViewModel = sharedViewModel
+        profileViewModel = profileViewModel
 
     )
 }
@@ -49,7 +49,7 @@ fun BoardingScreen1(
 @Composable
 fun BoardingScreen2(
     navController: NavController,
-    sharedViewModel: SharedViewModel
+    profileViewModel: ProfileViewModel
 ) {
     OnBoardingContent(
         image = if (isSystemInDarkTheme()) R.drawable.ic_on_boarding_dark_2
@@ -59,7 +59,7 @@ fun BoardingScreen2(
         button = stringResource(id = R.string.on_boarding_button_2),
         page = 2,
         navController = navController,
-        sharedViewModel = sharedViewModel
+        profileViewModel = profileViewModel
     )
 }
 
@@ -67,7 +67,7 @@ fun BoardingScreen2(
 @Composable
 fun BoardingScreen3(
     navController: NavController,
-    sharedViewModel: SharedViewModel
+    profileViewModel: ProfileViewModel
 ) {
     OnBoardingContent(
         image = if (isSystemInDarkTheme()) R.drawable.ic_on_boarding_dark_3
@@ -77,7 +77,7 @@ fun BoardingScreen3(
         button = stringResource(id = R.string.on_boarding_button_3),
         page = 3,
         navController = navController,
-        sharedViewModel = sharedViewModel
+        profileViewModel = profileViewModel
     )
 }
 
@@ -85,7 +85,7 @@ fun BoardingScreen3(
 @Composable
 fun BoardingScreen4(
     navController: NavController,
-    sharedViewModel: SharedViewModel
+    profileViewModel: ProfileViewModel
 ) {
     OnBoardingContent(
         image = if (isSystemInDarkTheme()) R.drawable.ic_on_boarding_dark_4
@@ -95,7 +95,7 @@ fun BoardingScreen4(
         button = stringResource(id = R.string.on_boarding_button_4),
         page = 4,
         navController = navController,
-        sharedViewModel = sharedViewModel
+        profileViewModel = profileViewModel
     )
 }
 
@@ -109,13 +109,13 @@ fun OnBoardingContent(
     button: String,
     page: Int,
     navController: NavController,
-    sharedViewModel: SharedViewModel
+    profileViewModel: ProfileViewModel
 ) {
 
     //context
     val context = LocalContext.current
     // to get profile is created or not
-    val profileCreate = sharedViewModel.profileCreatedStatus.collectAsState()
+    val profileCreate = profileViewModel.profileCreatedStatus.collectAsState()
 
     Column(
         modifier = Modifier
@@ -250,7 +250,7 @@ fun OnBoardingContent(
                 onClick = {
                     if (page == 4) {
                         // saving the data into the data store preference
-                        sharedViewModel.saveOnBoardingStatus(context = context)
+                        profileViewModel.saveOnBoardingStatus(context = context)
                     }
 
                     navController.popBackStack()
@@ -295,6 +295,6 @@ fun OnBoardingContentPreview() {
         button = stringResource(id = R.string.on_boarding_button_4),
         page = 4,
         navController = rememberNavController(),
-        sharedViewModel = SharedViewModel()
+        profileViewModel = ProfileViewModel()
     )
 }

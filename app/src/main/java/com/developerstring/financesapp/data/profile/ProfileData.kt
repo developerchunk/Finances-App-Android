@@ -3,20 +3,20 @@ package com.developerstring.financesapp.data.profile
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
+import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 
 @Composable
 fun ProfileData(
     context: Context,
-    sharedViewModel: SharedViewModel,
+    profileViewModel: ProfileViewModel,
     profile: (ProfileDataClass) -> Unit
 ) {
-    sharedViewModel.getProfileDetails(context = context)
-    val profileName = sharedViewModel.profileName.collectAsState()
-    val profileTotalAmount = sharedViewModel.profileTotalAmount.collectAsState()
-    val profileCurrency = sharedViewModel.profileCurrency.collectAsState()
-    val profileSpending = sharedViewModel.profileSpending.collectAsState()
-    val profileSaving = sharedViewModel.profileSavings.collectAsState()
+    profileViewModel.getProfileDetails(context = context)
+    val profileName = profileViewModel.profileName.collectAsState()
+    val profileTotalAmount = profileViewModel.profileTotalAmount.collectAsState()
+    val profileCurrency = profileViewModel.profileCurrency.collectAsState()
+    val profileSpending = profileViewModel.profileSpending.collectAsState()
+    val profileSaving = profileViewModel.profileSavings.collectAsState()
 
     profile(
         ProfileDataClass(

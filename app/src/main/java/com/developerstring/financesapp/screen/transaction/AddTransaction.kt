@@ -1,23 +1,23 @@
 package com.developerstring.financesapp.screen.transaction
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
-import com.developerstring.financesapp.ui.theme.UIBlue
+import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
+import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 
 @Composable
 fun AddTransaction(
     navController: NavController,
+    sharedViewModel: SharedViewModel,
+    profileViewModel: ProfileViewModel
 ) {
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(UIBlue)
-    ) {
+    sharedViewModel.getAllTransactions()
+    val text by sharedViewModel.allTransactions.collectAsState()
 
-    }
+    Text(text = text.toString())
 
 }

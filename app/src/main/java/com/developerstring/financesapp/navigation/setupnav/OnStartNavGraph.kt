@@ -9,10 +9,12 @@ import com.developerstring.financesapp.screen.MainScreen
 import com.developerstring.financesapp.screen.onstart.*
 import com.developerstring.financesapp.screen.profilecreate.CreateProfileScreen
 import com.developerstring.financesapp.screen.profilecreate.CreateProfileScreen2
+import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 
 fun NavGraphBuilder.onStartNavGraph(
     navController: NavHostController,
+    profileViewModel: ProfileViewModel,
     sharedViewModel: SharedViewModel
 ) {
     navigation(
@@ -23,7 +25,7 @@ fun NavGraphBuilder.onStartNavGraph(
         composable(
             route = SetUpNavRoute.MainSetUpNavRoute.route
         ) {
-            MainScreen(sharedViewModel = sharedViewModel)
+            MainScreen(profileViewModel = profileViewModel, sharedViewModel = sharedViewModel)
         }
 
         // Splash SetUpNavRoute
@@ -32,20 +34,20 @@ fun NavGraphBuilder.onStartNavGraph(
         ) {
             SplashScreen(
                 navController = navController,
-                sharedViewModel = sharedViewModel
+                profileViewModel = profileViewModel
             )
         }
         // CreateProfileSetUpNavRoute
         composable(
             route = SetUpNavRoute.CreateProfileSetUpNavRoute.route
         ) {
-            CreateProfileScreen(navController = navController, sharedViewModel = sharedViewModel)
+            CreateProfileScreen(navController = navController, profileViewModel = profileViewModel)
         }
         // CreateProfileSetUpNavRoute2
         composable(
             route = SetUpNavRoute.CreateProfileSetUpNavRoute2.route
         ) {
-            CreateProfileScreen2(navController = navController, sharedViewModel = sharedViewModel)
+            CreateProfileScreen2(navController = navController, profileViewModel = profileViewModel)
         }
 
         // Boarding Screens
@@ -55,7 +57,7 @@ fun NavGraphBuilder.onStartNavGraph(
         ) {
             BoardingScreen1(
                 navController = navController,
-                sharedViewModel = sharedViewModel
+                profileViewModel = profileViewModel
             )
         }
         // BoardingSetUpNavRoute2
@@ -64,7 +66,7 @@ fun NavGraphBuilder.onStartNavGraph(
         ) {
             BoardingScreen2(
                 navController = navController,
-                sharedViewModel = sharedViewModel
+                profileViewModel = profileViewModel
             )
         }
         // BoardingSetUpNavRoute3
@@ -73,7 +75,7 @@ fun NavGraphBuilder.onStartNavGraph(
         ) {
             BoardingScreen3(
                 navController = navController,
-                sharedViewModel = sharedViewModel
+                profileViewModel = profileViewModel
             )
         }
         // BoardingSetUpNavRoute4
@@ -82,7 +84,7 @@ fun NavGraphBuilder.onStartNavGraph(
         ) {
             BoardingScreen4(
                 navController = navController,
-                sharedViewModel = sharedViewModel
+                profileViewModel = profileViewModel
             )
         }
 
