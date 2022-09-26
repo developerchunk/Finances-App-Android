@@ -77,7 +77,7 @@ fun CreateProfileScreen(
                     .padding(top = 50.dp, start = 30.dp),
                 text = stringResource(id = R.string.create_profile_screen_text_1),
                 fontSize = MEDIUM_TEXT_SIZE,
-                color = MaterialTheme.colors.textColorGray,
+                color = MaterialTheme.colors.colorGray,
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Normal
             )

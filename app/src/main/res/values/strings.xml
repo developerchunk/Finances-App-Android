@@ -11,6 +11,12 @@
     <string name="create_profile_screen_2_savings">Savings(optional)</string>
     <string name="profile">Profile</string>
 
+    <string name="amount_text_field">Amount*</string>
+    <string name="category_text_field">Category*</string>
+    <string name="date_text_field">Date*</string>
+    <string name="extra_info_text_field">Extra Info (Optional)</string>
+    <string name="place_info_text_field">Place (Optional)</string>
+
     <string name="home_bottom_nav">Home</string>
     <string name="activity_bottom_nav">Activity</string>
     <string name="profile_bottom_nav">Profile</string>

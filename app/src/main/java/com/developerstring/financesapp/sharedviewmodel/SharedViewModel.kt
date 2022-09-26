@@ -32,17 +32,11 @@ class SharedViewModel @Inject constructor(
         }
     }
 
-    fun addTask() {
+    fun addTask(
+        transactionModel: TransactionModel
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val trans = TransactionModel(
-                id = 1,
-                amount = 10,
-                transaction_type = "adc",
-                category = "abf",
-                date = "sd",
-                info = "sd"
-            )
-            repository.addTransaction(transactionModel = trans)
+            repository.addTransaction(transactionModel = transactionModel)
         }
     }
 

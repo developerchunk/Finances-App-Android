@@ -4,7 +4,6 @@ import androidx.compose.material.Colors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.White
 
@@ -16,6 +15,9 @@ val Teal200 = Color(0xFF03DAC5)
 val LightPurple = Color(0xFFC9D4FF)
 val DarkerGray = Color(0xFF525252)
 val LightGray = Color(0xFF636B7B)
+val LighterGray = Color(0xFFB1B1B1)
+val ExtraLightGray = Color(0xFFD9D9D9)
+val LightDark = Color(0xFF20374D)
 val Dark = Color(0xFF16212B)
 val UIBlue = Color(0xFF1E90FF)
 val LightBlue = Color(0xFF6CBEFF)
@@ -25,9 +27,13 @@ val Colors.textColorBW: Color
     @Composable
     get() = if (isLight) Black else White
 
-val Colors.textColorGray: Color
+val Colors.colorGray: Color
     @Composable
     get() = if (isLight) Gray else LightGray
+
+val Colors.colorDarkGray: Color
+    @Composable
+    get() = if (isLight) ExtraLightGray else LightDark
 
 val Colors.contentBackgroundColor: Color
     @Composable

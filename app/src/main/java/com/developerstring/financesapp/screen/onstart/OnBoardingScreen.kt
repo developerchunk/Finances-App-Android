@@ -153,7 +153,7 @@ fun OnBoardingContent(
                     end = 10.dp
                 ),
             text = text,
-            color = MaterialTheme.colors.textColorGray,
+            color = MaterialTheme.colors.colorGray,
             fontSize = MEDIUM_TEXT_SIZE,
             fontFamily = fontInter,
             fontWeight = FontWeight.Light
