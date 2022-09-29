@@ -19,14 +19,18 @@ import androidx.navigation.NavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
+import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.YES
 import kotlinx.coroutines.delay
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun SplashScreen(
     navController: NavController,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    sharedViewModel: SharedViewModel
 ) {
     val context = LocalContext.current
 
@@ -45,6 +49,14 @@ fun SplashScreen(
         // logic behind navigation after splash screen
         if (onBoarding.value == YES) {
             if (profileCreate.value == YES) {
+                // to get all transactions
+                sharedViewModel.getAllTransactions()
+                // get current month spending
+                sharedViewModel.searchMonthSpent(month = SimpleDateFormat("M").format(Date()))
+                // get current month savings
+                sharedViewModel.searchMonthSavings(month = SimpleDateFormat("M").format(Date()))
+                // get profile details
+                profileViewModel.getProfileDetails(context = context)
                 navController.navigate(route = SetUpNavRoute.MainSetUpNavRoute.route)
             } else {
                 navController.navigate(route = SetUpNavRoute.CreateProfileSetUpNavRoute.route)
@@ -73,7 +85,7 @@ fun SplashScreenContent() {
                 text = stringResource(id = R.string.splash_screen_title),
                 fontFamily = fontFredoka,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = EXTRA_LARGE_TEXT_SIZE,
+                fontSize = MAX_TEXT_SIZE,
                 color = MaterialTheme.colors.textColorBW
             )
             Text(

@@ -20,8 +20,12 @@ val ExtraLightGray = Color(0xFFD9D9D9)
 val LightDark = Color(0xFF20374D)
 val Dark = Color(0xFF16212B)
 val UIBlue = Color(0xFF1E90FF)
-val LightBlue = Color(0xFF6CBEFF)
-val UIWhite = Color(0xFFFFFFFF)
+val LightUIBlue = Color(0xFF4AA6FF)
+val LightBlue = Color(0xFFB5DAFF)
+val LighterBlue = Color(0xFFE4F5FF)
+val Green = Color(0xFF04B6A5)
+val LightGreen = Color(0xFF03DAC5)
+val WhiteGreen = Color(0xFFB5FFF8)
 
 val Colors.textColorBW: Color
     @Composable
@@ -46,3 +50,19 @@ val Colors.backgroundColor: Color
 val Colors.textColorBLG: Color
     @Composable
     get() = if (isLight) Black else LightGray
+
+val Colors.contentColorLBLD: Color
+    @Composable
+    get() = if (isLight) LighterBlue else LightDark
+
+val Colors.greenIconColor: Color
+    @Composable
+    get() = if (isLight) Green else LightGreen
+
+val Colors.lightGreenGraphColor: Color
+    @Composable
+    get() = if (isLight) WhiteGreen else WhiteGreen.copy(alpha = 0.3f)
+
+val Colors.lightBlueGraphColor: Color
+    @Composable
+    get() = if (isLight) LightBlue else LightBlue.copy(alpha = 0.3f)

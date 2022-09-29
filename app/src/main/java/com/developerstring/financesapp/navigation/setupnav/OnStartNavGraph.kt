@@ -34,7 +34,8 @@ fun NavGraphBuilder.onStartNavGraph(
         ) {
             SplashScreen(
                 navController = navController,
-                profileViewModel = profileViewModel
+                profileViewModel = profileViewModel,
+                sharedViewModel = sharedViewModel
             )
         }
         // CreateProfileSetUpNavRoute

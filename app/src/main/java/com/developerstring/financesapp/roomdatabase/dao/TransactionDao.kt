@@ -45,4 +45,10 @@ interface TransactionDao {
     @Query("SELECT savings FROM transaction_table")
     fun getAllSavingsTransactions(): Flow<List<Int>>
 
+    @Query("SELECT spent FROM transaction_table WHERE month=:month AND spent>0")
+    fun searchMonthSpent(month: String): Flow<List<Int>>
+
+    @Query("SELECT savings FROM transaction_table WHERE month=:month AND savings>0")
+    fun searchMonthSavings(month: String): Flow<List<Int>>
+
 }

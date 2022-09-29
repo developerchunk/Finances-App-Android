@@ -19,6 +19,15 @@ object Constants {
     const val PROFILE_MONTHLY_SAVINGS_KEY = "monthly_savings"
     const val PROFILE_CREATED_STATUS_KEY = "profile_created"
 
+    // Currency
+    val CURRENCY_LIST = listOf(
+        "Indian Rupee- ₹",
+        "Dollar- $",
+        "Euro- €"
+    )
+
+    const val INDIAN_CURRENCY = "₹"
+
     // Chip Selection Add Transaction
     const val SPENT = "spent"
     const val ADD_FUND = "add_fund"
@@ -40,6 +49,8 @@ object Constants {
         "Rent",
         "Bills",
         "Fees",
+        "Bank",
+        "Cash",
         "Other"
     ).sorted()
 

@@ -71,27 +71,45 @@ class ProfileViewModel : ViewModel() {
     val profileSavings: StateFlow<Int> = _profileSavings
 
     fun getProfileDetails(context: Context) {
+        // name
         viewModelScope.launch {
-            // name
             ProfileDataStore(context = context).getName.collect {
                 _profileName.value = it!!
             }
-            // total amount
-            ProfileDataStore(context = context).getTotalAmount.collect {
-                _profileTotalAmount.value = it!!
-            }
-            // currency
+        }
+        // currency
+        viewModelScope.launch {
             ProfileDataStore(context = context).getCurrency.collect {
                 _profileCurrency.value = it!!
             }
-            // spending
-            ProfileDataStore(context = context).getMonthlySpending.collect {
-                _profileSpending.value = it!!
-            }
-            // savings
+        }
+        // savings
+        viewModelScope.launch {
             ProfileDataStore(context = context).getMonthlySavings.collect {
                 _profileSavings.value = it!!
             }
+        }
+        // total amount
+        viewModelScope.launch {
+            ProfileDataStore(context = context).getTotalAmount.collect {
+                _profileTotalAmount.value = it!!
+            }
+        }
+        // spending
+        viewModelScope.launch {
+            ProfileDataStore(context = context).getMonthlySpending.collect {
+                _profileSpending.value = it!!
+            }
+        }
+    }
+
+    // save total amount
+    fun saveTotalAmount(
+        context: Context,
+        amount: Int
+    ) {
+        viewModelScope.launch {
+            ProfileDataStore(context = context).saveTotalAmount(amount)
         }
     }
 

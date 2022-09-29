@@ -5,8 +5,6 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -38,13 +36,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
-import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.ADD_TRANSACTION_TYPE
 import com.developerstring.financesapp.util.Constants.CATEGORIES
+import com.developerstring.financesapp.util.Constants.SAVINGS
+import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.keyToTransactionType
 import java.text.SimpleDateFormat
 import java.util.*
@@ -57,6 +57,9 @@ fun AddTransaction(
 ) {
 
     val shape: Shape = RoundedCornerShape(10.dp)
+    val context = LocalContext.current
+
+    val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
 
     Column(
         modifier = Modifier
@@ -119,6 +122,15 @@ fun AddTransaction(
             AddTransactionContent(modifier = Modifier) {
                 sharedViewModel.addTask(transactionModel = it)
                 navController.popBackStack()
+
+                profileViewModel.saveTotalAmount(
+                    context = context,
+                    amount = when (it.transaction_type) {
+                        SPENT -> (totalAmount - it.amount)
+                        ADD_FUND -> (totalAmount + it.amount)
+                        else -> totalAmount
+                    }
+                )
             }
         }
     }
@@ -157,19 +169,21 @@ fun AddTransactionContent(
     var year by remember { mutableStateOf(0) }
     var month by remember { mutableStateOf(0) }
     var day by remember { mutableStateOf(0) }
-    var time by remember { mutableStateOf("") }
+
+    // for year, month, day and time temporary
+    var mYear by remember { mutableStateOf(0) }
+    var mMonth by remember { mutableStateOf(0) }
+    var mDay by remember { mutableStateOf(0) }
 
     // Initializing a Calendar
     val mCalendar = Calendar.getInstance()
 
-    var moreHeight by remember { mutableStateOf(0.dp) }
-
     var moreClicked by remember { mutableStateOf(false) }
 
     // Fetching current year, month and day
-    year = mCalendar.get(Calendar.YEAR)
-    month = mCalendar.get(Calendar.MONTH)
-    day = mCalendar.get(Calendar.DAY_OF_MONTH)
+    mYear = mCalendar.get(Calendar.YEAR)
+    mMonth = mCalendar.get(Calendar.MONTH)
+    mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
 
     mCalendar.time = Date()
 
@@ -396,8 +410,10 @@ fun AddTransactionContent(
                 }
 
                 LaunchedEffect(key1 = true) {
-                    date = SimpleDateFormat("dd/MM/yyyy").format(Date())
-                    time = SimpleDateFormat("HHmmssms").format(Date())
+                    date = SimpleDateFormat("dd/M/yyyy").format(Date())
+                    day = SimpleDateFormat("dd").format(Date()).toInt()
+                    month = SimpleDateFormat("M").format(Date()).toInt()
+                    year = SimpleDateFormat("yyyy").format(Date()).toInt()
                 }
 
                 if (dateClicked) {
@@ -408,7 +424,10 @@ fun AddTransactionContent(
                         context,
                         { _: DatePicker, mYear_: Int, mMonth_: Int, mDayOfMonth: Int ->
                             date = "$mDayOfMonth/${mMonth_ + 1}/$mYear_"
-                        }, year, month, day
+                            year = mYear_
+                            month = mMonth_
+                            day = mDayOfMonth
+                        }, mYear, mMonth, mDay
                     ).show()
 
                     dateClicked = false
@@ -581,8 +600,7 @@ fun AddTransactionContent(
                         amount.isNotEmpty() &&
                         category.isNotEmpty() &&
                         transactionType.isNotEmpty() &&
-                        date.isNotEmpty() &&
-                        time.isNotEmpty()
+                        date.isNotEmpty()
                     ) {
 
                         onSaveClicked(
@@ -595,7 +613,10 @@ fun AddTransactionContent(
                                 month = month.toShort(),
                                 year = year.toShort(),
                                 info = extraInfo,
-                                place = place
+                                place = place,
+                                spent = if (transactionType == SPENT) amount.toInt() else 0,
+                                savings = if (transactionType == SAVINGS) amount.toInt() else 0,
+                                add_fund = if (transactionType == ADD_FUND) amount.toInt() else 0
                             )
                         )
                     } else {
@@ -648,7 +669,6 @@ fun Chip(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-
             AnimatedVisibility(visible = isSelected) {
                 Icon(
                     imageVector = Icons.Filled.Check,
@@ -656,12 +676,9 @@ fun Chip(
                     tint = Color.White
                 )
             }
-
             Text(text = keyToTransactionType(title), color = contentColor, fontSize = 16.sp)
-
         }
     }
-
 }
 
 @Composable

@@ -140,7 +140,7 @@ fun OnBoardingContent(
                 ),
             text = title,
             color = MaterialTheme.colors.textColorBW,
-            fontSize = EXTRA_LARGE_TEXT_SIZE,
+            fontSize = MAX_TEXT_SIZE,
             fontFamily = fontInter,
             fontWeight = FontWeight.SemiBold
         )

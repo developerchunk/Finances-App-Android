@@ -65,7 +65,7 @@ fun CreateProfileScreen(
                     .fillMaxWidth()
                     .padding(top = 30.dp),
                 text = stringResource(id = R.string.profile),
-                fontSize = EXTRA_LARGE_TEXT_SIZE,
+                fontSize = MAX_TEXT_SIZE,
                 color = MaterialTheme.colors.textColorBW,
                 fontFamily = fontOpenSans,
                 fontWeight = FontWeight.Bold,

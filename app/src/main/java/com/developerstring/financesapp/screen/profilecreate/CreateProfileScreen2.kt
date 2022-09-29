@@ -59,7 +59,7 @@ fun CreateProfileScreen2(
                     .fillMaxWidth()
                     .padding(top = 30.dp),
                 text = stringResource(id = R.string.profile),
-                fontSize = EXTRA_LARGE_TEXT_SIZE,
+                fontSize = MAX_TEXT_SIZE,
                 color = MaterialTheme.colors.textColorBW,
                 fontFamily = fontOpenSans,
                 fontWeight = FontWeight.Bold,
@@ -188,13 +188,13 @@ fun CreateProfileScreen2(
                             spending = spending.value.toInt(),
                             savings =
                             if (savings.value.isEmpty()) {
-                                (spending.value.toInt() / 2)
+                                (spending.value.toInt() / 3)
                             } else {
                                 savings.value.toInt()
                             }
                         )
                         navController.popBackStack()
-                        navController.navigate(SetUpNavRoute.MainSetUpNavRoute.route)
+                        navController.navigate(SetUpNavRoute.SplashSetUpNavRoute.route)
                     } else {
                         Toast.makeText(context, "Please enter spending amount", Toast.LENGTH_SHORT)
                             .show()
