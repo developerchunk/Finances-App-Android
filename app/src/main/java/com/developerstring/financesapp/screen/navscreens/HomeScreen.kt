@@ -5,20 +5,20 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,9 +41,6 @@ fun HomeScreen(
     sharedViewModel: SharedViewModel,
     profileViewModel: ProfileViewModel
 ) {
-
-    val context = LocalContext.current
-
     val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
     val spent by profileViewModel.profileSpending.collectAsState()
     val savings by profileViewModel.profileSavings.collectAsState()
@@ -60,17 +57,22 @@ fun HomeScreen(
         mutableStateOf(0f)
     }
 
+    val buttonColor = Brush.horizontalGradient(colors = listOf(UIBlue, LightUIBlue))
+
     val spentSum = totalSpent.sum()
     val savingsSum = totalSavings.sum()
 
     spentPercent = (spentSum.toFloat() / spent.toFloat())
     savingsPercent = (savingsSum.toFloat() / savings.toFloat())
 
+    val interactionSource = remember { MutableInteractionSource() }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.backgroundColor)
             .padding(top = 30.dp)
+
     ) {
 
         Column(
@@ -103,7 +105,9 @@ fun HomeScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         modifier = Modifier.wrapContentSize(unbounded = true),
-                        text = spentSum.toString(),
+                        text = if (currency == INDIAN_CURRENCY) simplifyAmountIndia(spentSum) else simplifyAmount(
+                            spentSum
+                        ),
                         fontSize = MEDIUM_TEXT_SIZE,
                         fontFamily = fontInter,
                         fontWeight = FontWeight.Medium,
@@ -115,7 +119,8 @@ fun HomeScreen(
                         text = stringResource(id = R.string.spent),
                         fontSize = MEDIUM_TEXT_SIZE,
                         fontFamily = fontInter,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colors.textColorBW
                     )
                 }
             }
@@ -132,7 +137,9 @@ fun HomeScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         modifier = Modifier.wrapContentSize(unbounded = true),
-                        text = savingsSum.toString(),
+                        text = if (currency == INDIAN_CURRENCY) simplifyAmountIndia(savingsSum) else simplifyAmount(
+                            savingsSum
+                        ),
                         fontSize = MEDIUM_TEXT_SIZE,
                         fontFamily = fontInter,
                         fontWeight = FontWeight.Medium,
@@ -144,28 +151,35 @@ fun HomeScreen(
                         text = stringResource(id = R.string.saving),
                         fontSize = MEDIUM_TEXT_SIZE,
                         fontFamily = fontInter,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colors.textColorBW
                     )
                 }
             }
         }
 
+        // Buttons
         Row(
             modifier = Modifier
                 .padding(top = 20.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            Button(
+            // Add Payment
+            Box(
                 modifier = Modifier
                     .padding(end = 5.dp)
                     .width(160.dp)
-                    .height(38.dp),
-                shape = RoundedCornerShape(20.dp),
-                onClick = {
-                    navController.navigate(NavRoute.AddTransactionScreen.route)
-                },
-                colors = ButtonDefaults.buttonColors(backgroundColor = UIBlue)
+                    .height(38.dp)
+                    .background(brush = buttonColor, shape = RoundedCornerShape(20.dp))
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null,
+                        onClick = {
+                            navController.navigate(NavRoute.AddTransactionScreen.route)
+                        }
+                    ),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = stringResource(id = R.string.add_payment),
@@ -175,16 +189,21 @@ fun HomeScreen(
                     color = Color.White
                 )
             }
-            Button(
+            // History
+            Box(
                 modifier = Modifier
                     .padding(start = 5.dp)
                     .width(160.dp)
-                    .height(38.dp),
-                shape = RoundedCornerShape(20.dp),
-                onClick = {
-                    navController.navigate(NavRoute.ViewHistoryScreen.route)
-                },
-                colors = ButtonDefaults.buttonColors(backgroundColor = UIBlue)
+                    .height(38.dp)
+                    .background(brush = buttonColor, shape = RoundedCornerShape(20.dp))
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null,
+                        onClick = {
+                            navController.navigate(NavRoute.ViewHistoryScreen.route)
+                        }
+                    ),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = stringResource(id = R.string.history),
@@ -196,7 +215,6 @@ fun HomeScreen(
             }
         }
     }
-
 }
 
 @Composable
@@ -211,8 +229,10 @@ fun TopGraphMainScreen(
     currency: String
 ) {
 
-    val lightGreenColor: MutableState<Color> = mutableStateOf(MaterialTheme.colors.lightGreenGraphColor)
-    val lightBlueColor: MutableState<Color> = mutableStateOf(MaterialTheme.colors.lightBlueGraphColor)
+    val lightGreenColor: MutableState<Color> =
+        mutableStateOf(MaterialTheme.colors.lightGreenGraphColor)
+    val lightBlueColor: MutableState<Color> =
+        mutableStateOf(MaterialTheme.colors.lightBlueGraphColor)
 
     var animationPlayed by remember { mutableStateOf(false) }
     val spentCurPercentage = animateFloatAsState(

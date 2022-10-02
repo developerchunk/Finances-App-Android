@@ -32,13 +32,18 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
+import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
+import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.Constants.ADD_FUND
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun CreateProfileScreen(
     navController: NavController,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
 ) {
 
     //context
@@ -307,24 +312,4 @@ fun CreateProfileScreen(
 
     }
 
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CreateProfileScreenPreview() {
-    CreateProfileScreen(
-        navController = rememberNavController(),
-        profileViewModel = ProfileViewModel()
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CreateProfileScreenPreviewDark() {
-    FinancesAppTheme(darkTheme = true) {
-        CreateProfileScreen(
-            navController = rememberNavController(),
-            profileViewModel = ProfileViewModel()
-        )
-    }
 }

@@ -13,3 +13,6 @@ val EXTRA_SMALL_TEXT_SIZE = 12.sp
 
 // elevations
 val TASK_ITEM_ELEVATION = 3.dp
+
+// top app bar
+val TOP_APP_BAR_HEIGHT = 56.dp

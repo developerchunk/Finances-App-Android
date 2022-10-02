@@ -12,6 +12,7 @@ import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.FinancesAppTheme
 import com.developerstring.financesapp.ui.theme.backgroundColor
+import com.developerstring.financesapp.ui.theme.backgroundColorBW
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,7 +35,7 @@ class MainActivity : ComponentActivity() {
 
                 val systemController = rememberSystemUiController()
                 systemController.setSystemBarsColor(
-                    color = MaterialTheme.colors.backgroundColor
+                    color = MaterialTheme.colors.backgroundColorBW
                 )
             }
         }

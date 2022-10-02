@@ -15,6 +15,7 @@
     <string name="history">History</string>
     <string name="spent">Spent</string>
     <string name="saving">Saving</string>
+    <string name="payment">Payment</string>
 
     <string name="amount_text_field">Amount*</string>
     <string name="category_text_field">Category*</string>

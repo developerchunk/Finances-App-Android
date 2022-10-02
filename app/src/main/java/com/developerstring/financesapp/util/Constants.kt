@@ -27,6 +27,7 @@ object Constants {
     )
 
     const val INDIAN_CURRENCY = "₹"
+    const val DETAIL_TRANSACTION_KEY = "id"
 
     // Chip Selection Add Transaction
     const val SPENT = "spent"

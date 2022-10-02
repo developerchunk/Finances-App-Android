@@ -18,7 +18,4 @@ data class TransactionModel(
     val info: String = "",
     val place: String = "",
     val eventID: String = "",
-    val spent: Int = 0,
-    val add_fund: Int = 0,
-    val savings: Int = 0,
 )

@@ -5,6 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.roomdatabase.repository.TransactionRepository
+import com.developerstring.financesapp.util.Constants.SAVINGS
+import com.developerstring.financesapp.util.Constants.SPENT
+import com.developerstring.financesapp.util.RequestState
+import com.developerstring.financesapp.util.TransactionAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,8 +22,8 @@ class SharedViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var _allTransactions =
-        MutableStateFlow<List<TransactionModel>>(emptyList())
-    val allTransactions: StateFlow<List<TransactionModel>> = _allTransactions
+        MutableStateFlow<RequestState<List<TransactionModel>>>(RequestState.Idle)
+    val allTransactions: StateFlow<RequestState<List<TransactionModel>>> = _allTransactions
 
     private var _monthSpent =
         MutableStateFlow<List<Int>>(emptyList())
@@ -29,17 +33,36 @@ class SharedViewModel @Inject constructor(
         MutableStateFlow<List<Int>>(emptyList())
     val monthSavings: StateFlow<List<Int>> = _monthSavings
 
-    val id: MutableState<Int> = mutableStateOf(0)
+    var id: MutableState<Int> = mutableStateOf(0)
+
+    val transactionAction: MutableState<TransactionAction> = mutableStateOf(TransactionAction.NO_ACTION)
+    val transactionModel: MutableState<TransactionModel> = mutableStateOf(TransactionModel())
+
+    private val _selectedTransaction: MutableStateFlow<TransactionModel?> = MutableStateFlow(null)
+    val selectedTransaction: MutableStateFlow<TransactionModel?> = _selectedTransaction
 
     fun getAllTransactions() {
+        _allTransactions.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                repository.getAllTransactions.collect {
+                    _allTransactions.value = RequestState.Success(it)
+                }
+            }
+        } catch (e: Exception) {
+            _allTransactions.value = RequestState.Error(e)
+        }
+    }
+
+    fun getSelectedTransaction(transactionID: Int) {
         viewModelScope.launch {
-            repository.getAllTransactions.collect {
-                _allTransactions.value = it
+            repository.getSelectedTransaction(transactionID = transactionID).collect { task ->
+                _selectedTransaction.value = task
             }
         }
     }
 
-    fun addTask(
+    fun addTransaction(
         transactionModel: TransactionModel
     ) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -47,21 +70,50 @@ class SharedViewModel @Inject constructor(
         }
     }
 
+    fun updateTransaction(
+        transactionModel: TransactionModel
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateTransaction(transactionModel = transactionModel)
+        }
+    }
+
+    private fun deleteTransaction() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteTransaction(transactionModel = transactionModel.value)
+        }
+        this.transactionAction.value = TransactionAction.NO_ACTION
+    }
+
+    fun transactionAction(
+        action: TransactionAction,
+    ) {
+        when (action) {
+            TransactionAction.DELETE -> deleteTransaction()
+            else -> {
+
+            }
+        }
+        this.transactionAction.value = TransactionAction.NO_ACTION
+    }
+
     fun searchMonthSpent(
-        month: String
+        month: String,
+        year: String
     ) {
         viewModelScope.launch {
-            repository.searchMonthSpent(month = month).collect {
+            repository.searchMonthPayment(month = month, year = year, transaction_type = SPENT).collect {
                 _monthSpent.value = it
             }
         }
     }
 
     fun searchMonthSavings(
-        month: String
+        month: String,
+        year: String
     ) {
         viewModelScope.launch {
-            repository.searchMonthSavings(month = month).collect {
+            repository.searchMonthPayment(month = month, year = year, transaction_type = SAVINGS).collect {
                 _monthSavings.value = it
             }
         }

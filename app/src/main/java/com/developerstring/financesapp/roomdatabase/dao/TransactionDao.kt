@@ -36,19 +36,7 @@ interface TransactionDao {
     @Query("SELECT * FROM transaction_table WHERE amount LIKE :searchQuery OR transaction_type LIKE :searchQuery OR category LIKE :searchQuery OR info LIKE :searchQuery OR place LIKE :searchQuery")
     fun searchAllTransactions(searchQuery: String): Flow<List<TransactionModel>>
 
-    @Query("SELECT spent FROM transaction_table")
-    fun getAllSpentTransactions(): Flow<List<Int>>
-
-    @Query("SELECT add_fund FROM transaction_table")
-    fun getAllAddFundTransactions(): Flow<List<Int>>
-
-    @Query("SELECT savings FROM transaction_table")
-    fun getAllSavingsTransactions(): Flow<List<Int>>
-
-    @Query("SELECT spent FROM transaction_table WHERE month=:month AND spent>0")
-    fun searchMonthSpent(month: String): Flow<List<Int>>
-
-    @Query("SELECT savings FROM transaction_table WHERE month=:month AND savings>0")
-    fun searchMonthSavings(month: String): Flow<List<Int>>
+    @Query("SELECT amount FROM transaction_table WHERE month=:month AND year=:year AND transaction_type=:transaction_type")
+    fun searchMonthPayment(month: String,year: String, transaction_type: String): Flow<List<Int>>
 
 }

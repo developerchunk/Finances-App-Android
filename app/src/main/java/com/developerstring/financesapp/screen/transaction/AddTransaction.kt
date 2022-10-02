@@ -15,6 +15,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +45,6 @@ import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.ADD_TRANSACTION_TYPE
 import com.developerstring.financesapp.util.Constants.CATEGORIES
-import com.developerstring.financesapp.util.Constants.SAVINGS
 import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.keyToTransactionType
 import java.text.SimpleDateFormat
@@ -71,6 +72,8 @@ fun AddTransaction(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(TOP_APP_BAR_HEIGHT),
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
             IconButton(
@@ -119,10 +122,8 @@ fun AddTransaction(
                 .padding(start = 10.dp)
                 .fillMaxSize()
         ) {
-            AddTransactionContent(modifier = Modifier) {
-                sharedViewModel.addTask(transactionModel = it)
-                navController.popBackStack()
-
+            TransactionContent(modifier = Modifier, transactionModel = TransactionModel()) {
+                sharedViewModel.addTransaction(transactionModel = it)
                 profileViewModel.saveTotalAmount(
                     context = context,
                     amount = when (it.transaction_type) {
@@ -131,6 +132,7 @@ fun AddTransaction(
                         else -> totalAmount
                     }
                 )
+                navController.popBackStack()
             }
         }
     }
@@ -139,17 +141,24 @@ fun AddTransaction(
 }
 
 @Composable
-fun AddTransactionContent(
+fun TransactionContent(
     modifier: Modifier,
+    transactionModel: TransactionModel,
     onSaveClicked: (TransactionModel) -> Unit
 ) {
 
-    var amount by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf("") }
-    var extraInfo by remember { mutableStateOf("") }
-    var place by remember { mutableStateOf("") }
-    var transactionType by remember { mutableStateOf("") }
-    var date by remember { mutableStateOf("") }
+    var amount by remember { mutableStateOf(
+        if (transactionModel.amount == 0) {
+            ""
+        } else {
+            transactionModel.amount.toString()
+        }
+    ) }
+    var category by remember { mutableStateOf(transactionModel.category) }
+    var extraInfo by remember { mutableStateOf(transactionModel.info) }
+    var place by remember { mutableStateOf(transactionModel.place) }
+    var transactionType by remember { mutableStateOf(transactionModel.transaction_type) }
+    var date by remember { mutableStateOf(transactionModel.date) }
     var dateClicked by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
@@ -166,14 +175,14 @@ fun AddTransactionContent(
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
     // for year, month, day and time
-    var year by remember { mutableStateOf(0) }
-    var month by remember { mutableStateOf(0) }
-    var day by remember { mutableStateOf(0) }
+    var year by remember { mutableStateOf(transactionModel.year) }
+    var month by remember { mutableStateOf(transactionModel.month) }
+    var day by remember { mutableStateOf(transactionModel.day) }
 
     // for year, month, day and time temporary
-    var mYear by remember { mutableStateOf(0) }
-    var mMonth by remember { mutableStateOf(0) }
-    var mDay by remember { mutableStateOf(0) }
+    var mYear by remember { mutableStateOf(1) }
+    var mMonth by remember { mutableStateOf(1) }
+    var mDay by remember { mutableStateOf(1) }
 
     // Initializing a Calendar
     val mCalendar = Calendar.getInstance()
@@ -278,10 +287,10 @@ fun AddTransactionContent(
                 fontWeight = FontWeight.Medium
             )
 
-            TextField(
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(heightTextFields)
+                    .height(55.dp)
                     .border(
                         width = 1.8.dp,
                         color = MaterialTheme.colors.textColorBLG,
@@ -289,38 +298,41 @@ fun AddTransactionContent(
                     )
                     .onGloballyPositioned { coordinates ->
                         textFieldSize = coordinates.size.toSize()
-                    },
-                value = category,
-                onValueChange = {
-                    category = it
-                    categoriesExpanded = true
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.textColorBW,
-                ),
-                textStyle = TextStyle(
-                    color = MaterialTheme.colors.textColorBW,
-                    fontSize = TEXT_FIELD_SIZE
-                ),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                singleLine = true,
-                trailingIcon = {
-                    IconButton(onClick = { categoriesExpanded = !categoriesExpanded }) {
-                        Icon(
-                            modifier = Modifier.rotate(if (categoriesExpanded) 180f else 0f),
-                            painter = painterResource(id = R.drawable.ic_arrow_down),
-                            contentDescription = "drop_down",
-                            tint = MaterialTheme.colors.textColorBLG
-                        )
                     }
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) { categoriesExpanded = !categoriesExpanded },
+                shape = RoundedCornerShape(15.dp),
+                backgroundColor = MaterialTheme.colors.backgroundColor
+            ) {
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        modifier = Modifier.padding(start = 20.dp),
+                        text = category,
+                        fontSize = TEXT_FIELD_SIZE,
+                        color = MaterialTheme.colors.textColorBW
+                    )
+
+                    Icon(
+                        imageVector =
+                        if (!categoriesExpanded) Icons.Filled.KeyboardArrowDown
+                        else Icons.Rounded.KeyboardArrowUp,
+                        contentDescription = "currency_icon",
+                        Modifier
+                            .padding(end = 15.dp)
+                            .size(28.dp),
+                        tint = MaterialTheme.colors.textColorBLG
+                    )
                 }
-            )
+
+
+            }
 
             AnimatedVisibility(visible = categoriesExpanded) {
                 Card(
@@ -333,30 +345,13 @@ fun AddTransactionContent(
                         modifier = Modifier.heightIn(max = 150.dp),
                         userScrollEnabled = true
                     ) {
-                        if (category.isNotEmpty()) {
-                            items(
-                                categories
-                                    .filter {
-                                        it.lowercase()
-                                            .contains(category.lowercase()) || it.lowercase()
-                                            .contains("other")
-                                    }
-                                    .sorted()
-                            ) {
-                                CategoryItems(title = it) { title ->
-                                    category = title
-                                    categoriesExpanded = false
-                                }
-                            }
-                        } else {
-                            items(
-                                categories
-                                    .sorted()
-                            ) {
-                                CategoryItems(title = it) { title ->
-                                    category = title
-                                    categoriesExpanded = false
-                                }
+                        items(
+                            categories
+                                .sorted()
+                        ) {
+                            CategoryItems(title = it) { title ->
+                                category = title
+                                categoriesExpanded = false
                             }
                         }
                     }
@@ -409,11 +404,13 @@ fun AddTransactionContent(
                     )
                 }
 
-                LaunchedEffect(key1 = true) {
-                    date = SimpleDateFormat("dd/M/yyyy").format(Date())
-                    day = SimpleDateFormat("dd").format(Date()).toInt()
-                    month = SimpleDateFormat("M").format(Date()).toInt()
-                    year = SimpleDateFormat("yyyy").format(Date()).toInt()
+                LaunchedEffect(key1 = false) {
+                    if (date=="") {
+                        date = SimpleDateFormat("d/MM/yyyy").format(Date())
+                        day = SimpleDateFormat("d").format(Date()).toShort()
+                        month = SimpleDateFormat("M").format(Date()).toShort()
+                        year = SimpleDateFormat("yyyy").format(Date()).toShort()
+                    }
                 }
 
                 if (dateClicked) {
@@ -424,9 +421,9 @@ fun AddTransactionContent(
                         context,
                         { _: DatePicker, mYear_: Int, mMonth_: Int, mDayOfMonth: Int ->
                             date = "$mDayOfMonth/${mMonth_ + 1}/$mYear_"
-                            year = mYear_
-                            month = mMonth_
-                            day = mDayOfMonth
+                            year = mYear_.toShort()
+                            month = (mMonth_+1).toShort()
+                            day = mDayOfMonth.toShort()
                         }, mYear, mMonth, mDay
                     ).show()
 
@@ -602,22 +599,18 @@ fun AddTransactionContent(
                         transactionType.isNotEmpty() &&
                         date.isNotEmpty()
                     ) {
-
                         onSaveClicked(
                             TransactionModel(
                                 amount = amount.toInt(),
                                 transaction_type = transactionType,
                                 category = category,
                                 date = date,
-                                day = day.toShort(),
-                                month = month.toShort(),
-                                year = year.toShort(),
+                                day = day,
+                                month = month,
+                                year = year,
                                 info = extraInfo,
                                 place = place,
-                                spent = if (transactionType == SPENT) amount.toInt() else 0,
-                                savings = if (transactionType == SAVINGS) amount.toInt() else 0,
-                                add_fund = if (transactionType == ADD_FUND) amount.toInt() else 0
-                            )
+                            ),
                         )
                     } else {
                         Toast.makeText(context, "Please fill all details", Toast.LENGTH_SHORT)

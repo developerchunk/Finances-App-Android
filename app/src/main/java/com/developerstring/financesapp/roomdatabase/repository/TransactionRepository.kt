@@ -2,6 +2,7 @@ package com.developerstring.financesapp.roomdatabase.repository
 
 import com.developerstring.financesapp.roomdatabase.dao.TransactionDao
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
+import com.developerstring.financesapp.util.Constants.SPENT
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -10,10 +11,6 @@ import javax.inject.Inject
 class TransactionRepository @Inject constructor(private val transactionDao: TransactionDao) {
 
     val getAllTransactions: Flow<List<TransactionModel>> = transactionDao.getAllTransactions()
-
-    val getAllSpendTransactions: Flow<List<Int>> = transactionDao.getAllSpentTransactions()
-    val getAllAddFundTransactions: Flow<List<Int>> = transactionDao.getAllAddFundTransactions()
-    val getAllSavingsTransactions: Flow<List<Int>> = transactionDao.getAllSavingsTransactions()
 
     fun getSelectedTransaction(transactionID: Int): Flow<TransactionModel> {
         return transactionDao.getSelectedTransaction(transactionID = transactionID)
@@ -39,12 +36,12 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
         return transactionDao.searchAllTransactions(searchQuery = searchQuery)
     }
 
-    fun searchMonthSpent(month: String): Flow<List<Int>> {
-        return transactionDao.searchMonthSpent(month = month)
+    fun searchMonthPayment(month: String,year: String, transaction_type: String): Flow<List<Int>> {
+        return transactionDao.searchMonthPayment(month = month, year = year, transaction_type = transaction_type)
     }
 
-    fun searchMonthSavings(month: String): Flow<List<Int>> {
-        return transactionDao.searchMonthSavings(month = month)
-    }
+//    fun searchMonthSavings(month: String): Flow<List<Int>> {
+//        return transactionDao.searchMonthPayment(month = month, transaction_type = SAVINGS)
+//    }
 
 }

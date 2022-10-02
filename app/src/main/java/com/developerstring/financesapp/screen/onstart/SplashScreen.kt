@@ -52,9 +52,15 @@ fun SplashScreen(
                 // to get all transactions
                 sharedViewModel.getAllTransactions()
                 // get current month spending
-                sharedViewModel.searchMonthSpent(month = SimpleDateFormat("M").format(Date()))
+                sharedViewModel.searchMonthSpent(
+                    month = SimpleDateFormat("M").format(Date()),
+                    year = SimpleDateFormat("yyyy").format(Date())
+                )
                 // get current month savings
-                sharedViewModel.searchMonthSavings(month = SimpleDateFormat("M").format(Date()))
+                sharedViewModel.searchMonthSavings(
+                    month = SimpleDateFormat("M").format(Date()),
+                    year = SimpleDateFormat("yyyy").format(Date())
+                )
                 // get profile details
                 profileViewModel.getProfileDetails(context = context)
                 navController.navigate(route = SetUpNavRoute.MainSetUpNavRoute.route)
