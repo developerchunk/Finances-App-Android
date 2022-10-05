@@ -2,7 +2,6 @@ package com.developerstring.financesapp.roomdatabase.repository
 
 import com.developerstring.financesapp.roomdatabase.dao.TransactionDao
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
-import com.developerstring.financesapp.util.Constants.SPENT
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -36,12 +35,26 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
         return transactionDao.searchAllTransactions(searchQuery = searchQuery)
     }
 
-    fun searchMonthPayment(month: String,year: String, transaction_type: String): Flow<List<Int>> {
-        return transactionDao.searchMonthPayment(month = month, year = year, transaction_type = transaction_type)
+    fun searchMonthPayment(month: String, year: String, transaction_type: String): Flow<List<Int>> {
+        return transactionDao.searchMonthPayment(
+            month = month,
+            year = year,
+            transaction_type = transaction_type
+        )
     }
 
-//    fun searchMonthSavings(month: String): Flow<List<Int>> {
-//        return transactionDao.searchMonthPayment(month = month, transaction_type = SAVINGS)
-//    }
+    fun searchDayPayment(
+        day: String,
+        month: String,
+        year: String,
+        transaction_type: String
+    ): Flow<List<Int>> {
+        return transactionDao.searchDayPayment(
+            day = day,
+            month = month,
+            year = year,
+            transaction_type = transaction_type
+        )
+    }
 
 }

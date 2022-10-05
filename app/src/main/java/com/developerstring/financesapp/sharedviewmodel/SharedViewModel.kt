@@ -35,7 +35,8 @@ class SharedViewModel @Inject constructor(
 
     var id: MutableState<Int> = mutableStateOf(0)
 
-    val transactionAction: MutableState<TransactionAction> = mutableStateOf(TransactionAction.NO_ACTION)
+    val transactionAction: MutableState<TransactionAction> =
+        mutableStateOf(TransactionAction.NO_ACTION)
     val transactionModel: MutableState<TransactionModel> = mutableStateOf(TransactionModel())
 
     private val _selectedTransaction: MutableStateFlow<TransactionModel?> = MutableStateFlow(null)
@@ -102,9 +103,10 @@ class SharedViewModel @Inject constructor(
         year: String
     ) {
         viewModelScope.launch {
-            repository.searchMonthPayment(month = month, year = year, transaction_type = SPENT).collect {
-                _monthSpent.value = it
-            }
+            repository.searchMonthPayment(month = month, year = year, transaction_type = SPENT)
+                .collect {
+                    _monthSpent.value = it
+                }
         }
     }
 
@@ -113,8 +115,31 @@ class SharedViewModel @Inject constructor(
         year: String
     ) {
         viewModelScope.launch {
-            repository.searchMonthPayment(month = month, year = year, transaction_type = SAVINGS).collect {
-                _monthSavings.value = it
+            repository.searchMonthPayment(month = month, year = year, transaction_type = SAVINGS)
+                .collect {
+                    _monthSavings.value = it
+                }
+        }
+    }
+
+    private var _dayPayment =
+        MutableStateFlow<List<Int>>(emptyList())
+    val dayPayment: StateFlow<List<Int>> = _dayPayment
+
+    fun searchDayPayment(
+        day: String,
+        month: String,
+        year: String,
+        transaction_type: String
+    ) {
+        viewModelScope.launch {
+            repository.searchDayPayment(
+                day = day,
+                month = month,
+                year = year,
+                transaction_type = transaction_type
+            ).collect {
+                _dayPayment.value = it
             }
         }
     }

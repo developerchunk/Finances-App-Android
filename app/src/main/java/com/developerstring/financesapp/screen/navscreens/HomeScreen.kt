@@ -6,7 +6,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,12 +27,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.navgraph.NavRoute
+import com.developerstring.financesapp.screen.navscreens.content.homescreen.MyActivityContent
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
+import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.simplifyAmount
 import com.developerstring.financesapp.util.simplifyAmountIndia
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun HomeScreen(
@@ -64,6 +67,10 @@ fun HomeScreen(
 
     spentPercent = (spentSum.toFloat() / spent.toFloat())
     savingsPercent = (savingsSum.toFloat() / savings.toFloat())
+
+    val day = SimpleDateFormat("d").format(Date()).toInt()
+    val month = SimpleDateFormat("M").format(Date()).toInt()
+    val year = SimpleDateFormat("yyyy").format(Date()).toInt()
 
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -214,6 +221,7 @@ fun HomeScreen(
                 )
             }
         }
+        MyActivityContent(sharedViewModel = sharedViewModel, day_ = day, month_ = month, year_ = year)
     }
 }
 
@@ -249,7 +257,6 @@ fun TopGraphMainScreen(
             delayMillis = 0
         )
     )
-
     LaunchedEffect(key1 = true) {
         animationPlayed = true
     }
@@ -310,7 +317,5 @@ fun TopGraphMainScreen(
                 style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
             )
         }
-
     }
-
 }
