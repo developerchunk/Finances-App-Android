@@ -23,8 +23,9 @@ import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
-import com.developerstring.financesapp.ui.components.ViewTransactionItem
+import com.developerstring.financesapp.ui.components.TransactionsItemView
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.Constants.LAST_TRANSACTION
 import com.developerstring.financesapp.util.RequestState
 
 @Composable
@@ -121,11 +122,14 @@ fun HistoryTransactionContent(
     sharedViewModel: SharedViewModel,
     navController: NavController
 ) {
+
+    LAST_TRANSACTION = ""
+
     LazyColumn {
         items(
             items = allTransactions
         ) {
-            ViewTransactionItem(
+            TransactionsItemView(
                 transactionModel = it,
                 currency = currency,
                 navigateToDetails = { id ->

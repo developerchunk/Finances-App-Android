@@ -29,6 +29,22 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
+    // theme setting
+    fun saveThemeSetting(context: Context, darkTheme: Boolean) {
+        viewModelScope.launch {
+            ProfileDataStore(context).saveThemeSetting(darkTheme)
+        }
+    }
+    private val _themeSetting = MutableStateFlow(true)
+    val themeSetting: StateFlow<Boolean> = _themeSetting
+    fun getThemeSetting(context: Context) {
+        viewModelScope.launch {
+            ProfileDataStore(context).getThemeSetting.collect {
+                _themeSetting.value = it!!
+            }
+        }
+    }
+
     // Profile Details
     fun saveProfileDetails1(
         context: Context,

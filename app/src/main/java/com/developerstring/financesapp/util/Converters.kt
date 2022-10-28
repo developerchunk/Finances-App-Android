@@ -84,15 +84,14 @@ fun lastWeekDateCalculator(
     val mMonth = arrayListOf<Int>()
     val mYear = arrayListOf<Int>()
 
-    for (i in 1..8) {
+    for (i in 1..7) {
 
-        if (days != 1) {
+        if (days != 0) {
             days -= 1
             dates.add(days)
             mMonth.add(months)
             mYear.add(years)
         } else {
-
             months -= 1
             if (months == 0) {
                 years -= 1
@@ -107,11 +106,38 @@ fun lastWeekDateCalculator(
                 month = months,
                 year = years
             ) + 1
+            dates.add(days)
         }
     }
 
-    mMonth.removeLast()
-    mYear.removeLast()
+//    dates.removeLast()
+//    mMonth.removeLast()
+//    mYear.removeLast()
+
+    day_(dates)
+    month_(mMonth)
+    year_(mYear)
+
+}
+fun monthDateCalculator(
+    month: Int,
+    year: Int,
+    day_: (List<Int>) -> Unit,
+    month_: (List<Int>) -> Unit,
+    year_: (List<Int>) -> Unit,
+) {
+
+    val dates = arrayListOf<Int>()
+    val mMonth = arrayListOf<Int>()
+    val mYear = arrayListOf<Int>()
+
+    val monthLastDate = monthLastDate(month = month, year = year)
+
+    for (i in 1..monthLastDate) {
+        dates.add(i)
+        mMonth.add(month)
+        mYear.add(year)
+    }
 
     day_(dates)
     month_(mMonth)

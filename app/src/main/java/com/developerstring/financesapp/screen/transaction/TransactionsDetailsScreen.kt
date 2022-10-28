@@ -1,7 +1,12 @@
 package com.developerstring.financesapp.screen.transaction
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -45,6 +50,8 @@ fun TransactionDetailsScreen(
         mutableStateOf(TransactionModel())
     }
 
+    val scrollState = rememberScrollState()
+
 //    val oldTransactionModel by mutableStateOf<TransactionModel>(getTransactionModel!!)
 
     var oldAmount by mutableStateOf(0)
@@ -65,7 +72,7 @@ fun TransactionDetailsScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.backgroundColor)
-
+            .verticalScroll(state = scrollState)
     ) {
 
         Row(

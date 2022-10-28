@@ -56,6 +56,8 @@ fun SplashScreen(
                     month = SimpleDateFormat("M").format(Date()),
                     year = SimpleDateFormat("yyyy").format(Date())
                 )
+                // setDayPaymentArray
+                sharedViewModel.setDayPaymentArray()
                 // get current month savings
                 sharedViewModel.searchMonthSavings(
                     month = SimpleDateFormat("M").format(Date()),

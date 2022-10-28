@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.developerstring.financesapp.navigation.Graph
+import com.developerstring.financesapp.screen.navscreens.profile.EditProfileScreen
 import com.developerstring.financesapp.screen.transaction.AddTransaction
 import com.developerstring.financesapp.screen.transaction.TransactionDetailsScreen
 import com.developerstring.financesapp.screen.transaction.ViewHistoryScreen
@@ -44,6 +45,15 @@ fun NavGraphBuilder.navGraph(
         ) {
             TransactionDetailsScreen(
                 sharedViewModel = sharedViewModel,
+                profileViewModel = profileViewModel,
+                navController = navController,
+//                id = task.arguments?.getInt(DETAIL_TRANSACTION_KEY)!!.toInt()
+            )
+        }
+        composable(
+            route = NavRoute.EditProfileScreen.route
+        ) {
+            EditProfileScreen(
                 profileViewModel = profileViewModel,
                 navController = navController,
 //                id = task.arguments?.getInt(DETAIL_TRANSACTION_KEY)!!.toInt()

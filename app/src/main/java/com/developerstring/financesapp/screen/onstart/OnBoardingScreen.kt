@@ -1,8 +1,7 @@
 package com.developerstring.financesapp.screen.onstart
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
+import android.content.res.Configuration
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -12,6 +11,7 @@ import androidx.compose.ui.Alignment.Companion.Bottom
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -117,6 +117,8 @@ fun OnBoardingContent(
     // to get profile is created or not
     val profileCreate = profileViewModel.profileCreatedStatus.collectAsState()
 
+    val configuration = LocalConfiguration.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -126,7 +128,16 @@ fun OnBoardingContent(
     ) {
         Image(
             modifier = Modifier
-                .fillMaxHeight(0.5f)
+                .fillMaxHeight(
+                    when (configuration.orientation) {
+                        Configuration.ORIENTATION_LANDSCAPE -> {
+                            0f
+                        }
+                        else -> {
+                            0.5f
+                        }
+                    }
+                )
                 .padding(top = 90.dp),
             painter = painterResource(id = image),
             contentDescription = "OnBoardingImage"

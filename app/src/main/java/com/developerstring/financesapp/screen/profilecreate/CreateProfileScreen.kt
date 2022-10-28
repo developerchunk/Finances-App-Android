@@ -2,6 +2,8 @@ package com.developerstring.financesapp.screen.profilecreate
 
 import android.widget.Toast
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -57,11 +59,13 @@ fun CreateProfileScreen(
     val name = remember { mutableStateOf("") }
     val amount = remember { mutableStateOf("") }
 
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.backgroundColor)
-            .verticalScroll(state = ScrollState(1)),
+            .verticalScroll(state = scrollState),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -245,6 +249,7 @@ fun CreateProfileScreen(
                     onDismissRequest = { expanded = false },
                     modifier = Modifier
                         .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+                        .background(color = MaterialTheme.colors.backgroundColorCard)
                 ) {
                     list.forEach { label ->
                         DropdownMenuItem(onClick = {

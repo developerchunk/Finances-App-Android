@@ -1,13 +1,12 @@
 package com.developerstring.financesapp.screen.profilecreate
 
 import android.widget.Toast
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -44,11 +43,13 @@ fun CreateProfileScreen2(
     val spending = remember { mutableStateOf("") }
     val savings = remember { mutableStateOf("") }
 
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.backgroundColor)
-            .verticalScroll(state = ScrollState(1))
+            .verticalScroll(state = scrollState)
         ,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -171,7 +172,9 @@ fun CreateProfileScreen2(
         }
 
         Column(
-            modifier = Modifier.padding(top = 30.dp,bottom = 30.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(top = 30.dp, bottom = 30.dp)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(

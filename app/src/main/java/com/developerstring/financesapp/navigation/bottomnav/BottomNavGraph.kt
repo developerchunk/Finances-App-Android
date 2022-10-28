@@ -31,13 +31,25 @@ fun BottomNavGraph(
         )
         // MainSetUpNavRoute
         composable(route = BottomNavRoute.Home.route) {
-            HomeScreen(navController = navController, sharedViewModel = sharedViewModel, profileViewModel = profileViewModel)
+            HomeScreen(
+                navController = navController,
+                sharedViewModel = sharedViewModel,
+                profileViewModel = profileViewModel
+            )
         }
         composable(route = BottomNavRoute.Activity.route) {
-            ActivityScreen()
+            ActivityScreen(
+                profileViewModel = profileViewModel,
+                sharedViewModel = sharedViewModel,
+                navController = navController
+            )
         }
         composable(route = BottomNavRoute.Profile.route) {
-            ProfileScreen()
+            ProfileScreen(
+                profileViewModel = profileViewModel,
+                sharedViewModel = sharedViewModel,
+                navController = navController
+            )
         }
     }
 

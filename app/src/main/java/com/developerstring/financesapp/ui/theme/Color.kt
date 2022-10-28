@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.White
+import com.developerstring.financesapp.util.Constants.DARK_THEME_ENABLE
 
 val Purple200 = Color(0xFFBB86FC)
 val Purple500 = Color(0xFF6200EE)
@@ -15,9 +16,12 @@ val Teal200 = Color(0xFF03DAC5)
 val LightPurple = Color(0xFFC9D4FF)
 val DarkerGray = Color(0xFF525252)
 val LightGray = Color(0xFF636B7B)
+val SlightGray = Color(0xFF8D95A3)
 val LighterGray = Color(0xFFB1B1B1)
 val ExtraLightGray = Color(0xFFD9D9D9)
 val LightDark = Color(0xFF20374D)
+val LighterDark = Color(0xFF2D475F)
+val SlightDark = Color(0xFF1C2A36)
 val Dark = Color(0xFF16212B)
 val ExtraDark = Color(0xFF131E29)
 val UIBlue = Color(0xFF1E90FF)
@@ -27,48 +31,49 @@ val LighterBlue = Color(0xFFE4F5FF)
 val Green = Color(0xFF04B6A5)
 val LightGreen = Color(0xFF03DAC5)
 val WhiteGreen = Color(0xFFADFFF7)
-val LightWhiteBlue = Color(0xFFF5FAFF)
+val LightWhiteBlue = Color(0xFFF9FCFF)
 
 val Colors.textColorBW: Color
-    @Composable
-    get() = if (isLight) Black else White
+    get() = if (!DARK_THEME_ENABLE) Black else White
 
 val Colors.colorGray: Color
-    @Composable
-    get() = if (isLight) Gray else LightGray
+    get() = if (!DARK_THEME_ENABLE) Gray else LightGray
 
 val Colors.colorDarkGray: Color
-    @Composable
-    get() = if (isLight) ExtraLightGray else LightDark
+    get() = if (!DARK_THEME_ENABLE) ExtraLightGray else LighterDark
 
 val Colors.contentBackgroundColor: Color
-    @Composable
-    get() = if (isLight) Black else UIBlue
+    get() = if (!DARK_THEME_ENABLE) Black else UIBlue
 
 val Colors.backgroundColor: Color
-    @Composable
-    get() = if (isLight) LightWhiteBlue else Dark
+    get() = if (!DARK_THEME_ENABLE) LightWhiteBlue else Dark
 
 val Colors.backgroundColorBW: Color
-    @Composable
-    get() = if (isLight) White else ExtraDark
+    get() = if (!DARK_THEME_ENABLE) White else ExtraDark
+
+val Colors.backgroundColorCard: Color
+    get() = if (!DARK_THEME_ENABLE) White else LightGray
 
 val Colors.textColorBLG: Color
-    @Composable
-    get() = if (isLight) Black else LightGray
+    get() = if (!DARK_THEME_ENABLE) Black else SlightGray
 
 val Colors.contentColorLBLD: Color
-    @Composable
-    get() = if (isLight) LighterBlue else LightDark
+    get() = if (!DARK_THEME_ENABLE) LighterBlue else LightDark
+
+val Colors.contentColorCard: Color
+    get() = if (!DARK_THEME_ENABLE) White else LightDark
+
+val Colors.contentColorLBSD: Color
+    get() = if (!DARK_THEME_ENABLE) LighterBlue else SlightDark
+
+val Colors.contentColorDW: Color
+    get() = if (!DARK_THEME_ENABLE) Dark else White
 
 val Colors.greenIconColor: Color
-    @Composable
-    get() = if (isLight) Green else LightGreen
+    get() = if (!DARK_THEME_ENABLE) Green else LightGreen
 
 val Colors.lightGreenGraphColor: Color
-    @Composable
-    get() = if (isLight) WhiteGreen else WhiteGreen.copy(alpha = 0.3f)
+    get() = if (!DARK_THEME_ENABLE) WhiteGreen else WhiteGreen.copy(alpha = 0.3f)
 
 val Colors.lightBlueGraphColor: Color
-    @Composable
-    get() = if (isLight) LightBlue else LightBlue.copy(alpha = 0.3f)
+    get() = if (!DARK_THEME_ENABLE) LightBlue else LightBlue.copy(alpha = 0.3f)

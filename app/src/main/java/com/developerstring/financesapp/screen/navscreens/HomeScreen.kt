@@ -2,10 +2,7 @@ package com.developerstring.financesapp.screen.navscreens
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +26,7 @@ import androidx.navigation.NavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.screen.navscreens.content.homescreen.MyActivityContent
+import com.developerstring.financesapp.screen.navscreens.content.homescreen.WeeklyTransactionChart
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
@@ -52,6 +51,8 @@ fun HomeScreen(
     val totalSpent by sharedViewModel.monthSpent.collectAsState()
     val totalSavings by sharedViewModel.monthSavings.collectAsState()
 
+    val scrollState = rememberScrollState()
+
     var spentPercent by remember {
         mutableStateOf(0f)
     }
@@ -74,16 +75,22 @@ fun HomeScreen(
 
     val interactionSource = remember { MutableInteractionSource() }
 
+    val configuration = LocalConfiguration.current
+
+    val screenWidth = configuration.screenWidthDp.dp
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.backgroundColor)
-            .padding(top = 30.dp)
+            .verticalScroll(state = scrollState)
 
     ) {
 
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .padding(top = 30.dp)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -168,7 +175,7 @@ fun HomeScreen(
         // Buttons
         Row(
             modifier = Modifier
-                .padding(top = 20.dp)
+                .padding(top = 20.dp, start = 10.dp, end = 10.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
@@ -176,7 +183,7 @@ fun HomeScreen(
             Box(
                 modifier = Modifier
                     .padding(end = 5.dp)
-                    .width(160.dp)
+                    .width(170.dp)
                     .height(38.dp)
                     .background(brush = buttonColor, shape = RoundedCornerShape(20.dp))
                     .clickable(
@@ -200,7 +207,7 @@ fun HomeScreen(
             Box(
                 modifier = Modifier
                     .padding(start = 5.dp)
-                    .width(160.dp)
+                    .width(170.dp)
                     .height(38.dp)
                     .background(brush = buttonColor, shape = RoundedCornerShape(20.dp))
                     .clickable(
@@ -221,7 +228,13 @@ fun HomeScreen(
                 )
             }
         }
-        MyActivityContent(sharedViewModel = sharedViewModel, day_ = day, month_ = month, year_ = year)
+        MyActivityContent(
+            sharedViewModel = sharedViewModel,
+            day_ = day,
+            month_ = month,
+            year_ = year,
+            currency = currency
+        )
     }
 }
 
@@ -274,13 +287,15 @@ fun TopGraphMainScreen(
                         else simplifyAmount(amount = total_amount),
                 fontSize = EXTRA_LARGE_TEXT_SIZE,
                 fontFamily = fontInter,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colors.textColorBW
             )
             Text(
                 text = stringResource(id = R.string.total_balance),
                 fontSize = EXTRA_SMALL_TEXT_SIZE,
                 fontFamily = fontInter,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colors.textColorBW
             )
         }
 
@@ -319,3 +334,15 @@ fun TopGraphMainScreen(
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+

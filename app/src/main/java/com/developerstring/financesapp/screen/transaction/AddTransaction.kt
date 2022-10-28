@@ -5,6 +5,8 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -62,12 +64,14 @@ fun AddTransaction(
 
     val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
 
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.backgroundColor)
             .padding(start = 10.dp, end = 20.dp, top = 10.dp)
-            .verticalScroll(enabled = true, state = ScrollState(1))
+            .verticalScroll(state = scrollState)
     ) {
         Row(
             modifier = Modifier
@@ -86,7 +90,8 @@ fun AddTransaction(
                         .size(20.dp)
                         .rotate(90f),
                     painter = painterResource(id = R.drawable.ic_arrow_down),
-                    contentDescription = "back_arrow"
+                    contentDescription = "back_arrow",
+                    tint = MaterialTheme.colors.textColorBW
                 )
             }
 
@@ -97,6 +102,7 @@ fun AddTransaction(
                     fontSize = LARGE_TEXT_SIZE,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colors.textColorBW
                 )
                 Box(
                     modifier = Modifier
@@ -114,6 +120,7 @@ fun AddTransaction(
                 fontSize = LARGE_TEXT_SIZE,
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colors.textColorBW
             )
         }
 
@@ -147,13 +154,15 @@ fun TransactionContent(
     onSaveClicked: (TransactionModel) -> Unit
 ) {
 
-    var amount by remember { mutableStateOf(
-        if (transactionModel.amount == 0) {
-            ""
-        } else {
-            transactionModel.amount.toString()
-        }
-    ) }
+    var amount by remember {
+        mutableStateOf(
+            if (transactionModel.amount == 0) {
+                ""
+            } else {
+                transactionModel.amount.toString()
+            }
+        )
+    }
     var category by remember { mutableStateOf(transactionModel.category) }
     var extraInfo by remember { mutableStateOf(transactionModel.info) }
     var place by remember { mutableStateOf(transactionModel.place) }
@@ -207,7 +216,7 @@ fun TransactionContent(
                     categoriesExpanded = false
                 }
             ),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
 
         // group of Amount textField
@@ -339,6 +348,7 @@ fun TransactionContent(
                     modifier = Modifier
                         .padding(horizontal = 5.dp)
                         .width(textFieldSize.width.dp),
+                    backgroundColor = MaterialTheme.colors.backgroundColorCard,
                     elevation = 10.dp
                 ) {
                     LazyColumn(
@@ -405,7 +415,7 @@ fun TransactionContent(
                 }
 
                 LaunchedEffect(key1 = false) {
-                    if (date=="") {
+                    if (date == "") {
                         date = SimpleDateFormat("d/MM/yyyy").format(Date())
                         day = SimpleDateFormat("d").format(Date()).toShort()
                         month = SimpleDateFormat("M").format(Date()).toShort()
@@ -422,9 +432,12 @@ fun TransactionContent(
                         { _: DatePicker, mYear_: Int, mMonth_: Int, mDayOfMonth: Int ->
                             date = "$mDayOfMonth/${mMonth_ + 1}/$mYear_"
                             year = mYear_.toShort()
-                            month = (mMonth_+1).toShort()
+                            month = (mMonth_ + 1).toShort()
                             day = mDayOfMonth.toShort()
-                        }, mYear, mMonth, mDay
+                        },
+                        if (year.toInt() != 0) year.toInt() else mYear,
+                        if (month.toInt() != 0) month.toInt()-1 else mMonth,
+                        if(day.toInt()!=0) day.toInt() else mDay
                     ).show()
 
                     dateClicked = false
@@ -500,7 +513,7 @@ fun TransactionContent(
                     TextField(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(heightTextFields)
+                            .heightIn(min = heightTextFields)
                             .border(
                                 width = 1.8.dp,
                                 color = MaterialTheme.colors.textColorBLG,
@@ -524,7 +537,7 @@ fun TransactionContent(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next
                         ),
-                        singleLine = true
+                        singleLine = false
                     )
                 }
 
@@ -682,6 +695,11 @@ fun CategoryItems(
     Row(modifier = Modifier
         .clickable { onSelect(title) }
         .padding(horizontal = 10.dp, vertical = 10.dp)) {
-        Text(modifier = Modifier.fillMaxWidth(), text = title, fontSize = 16.sp)
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = title,
+            fontSize = 16.sp,
+            color = MaterialTheme.colors.textColorBW
+        )
     }
 }

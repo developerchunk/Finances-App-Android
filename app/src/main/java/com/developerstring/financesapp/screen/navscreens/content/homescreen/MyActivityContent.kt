@@ -7,11 +7,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -22,22 +19,24 @@ import androidx.compose.ui.unit.dp
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
-import com.developerstring.financesapp.util.Constants
-import com.developerstring.financesapp.util.lastWeekDateCalculator
-import java.text.SimpleDateFormat
-import java.util.Date
+import com.developerstring.financesapp.ui.components.BarChart
+import com.developerstring.financesapp.util.*
+import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
+import com.developerstring.financesapp.util.Constants.SPENT
 
 @Composable
 fun MyActivityContent(
     sharedViewModel: SharedViewModel,
     day_: Int,
     month_: Int,
-    year_: Int
+    year_: Int,
+    currency: String
 ) {
 
     var day = listOf<Int>()
     var month = listOf<Int>()
     var year = listOf<Int>()
+    var weekTransactions = listOf<Int>()
 
     lastWeekDateCalculator(
         day = day_,
@@ -53,24 +52,21 @@ fun MyActivityContent(
             year = it.reversed()
         }
     )
-
-
-
-    sharedViewModel.searchDayPayment(
-        day = day_.toString(),
-        month = month_.toString(),
-        year = year_.toString(),
-        transaction_type = Constants.SPENT
+    GetLastWeekTransactions(
+        days = day,
+        months = month,
+        years = year,
+        sharedViewModel = sharedViewModel,
+        transactions = {
+            weekTransactions = it
+        }
     )
-    val day1List by sharedViewModel.dayPayment.collectAsState()
-
-    val day1Data = day1List.sum()
 
     Surface(
         modifier = Modifier
-            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .padding(start = 20.dp, end = 20.dp, top = 30.dp, bottom = 10.dp)
             .fillMaxWidth(),
-        elevation = 10.dp,
+        elevation = 8.dp,
         color = MaterialTheme.colors.contentColorLBLD,
         shape = RoundedCornerShape(20.dp)
     ) {
@@ -89,7 +85,8 @@ fun MyActivityContent(
                     text = stringResource(id = R.string.my_activity),
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium,
-                    fontSize = TEXT_FIELD_SIZE
+                    fontSize = TEXT_FIELD_SIZE,
+                    color = MaterialTheme.colors.textColorBW
                 )
                 Image(
                     modifier = Modifier
@@ -101,18 +98,47 @@ fun MyActivityContent(
                 )
             }
 
-            Text(
-                modifier = Modifier.padding(start = 20.dp, top = 5.dp),
-                text = stringResource(id = R.string.last_week),
-                fontFamily = fontInter,
-                fontWeight = FontWeight.Medium,
-                fontSize = EXTRA_SMALL_TEXT_SIZE
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 5.dp, end = 10.dp)
+            ) {
 
-            Text(text = day1Data.toString())
-            Text(text = day.toString())
-            Text(text = month.toString())
-            Text(text = year.toString())
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        modifier = Modifier.padding(start = 5.dp),
+                        text = stringResource(id = R.string.last_week),
+                        fontFamily = fontInter,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = EXTRA_SMALL_TEXT_SIZE,
+                        color = MaterialTheme.colors.textColorBW
+                    )
+
+                    WeeklyTransactionChart(
+                        data = weekTransactions,
+                        dates = day
+                    )
+
+                    Column {
+
+                        Text(
+                            text = if (currency == INDIAN_CURRENCY) simplifyAmountIndia(
+                                weekTransactions.sum()
+                            ) else simplifyAmount(weekTransactions.sum()),
+                            fontWeight = FontWeight.Medium,
+                            fontSize = TEXT_FIELD_SIZE,
+                            color = MaterialTheme.colors.textColorBW
+                        )
+                        Text(
+                            text = stringResource(id = R.string.spent_this_week),
+                            fontWeight = FontWeight.Normal,
+                            fontSize = SMALL_TEXT_SIZE,
+                            color = MaterialTheme.colors.textColorBW
+                        )
+
+                    }
+                }
+            }
 
         }
 
@@ -122,9 +148,107 @@ fun MyActivityContent(
 
 @Composable
 fun WeeklyTransactionChart(
-    data: Map<Float, Int>
+    data: List<Int>,
+    dates: List<Int>
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+
+    val maxValue = data.max()
+    val amount = mutableListOf<Float>()
+
+    data.forEach {
+        if (it == 0) {
+            amount.add(0f)
+        } else {
+            amount.add(it.toFloat() / maxValue.toFloat())
+        }
+    }
+
+    Row(modifier = Modifier.fillMaxWidth()) {
+
+        BarChart(
+            data = amount,
+            date = dates,
+            height = 100.dp
+        )
+
+//        Text(text = amount.toString())
 
     }
+}
+
+@Composable
+fun MonthTransactions(
+    sharedViewModel: SharedViewModel,
+    dates: (List<Int>) -> Unit,
+    monthData: (List<Int>) -> Unit,
+) {
+
+    var days = listOf<Int>()
+    var months = listOf<Int>()
+    var years = listOf<Int>()
+
+    monthDateCalculator(
+        month = 10,
+        year = 2022,
+        day_ = {
+            days = it
+        },
+        month_ = {
+            months = it
+        },
+        year_ = {
+            years = it
+        }
+    )
+
+    var week1 = listOf<Int>()
+    var week2 = listOf<Int>()
+    var week3 = listOf<Int>()
+    var week4 = listOf<Int>()
+
+    for (i in 0..days.lastIndex) {
+        sharedViewModel.searchMonthPayment(
+            day = days[i].toString(),
+            month = months[i].toString(),
+            year = years[i].toString(),
+            transaction_type = SPENT,
+            day_no = i
+        )
+    }
+//    GetLastWeekTransactions(
+//        days = days.subList(8,14),
+//        months = months,
+//        years = years,
+//        sharedViewModel = sharedViewModel,
+//        transactions = {
+//            week2 = it
+//        }
+//    )
+//    GetLastWeekTransactions(
+//        days = days.subList(15,21),
+//        months = months,
+//        years = years,
+//        sharedViewModel = sharedViewModel,
+//        transactions = {
+//            week3 = it
+//        }
+//    )
+//    GetLastWeekTransactions(
+//        days = days.subList(22,days.last()),
+//        months = months,
+//        years = years,
+//        sharedViewModel = sharedViewModel,
+//        transactions = {
+//            week4 = it
+//        }
+//    )
+
+    val monthDataList by sharedViewModel.dayPayment.collectAsState()
+
+    dates(days)
+    monthData(monthDataList)
+
+//    Text(text = months.toString())
+//    Text(text = years.toString())
+
 }
