@@ -8,6 +8,7 @@ import com.developerstring.financesapp.roomdatabase.repository.TransactionReposi
 import com.developerstring.financesapp.util.Constants.SAVINGS
 import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.RequestState
+import com.developerstring.financesapp.util.SearchBarState
 import com.developerstring.financesapp.util.TransactionAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +46,29 @@ class SharedViewModel @Inject constructor(
         } catch (e: Exception) {
             _allTransactions.value = RequestState.Error(e)
         }
+    }
+
+    val searchBarState: MutableState<SearchBarState> = mutableStateOf(SearchBarState.DELETE)
+
+    val searchBarText: MutableState<String> = mutableStateOf("")
+
+    private var _searchedTransactions =
+        MutableStateFlow<RequestState<List<TransactionModel>>>(RequestState.Idle)
+    val searchedTransactions: StateFlow<RequestState<List<TransactionModel>>> = _searchedTransactions
+
+    fun getSearchedTransactions(searchQuery: String="Bills") {
+        _searchedTransactions.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                repository.searchAllTransaction(searchQuery = searchQuery).collect {
+                    _searchedTransactions.value = RequestState.Success(it)
+                }
+            }
+        } catch (e: Exception) {
+            _searchedTransactions.value = RequestState.Error(e)
+        }
+
+        searchBarState.value = SearchBarState.TRIGGERED
     }
 
     fun getSelectedTransaction(transactionID: Int) {

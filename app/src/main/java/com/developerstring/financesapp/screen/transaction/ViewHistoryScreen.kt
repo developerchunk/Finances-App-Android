@@ -1,32 +1,27 @@
 package com.developerstring.financesapp.screen.transaction
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
+import com.developerstring.financesapp.ui.components.TopAppBarHistory
 import com.developerstring.financesapp.ui.components.TransactionsItemView
-import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.ui.theme.backgroundColor
 import com.developerstring.financesapp.util.Constants.LAST_TRANSACTION
 import com.developerstring.financesapp.util.RequestState
+import com.developerstring.financesapp.util.SearchBarState
 
 @Composable
 fun ViewHistoryScreen(
@@ -38,14 +33,33 @@ fun ViewHistoryScreen(
     val transactionAction = sharedViewModel.transactionAction
     sharedViewModel.transactionAction(action = transactionAction.value)
 
-    val allTransactions by sharedViewModel.allTransactions.collectAsState()
+    val searchBarState: SearchBarState by sharedViewModel.searchBarState
+    val searchBarText: String by sharedViewModel.searchBarText
 
-    TransactionHistoryContain(
-        sharedViewModel = sharedViewModel,
-        profileViewModel = profileViewModel,
-        navController = navController,
-        allTransactions = allTransactions
-    )
+    val allTransactions by sharedViewModel.allTransactions.collectAsState()
+    val searchedTransactions by sharedViewModel.searchedTransactions.collectAsState()
+
+    Scaffold(
+        topBar = {
+            TopAppBarHistory(
+                sharedViewModel = sharedViewModel,
+                profileViewModel = profileViewModel,
+                navController = navController,
+                searchBarState = searchBarState,
+                searchBarText = searchBarText,
+                allTransactions = allTransactions
+            )
+        }
+    ) {
+        TransactionHistoryContain(
+            sharedViewModel = sharedViewModel,
+            profileViewModel = profileViewModel,
+            navController = navController,
+            allTransactions = allTransactions,
+            searchTransactions = searchedTransactions,
+            searchBarState = searchBarState
+        )
+    }
 
 }
 
@@ -54,7 +68,9 @@ fun TransactionHistoryContain(
     sharedViewModel: SharedViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavController,
-    allTransactions: RequestState<List<TransactionModel>>
+    allTransactions: RequestState<List<TransactionModel>>,
+    searchTransactions: RequestState<List<TransactionModel>>,
+    searchBarState: SearchBarState
 ) {
 
     val currency by profileViewModel.profileCurrency.collectAsState()
@@ -65,53 +81,26 @@ fun TransactionHistoryContain(
             .background(MaterialTheme.colors.backgroundColor)
     ) {
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(TOP_APP_BAR_HEIGHT),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            IconButton(onClick = {
-                navController.popBackStack()
-            }) {
-                Icon(
-                    modifier = Modifier.size(28.dp),
-                    imageVector = Icons.Rounded.Close,
-                    contentDescription = "close",
-                    tint = MaterialTheme.colors.textColorBW
+        if (searchBarState == SearchBarState.TRIGGERED) {
+            if (searchTransactions is RequestState.Success) {
+                HistoryTransactionContent(
+                    allTransactions = searchTransactions.data,
+                    currency = currency,
+                    sharedViewModel = sharedViewModel,
+                    navController = navController
                 )
             }
-
-            Text(
-                text = stringResource(id = R.string.history),
-                fontFamily = fontInter,
-                fontWeight = FontWeight.Medium,
-                fontSize = EXTRA_LARGE_TEXT_SIZE,
-                color = MaterialTheme.colors.textColorBW
-            )
-
-            IconButton(onClick = {
-//                navController.popBackStack()
-            }) {
-                Icon(
-                    modifier = Modifier.size(28.dp),
-                    imageVector = Icons.Rounded.Search,
-                    contentDescription = "close",
-                    tint = MaterialTheme.colors.textColorBW
+        } else {
+            if (allTransactions is RequestState.Success) {
+                HistoryTransactionContent(
+                    allTransactions = allTransactions.data,
+                    currency = currency,
+                    sharedViewModel = sharedViewModel,
+                    navController = navController
                 )
             }
-
         }
 
-        if (allTransactions is RequestState.Success)
-            HistoryTransactionContent(
-                allTransactions = allTransactions.data,
-                currency = currency,
-                sharedViewModel = sharedViewModel,
-                navController = navController
-            )
     }
 }
 

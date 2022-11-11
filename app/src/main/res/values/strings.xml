@@ -34,6 +34,9 @@
     <string name="search_icon">search icon</string>
     <string name="close_icon">close icon</string>
 
+
+    <string name="search_placeholder">Search</string>
+
 <!--    Currencies-->
     <string-array name="currencies">
         <item>Indian Rupee- ₹</item>

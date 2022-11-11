@@ -631,7 +631,7 @@ fun TransactionContent(
                     }
                 },
             ) {
-                Text(text = "Next", color = Color.White, fontSize = 20.sp)
+                Text(text = "Save", color = Color.White, fontSize = 20.sp)
             }
 
             Spacer(

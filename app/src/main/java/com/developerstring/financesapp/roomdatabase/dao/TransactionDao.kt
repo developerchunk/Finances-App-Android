@@ -33,7 +33,7 @@ interface TransactionDao {
     @Query("DELETE FROM transaction_table")
     suspend fun deleteAllTransactions()
 
-    @Query("SELECT * FROM transaction_table WHERE amount LIKE :searchQuery OR transaction_type LIKE :searchQuery OR category LIKE :searchQuery OR info LIKE :searchQuery OR place LIKE :searchQuery")
+    @Query("SELECT * FROM transaction_table WHERE info LIKE :searchQuery OR amount LIKE :searchQuery OR transaction_type LIKE :searchQuery OR category LIKE :searchQuery OR place LIKE :searchQuery")
     fun searchAllTransactions(searchQuery: String): Flow<List<TransactionModel>>
 
     @Query("SELECT amount FROM transaction_table WHERE month=:month AND year=:year AND transaction_type=:transaction_type")
@@ -43,3 +43,5 @@ interface TransactionDao {
     fun searchDayPayment(day: String,month: String,year: String, transaction_type: String): Flow<List<Int>>
 
 }
+
+const val a = "dsscsdc"
