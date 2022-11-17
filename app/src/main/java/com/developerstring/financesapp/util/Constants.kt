@@ -40,15 +40,7 @@ object Constants {
         DARK_THEME to R.drawable.themes_icon,
     )
 
-    // Currency
-    val CURRENCY_LIST = listOf(
-        "Indian Rupee- ₹",
-        "Dollar- $",
-        "Euro- €"
-    )
-
     const val INDIAN_CURRENCY = "₹"
-    const val DETAIL_TRANSACTION_KEY = "id"
 
     // Chip Selection Add Transaction
     const val SPENT = "spent"
@@ -61,6 +53,12 @@ object Constants {
         SAVINGS
     )
 
+    const val THIS_MONTH = "This Month"
+
+    val FILTER_NAME = mutableListOf(
+        THIS_MONTH
+    )
+
     // Category List
     val CATEGORIES = listOf(
         "Food",
@@ -71,8 +69,8 @@ object Constants {
         "Rent",
         "Bills",
         "Fees",
-        "Bank",
-        "Cash",
+        "Transaction",
+        "Gift",
         "Other"
     ).sorted()
 

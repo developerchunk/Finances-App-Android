@@ -66,7 +66,7 @@ fun MyActivityContent(
         modifier = Modifier
             .padding(start = 20.dp, end = 20.dp, top = 30.dp, bottom = 10.dp)
             .fillMaxWidth(),
-        elevation = 8.dp,
+        elevation = 4.dp,
         color = MaterialTheme.colors.contentColorLBLD,
         shape = RoundedCornerShape(20.dp)
     ) {
@@ -200,11 +200,6 @@ fun MonthTransactions(
             years = it
         }
     )
-
-    var week1 = listOf<Int>()
-    var week2 = listOf<Int>()
-    var week3 = listOf<Int>()
-    var week4 = listOf<Int>()
 
     for (i in 0..days.lastIndex) {
         sharedViewModel.searchMonthPayment(

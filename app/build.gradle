@@ -85,4 +85,6 @@ dependencies {
 
     // constraintLayout
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+    // accompanist library https://google.github.io/accompanist/flowlayout/
+    implementation "com.google.accompanist:accompanist-flowlayout:0.27.0"
 }

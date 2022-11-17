@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
@@ -20,6 +21,7 @@ import com.developerstring.financesapp.ui.components.TopAppBarHistory
 import com.developerstring.financesapp.ui.components.TransactionsItemView
 import com.developerstring.financesapp.ui.theme.backgroundColor
 import com.developerstring.financesapp.util.Constants.LAST_TRANSACTION
+import com.developerstring.financesapp.util.FilterTransactionState
 import com.developerstring.financesapp.util.RequestState
 import com.developerstring.financesapp.util.SearchBarState
 
@@ -34,20 +36,20 @@ fun ViewHistoryScreen(
     sharedViewModel.transactionAction(action = transactionAction.value)
 
     val searchBarState: SearchBarState by sharedViewModel.searchBarState
+    val filterState: FilterTransactionState by sharedViewModel.filterState
     val searchBarText: String by sharedViewModel.searchBarText
 
     val allTransactions by sharedViewModel.allTransactions.collectAsState()
     val searchedTransactions by sharedViewModel.searchedTransactions.collectAsState()
+    val filterSearchedTransactions by sharedViewModel.filterSearchedTransactions.collectAsState()
 
     Scaffold(
         topBar = {
             TopAppBarHistory(
                 sharedViewModel = sharedViewModel,
-                profileViewModel = profileViewModel,
                 navController = navController,
                 searchBarState = searchBarState,
                 searchBarText = searchBarText,
-                allTransactions = allTransactions
             )
         }
     ) {
@@ -57,7 +59,9 @@ fun ViewHistoryScreen(
             navController = navController,
             allTransactions = allTransactions,
             searchTransactions = searchedTransactions,
-            searchBarState = searchBarState
+            filterSearchTransactions = filterSearchedTransactions,
+            searchBarState = searchBarState,
+            filterState = filterState
         )
     }
 
@@ -70,7 +74,9 @@ fun TransactionHistoryContain(
     navController: NavController,
     allTransactions: RequestState<List<TransactionModel>>,
     searchTransactions: RequestState<List<TransactionModel>>,
-    searchBarState: SearchBarState
+    filterSearchTransactions: RequestState<List<TransactionModel>>,
+    searchBarState: SearchBarState,
+    filterState: FilterTransactionState
 ) {
 
     val currency by profileViewModel.profileCurrency.collectAsState()
@@ -81,7 +87,25 @@ fun TransactionHistoryContain(
             .background(MaterialTheme.colors.backgroundColor)
     ) {
 
-        if (searchBarState == SearchBarState.TRIGGERED) {
+        if (searchBarState == SearchBarState.TRIGGERED && filterState == FilterTransactionState.OPENED) {
+            if (filterSearchTransactions is RequestState.Success) {
+                HistoryTransactionContent(
+                    allTransactions = filterSearchTransactions.data,
+                    currency = currency,
+                    sharedViewModel = sharedViewModel,
+                    navController = navController
+                )
+            }
+        } else if (searchBarState == SearchBarState.TRIGGERED) {
+            if (searchTransactions is RequestState.Success) {
+                HistoryTransactionContent(
+                    allTransactions = searchTransactions.data,
+                    currency = currency,
+                    sharedViewModel = sharedViewModel,
+                    navController = navController
+                )
+            }
+        } else if (filterState == FilterTransactionState.OPENED) {
             if (searchTransactions is RequestState.Success) {
                 HistoryTransactionContent(
                     allTransactions = searchTransactions.data,

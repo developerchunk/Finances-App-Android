@@ -35,6 +35,10 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
         return transactionDao.searchAllTransactions(searchQuery = searchQuery)
     }
 
+    fun filterSearchTransaction(searchQuery: String, filterQuery: String): Flow<List<TransactionModel>> {
+        return transactionDao.filterSearchTransactions(searchQuery = searchQuery, filterQuery = filterQuery)
+    }
+
     fun searchMonthPayment(month: String, year: String, transaction_type: String): Flow<List<Int>> {
         return transactionDao.searchMonthPayment(
             month = month,

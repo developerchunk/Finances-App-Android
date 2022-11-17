@@ -3,7 +3,10 @@ package com.developerstring.financesapp.util
 import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.SAVINGS
 import com.developerstring.financesapp.util.Constants.SPENT
+import com.developerstring.financesapp.util.Constants.THIS_MONTH
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import kotlin.math.abs
 
 fun keyToTransactionType(key: String): String {
@@ -171,4 +174,15 @@ fun monthLastDate(
         12 -> 31
         else -> 31
     }
+}
+
+fun String.filterListText(): String {
+
+    val calender = Calendar.getInstance()
+
+    return when(this) {
+        THIS_MONTH -> "${calender.get(Calendar.MONTH)+1}/${calender.get(Calendar.YEAR)}"
+        else -> this
+    }
+
 }

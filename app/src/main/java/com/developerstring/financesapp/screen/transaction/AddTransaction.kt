@@ -5,8 +5,6 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.runtime.*
@@ -25,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -40,15 +38,16 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
+import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
+import com.developerstring.financesapp.ui.components.CustomChip
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.ADD_TRANSACTION_TYPE
 import com.developerstring.financesapp.util.Constants.CATEGORIES
 import com.developerstring.financesapp.util.Constants.SPENT
-import com.developerstring.financesapp.util.keyToTransactionType
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -205,6 +204,8 @@ fun TransactionContent(
 
     mCalendar.time = Date()
 
+    val buttonColor = Brush.horizontalGradient(colors = listOf(UIBlue, LightUIBlue))
+
     Column(
         modifier = modifier
             .padding(top = 30.dp)
@@ -271,7 +272,7 @@ fun TransactionContent(
                 .fillMaxWidth()
         ) {
             chipList.forEach { it ->
-                Chip(
+                CustomChip(
                     title = it,
                     selected = transactionType,
                     onSelected = {
@@ -436,8 +437,8 @@ fun TransactionContent(
                             day = mDayOfMonth.toShort()
                         },
                         if (year.toInt() != 0) year.toInt() else mYear,
-                        if (month.toInt() != 0) month.toInt()-1 else mMonth,
-                        if(day.toInt()!=0) day.toInt() else mDay
+                        if (month.toInt() != 0) month.toInt() - 1 else mMonth,
+                        if (day.toInt() != 0) day.toInt() else mDay
                     ).show()
 
                     dateClicked = false
@@ -597,42 +598,102 @@ fun TransactionContent(
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(
+
+            Surface(
                 modifier = Modifier
+                    .padding(start = 5.dp)
                     .width(220.dp)
                     .height(45.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.contentBackgroundColor
-                ),
-                shape = RoundedCornerShape(25.dp),
-                onClick = {
-                    if (
-                        amount.isNotEmpty() &&
-                        category.isNotEmpty() &&
-                        transactionType.isNotEmpty() &&
-                        date.isNotEmpty()
-                    ) {
-                        onSaveClicked(
-                            TransactionModel(
-                                amount = amount.toInt(),
-                                transaction_type = transactionType,
-                                category = category,
-                                date = date,
-                                day = day,
-                                month = month,
-                                year = year,
-                                info = extraInfo,
-                                place = place,
-                            ),
-                        )
-                    } else {
-                        Toast.makeText(context, "Please fill all details", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                },
+                shape = CircleShape,
+                elevation = 4.dp, color = Color.Transparent
             ) {
-                Text(text = "Save", color = Color.White, fontSize = 20.sp)
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(brush = buttonColor)
+                        .clickable(
+                            interactionSource = interactionSource,
+                            indication = null,
+                            onClick = {
+                                if (
+                                    amount.isNotEmpty() &&
+                                    category.isNotEmpty() &&
+                                    transactionType.isNotEmpty() &&
+                                    date.isNotEmpty()
+                                ) {
+                                    onSaveClicked(
+                                        TransactionModel(
+                                            amount = amount.toInt(),
+                                            transaction_type = transactionType,
+                                            category = category,
+                                            date = date,
+                                            day = day,
+                                            month = month,
+                                            year = year,
+                                            info = extraInfo,
+                                            place = place,
+                                        ),
+                                    )
+                                } else {
+                                    Toast
+                                        .makeText(
+                                            context,
+                                            "Please fill all details",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                        .show()
+                                }
+                            }
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Save",
+                        fontFamily = fontInter,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = LARGE_TEXT_SIZE,
+                        color = Color.White
+                    )
+                }
             }
+
+
+//            Button(
+//                modifier = Modifier
+//                    .width(220.dp)
+//                    .height(45.dp),
+//                colors = ButtonDefaults.buttonColors(
+//                    backgroundColor = MaterialTheme.colors.contentBackgroundColor
+//                ),
+//                shape = RoundedCornerShape(25.dp),
+//                onClick = {
+//                    if (
+//                        amount.isNotEmpty() &&
+//                        category.isNotEmpty() &&
+//                        transactionType.isNotEmpty() &&
+//                        date.isNotEmpty()
+//                    ) {
+//                        onSaveClicked(
+//                            TransactionModel(
+//                                amount = amount.toInt(),
+//                                transaction_type = transactionType,
+//                                category = category,
+//                                date = date,
+//                                day = day,
+//                                month = month,
+//                                year = year,
+//                                info = extraInfo,
+//                                place = place,
+//                            ),
+//                        )
+//                    } else {
+//                        Toast.makeText(context, "Please fill all details", Toast.LENGTH_SHORT)
+//                            .show()
+//                    }
+//                },
+//            ) {
+//                Text(text = "Save", color = Color.White, fontSize = 20.sp)
+//            }
 
             Spacer(
                 modifier = Modifier
@@ -644,47 +705,6 @@ fun TransactionContent(
 
     }
 
-}
-
-@Composable
-fun Chip(
-    title: String,
-    selected: String,
-    onSelected: (String) -> Unit
-) {
-
-    val isSelected = selected == title
-
-    val background = if (isSelected) UIBlue else MaterialTheme.colors.colorDarkGray
-    val contentColor = if (isSelected) Color.White else MaterialTheme.colors.textColorBLG
-
-    Box(
-        modifier = Modifier
-            .padding(end = 10.dp)
-            .height(35.dp)
-            .clip(CircleShape)
-            .background(background)
-            .clickable(
-                onClick = {
-                    onSelected(title)
-                }
-            )
-    ) {
-        Row(
-            modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            AnimatedVisibility(visible = isSelected) {
-                Icon(
-                    imageVector = Icons.Filled.Check,
-                    contentDescription = "check",
-                    tint = Color.White
-                )
-            }
-            Text(text = keyToTransactionType(title), color = contentColor, fontSize = 16.sp)
-        }
-    }
 }
 
 @Composable

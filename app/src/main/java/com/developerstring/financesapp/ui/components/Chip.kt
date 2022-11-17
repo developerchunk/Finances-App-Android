@@ -1,0 +1,120 @@
+package com.developerstring.financesapp.ui.components
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.keyToTransactionType
+
+@Composable
+fun CustomChip(
+    title: String,
+    selected: String,
+    onSelected: (String) -> Unit
+) {
+
+    val isSelected = selected == title
+
+    val background = if (isSelected) UIBlue else MaterialTheme.colors.colorDarkGray
+    val contentColor = if (isSelected) Color.White else MaterialTheme.colors.textColorBLG
+
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
+
+    Box(
+        modifier = Modifier
+            .padding(end = 10.dp)
+            .height(35.dp)
+            .clip(CircleShape)
+            .background(background)
+            .clickable(
+                onClick = {
+                    onSelected(title)
+                },
+                indication = null,
+                interactionSource = interactionSource
+            )
+    ) {
+        Row(
+            modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            AnimatedVisibility(visible = isSelected) {
+                Icon(
+                    imageVector = Icons.Filled.Check,
+                    contentDescription = "check",
+                    tint = Color.White
+                )
+            }
+            Text(text = keyToTransactionType(title), color = contentColor, fontSize = 16.sp)
+        }
+    }
+}
+
+@Composable
+fun SearchChip(
+    title: String,
+    selected: String,
+    onSelected: (String) -> Unit
+) {
+
+    val isSelected = selected == title
+
+    val background = if (isSelected) UIBlue else MaterialTheme.colors.colorDarkGray
+    val contentColor = if (isSelected) Color.White else MaterialTheme.colors.textColorBW
+
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
+
+    Box(
+        modifier = Modifier
+            .padding(end = 10.dp)
+            .height(35.dp)
+            .clip(CircleShape)
+            .background(background)
+            .border(width = 1.dp, color = MaterialTheme.colors.colorGray, shape = CircleShape)
+            .clickable(
+                onClick = {
+                    onSelected(title)
+                },
+                indication = null,
+                interactionSource = interactionSource
+            )
+    ) {
+        Row(
+            modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(text = title, color = contentColor, fontSize = 16.sp)
+            AnimatedVisibility(visible = isSelected) {
+                Icon(
+                    imageVector = Icons.Filled.Close,
+                    contentDescription = "check",
+                    tint = Color.White
+                )
+            }
+        }
+    }
+}

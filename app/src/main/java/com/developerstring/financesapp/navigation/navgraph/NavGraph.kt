@@ -1,7 +1,5 @@
 package com.developerstring.financesapp.navigation.navgraph
 
-import android.util.Log
-import android.widget.Toast
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.developerstring.financesapp.navigation.Graph
@@ -11,8 +9,6 @@ import com.developerstring.financesapp.screen.transaction.TransactionDetailsScre
 import com.developerstring.financesapp.screen.transaction.ViewHistoryScreen
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
-import com.developerstring.financesapp.util.Constants.DETAIL_TRANSACTION_KEY
-import kotlin.reflect.typeOf
 
 fun NavGraphBuilder.navGraph(
     navController: NavHostController,

@@ -35,7 +35,9 @@
     <string name="close_icon">close icon</string>
 
 
-    <string name="search_placeholder">Search</string>
+    <string name="search_placeholder">Search here</string>
+
+    <string name="filter">Filter</string>
 
 <!--    Currencies-->
     <string-array name="currencies">

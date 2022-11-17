@@ -7,6 +7,7 @@ import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.roomdatabase.repository.TransactionRepository
 import com.developerstring.financesapp.util.Constants.SAVINGS
 import com.developerstring.financesapp.util.Constants.SPENT
+import com.developerstring.financesapp.util.FilterTransactionState
 import com.developerstring.financesapp.util.RequestState
 import com.developerstring.financesapp.util.SearchBarState
 import com.developerstring.financesapp.util.TransactionAction
@@ -52,11 +53,16 @@ class SharedViewModel @Inject constructor(
 
     val searchBarText: MutableState<String> = mutableStateOf("")
 
+    val filterState: MutableState<FilterTransactionState> =
+        mutableStateOf(FilterTransactionState.CLOSED)
+
+
     private var _searchedTransactions =
         MutableStateFlow<RequestState<List<TransactionModel>>>(RequestState.Idle)
-    val searchedTransactions: StateFlow<RequestState<List<TransactionModel>>> = _searchedTransactions
+    val searchedTransactions: StateFlow<RequestState<List<TransactionModel>>> =
+        _searchedTransactions
 
-    fun getSearchedTransactions(searchQuery: String="Bills") {
+    fun getSearchedTransactions(searchQuery: String) {
         _searchedTransactions.value = RequestState.Loading
         try {
             viewModelScope.launch {
@@ -66,6 +72,29 @@ class SharedViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             _searchedTransactions.value = RequestState.Error(e)
+        }
+
+        searchBarState.value = SearchBarState.TRIGGERED
+    }
+
+    private var _filterSearchedTransactions =
+        MutableStateFlow<RequestState<List<TransactionModel>>>(RequestState.Idle)
+    val filterSearchedTransactions: StateFlow<RequestState<List<TransactionModel>>> =
+        _filterSearchedTransactions
+
+    fun getFilterSearchedTransactions(searchQuery: String, filterQuery: String) {
+        _filterSearchedTransactions.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                repository.filterSearchTransaction(
+                    searchQuery = searchQuery,
+                    filterQuery = filterQuery
+                ).collect {
+                    _filterSearchedTransactions.value = RequestState.Success(it)
+                }
+            }
+        } catch (e: Exception) {
+            _filterSearchedTransactions.value = RequestState.Error(e)
         }
 
         searchBarState.value = SearchBarState.TRIGGERED

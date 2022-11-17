@@ -14,13 +14,11 @@ val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 
 val LightPurple = Color(0xFFC9D4FF)
-val DarkerGray = Color(0xFF525252)
 val LightGray = Color(0xFF636B7B)
 val SlightGray = Color(0xFF8D95A3)
 val LighterGray = Color(0xFFB1B1B1)
-val ExtraLightGray = Color(0xFFD9D9D9)
+val ExtraLightGray = Color(0xFFE4E7EC)
 val LightDark = Color(0xFF20374D)
-val LighterDark = Color(0xFF2D475F)
 val SlightDark = Color(0xFF1C2A36)
 val Dark = Color(0xFF16212B)
 val ExtraDark = Color(0xFF131E29)
@@ -37,10 +35,10 @@ val Colors.textColorBW: Color
     get() = if (!DARK_THEME_ENABLE) Black else White
 
 val Colors.colorGray: Color
-    get() = if (!DARK_THEME_ENABLE) Gray else LightGray
+    get() = if (!DARK_THEME_ENABLE) Gray else LighterGray
 
 val Colors.colorDarkGray: Color
-    get() = if (!DARK_THEME_ENABLE) ExtraLightGray else LighterDark
+    get() = if (!DARK_THEME_ENABLE) ExtraLightGray else SlightDark
 
 val Colors.contentBackgroundColor: Color
     get() = if (!DARK_THEME_ENABLE) Black else UIBlue
