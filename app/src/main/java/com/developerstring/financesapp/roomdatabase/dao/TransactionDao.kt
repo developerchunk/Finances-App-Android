@@ -33,10 +33,10 @@ interface TransactionDao {
     @Query("DELETE FROM transaction_table")
     suspend fun deleteAllTransactions()
 
-    @Query("SELECT * FROM transaction_table WHERE info LIKE :searchQuery OR amount LIKE :searchQuery OR category LIKE :searchQuery OR place LIKE :searchQuery OR date LIKE :searchQuery ORDER BY id DESC")
+    @Query("SELECT * FROM transaction_table WHERE info LIKE :searchQuery OR amount LIKE :searchQuery OR category LIKE :searchQuery OR place LIKE :searchQuery OR date LIKE :searchQuery ORDER BY date DESC")
     fun searchAllTransactions(searchQuery: String): Flow<List<TransactionModel>>
 
-    @Query("SELECT * FROM transaction_table WHERE (info LIKE :searchQuery OR amount LIKE :searchQuery OR category LIKE :searchQuery OR place LIKE :searchQuery OR date LIKE :searchQuery) AND (info LIKE :filterQuery OR category LIKE :filterQuery OR amount LIKE :filterQuery OR date LIKE :filterQuery OR place LIKE :filterQuery OR transaction_type LIKE :filterQuery) ORDER BY id DESC")
+    @Query("SELECT * FROM transaction_table WHERE (info LIKE :searchQuery OR amount LIKE :searchQuery OR category LIKE :searchQuery OR place LIKE :searchQuery OR date LIKE :searchQuery) AND (info LIKE :filterQuery OR category LIKE :filterQuery OR amount LIKE :filterQuery OR date LIKE :filterQuery OR place LIKE :filterQuery OR transaction_type LIKE :filterQuery) ORDER BY date DESC")
     fun filterSearchTransactions(searchQuery: String, filterQuery: String): Flow<List<TransactionModel>>
 
     @Query("SELECT amount FROM transaction_table WHERE month=:month AND year=:year AND transaction_type=:transaction_type")

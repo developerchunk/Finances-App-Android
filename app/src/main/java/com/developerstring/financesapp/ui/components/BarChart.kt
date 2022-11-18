@@ -1,12 +1,14 @@
 package com.developerstring.financesapp.ui.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -42,12 +44,29 @@ fun BarChart(
         ) {
             // graph
             data.forEach {
+
+                var animationTriggered by remember {
+                    mutableStateOf(false)
+                }
+
+                val animatedHeight by animateFloatAsState(
+                    targetValue = if (animationTriggered) it else 0f,
+                    animationSpec = tween(
+                        durationMillis = 1000,
+                        delayMillis = 0
+                    )
+                )
+
+                LaunchedEffect(key1 = true) {
+                    animationTriggered = true
+                }
+
                 Box(
                     modifier = Modifier
                         .padding(start = 14.dp, bottom = 5.dp)
                         .clip(RoundedCornerShape(5.dp))
                         .width(17.dp)
-                        .fillMaxHeight(it)
+                        .fillMaxHeight(animatedHeight)
                         .background(UIBlue)
                 )
             }

@@ -1,5 +1,7 @@
 package com.developerstring.financesapp.util
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.developerstring.financesapp.R
 
 object Constants {
@@ -28,7 +30,7 @@ object Constants {
     const val THEME_SETTING_KEY = "theme_setting"
 
 
-    var LAST_TRANSACTION = ""
+//    var LAST_TRANSACTION = ""
 
     const val DARK_THEME = "Dark Theme"
     const val PROFILE = "Profile"
@@ -54,10 +56,19 @@ object Constants {
     )
 
     const val THIS_MONTH = "This Month"
+    const val LATEST_FIRST = "Latest First"
+    const val OLD_FIRST = "Old First"
+
+    var oldFirstFilter: MutableState<Boolean> = mutableStateOf(false)
 
     val FILTER_NAME = mutableListOf(
-        THIS_MONTH
+        THIS_MONTH,
+        LATEST_FIRST,
+        OLD_FIRST
     )
+
+    const val CATEGORY_LIST_KEY = "category"
+    const val SUB_CATEGORY_LIST_KEY = "sub_category"
 
     // Category List
     val CATEGORIES = listOf(

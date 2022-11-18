@@ -20,7 +20,8 @@ import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.components.TopAppBarHistory
 import com.developerstring.financesapp.ui.components.TransactionsItemView
 import com.developerstring.financesapp.ui.theme.backgroundColor
-import com.developerstring.financesapp.util.Constants.LAST_TRANSACTION
+import com.developerstring.financesapp.util.Constants
+import com.developerstring.financesapp.util.Constants.oldFirstFilter
 import com.developerstring.financesapp.util.FilterTransactionState
 import com.developerstring.financesapp.util.RequestState
 import com.developerstring.financesapp.util.SearchBarState
@@ -31,6 +32,8 @@ fun ViewHistoryScreen(
     profileViewModel: ProfileViewModel,
     navController: NavController
 ) {
+
+    oldFirstFilter.value = false
 
     val transactionAction = sharedViewModel.transactionAction
     sharedViewModel.transactionAction(action = transactionAction.value)
@@ -136,11 +139,14 @@ fun HistoryTransactionContent(
     navController: NavController
 ) {
 
-    LAST_TRANSACTION = ""
-
     LazyColumn {
         items(
-            items = allTransactions
+            items =
+                if (oldFirstFilter.value) {
+                    allTransactions.reversed()
+                } else {
+                    allTransactions
+                }
         ) {
             TransactionsItemView(
                 transactionModel = it,

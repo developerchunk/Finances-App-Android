@@ -1,9 +1,14 @@
 package com.developerstring.financesapp.util
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.developerstring.financesapp.util.Constants.ADD_FUND
+import com.developerstring.financesapp.util.Constants.LATEST_FIRST
+import com.developerstring.financesapp.util.Constants.OLD_FIRST
 import com.developerstring.financesapp.util.Constants.SAVINGS
 import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.Constants.THIS_MONTH
+import com.developerstring.financesapp.util.Constants.oldFirstFilter
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -122,6 +127,7 @@ fun lastWeekDateCalculator(
     year_(mYear)
 
 }
+
 fun monthDateCalculator(
     month: Int,
     year: Int,
@@ -180,9 +186,25 @@ fun String.filterListText(): String {
 
     val calender = Calendar.getInstance()
 
-    return when(this) {
-        THIS_MONTH -> "${calender.get(Calendar.MONTH)+1}/${calender.get(Calendar.YEAR)}"
+    oldFirstFilter.value = this == OLD_FIRST
+
+    return when (this) {
+        THIS_MONTH -> "${calender.get(Calendar.YEAR)}${calender.get(Calendar.MONTH) + 1}"
+        LATEST_FIRST -> ""
+        OLD_FIRST -> ""
         else -> this
+    }
+
+
+
+}
+
+fun Short.addZeroToStart(): String {
+
+    return if (this <= 9) {
+        "0$this"
+    } else {
+        this.toString()
     }
 
 }

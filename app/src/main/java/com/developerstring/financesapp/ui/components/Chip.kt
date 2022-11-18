@@ -42,7 +42,6 @@ fun CustomChip(
 
     Box(
         modifier = Modifier
-            .padding(end = 10.dp)
             .height(35.dp)
             .clip(CircleShape)
             .background(background)

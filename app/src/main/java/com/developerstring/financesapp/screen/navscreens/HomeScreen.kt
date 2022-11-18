@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +31,7 @@ import com.developerstring.financesapp.screen.navscreens.content.homescreen.Week
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.Constants.CATEGORIES
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
 import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.simplifyAmount
@@ -75,9 +77,6 @@ fun HomeScreen(
 
     val interactionSource = remember { MutableInteractionSource() }
 
-    val configuration = LocalConfiguration.current
-
-    val screenWidth = configuration.screenWidthDp.dp
 
     Column(
         modifier = Modifier
@@ -215,6 +214,8 @@ fun HomeScreen(
                         indication = null,
                         onClick = {
                             navController.navigate(NavRoute.ViewHistoryScreen.route)
+                            // to get all transactions
+                            sharedViewModel.getAllTransactions()
                         }
                     ),
                 contentAlignment = Alignment.Center

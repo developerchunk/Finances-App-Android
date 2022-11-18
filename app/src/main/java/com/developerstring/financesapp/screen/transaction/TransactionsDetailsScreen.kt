@@ -133,6 +133,7 @@ fun TransactionDetailsScreen(
             if (getTransactionModel!=null) {
                 TransactionContent(
                     modifier = Modifier,
+                    profileViewModel = profileViewModel,
                     transactionModel = getTransactionModel!!,
                     onSaveClicked = {
 //                    Toast.makeText(context, id.toString(), Toast.LENGTH_SHORT).show()

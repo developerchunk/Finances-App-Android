@@ -118,7 +118,6 @@ class ProfileViewModel : ViewModel() {
             }
         }
     }
-
     // save total amount
     fun saveTotalAmount(
         context: Context,

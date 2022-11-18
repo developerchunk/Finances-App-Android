@@ -49,8 +49,6 @@ fun SplashScreen(
         // logic behind navigation after splash screen
         if (onBoarding.value == YES) {
             if (profileCreate.value == YES) {
-                // to get all transactions
-                sharedViewModel.getAllTransactions()
                 // get current month spending
                 sharedViewModel.searchMonthSpent(
                     month = SimpleDateFormat("M").format(Date()),

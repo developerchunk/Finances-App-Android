@@ -1,5 +1,7 @@
 package com.developerstring.financesapp.ui.components
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -32,10 +34,12 @@ import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.CATEGORIES
 import com.developerstring.financesapp.util.Constants.FILTER_NAME
+import com.developerstring.financesapp.util.Constants.oldFirstFilter
 import com.developerstring.financesapp.util.FilterTransactionState
 import com.developerstring.financesapp.util.SearchBarState
 import com.developerstring.financesapp.util.TrailingIconStateSearch
 import com.developerstring.financesapp.util.filterListText
+import com.google.accompanist.flowlayout.FlowColumn
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
@@ -84,7 +88,7 @@ fun TopAppBarHistory(
                         },
                         onSearchClicked = {
                             sharedViewModel.searchBarState.value = SearchBarState.TRIGGERED
-                            if (filter == FilterTransactionState.OPENED && searchBarState == SearchBarState.TRIGGERED) {
+                            if (filter == FilterTransactionState.OPENED) {
                                 sharedViewModel.getFilterSearchedTransactions(
                                     searchQuery = "%$searchBarText%",
                                     filterQuery = "%${filterText.filterListText()}%"
@@ -163,13 +167,18 @@ fun TopAppBarFilterContent(
         Row(modifier = Modifier
             .padding(start = 60.dp)
             .fillMaxWidth()
+            .animateContentSize(
+                animationSpec = tween(
+                    durationMillis = 500,
+                )
+            )
         ) {
             when (expanded) {
                 true -> {
                     FlowRow(
                         modifier = Modifier.fillMaxWidth(),
                         mainAxisSpacing = 16.dp,
-                        crossAxisSpacing = 16.dp
+                        crossAxisSpacing = 16.dp,
                     ) {
                         filterList.forEach { mList ->
                             SearchChip(

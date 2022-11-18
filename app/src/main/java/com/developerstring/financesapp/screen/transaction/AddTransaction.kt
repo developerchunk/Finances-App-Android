@@ -48,6 +48,8 @@ import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.ADD_TRANSACTION_TYPE
 import com.developerstring.financesapp.util.Constants.CATEGORIES
 import com.developerstring.financesapp.util.Constants.SPENT
+import com.developerstring.financesapp.util.addZeroToStart
+import com.google.accompanist.flowlayout.FlowRow
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -128,7 +130,11 @@ fun AddTransaction(
                 .padding(start = 10.dp)
                 .fillMaxSize()
         ) {
-            TransactionContent(modifier = Modifier, transactionModel = TransactionModel()) {
+            TransactionContent(
+                modifier = Modifier,
+                transactionModel = TransactionModel(),
+                profileViewModel = profileViewModel
+            ) {
                 sharedViewModel.addTransaction(transactionModel = it)
                 profileViewModel.saveTotalAmount(
                     context = context,
@@ -149,8 +155,9 @@ fun AddTransaction(
 @Composable
 fun TransactionContent(
     modifier: Modifier,
+    profileViewModel: ProfileViewModel,
     transactionModel: TransactionModel,
-    onSaveClicked: (TransactionModel) -> Unit
+    onSaveClicked: (TransactionModel) -> Unit,
 ) {
 
     var amount by remember {
@@ -163,10 +170,20 @@ fun TransactionContent(
         )
     }
     var category by remember { mutableStateOf(transactionModel.category) }
+    var subCategory by remember { mutableStateOf(transactionModel.subCategory) }
     var extraInfo by remember { mutableStateOf(transactionModel.info) }
     var place by remember { mutableStateOf(transactionModel.place) }
-    var transactionType by remember { mutableStateOf(transactionModel.transaction_type) }
-    var date by remember { mutableStateOf(transactionModel.date) }
+    var transactionType by remember {
+        mutableStateOf(
+            if (transactionModel.transaction_type == "") {
+                SPENT
+            } else {
+                transactionModel.transaction_type
+            }
+        )
+    }
+    var date by remember { mutableStateOf("") }
+    var time by remember { mutableStateOf("") }
     var dateClicked by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
@@ -267,9 +284,11 @@ fun TransactionContent(
         }
 
         // Select Transaction Type
-        Row(
+        FlowRow(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            mainAxisSpacing = 10.dp,
+            crossAxisSpacing = 10.dp
         ) {
             chipList.forEach { it ->
                 CustomChip(
@@ -353,7 +372,7 @@ fun TransactionContent(
                     elevation = 10.dp
                 ) {
                     LazyColumn(
-                        modifier = Modifier.heightIn(max = 150.dp),
+                        modifier = Modifier.heightIn(max = 200.dp),
                         userScrollEnabled = true
                     ) {
                         items(
@@ -416,11 +435,14 @@ fun TransactionContent(
                 }
 
                 LaunchedEffect(key1 = false) {
-                    if (date == "") {
-                        date = SimpleDateFormat("d/MM/yyyy").format(Date())
-                        day = SimpleDateFormat("d").format(Date()).toShort()
-                        month = SimpleDateFormat("M").format(Date()).toShort()
+                    if (transactionModel.date == "") {
+                        date = SimpleDateFormat("dd/MM/yyyy").format(Date())
+                        time = SimpleDateFormat("HHmmss").format(Date())
+                        day = SimpleDateFormat("dd").format(Date()).toShort()
+                        month = SimpleDateFormat("MM").format(Date()).toShort()
                         year = SimpleDateFormat("yyyy").format(Date()).toShort()
+                    } else {
+                        date = "$day/$month/$year"
                     }
                 }
 
@@ -626,7 +648,7 @@ fun TransactionContent(
                                             amount = amount.toInt(),
                                             transaction_type = transactionType,
                                             category = category,
-                                            date = date,
+                                            date = "$year${month.addZeroToStart()}${day.addZeroToStart()}$time",
                                             day = day,
                                             month = month,
                                             year = year,
