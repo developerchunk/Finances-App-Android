@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
-import com.developerstring.financesapp.util.Constants.CATEGORY_LIST_KEY
 import com.developerstring.financesapp.util.Constants.NO
 import com.developerstring.financesapp.util.Constants.PROFILE_TOTAL_AMOUNT_KEY
 import com.developerstring.financesapp.util.Constants.PROFILE_CREATED_STATUS_KEY
@@ -13,7 +12,6 @@ import com.developerstring.financesapp.util.Constants.PROFILE_DATA
 import com.developerstring.financesapp.util.Constants.PROFILE_MONTHLY_SAVINGS_KEY
 import com.developerstring.financesapp.util.Constants.PROFILE_MONTHLY_SPENDING_KEY
 import com.developerstring.financesapp.util.Constants.PROFILE_NAME_KEY
-import com.developerstring.financesapp.util.Constants.SUB_CATEGORY_LIST_KEY
 import com.developerstring.financesapp.util.Constants.THEME_SETTING_KEY
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

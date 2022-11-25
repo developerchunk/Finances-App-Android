@@ -7,9 +7,9 @@ import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.roomdatabase.repository.TransactionRepository
 import com.developerstring.financesapp.util.Constants.SAVINGS
 import com.developerstring.financesapp.util.Constants.SPENT
-import com.developerstring.financesapp.util.FilterTransactionState
-import com.developerstring.financesapp.util.RequestState
-import com.developerstring.financesapp.util.SearchBarState
+import com.developerstring.financesapp.util.state.FilterTransactionState
+import com.developerstring.financesapp.util.state.RequestState
+import com.developerstring.financesapp.util.state.SearchBarState
 import com.developerstring.financesapp.util.TransactionAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +31,7 @@ class SharedViewModel @Inject constructor(
 
     val transactionAction: MutableState<TransactionAction> =
         mutableStateOf(TransactionAction.NO_ACTION)
+
     val transactionModel: MutableState<TransactionModel> = mutableStateOf(TransactionModel())
 
     private val _selectedTransaction: MutableStateFlow<TransactionModel?> = MutableStateFlow(null)
@@ -185,6 +186,16 @@ class SharedViewModel @Inject constructor(
                 .collect {
                     _monthSavings.value = it
                 }
+        }
+    }
+
+    private var _lastTransactionID = MutableStateFlow(0)
+    val lastTransactionID: StateFlow<Int> = _lastTransactionID
+    fun getLastTransactionID() {
+        viewModelScope.launch {
+            repository.getLastTransaction().collect { id_ ->
+                _lastTransactionID.value = id_
+            }
         }
     }
 

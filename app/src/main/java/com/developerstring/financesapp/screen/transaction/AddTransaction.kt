@@ -38,17 +38,21 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
-import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
+import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.components.CustomChip
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.ADD_TRANSACTION_TYPE
 import com.developerstring.financesapp.util.Constants.CATEGORIES
+import com.developerstring.financesapp.util.Constants.OTHER
 import com.developerstring.financesapp.util.Constants.SPENT
+import com.developerstring.financesapp.util.Constants.SUB_CATEGORY
 import com.developerstring.financesapp.util.addZeroToStart
+import com.developerstring.financesapp.util.mapListToList
+import com.developerstring.financesapp.util.state.MessageBarState
 import com.google.accompanist.flowlayout.FlowRow
 import java.text.SimpleDateFormat
 import java.util.*
@@ -57,7 +61,8 @@ import java.util.*
 fun AddTransaction(
     navController: NavController,
     sharedViewModel: SharedViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    publicSharedViewModel: PublicSharedViewModel
 ) {
 
     val shape: Shape = RoundedCornerShape(10.dp)
@@ -70,7 +75,7 @@ fun AddTransaction(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.backgroundColor)
+            .background(backgroundColor)
             .padding(start = 10.dp, end = 20.dp, top = 10.dp)
             .verticalScroll(state = scrollState)
     ) {
@@ -92,7 +97,7 @@ fun AddTransaction(
                         .rotate(90f),
                     painter = painterResource(id = R.drawable.ic_arrow_down),
                     contentDescription = "back_arrow",
-                    tint = MaterialTheme.colors.textColorBW
+                    tint = textColorBW
                 )
             }
 
@@ -103,13 +108,13 @@ fun AddTransaction(
                     fontSize = LARGE_TEXT_SIZE,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colors.textColorBW
+                    color = textColorBW
                 )
                 Box(
                     modifier = Modifier
                         .padding(start = 3.dp, end = 3.dp)
                         .clip(shape)
-                        .background(MaterialTheme.colors.textColorBW)
+                        .background(textColorBW)
                         .size(65.dp, 3.dp)
                 )
 
@@ -121,7 +126,7 @@ fun AddTransaction(
                 fontSize = LARGE_TEXT_SIZE,
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colors.textColorBW
+                color = textColorBW
             )
         }
 
@@ -133,7 +138,7 @@ fun AddTransaction(
             TransactionContent(
                 modifier = Modifier,
                 transactionModel = TransactionModel(),
-                profileViewModel = profileViewModel
+                publicSharedViewModel = publicSharedViewModel
             ) {
                 sharedViewModel.addTransaction(transactionModel = it)
                 profileViewModel.saveTotalAmount(
@@ -155,7 +160,7 @@ fun AddTransaction(
 @Composable
 fun TransactionContent(
     modifier: Modifier,
-    profileViewModel: ProfileViewModel,
+    publicSharedViewModel: PublicSharedViewModel,
     transactionModel: TransactionModel,
     onSaveClicked: (TransactionModel) -> Unit,
 ) {
@@ -170,7 +175,11 @@ fun TransactionContent(
         )
     }
     var category by remember { mutableStateOf(transactionModel.category) }
+    var otherCategory by remember { mutableStateOf(transactionModel.categoryOther) }
     var subCategory by remember { mutableStateOf(transactionModel.subCategory) }
+    var otherSubCategory by remember { mutableStateOf(transactionModel.subCategoryOther) }
+    val otherSubCategories = mutableListOf(OTHER)
+    otherSubCategories.addAll(SUB_CATEGORY.mapListToList())
     var extraInfo by remember { mutableStateOf(transactionModel.info) }
     var place by remember { mutableStateOf(transactionModel.place) }
     var transactionType by remember {
@@ -192,11 +201,15 @@ fun TransactionContent(
 
     val interactionSource = remember { MutableInteractionSource() }
     var categoriesExpanded by remember { mutableStateOf(false) }
+    var subCategoriesExpanded by remember { mutableStateOf(false) }
 
     // Chip Selection
     val chipList = ADD_TRANSACTION_TYPE
 
     val categories = CATEGORIES
+    val subCategories = SUB_CATEGORY
+
+
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
     // for year, month, day and time
@@ -232,6 +245,7 @@ fun TransactionContent(
                 indication = null,
                 onClick = {
                     categoriesExpanded = false
+                    subCategoriesExpanded = false
                 }
             ),
         verticalArrangement = Arrangement.spacedBy(15.dp)
@@ -247,7 +261,7 @@ fun TransactionContent(
                     .padding(start = 3.dp, bottom = 2.dp),
                 text = stringResource(id = R.string.amount_text_field),
                 fontSize = TEXT_FIELD_SIZE,
-                color = MaterialTheme.colors.textColorBLG,
+                color = textColorBLG,
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium
             )
@@ -258,7 +272,7 @@ fun TransactionContent(
                     .height(heightTextFields)
                     .border(
                         width = 1.8.dp,
-                        color = MaterialTheme.colors.textColorBLG,
+                        color = textColorBLG,
                         shape = RoundedCornerShape(15.dp)
                     ),
                 value = amount,
@@ -269,10 +283,10 @@ fun TransactionContent(
                     backgroundColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.textColorBW,
+                    cursorColor = textColorBW,
                 ),
                 textStyle = TextStyle(
-                    color = MaterialTheme.colors.textColorBW,
+                    color = textColorBW,
                     fontSize = TEXT_FIELD_SIZE
                 ),
                 keyboardOptions = KeyboardOptions(
@@ -311,7 +325,7 @@ fun TransactionContent(
                     .padding(start = 3.dp, bottom = 2.dp),
                 text = stringResource(id = R.string.category_text_field),
                 fontSize = TEXT_FIELD_SIZE,
-                color = MaterialTheme.colors.textColorBLG,
+                color = textColorBLG,
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium
             )
@@ -322,7 +336,7 @@ fun TransactionContent(
                     .height(55.dp)
                     .border(
                         width = 1.8.dp,
-                        color = MaterialTheme.colors.textColorBLG,
+                        color = textColorBLG,
                         shape = RoundedCornerShape(15.dp)
                     )
                     .onGloballyPositioned { coordinates ->
@@ -333,7 +347,7 @@ fun TransactionContent(
                         indication = null
                     ) { categoriesExpanded = !categoriesExpanded },
                 shape = RoundedCornerShape(15.dp),
-                backgroundColor = MaterialTheme.colors.backgroundColor
+                backgroundColor = backgroundColor
             ) {
 
                 Row(
@@ -345,7 +359,7 @@ fun TransactionContent(
                         modifier = Modifier.padding(start = 20.dp),
                         text = category,
                         fontSize = TEXT_FIELD_SIZE,
-                        color = MaterialTheme.colors.textColorBW
+                        color = textColorBW
                     )
 
                     Icon(
@@ -356,7 +370,7 @@ fun TransactionContent(
                         Modifier
                             .padding(end = 15.dp)
                             .size(28.dp),
-                        tint = MaterialTheme.colors.textColorBLG
+                        tint = textColorBLG
                     )
                 }
 
@@ -368,7 +382,7 @@ fun TransactionContent(
                     modifier = Modifier
                         .padding(horizontal = 5.dp)
                         .width(textFieldSize.width.dp),
-                    backgroundColor = MaterialTheme.colors.backgroundColorCard,
+                    backgroundColor = backgroundColorCard,
                     elevation = 10.dp
                 ) {
                     LazyColumn(
@@ -390,14 +404,65 @@ fun TransactionContent(
             }
         }
 
-        // Date TextField
-        Column(modifier = Modifier.fillMaxWidth()) {
+        // group of Other Category
+        AnimatedVisibility(visible = category == OTHER) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 3.dp, bottom = 2.dp),
+                    text = stringResource(id = R.string.other_category_text_field),
+                    fontSize = TEXT_FIELD_SIZE,
+                    color = textColorBLG,
+                    fontFamily = fontInter,
+                    fontWeight = FontWeight.Medium
+                )
+
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = heightTextFields)
+                        .border(
+                            width = 1.8.dp,
+                            color = textColorBLG,
+                            shape = RoundedCornerShape(15.dp)
+                        ),
+                    value = otherCategory,
+                    onValueChange = {
+                        otherCategory = it
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = textColorBW,
+                    ),
+                    textStyle = TextStyle(
+                        color = textColorBW,
+                        fontSize = TEXT_FIELD_SIZE
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    singleLine = false
+                )
+            }
+        }
+
+        // Sub Category
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
             Text(
                 modifier = Modifier
                     .padding(start = 3.dp, bottom = 2.dp),
-                text = stringResource(id = R.string.date_text_field),
+                text = stringResource(id = R.string.sub_category_text_field),
                 fontSize = TEXT_FIELD_SIZE,
-                color = MaterialTheme.colors.textColorBLG,
+                color = textColorBLG,
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium
             )
@@ -408,7 +473,140 @@ fun TransactionContent(
                     .height(55.dp)
                     .border(
                         width = 1.8.dp,
-                        color = MaterialTheme.colors.textColorBLG,
+                        color = textColorBLG,
+                        shape = RoundedCornerShape(15.dp)
+                    )
+                    .onGloballyPositioned { coordinates ->
+                        textFieldSize = coordinates.size.toSize()
+                    }
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) { subCategoriesExpanded = !subCategoriesExpanded },
+                shape = RoundedCornerShape(15.dp),
+                backgroundColor = backgroundColor
+            ) {
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        modifier = Modifier.padding(start = 20.dp),
+                        text = subCategory,
+                        fontSize = TEXT_FIELD_SIZE,
+                        color = textColorBW
+                    )
+
+                    Icon(
+                        imageVector =
+                        if (!subCategoriesExpanded) Icons.Filled.KeyboardArrowDown
+                        else Icons.Rounded.KeyboardArrowUp,
+                        contentDescription = "currency_icon",
+                        Modifier
+                            .padding(end = 15.dp)
+                            .size(28.dp),
+                        tint = textColorBLG
+                    )
+                }
+
+
+            }
+
+            AnimatedVisibility(visible = subCategoriesExpanded) {
+                Card(
+                    modifier = Modifier
+                        .padding(horizontal = 5.dp)
+                        .width(textFieldSize.width.dp),
+                    backgroundColor = backgroundColorCard,
+                    elevation = 10.dp
+                ) {
+                    LazyColumn(
+                        modifier = Modifier.heightIn(max = 200.dp),
+                        userScrollEnabled = true
+                    ) {
+                        items(
+                            subCategories.getOrDefault(category, defaultValue = otherSubCategories)
+                        ) {
+                            CategoryItems(title = it) { title ->
+                                subCategory = title
+                                subCategoriesExpanded = false
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        // group of Other Category
+        AnimatedVisibility(visible = subCategory == OTHER) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 3.dp, bottom = 2.dp),
+                    text = stringResource(id = R.string.other_sub_category_text_field),
+                    fontSize = TEXT_FIELD_SIZE,
+                    color = textColorBLG,
+                    fontFamily = fontInter,
+                    fontWeight = FontWeight.Medium
+                )
+
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = heightTextFields)
+                        .border(
+                            width = 1.8.dp,
+                            color = textColorBLG,
+                            shape = RoundedCornerShape(15.dp)
+                        ),
+                    value = otherSubCategory,
+                    onValueChange = {
+                        otherSubCategory = it
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = textColorBW,
+                    ),
+                    textStyle = TextStyle(
+                        color = textColorBW,
+                        fontSize = TEXT_FIELD_SIZE
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    singleLine = false
+                )
+            }
+        }
+
+        // Date TextField
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                modifier = Modifier
+                    .padding(start = 3.dp, bottom = 2.dp),
+                text = stringResource(id = R.string.date_text_field),
+                fontSize = TEXT_FIELD_SIZE,
+                color = textColorBLG,
+                fontFamily = fontInter,
+                fontWeight = FontWeight.Medium
+            )
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp)
+                    .border(
+                        width = 1.8.dp,
+                        color = textColorBLG,
                         shape = RoundedCornerShape(15.dp)
                     )
                     .onGloballyPositioned { coordinates ->
@@ -418,7 +616,7 @@ fun TransactionContent(
                         dateClicked = true
                     },
                 shape = RoundedCornerShape(15.dp),
-                backgroundColor = MaterialTheme.colors.backgroundColor
+                backgroundColor = backgroundColor
             ) {
 
                 Row(
@@ -430,7 +628,7 @@ fun TransactionContent(
                         modifier = Modifier.padding(start = 20.dp),
                         text = date,
                         fontSize = TEXT_FIELD_SIZE,
-                        color = MaterialTheme.colors.textColorBW
+                        color = textColorBW
                     )
                 }
 
@@ -528,7 +726,7 @@ fun TransactionContent(
                             .padding(start = 3.dp, bottom = 2.dp),
                         text = stringResource(id = R.string.extra_info_text_field),
                         fontSize = TEXT_FIELD_SIZE,
-                        color = MaterialTheme.colors.textColorBLG,
+                        color = textColorBLG,
                         fontFamily = fontInter,
                         fontWeight = FontWeight.Medium
                     )
@@ -539,7 +737,7 @@ fun TransactionContent(
                             .heightIn(min = heightTextFields)
                             .border(
                                 width = 1.8.dp,
-                                color = MaterialTheme.colors.textColorBLG,
+                                color = textColorBLG,
                                 shape = RoundedCornerShape(15.dp)
                             ),
                         value = extraInfo,
@@ -550,10 +748,10 @@ fun TransactionContent(
                             backgroundColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = MaterialTheme.colors.textColorBW,
+                            cursorColor = textColorBW,
                         ),
                         textStyle = TextStyle(
-                            color = MaterialTheme.colors.textColorBW,
+                            color = textColorBW,
                             fontSize = TEXT_FIELD_SIZE
                         ),
                         keyboardOptions = KeyboardOptions(
@@ -574,7 +772,7 @@ fun TransactionContent(
                             .padding(start = 3.dp, bottom = 2.dp),
                         text = stringResource(id = R.string.place_info_text_field),
                         fontSize = TEXT_FIELD_SIZE,
-                        color = MaterialTheme.colors.textColorBLG,
+                        color = textColorBLG,
                         fontFamily = fontInter,
                         fontWeight = FontWeight.Medium
                     )
@@ -585,7 +783,7 @@ fun TransactionContent(
                             .height(heightTextFields)
                             .border(
                                 width = 1.8.dp,
-                                color = MaterialTheme.colors.textColorBLG,
+                                color = textColorBLG,
                                 shape = RoundedCornerShape(15.dp)
                             ),
                         value = place,
@@ -596,10 +794,10 @@ fun TransactionContent(
                             backgroundColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = MaterialTheme.colors.textColorBW,
+                            cursorColor = textColorBW,
                         ),
                         textStyle = TextStyle(
-                            color = MaterialTheme.colors.textColorBW,
+                            color = textColorBW,
                             fontSize = TEXT_FIELD_SIZE
                         ),
                         keyboardOptions = KeyboardOptions(
@@ -648,14 +846,21 @@ fun TransactionContent(
                                             amount = amount.toInt(),
                                             transaction_type = transactionType,
                                             category = category,
+                                            subCategory = subCategory,
                                             date = "$year${month.addZeroToStart()}${day.addZeroToStart()}$time",
                                             day = day,
                                             month = month,
                                             year = year,
                                             info = extraInfo,
                                             place = place,
-                                        ),
+                                            categoryOther = if (category == OTHER) otherCategory else "",
+                                            subCategoryOther = if (subCategory == OTHER) otherSubCategory else ""
+                                        )
                                     )
+
+                                    publicSharedViewModel.messageBarState.value =
+                                        MessageBarState.OPENED
+
                                 } else {
                                     Toast
                                         .makeText(
@@ -741,7 +946,7 @@ fun CategoryItems(
             modifier = Modifier.fillMaxWidth(),
             text = title,
             fontSize = 16.sp,
-            color = MaterialTheme.colors.textColorBW
+            color = textColorBW
         )
     }
 }

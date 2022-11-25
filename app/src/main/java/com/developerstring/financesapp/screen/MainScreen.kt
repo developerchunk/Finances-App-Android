@@ -21,18 +21,18 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.developerstring.financesapp.navigation.bottomnav.BottomNavGraph
 import com.developerstring.financesapp.navigation.bottomnav.BottomNavRoute
-import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
+import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.UIBlue
-import com.developerstring.financesapp.ui.theme.backgroundColor
 import com.developerstring.financesapp.ui.theme.backgroundColorBW
 import com.developerstring.financesapp.ui.theme.textColorBW
 
 @Composable
 fun MainScreen(
     profileViewModel: ProfileViewModel,
-    sharedViewModel: SharedViewModel
+    sharedViewModel: SharedViewModel,
+    publicSharedViewModel: PublicSharedViewModel
 ) {
 
     val nav = rememberNavController()
@@ -47,7 +47,8 @@ fun MainScreen(
                 BottomNavGraph(
                     navController = nav,
                     profileViewModel = profileViewModel,
-                    sharedViewModel = sharedViewModel
+                    sharedViewModel = sharedViewModel,
+                    publicSharedViewModel = publicSharedViewModel
                 )
             }
         }
@@ -73,7 +74,7 @@ fun BottomNavBar(
         Surface(modifier = Modifier.fillMaxWidth(), elevation = 10.dp) {
             Row(
                 modifier = Modifier
-                    .background(MaterialTheme.colors.backgroundColorBW)
+                    .background(backgroundColorBW)
                     .fillMaxWidth()
                     .padding(bottom = 5.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -102,7 +103,7 @@ fun RowScope.AddItem(
     val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
 
     val contentColor =
-        if (selected) UIBlue else MaterialTheme.colors.textColorBW
+        if (selected) UIBlue else textColorBW
 
     val interactionSource = remember { MutableInteractionSource() }
 

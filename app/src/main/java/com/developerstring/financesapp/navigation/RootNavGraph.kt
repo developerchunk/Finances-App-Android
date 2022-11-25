@@ -7,13 +7,15 @@ import androidx.navigation.compose.composable
 import com.developerstring.financesapp.navigation.setupnav.onStartNavGraph
 import com.developerstring.financesapp.screen.MainScreen
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
+import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 
 @Composable
 fun RootNavGraph(
     navController: NavHostController,
     profileViewModel: ProfileViewModel,
-    sharedViewModel: SharedViewModel
+    sharedViewModel: SharedViewModel,
+    publicSharedViewModel: PublicSharedViewModel
 ) {
 
     NavHost(
@@ -24,12 +26,14 @@ fun RootNavGraph(
         onStartNavGraph(
             navController = navController,
             profileViewModel = profileViewModel,
-            sharedViewModel = sharedViewModel
+            sharedViewModel = sharedViewModel,
+            publicSharedViewModel = publicSharedViewModel
         )
         composable(route = Graph.BOTTOM_NAV_GRAPH) {
             MainScreen(
                 profileViewModel = profileViewModel,
-                sharedViewModel = sharedViewModel
+                sharedViewModel = sharedViewModel,
+                publicSharedViewModel = publicSharedViewModel
             )
         }
     }

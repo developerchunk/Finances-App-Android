@@ -67,8 +67,10 @@ object Constants {
         OLD_FIRST
     )
 
-    const val CATEGORY_LIST_KEY = "category"
-    const val SUB_CATEGORY_LIST_KEY = "sub_category"
+//    const val CATEGORY_LIST_KEY = "category"
+//    const val SUB_CATEGORY_LIST_KEY = "sub_category"
+    const val OTHER = "Other"
+
 
     // Category List
     val CATEGORIES = listOf(
@@ -84,6 +86,28 @@ object Constants {
         "Gift",
         "Other"
     ).sorted()
+
+    val SUB_CATEGORY = mapOf(
+        "Food" to listOf(
+            "Breakfast",
+            "Lunch",
+            "Dinner",
+            "Desert",
+            "Fruits",
+            "Meal",
+            "Fast Food",
+            "Salad",
+            "Healthy Meal",
+        ),
+        "Beverages" to listOf(
+            "Chips",
+            "Chocolates",
+            "Packets",
+            "Drinks",
+            "IceCream",
+            "Water Bottle",
+        ),
+    )
 
     const val YES = "YES"
     const val NO = "NO"

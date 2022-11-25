@@ -10,13 +10,15 @@ import com.developerstring.financesapp.screen.navscreens.ActivityScreen
 import com.developerstring.financesapp.screen.navscreens.HomeScreen
 import com.developerstring.financesapp.screen.navscreens.ProfileScreen
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
+import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 
 @Composable
 fun BottomNavGraph(
     navController: NavHostController,
     profileViewModel: ProfileViewModel,
-    sharedViewModel: SharedViewModel
+    sharedViewModel: SharedViewModel,
+    publicSharedViewModel: PublicSharedViewModel
 ) {
 
     NavHost(
@@ -27,14 +29,16 @@ fun BottomNavGraph(
         navGraph(
             navController = navController,
             profileViewModel = profileViewModel,
-            sharedViewModel = sharedViewModel
+            sharedViewModel = sharedViewModel,
+            publicSharedViewModel = publicSharedViewModel
         )
         // MainSetUpNavRoute
         composable(route = BottomNavRoute.Home.route) {
             HomeScreen(
                 navController = navController,
                 sharedViewModel = sharedViewModel,
-                profileViewModel = profileViewModel
+                profileViewModel = profileViewModel,
+                publicSharedViewModel = publicSharedViewModel
             )
         }
         composable(route = BottomNavRoute.Activity.route) {

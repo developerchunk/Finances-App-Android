@@ -123,7 +123,7 @@ fun OnBoardingContent(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                MaterialTheme.colors.backgroundColor
+                backgroundColor
             )
     ) {
         Image(
@@ -150,7 +150,7 @@ fun OnBoardingContent(
                     start = 30.dp
                 ),
             text = title,
-            color = MaterialTheme.colors.textColorBW,
+            color = textColorBW,
             fontSize = MAX_TEXT_SIZE,
             fontFamily = fontInter,
             fontWeight = FontWeight.SemiBold
@@ -164,7 +164,7 @@ fun OnBoardingContent(
                     end = 10.dp
                 ),
             text = text,
-            color = MaterialTheme.colors.colorGray,
+            color = colorGray,
             fontSize = MEDIUM_TEXT_SIZE,
             fontFamily = fontInter,
             fontWeight = FontWeight.Light
@@ -195,7 +195,7 @@ fun OnBoardingContent(
                     shape = RoundedCornerShape(6.dp),
                     backgroundColor =
                     if (page == 1) {
-                        MaterialTheme.colors.contentBackgroundColor
+                        contentBackgroundColor
                     } else {
                         LightPurple
                     }
@@ -210,7 +210,7 @@ fun OnBoardingContent(
                     shape = RoundedCornerShape(6.dp),
                     backgroundColor =
                     if (page == 2) {
-                        MaterialTheme.colors.contentBackgroundColor
+                        contentBackgroundColor
                     } else {
                         LightPurple
                     }
@@ -225,7 +225,7 @@ fun OnBoardingContent(
                     shape = RoundedCornerShape(6.dp),
                     backgroundColor =
                     if (page == 3) {
-                        MaterialTheme.colors.contentBackgroundColor
+                        contentBackgroundColor
                     } else {
                         LightPurple
                     }
@@ -240,7 +240,7 @@ fun OnBoardingContent(
                     shape = RoundedCornerShape(6.dp),
                     backgroundColor =
                     if (page == 4) {
-                        MaterialTheme.colors.contentBackgroundColor
+                        contentBackgroundColor
                     } else {
                         LightPurple
                     }
@@ -256,7 +256,7 @@ fun OnBoardingContent(
                     .width(80.dp)
                     .padding(0.dp),
                 shape = RoundedCornerShape(40.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.contentBackgroundColor),
+                colors = ButtonDefaults.buttonColors(backgroundColor = contentBackgroundColor),
                 elevation = ButtonDefaults.elevation(defaultElevation = 8.dp),
                 onClick = {
                     if (page == 4) {

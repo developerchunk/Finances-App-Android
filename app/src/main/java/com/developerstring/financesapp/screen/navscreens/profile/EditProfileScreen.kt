@@ -1,6 +1,5 @@
 package com.developerstring.financesapp.screen.navscreens.profile
 
-import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -12,7 +11,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -83,7 +81,7 @@ fun EditProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.backgroundColor)
+            .background(backgroundColor)
             .verticalScroll(state = scrollState)
     ) {
 
@@ -102,7 +100,7 @@ fun EditProfileScreen(
                     modifier = Modifier.size(28.dp),
                     imageVector = Icons.Rounded.Close,
                     contentDescription = "close",
-                    tint = MaterialTheme.colors.textColorBW
+                    tint = textColorBW
                 )
             }
 
@@ -111,7 +109,7 @@ fun EditProfileScreen(
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium,
                 fontSize = EXTRA_LARGE_TEXT_SIZE,
-                color = MaterialTheme.colors.textColorBW
+                color = textColorBW
             )
 
             IconButton(onClick = {
@@ -146,7 +144,7 @@ fun EditProfileScreen(
                     modifier = Modifier.size(28.dp),
                     imageVector = Icons.Rounded.Check,
                     contentDescription = "check",
-                    tint = MaterialTheme.colors.textColorBW
+                    tint = textColorBW
                 )
             }
 
@@ -169,7 +167,7 @@ fun EditProfileScreen(
                         .padding(start = 3.dp, bottom = 2.dp),
                     text = stringResource(id = R.string.create_profile_screen_name),
                     fontSize = TEXT_FIELD_SIZE,
-                    color = MaterialTheme.colors.textColorBLG,
+                    color = textColorBLG,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium
                 )
@@ -180,7 +178,7 @@ fun EditProfileScreen(
                         .height(heightTextFields)
                         .border(
                             width = 1.8.dp,
-                            color = MaterialTheme.colors.textColorBLG,
+                            color = textColorBLG,
                             shape = RoundedCornerShape(15.dp)
                         ),
                     value = newName,
@@ -191,10 +189,10 @@ fun EditProfileScreen(
                         backgroundColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.textColorBW,
+                        cursorColor = textColorBW,
                     ),
                     textStyle = TextStyle(
-                        color = MaterialTheme.colors.textColorBW,
+                        color = textColorBW,
                         fontSize = TEXT_FIELD_SIZE
                     ),
                     keyboardOptions = KeyboardOptions(
@@ -215,7 +213,7 @@ fun EditProfileScreen(
                         .padding(start = 3.dp, bottom = 2.dp),
                     text = stringResource(id = R.string.create_profile_screen_currency),
                     fontSize = TEXT_FIELD_SIZE,
-                    color = MaterialTheme.colors.textColorBLG,
+                    color = textColorBLG,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium
                 )
@@ -226,7 +224,7 @@ fun EditProfileScreen(
                         .height(55.dp)
                         .border(
                             width = 1.8.dp,
-                            color = MaterialTheme.colors.textColorBLG,
+                            color = textColorBLG,
                             shape = RoundedCornerShape(15.dp)
                         )
                         .onGloballyPositioned { coordinates ->
@@ -234,7 +232,7 @@ fun EditProfileScreen(
                         }
                         .clickable { expanded = !expanded },
                     shape = RoundedCornerShape(15.dp),
-                    backgroundColor = MaterialTheme.colors.backgroundColor
+                    backgroundColor = backgroundColor
                 ) {
 
                     Row(
@@ -246,7 +244,7 @@ fun EditProfileScreen(
                             modifier = Modifier.padding(start = 20.dp),
                             text = selectedCurrency,
                             fontSize = TEXT_FIELD_SIZE,
-                            color = MaterialTheme.colors.textColorBW
+                            color = textColorBW
                         )
 
                         Icon(
@@ -257,7 +255,7 @@ fun EditProfileScreen(
                             Modifier
                                 .padding(end = 15.dp)
                                 .size(28.dp),
-                            tint = MaterialTheme.colors.textColorBLG
+                            tint = textColorBLG
                         )
                     }
 
@@ -269,7 +267,7 @@ fun EditProfileScreen(
                     onDismissRequest = { expanded = false },
                     modifier = Modifier
                         .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
-                        .background(MaterialTheme.colors.backgroundColorCard)
+                        .background(backgroundColorCard)
                 ) {
                     list.forEach { label ->
                         DropdownMenuItem(onClick = {
@@ -279,7 +277,7 @@ fun EditProfileScreen(
                             Text(
                                 text = label,
                                 fontSize = 18.sp,
-                                color = MaterialTheme.colors.textColorBW
+                                color = textColorBW
                             )
                         }
                     }
@@ -297,7 +295,7 @@ fun EditProfileScreen(
                         .padding(start = 3.dp, bottom = 2.dp),
                     text = stringResource(id = R.string.create_profile_screen_amount),
                     fontSize = TEXT_FIELD_SIZE,
-                    color = MaterialTheme.colors.textColorBLG,
+                    color = textColorBLG,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium
                 )
@@ -308,7 +306,7 @@ fun EditProfileScreen(
                         .height(heightTextFields)
                         .border(
                             width = 1.8.dp,
-                            color = MaterialTheme.colors.textColorBLG,
+                            color = textColorBLG,
                             shape = RoundedCornerShape(15.dp)
                         ),
                     value = amount,
@@ -319,10 +317,10 @@ fun EditProfileScreen(
                         backgroundColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.textColorBW,
+                        cursorColor = textColorBW,
                     ),
                     textStyle = TextStyle(
-                        color = MaterialTheme.colors.textColorBW,
+                        color = textColorBW,
                         fontSize = TEXT_FIELD_SIZE
                     ),
                     keyboardOptions = KeyboardOptions(
@@ -342,7 +340,7 @@ fun EditProfileScreen(
                         .padding(start = 3.dp, bottom = 2.dp),
                     text = stringResource(id = R.string.create_profile_screen_2_spending),
                     fontSize = TEXT_FIELD_SIZE,
-                    color = MaterialTheme.colors.textColorBLG,
+                    color = textColorBLG,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium
                 )
@@ -353,7 +351,7 @@ fun EditProfileScreen(
                         .height(heightTextFields)
                         .border(
                             width = 1.8.dp,
-                            color = MaterialTheme.colors.textColorBLG,
+                            color = textColorBLG,
                             shape = RoundedCornerShape(15.dp)
                         ),
                     value = newSpending,
@@ -364,10 +362,10 @@ fun EditProfileScreen(
                         backgroundColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.textColorBW,
+                        cursorColor = textColorBW,
                     ),
                     textStyle = TextStyle(
-                        color = MaterialTheme.colors.textColorBW,
+                        color = textColorBW,
                         fontSize = TEXT_FIELD_SIZE
                     ),
                     keyboardOptions = KeyboardOptions(
@@ -387,7 +385,7 @@ fun EditProfileScreen(
                         .padding(start = 3.dp, bottom = 2.dp),
                     text = stringResource(id = R.string.create_profile_screen_2_savings),
                     fontSize = TEXT_FIELD_SIZE,
-                    color = MaterialTheme.colors.textColorBLG,
+                    color = textColorBLG,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium
                 )
@@ -398,7 +396,7 @@ fun EditProfileScreen(
                         .height(heightTextFields)
                         .border(
                             width = 1.8.dp,
-                            color = MaterialTheme.colors.textColorBLG,
+                            color = textColorBLG,
                             shape = RoundedCornerShape(15.dp)
                         ),
                     value = newSavings,
@@ -409,10 +407,10 @@ fun EditProfileScreen(
                         backgroundColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.textColorBW,
+                        cursorColor = textColorBW,
                     ),
                     textStyle = TextStyle(
-                        color = MaterialTheme.colors.textColorBW,
+                        color = textColorBW,
                         fontSize = TEXT_FIELD_SIZE
                     ),
                     keyboardOptions = KeyboardOptions(

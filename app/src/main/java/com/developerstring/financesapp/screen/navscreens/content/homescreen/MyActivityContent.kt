@@ -3,7 +3,6 @@ package com.developerstring.financesapp.screen.navscreens.content.homescreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -23,6 +22,7 @@ import com.developerstring.financesapp.ui.components.BarChart
 import com.developerstring.financesapp.util.*
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
 import com.developerstring.financesapp.util.Constants.SPENT
+import java.util.Calendar
 
 @Composable
 fun MyActivityContent(
@@ -67,7 +67,7 @@ fun MyActivityContent(
             .padding(start = 20.dp, end = 20.dp, top = 30.dp, bottom = 10.dp)
             .fillMaxWidth(),
         elevation = 4.dp,
-        color = MaterialTheme.colors.contentColorLBLD,
+        color = contentColorLBLD,
         shape = RoundedCornerShape(20.dp)
     ) {
 
@@ -86,7 +86,7 @@ fun MyActivityContent(
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium,
                     fontSize = TEXT_FIELD_SIZE,
-                    color = MaterialTheme.colors.textColorBW
+                    color = textColorBW
                 )
                 Image(
                     modifier = Modifier
@@ -94,7 +94,7 @@ fun MyActivityContent(
                         .size(32.dp),
                     imageVector = Icons.Rounded.KeyboardArrowDown,
                     contentDescription = "arrow",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.textColorBW)
+                    colorFilter = ColorFilter.tint(textColorBW)
                 )
             }
 
@@ -111,7 +111,7 @@ fun MyActivityContent(
                         fontFamily = fontInter,
                         fontWeight = FontWeight.Medium,
                         fontSize = EXTRA_SMALL_TEXT_SIZE,
-                        color = MaterialTheme.colors.textColorBW
+                        color = textColorBW
                     )
 
                     WeeklyTransactionChart(
@@ -127,13 +127,13 @@ fun MyActivityContent(
                             ) else simplifyAmount(weekTransactions.sum()),
                             fontWeight = FontWeight.Medium,
                             fontSize = TEXT_FIELD_SIZE,
-                            color = MaterialTheme.colors.textColorBW
+                            color = textColorBW
                         )
                         Text(
                             text = stringResource(id = R.string.spent_this_week),
                             fontWeight = FontWeight.Normal,
                             fontSize = SMALL_TEXT_SIZE,
-                            color = MaterialTheme.colors.textColorBW
+                            color = textColorBW
                         )
 
                     }
@@ -187,9 +187,11 @@ fun MonthTransactions(
     var months = listOf<Int>()
     var years = listOf<Int>()
 
+    val calender = Calendar.getInstance()
+
     monthDateCalculator(
-        month = 10,
-        year = 2022,
+        month = calender.get(Calendar.MONTH)+1,
+        year = calender.get(Calendar.YEAR),
         day_ = {
             days = it
         },
@@ -210,33 +212,6 @@ fun MonthTransactions(
             day_no = i
         )
     }
-//    GetLastWeekTransactions(
-//        days = days.subList(8,14),
-//        months = months,
-//        years = years,
-//        sharedViewModel = sharedViewModel,
-//        transactions = {
-//            week2 = it
-//        }
-//    )
-//    GetLastWeekTransactions(
-//        days = days.subList(15,21),
-//        months = months,
-//        years = years,
-//        sharedViewModel = sharedViewModel,
-//        transactions = {
-//            week3 = it
-//        }
-//    )
-//    GetLastWeekTransactions(
-//        days = days.subList(22,days.last()),
-//        months = months,
-//        years = years,
-//        sharedViewModel = sharedViewModel,
-//        transactions = {
-//            week4 = it
-//        }
-//    )
 
     val monthDataList by sharedViewModel.dayPayment.collectAsState()
 

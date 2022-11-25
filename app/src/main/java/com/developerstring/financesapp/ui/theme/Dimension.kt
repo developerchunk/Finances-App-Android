@@ -10,6 +10,7 @@ val TEXT_FIELD_SIZE = 18.sp
 val MEDIUM_TEXT_SIZE = 16.sp
 val SMALL_TEXT_SIZE = 14.sp
 val EXTRA_SMALL_TEXT_SIZE = 12.sp
+val SMALLEST_TEXT_SIZE = 10.sp
 
 // elevations
 val TASK_ITEM_ELEVATION = 3.dp

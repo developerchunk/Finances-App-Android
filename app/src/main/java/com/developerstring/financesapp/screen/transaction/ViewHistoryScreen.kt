@@ -5,13 +5,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
@@ -20,11 +18,10 @@ import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.components.TopAppBarHistory
 import com.developerstring.financesapp.ui.components.TransactionsItemView
 import com.developerstring.financesapp.ui.theme.backgroundColor
-import com.developerstring.financesapp.util.Constants
 import com.developerstring.financesapp.util.Constants.oldFirstFilter
-import com.developerstring.financesapp.util.FilterTransactionState
-import com.developerstring.financesapp.util.RequestState
-import com.developerstring.financesapp.util.SearchBarState
+import com.developerstring.financesapp.util.state.FilterTransactionState
+import com.developerstring.financesapp.util.state.RequestState
+import com.developerstring.financesapp.util.state.SearchBarState
 
 @Composable
 fun ViewHistoryScreen(
@@ -87,7 +84,7 @@ fun TransactionHistoryContain(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.backgroundColor)
+            .background(backgroundColor)
     ) {
 
         if (searchBarState == SearchBarState.TRIGGERED && filterState == FilterTransactionState.OPENED) {

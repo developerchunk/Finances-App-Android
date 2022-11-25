@@ -1,15 +1,11 @@
 package com.developerstring.financesapp.screen.transaction
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
@@ -25,6 +21,7 @@ import androidx.navigation.NavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
+import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.ADD_FUND
@@ -37,6 +34,7 @@ fun TransactionDetailsScreen(
     sharedViewModel: SharedViewModel,
     navController: NavController,
     profileViewModel: ProfileViewModel,
+    publicSharedViewModel: PublicSharedViewModel
 ) {
 
     val context = LocalContext.current
@@ -71,7 +69,7 @@ fun TransactionDetailsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.backgroundColor)
+            .background(backgroundColor)
             .verticalScroll(state = scrollState)
     ) {
 
@@ -90,7 +88,7 @@ fun TransactionDetailsScreen(
                     modifier = Modifier.size(28.dp),
                     imageVector = Icons.Rounded.Close,
                     contentDescription = "close",
-                    tint = MaterialTheme.colors.textColorBW
+                    tint = textColorBW
                 )
             }
 
@@ -99,7 +97,7 @@ fun TransactionDetailsScreen(
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium,
                 fontSize = EXTRA_LARGE_TEXT_SIZE,
-                color = MaterialTheme.colors.textColorBW
+                color = textColorBW
             )
 
             IconButton(onClick = {
@@ -119,7 +117,7 @@ fun TransactionDetailsScreen(
                     modifier = Modifier.size(28.dp),
                     imageVector = Icons.Rounded.Delete,
                     contentDescription = "delete",
-                    tint = MaterialTheme.colors.textColorBW
+                    tint = textColorBW
                 )
             }
 
@@ -133,8 +131,8 @@ fun TransactionDetailsScreen(
             if (getTransactionModel!=null) {
                 TransactionContent(
                     modifier = Modifier,
-                    profileViewModel = profileViewModel,
                     transactionModel = getTransactionModel!!,
+                    publicSharedViewModel = publicSharedViewModel,
                     onSaveClicked = {
 //                    Toast.makeText(context, id.toString(), Toast.LENGTH_SHORT).show()
                         transactionModel = TransactionModel(
@@ -142,6 +140,7 @@ fun TransactionDetailsScreen(
                             amount = it.amount,
                             transaction_type = it.transaction_type,
                             category = it.category,
+                            subCategory = it.subCategory,
                             date = it.date,
                             day = it.day,
                             month = it.month,

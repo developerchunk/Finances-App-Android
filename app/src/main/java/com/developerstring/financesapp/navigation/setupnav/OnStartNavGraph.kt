@@ -10,12 +10,14 @@ import com.developerstring.financesapp.screen.onstart.*
 import com.developerstring.financesapp.screen.profilecreate.CreateProfileScreen
 import com.developerstring.financesapp.screen.profilecreate.CreateProfileScreen2
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
+import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 
 fun NavGraphBuilder.onStartNavGraph(
     navController: NavHostController,
     profileViewModel: ProfileViewModel,
-    sharedViewModel: SharedViewModel
+    sharedViewModel: SharedViewModel,
+    publicSharedViewModel: PublicSharedViewModel
 ) {
     navigation(
         route = Graph.ON_START_NAV_GRAPH,
@@ -25,7 +27,11 @@ fun NavGraphBuilder.onStartNavGraph(
         composable(
             route = SetUpNavRoute.MainSetUpNavRoute.route
         ) {
-            MainScreen(profileViewModel = profileViewModel, sharedViewModel = sharedViewModel)
+            MainScreen(
+                profileViewModel = profileViewModel,
+                sharedViewModel = sharedViewModel,
+                publicSharedViewModel = publicSharedViewModel
+            )
         }
 
         // Splash SetUpNavRoute

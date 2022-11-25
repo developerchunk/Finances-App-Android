@@ -8,7 +8,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -33,8 +32,8 @@ fun CustomChip(
 
     val isSelected = selected == title
 
-    val background = if (isSelected) UIBlue else MaterialTheme.colors.colorDarkGray
-    val contentColor = if (isSelected) Color.White else MaterialTheme.colors.textColorBLG
+    val background = if (isSelected) UIBlue else colorDarkGray
+    val contentColor = if (isSelected) Color.White else textColorBW
 
     val interactionSource = remember {
         MutableInteractionSource()
@@ -45,6 +44,7 @@ fun CustomChip(
             .height(35.dp)
             .clip(CircleShape)
             .background(background)
+            .border(width = 1.dp, color = colorGray, shape = CircleShape)
             .clickable(
                 onClick = {
                     onSelected(title)
@@ -65,7 +65,7 @@ fun CustomChip(
                     tint = Color.White
                 )
             }
-            Text(text = keyToTransactionType(title), color = contentColor, fontSize = 16.sp)
+            Text(text = title.keyToTransactionType(), color = contentColor, fontSize = 16.sp)
         }
     }
 }
@@ -79,8 +79,8 @@ fun SearchChip(
 
     val isSelected = selected == title
 
-    val background = if (isSelected) UIBlue else MaterialTheme.colors.colorDarkGray
-    val contentColor = if (isSelected) Color.White else MaterialTheme.colors.textColorBW
+    val background = if (isSelected) UIBlue else colorDarkGray
+    val contentColor = if (isSelected) Color.White else textColorBW
 
     val interactionSource = remember {
         MutableInteractionSource()
@@ -92,7 +92,7 @@ fun SearchChip(
             .height(35.dp)
             .clip(CircleShape)
             .background(background)
-            .border(width = 1.dp, color = MaterialTheme.colors.colorGray, shape = CircleShape)
+            .border(width = 1.dp, color = colorGray, shape = CircleShape)
             .clickable(
                 onClick = {
                     onSelected(title)

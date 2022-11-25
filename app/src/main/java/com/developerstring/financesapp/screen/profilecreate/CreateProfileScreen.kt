@@ -2,8 +2,6 @@ package com.developerstring.financesapp.screen.profilecreate
 
 import android.widget.Toast
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,21 +24,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
-import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
-import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
-import com.developerstring.financesapp.util.Constants.ADD_FUND
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Composable
 fun CreateProfileScreen(
@@ -64,7 +55,7 @@ fun CreateProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.backgroundColor)
+            .background(backgroundColor)
             .verticalScroll(state = scrollState),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -75,7 +66,7 @@ fun CreateProfileScreen(
                     .padding(top = 30.dp),
                 text = stringResource(id = R.string.profile),
                 fontSize = MAX_TEXT_SIZE,
-                color = MaterialTheme.colors.textColorBW,
+                color = textColorBW,
                 fontFamily = fontOpenSans,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
@@ -86,7 +77,7 @@ fun CreateProfileScreen(
                     .padding(top = 50.dp, start = 30.dp),
                 text = stringResource(id = R.string.create_profile_screen_text_1),
                 fontSize = MEDIUM_TEXT_SIZE,
-                color = MaterialTheme.colors.colorGray,
+                color = colorGray,
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Normal
             )
@@ -102,7 +93,7 @@ fun CreateProfileScreen(
                         .padding(start = 3.dp, bottom = 2.dp),
                     text = stringResource(id = R.string.create_profile_screen_name),
                     fontSize = TEXT_FIELD_SIZE,
-                    color = MaterialTheme.colors.textColorBLG,
+                    color = textColorBLG,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium
                 )
@@ -113,7 +104,7 @@ fun CreateProfileScreen(
                         .height(55.dp)
                         .border(
                             width = 1.8.dp,
-                            color = MaterialTheme.colors.textColorBLG,
+                            color = textColorBLG,
                             shape = RoundedCornerShape(15.dp)
                         ),
                     value = name.value,
@@ -124,10 +115,10 @@ fun CreateProfileScreen(
                         backgroundColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.textColorBW,
+                        cursorColor = textColorBW,
                     ),
                     textStyle = TextStyle(
-                        color = MaterialTheme.colors.textColorBW,
+                        color = textColorBW,
                         fontSize = TEXT_FIELD_SIZE
                     ),
                     keyboardOptions = KeyboardOptions(
@@ -149,7 +140,7 @@ fun CreateProfileScreen(
                         .padding(start = 3.dp, bottom = 2.dp),
                     text = stringResource(id = R.string.create_profile_screen_amount),
                     fontSize = TEXT_FIELD_SIZE,
-                    color = MaterialTheme.colors.textColorBLG,
+                    color = textColorBLG,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium
                 )
@@ -160,7 +151,7 @@ fun CreateProfileScreen(
                         .height(55.dp)
                         .border(
                             width = 1.8.dp,
-                            color = MaterialTheme.colors.textColorBLG,
+                            color = textColorBLG,
                             shape = RoundedCornerShape(15.dp)
                         ),
                     value = amount.value,
@@ -171,10 +162,10 @@ fun CreateProfileScreen(
                         backgroundColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.textColorBW
+                        cursorColor = textColorBW
                     ),
                     textStyle = TextStyle(
-                        color = MaterialTheme.colors.textColorBW,
+                        color = textColorBW,
                         fontSize = TEXT_FIELD_SIZE
                     ),
                     keyboardOptions = KeyboardOptions(
@@ -195,7 +186,7 @@ fun CreateProfileScreen(
                         .padding(start = 3.dp, bottom = 2.dp),
                     text = stringResource(id = R.string.create_profile_screen_currency),
                     fontSize = TEXT_FIELD_SIZE,
-                    color = MaterialTheme.colors.textColorBLG,
+                    color = textColorBLG,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium
                 )
@@ -206,7 +197,7 @@ fun CreateProfileScreen(
                         .height(55.dp)
                         .border(
                             width = 1.8.dp,
-                            color = MaterialTheme.colors.textColorBLG,
+                            color = textColorBLG,
                             shape = RoundedCornerShape(15.dp)
                         )
                         .onGloballyPositioned { coordinates ->
@@ -214,7 +205,7 @@ fun CreateProfileScreen(
                         }
                         .clickable { expanded = !expanded },
                     shape = RoundedCornerShape(15.dp),
-                    backgroundColor = MaterialTheme.colors.backgroundColor
+                    backgroundColor = backgroundColor
                 ) {
 
                     Row(
@@ -226,7 +217,7 @@ fun CreateProfileScreen(
                             modifier = Modifier.padding(start = 20.dp),
                             text = selectedCurrency,
                             fontSize = TEXT_FIELD_SIZE,
-                            color = MaterialTheme.colors.textColorBW
+                            color = textColorBW
                         )
 
                         Icon(
@@ -237,7 +228,7 @@ fun CreateProfileScreen(
                             Modifier
                                 .padding(end = 15.dp)
                                 .size(28.dp),
-                            tint = MaterialTheme.colors.textColorBLG
+                            tint = textColorBLG
                         )
                     }
 
@@ -249,7 +240,7 @@ fun CreateProfileScreen(
                     onDismissRequest = { expanded = false },
                     modifier = Modifier
                         .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
-                        .background(color = MaterialTheme.colors.backgroundColorCard)
+                        .background(color = backgroundColorCard)
                 ) {
                     list.forEach { label ->
                         DropdownMenuItem(onClick = {
@@ -259,7 +250,7 @@ fun CreateProfileScreen(
                             Text(
                                 text = label,
                                 fontSize = 18.sp,
-                                color = MaterialTheme.colors.textColorBW
+                                color = textColorBW
                             )
                         }
                     }
@@ -281,7 +272,7 @@ fun CreateProfileScreen(
                     .width(220.dp)
                     .height(45.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.contentBackgroundColor
+                    backgroundColor = contentBackgroundColor
                 ),
                 shape = RoundedCornerShape(25.dp),
                 onClick = {

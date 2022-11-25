@@ -8,12 +8,14 @@ import com.developerstring.financesapp.screen.transaction.AddTransaction
 import com.developerstring.financesapp.screen.transaction.TransactionDetailsScreen
 import com.developerstring.financesapp.screen.transaction.ViewHistoryScreen
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
+import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 
 fun NavGraphBuilder.navGraph(
     navController: NavHostController,
     profileViewModel: ProfileViewModel,
-    sharedViewModel: SharedViewModel
+    sharedViewModel: SharedViewModel,
+    publicSharedViewModel: PublicSharedViewModel
 ) {
 
     navigation(
@@ -24,7 +26,8 @@ fun NavGraphBuilder.navGraph(
             AddTransaction(
                 navController = navController,
                 sharedViewModel = sharedViewModel,
-                profileViewModel = profileViewModel
+                profileViewModel = profileViewModel,
+                publicSharedViewModel = publicSharedViewModel
             )
         }
 
@@ -43,6 +46,7 @@ fun NavGraphBuilder.navGraph(
                 sharedViewModel = sharedViewModel,
                 profileViewModel = profileViewModel,
                 navController = navController,
+                publicSharedViewModel = publicSharedViewModel
 //                id = task.arguments?.getInt(DETAIL_TRANSACTION_KEY)!!.toInt()
             )
         }

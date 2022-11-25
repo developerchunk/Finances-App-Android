@@ -1,21 +1,20 @@
 package com.developerstring.financesapp.util
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.LATEST_FIRST
 import com.developerstring.financesapp.util.Constants.OLD_FIRST
 import com.developerstring.financesapp.util.Constants.SAVINGS
 import com.developerstring.financesapp.util.Constants.SPENT
+import com.developerstring.financesapp.util.Constants.SUB_CATEGORY
 import com.developerstring.financesapp.util.Constants.THIS_MONTH
 import com.developerstring.financesapp.util.Constants.oldFirstFilter
 import java.text.DecimalFormat
-import java.text.SimpleDateFormat
-import java.util.Calendar
+import java.util.*
+import kotlin.collections.Map
 import kotlin.math.abs
 
-fun keyToTransactionType(key: String): String {
-    return when (key) {
+fun String.keyToTransactionType(): String {
+    return when (this) {
         SPENT -> "Spent"
         ADD_FUND -> "Add Fund"
         SAVINGS -> "Savings"
@@ -194,9 +193,6 @@ fun String.filterListText(): String {
         OLD_FIRST -> ""
         else -> this
     }
-
-
-
 }
 
 fun Short.addZeroToStart(): String {
@@ -206,5 +202,56 @@ fun Short.addZeroToStart(): String {
     } else {
         this.toString()
     }
+
+}
+
+class MessageBarContentLastTransaction {
+
+    fun title(
+        transactionType: String,
+        currency: String,
+        amount: Int
+    ): String {
+
+        return "Delete ${
+            transactionType.keyToTransactionType().uppercase()
+        } ${
+            if (currency.last().toString() == Constants.INDIAN_CURRENCY)
+                simplifyAmountIndia(amount)
+            else simplifyAmount(
+                amount
+            )
+        }${currency.last()}"
+
+    }
+
+    fun message(
+        category: String,
+        subCategory: String,
+        day: Short,
+        month: Short,
+        year: Short,
+    ): String {
+
+        return "Are you sure you want to delete \n\n" +
+                "Category: $category\n" +
+                "Sub Category: $subCategory\n" +
+                "Date: $day/$month/$year\n"
+
+    }
+
+}
+
+fun Map<String, List<String>>.mapListToList(): List<String> {
+
+    val list = mutableListOf<String>()
+
+    this.values.forEach {
+        it.forEach { str ->
+            list.add(str)
+        }
+    }
+
+    return list.sorted()
 
 }

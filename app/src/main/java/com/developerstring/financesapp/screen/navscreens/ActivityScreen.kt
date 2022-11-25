@@ -44,6 +44,6 @@ fun ActivityScreenDates(
     dates: List<Int>
 ) {
 
-    Text(text = dates.toString())
+    Text(text = data.toString())
 
 }

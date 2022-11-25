@@ -1,7 +1,5 @@
 package com.developerstring.financesapp.ui.theme
 
-import androidx.compose.material.Colors
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Gray
@@ -31,47 +29,44 @@ val LightGreen = Color(0xFF03DAC5)
 val WhiteGreen = Color(0xFFADFFF7)
 val LightWhiteBlue = Color(0xFFF9FCFF)
 
-val Colors.textColorBW: Color
+val textColorBW: Color
     get() = if (!DARK_THEME_ENABLE) Black else White
 
-val Colors.colorGray: Color
+val colorGray: Color
     get() = if (!DARK_THEME_ENABLE) Gray else LighterGray
 
-val Colors.colorDarkGray: Color
-    get() = if (!DARK_THEME_ENABLE) ExtraLightGray else SlightDark
+val colorDarkGray: Color
+    get() = if (!DARK_THEME_ENABLE) ExtraLightGray else LightDark
 
-val Colors.contentBackgroundColor: Color
+val contentBackgroundColor: Color
     get() = if (!DARK_THEME_ENABLE) Black else UIBlue
 
-val Colors.backgroundColor: Color
+val backgroundColor: Color
     get() = if (!DARK_THEME_ENABLE) LightWhiteBlue else Dark
 
-val Colors.backgroundColorBW: Color
+val backgroundColorBW: Color
     get() = if (!DARK_THEME_ENABLE) White else ExtraDark
 
-val Colors.backgroundColorCard: Color
+val backgroundColorCard: Color
     get() = if (!DARK_THEME_ENABLE) White else LightGray
 
-val Colors.textColorBLG: Color
+val textColorBLG: Color
     get() = if (!DARK_THEME_ENABLE) Black else SlightGray
 
-val Colors.contentColorLBLD: Color
+val contentColorLBLD: Color
     get() = if (!DARK_THEME_ENABLE) LighterBlue else LightDark
 
-val Colors.contentColorCard: Color
+val contentColorCard: Color
     get() = if (!DARK_THEME_ENABLE) White else LightDark
 
-val Colors.contentColorLBSD: Color
+val contentColorLBSD: Color
     get() = if (!DARK_THEME_ENABLE) LighterBlue else SlightDark
 
-val Colors.contentColorDW: Color
-    get() = if (!DARK_THEME_ENABLE) Dark else White
-
-val Colors.greenIconColor: Color
+val greenIconColor: Color
     get() = if (!DARK_THEME_ENABLE) Green else LightGreen
 
-val Colors.lightGreenGraphColor: Color
+val lightGreenGraphColor: Color
     get() = if (!DARK_THEME_ENABLE) WhiteGreen else WhiteGreen.copy(alpha = 0.3f)
 
-val Colors.lightBlueGraphColor: Color
+val lightBlueGraphColor: Color
     get() = if (!DARK_THEME_ENABLE) LightBlue else LightBlue.copy(alpha = 0.3f)

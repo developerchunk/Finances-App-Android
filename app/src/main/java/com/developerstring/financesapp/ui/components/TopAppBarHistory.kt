@@ -6,9 +6,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -20,7 +20,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -34,12 +33,10 @@ import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.CATEGORIES
 import com.developerstring.financesapp.util.Constants.FILTER_NAME
-import com.developerstring.financesapp.util.Constants.oldFirstFilter
-import com.developerstring.financesapp.util.FilterTransactionState
-import com.developerstring.financesapp.util.SearchBarState
-import com.developerstring.financesapp.util.TrailingIconStateSearch
+import com.developerstring.financesapp.util.state.FilterTransactionState
+import com.developerstring.financesapp.util.state.SearchBarState
+import com.developerstring.financesapp.util.state.TrailingIconStateSearch
 import com.developerstring.financesapp.util.filterListText
-import com.google.accompanist.flowlayout.FlowColumn
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
@@ -64,7 +61,7 @@ fun TopAppBarHistory(
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colors.backgroundColor
+        color = backgroundColor
     ) {
         Column(
             modifier = Modifier
@@ -139,13 +136,21 @@ fun TopAppBarFilterContent(
 //    chipNames: List<String>,
 ) {
 
+//    val subCategory = mutableListOf<String>()
+
+//    SUB_CATEGORY.values.forEach { list ->
+//        list.forEach {
+//            subCategory.add(it)
+//        }
+//    }
+
     val filterList = FILTER_NAME.plus(CATEGORIES)
 
 
     val expandBackground = Brush.horizontalGradient(
         colors = listOf(
             Color.Transparent,
-            MaterialTheme.colors.backgroundColor,
+            backgroundColor,
         ),
     )
 
@@ -164,19 +169,25 @@ fun TopAppBarFilterContent(
             .fillMaxWidth(),
     ) {
 
-        Row(modifier = Modifier
-            .padding(start = 60.dp)
-            .fillMaxWidth()
-            .animateContentSize(
-                animationSpec = tween(
-                    durationMillis = 500,
+        Row(
+            modifier = Modifier
+                .padding(start = 60.dp)
+                .fillMaxWidth()
+                .animateContentSize(
+                    animationSpec = tween(
+                        durationMillis = 500,
+                    )
                 )
-            )
         ) {
             when (expanded) {
                 true -> {
                     FlowRow(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 300.dp)
+                            .verticalScroll(
+                                rememberScrollState()
+                            ),
                         mainAxisSpacing = 16.dp,
                         crossAxisSpacing = 16.dp,
                     ) {
@@ -216,7 +227,7 @@ fun TopAppBarFilterContent(
             modifier = Modifier
                 .height(40.dp)
                 .width(50.dp)
-                .background(MaterialTheme.colors.backgroundColor),
+                .background(backgroundColor),
             contentAlignment = Alignment.TopStart
         ) {
 
@@ -230,144 +241,31 @@ fun TopAppBarFilterContent(
                     modifier = Modifier.size(35.dp),
                     imageVector = Icons.Rounded.KeyboardArrowDown,
                     contentDescription = "expand",
-                    tint = MaterialTheme.colors.textColorBW
+                    tint = textColorBW
                 )
 
             }
 
         }
 
-        if(!expanded) {
+        if (!expanded) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.Transparent),
                 contentAlignment = Alignment.CenterEnd
-            ){
-                Box(modifier = Modifier
-                    .height(40.dp)
-                    .width(50.dp)
-                    .background(expandBackground))
+            ) {
+                Box(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .width(50.dp)
+                        .background(expandBackground)
+                )
             }
         }
 
     }
 
-
-}
-
-@Composable
-fun DefaultFilterChip(
-    filterList: List<String>,
-    selectedChip: String,
-    selectedList: (String) -> Unit
-) {
-    var selected by remember {
-        mutableStateOf(selectedChip)
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(40.dp)
-            .horizontalScroll(rememberScrollState())
-    ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            Text(
-                modifier = Modifier.padding(start = 10.dp, end = 10.dp),
-                text = stringResource(id = R.string.filter),
-                fontSize = TEXT_FIELD_SIZE,
-                fontFamily = fontInter,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colors.textColorBW
-            )
-
-        }
-
-        Box(
-            modifier = Modifier
-                .padding(bottom = 4.dp, top = 4.dp, end = 20.dp)
-                .fillMaxHeight()
-                .width(2.dp)
-                .background(color = MaterialTheme.colors.colorGray, shape = CircleShape)
-        )
-
-    }
-}
-
-@Composable
-fun ExpandedFilterChip(
-    filterList: List<String>,
-    selectedChip: String,
-    selectedList: (String) -> Unit
-) {
-
-    var selected by remember {
-        mutableStateOf(selectedChip)
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-
-        Column(
-            modifier = Modifier
-                .height(40.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            Text(
-                modifier = Modifier.padding(start = 10.dp, end = 10.dp),
-                text = stringResource(id = R.string.filter),
-                fontSize = TEXT_FIELD_SIZE,
-                fontFamily = fontInter,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colors.textColorBW
-            )
-
-        }
-
-        Box(
-            modifier = Modifier
-                .padding(bottom = 4.dp, top = 4.dp, end = 20.dp)
-                .height(40.dp)
-                .width(2.dp)
-                .background(color = MaterialTheme.colors.colorGray, shape = CircleShape)
-        )
-
-        filterList.forEach { mList ->
-            SearchChip(
-                title = mList,
-                selected = selected,
-                onSelected = { text ->
-                    selected = if (text == selected) "" else text
-                    selectedList(selected)
-                })
-        }
-
-        FlowRow(
-            mainAxisSpacing = 16.dp,
-            crossAxisSpacing = 16.dp
-        ) {
-            filterList.forEach { mList ->
-                SearchChip(
-                    title = mList,
-                    selected = selected,
-                    onSelected = { text ->
-                        selected = if (text == selected) "" else text
-                        selectedList(selected)
-                    })
-            }
-        }
-
-    }
 
 }
 
@@ -392,7 +290,7 @@ fun DefaultTopAppBarHistory(
                 modifier = Modifier.size(28.dp),
                 imageVector = Icons.Rounded.Close,
                 contentDescription = "close",
-                tint = MaterialTheme.colors.textColorBW
+                tint = textColorBW
             )
         }
 
@@ -401,7 +299,7 @@ fun DefaultTopAppBarHistory(
             fontFamily = fontInter,
             fontWeight = FontWeight.Medium,
             fontSize = EXTRA_LARGE_TEXT_SIZE,
-            color = MaterialTheme.colors.textColorBW
+            color = textColorBW
         )
 
         IconButton(onClick = {
@@ -411,7 +309,7 @@ fun DefaultTopAppBarHistory(
                 modifier = Modifier.size(28.dp),
                 imageVector = Icons.Rounded.Search,
                 contentDescription = "search",
-                tint = MaterialTheme.colors.textColorBW
+                tint = textColorBW
             )
         }
 
@@ -450,12 +348,12 @@ fun SearchedTopAppBarHistory(
                     modifier = Modifier
                         .alpha(ContentAlpha.medium),
                     text = stringResource(id = R.string.search_placeholder),
-                    color = MaterialTheme.colors.textColorBW,
+                    color = textColorBW,
                     fontSize = TEXT_FIELD_SIZE
                 )
             },
             textStyle = TextStyle(
-                color = MaterialTheme.colors.textColorBW,
+                color = textColorBW,
                 fontSize = TEXT_FIELD_SIZE
             ),
             singleLine = true,
@@ -468,7 +366,7 @@ fun SearchedTopAppBarHistory(
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = stringResource(id = R.string.search_icon),
-                        tint = MaterialTheme.colors.textColorBW
+                        tint = textColorBW
                     )
                 }
             },
@@ -516,7 +414,7 @@ fun SearchedTopAppBarHistory(
                     Icon(
                         imageVector = Icons.Filled.Close,
                         contentDescription = stringResource(id = R.string.close_icon),
-                        tint = MaterialTheme.colors.textColorBW
+                        tint = textColorBW
                     )
                 }
             },
@@ -529,10 +427,10 @@ fun SearchedTopAppBarHistory(
                 }
             ),
             colors = TextFieldDefaults.textFieldColors(
-                cursorColor = MaterialTheme.colors.textColorBW,
-                focusedIndicatorColor = MaterialTheme.colors.textColorBW,
-                disabledIndicatorColor = MaterialTheme.colors.textColorBW,
-                unfocusedIndicatorColor = MaterialTheme.colors.textColorBW,
+                cursorColor = textColorBW,
+                focusedIndicatorColor = textColorBW,
+                disabledIndicatorColor = textColorBW,
+                unfocusedIndicatorColor = textColorBW,
                 backgroundColor = Color.Transparent
             )
         )

@@ -20,8 +20,14 @@
     <string name="last_week">Last 7 Days</string>
     <string name="spent_this_week">Spent this week</string>
 
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
     <string name="amount_text_field">Amount*</string>
     <string name="category_text_field">Category*</string>
+    <string name="other_category_text_field">Specify Category (Optional)</string>
+    <string name="sub_category_text_field">Sub Category*</string>
+    <string name="other_sub_category_text_field">Specify Sub Category (Optional)</string>
     <string name="date_text_field">Date*</string>
     <string name="extra_info_text_field">Extra Info (Optional)</string>
     <string name="place_info_text_field">Place (Optional)</string>
@@ -38,6 +44,9 @@
     <string name="search_placeholder">Search here</string>
 
     <string name="filter">Filter</string>
+
+    <string name="delete_transaction">Delete \%1$s\ \%1$s\</string>
+    <string name="delete_transaction_message">Are you sure you want to delete \n\nCategory: \%1$s\ \nSub Category: \%1$s\ \nDate: \%1$s\</string>
 
 <!--    Currencies-->
     <string-array name="currencies">

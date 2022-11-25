@@ -3,7 +3,6 @@ package com.developerstring.financesapp.screen.onstart
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -78,7 +77,7 @@ fun SplashScreenContent() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colors.backgroundColor),
+            .background(color = backgroundColor),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
@@ -92,14 +91,14 @@ fun SplashScreenContent() {
                 fontFamily = fontFredoka,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = MAX_TEXT_SIZE,
-                color = MaterialTheme.colors.textColorBW
+                color = textColorBW
             )
             Text(
                 text = stringResource(id = R.string.splash_screen_text),
                 fontFamily = fontPoppins,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = SMALL_TEXT_SIZE,
-                color = MaterialTheme.colors.textColorBLG
+                color = textColorBLG
             )
         }
         Column(
@@ -108,7 +107,7 @@ fun SplashScreenContent() {
         ) {
             CircularProgressIndicator(
                 modifier = Modifier.size(40.dp),
-                color = MaterialTheme.colors.contentBackgroundColor,
+                color = contentBackgroundColor,
                 strokeWidth = 3.dp
             )
             Spacer(modifier = Modifier.fillMaxHeight(0.11f))

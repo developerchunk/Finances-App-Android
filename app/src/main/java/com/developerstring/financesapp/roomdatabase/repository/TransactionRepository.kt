@@ -15,6 +15,10 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
         return transactionDao.getSelectedTransaction(transactionID = transactionID)
     }
 
+    fun getLastTransaction(): Flow<Int> {
+        return transactionDao.getLastTransaction()
+    }
+
     suspend fun addTransaction(transactionModel: TransactionModel) {
         transactionDao.addTransaction(transactionModel = transactionModel)
     }

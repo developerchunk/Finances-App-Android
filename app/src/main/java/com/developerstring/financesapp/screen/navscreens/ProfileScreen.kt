@@ -1,16 +1,12 @@
 package com.developerstring.financesapp.screen.navscreens
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,13 +26,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
-import com.developerstring.financesapp.navigation.Graph
 import com.developerstring.financesapp.navigation.bottomnav.BottomNavRoute
 import com.developerstring.financesapp.navigation.navgraph.NavRoute
-import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
 import com.developerstring.financesapp.screen.navscreens.content.profilescreen.CustomSwitchButton
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
@@ -44,7 +37,6 @@ import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.DARK_THEME
 import com.developerstring.financesapp.util.Constants.PROFILE
 import com.developerstring.financesapp.util.Constants.PROFILE_CONTENT_LIST
-import kotlin.math.max
 
 @Composable
 fun ProfileScreen(
@@ -70,7 +62,7 @@ fun ProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colors.backgroundColor)
+            .background(color = backgroundColor)
             .verticalScroll(state = scrollState)
     ) {
 
@@ -80,7 +72,7 @@ fun ProfileScreen(
                 modifier = Modifier
                     .height(150.dp)
                     .fillMaxWidth()
-                    .background(MaterialTheme.colors.contentColorLBSD)
+                    .background(contentColorLBSD)
             )
 
             Text(
@@ -90,7 +82,7 @@ fun ProfileScreen(
                 text = stringResource(id = R.string.profile),
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colors.textColorBW,
+                color = textColorBW,
                 fontSize = EXTRA_LARGE_TEXT_SIZE
             )
 
@@ -101,7 +93,7 @@ fun ProfileScreen(
                     .height(150.dp),
                 elevation = 10.dp,
                 shape = RoundedCornerShape(15.dp),
-                backgroundColor = MaterialTheme.colors.contentColorCard
+                backgroundColor = contentColorCard
             ) {
 
                 Row(
@@ -156,7 +148,7 @@ fun ProfileScreen(
                             fontFamily = fontInter,
                             fontWeight = FontWeight.Medium,
                             fontSize = LARGE_TEXT_SIZE,
-                            color = MaterialTheme.colors.textColorBW,
+                            color = textColorBW,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -230,7 +222,7 @@ fun ProfileOptionsContent(
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium,
                 fontSize = TEXT_FIELD_SIZE,
-                color = MaterialTheme.colors.textColorBW
+                color = textColorBW
             )
 
             if (title == DARK_THEME) {
@@ -250,7 +242,7 @@ fun ProfileOptionsContent(
                     modifier = Modifier.size(34.dp),
                     painter = painterResource(id = icon),
                     contentDescription = "icon",
-                    colorFilter = ColorFilter.tint(color = MaterialTheme.colors.textColorBW)
+                    colorFilter = ColorFilter.tint(color = textColorBW)
                 )
             }
 
@@ -263,7 +255,7 @@ fun ProfileOptionsContent(
                 .fillMaxWidth()
                 .height(1.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colors.textColorBW)
+                .background(textColorBW)
         )
     }
 

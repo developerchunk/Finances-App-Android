@@ -1,4 +1,4 @@
-package com.developerstring.financesapp.util
+package com.developerstring.financesapp.util.state
 
 sealed class RequestState<out T> {
     object Idle: RequestState<Nothing>()

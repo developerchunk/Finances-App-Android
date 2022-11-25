@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -18,6 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
+import com.developerstring.financesapp.util.simplifyAmount
+import com.developerstring.financesapp.util.simplifyAmountIndia
 import com.developerstring.financesapp.util.transactionTypeToSymbol
 
 @Composable
@@ -70,14 +72,14 @@ fun TransactionsItemView(
                     fontSize = TEXT_FIELD_SIZE,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colors.textColorBW
+                    color = textColorBW
                 )
                 Text(
                     text = "${transactionModel.month}/${transactionModel.year}",
                     fontSize = EXTRA_SMALL_TEXT_SIZE,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colors.textColorBW
+                    color = textColorBW
                 )
 
 
@@ -87,7 +89,7 @@ fun TransactionsItemView(
                 elevation = 5.dp,
                 modifier = Modifier.padding(10.dp),
                 shape = RoundedCornerShape(10.dp),
-                color = MaterialTheme.colors.contentColorCard
+                color = contentColorCard
             ) {
                 Row(
                     modifier = Modifier
@@ -98,20 +100,40 @@ fun TransactionsItemView(
                 ) {
                     ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
 
-                        val (text1, text2, text3) = createRefs()
+                        val (text,text1, text2, text3) = createRefs()
 
                         Text(
                             modifier = Modifier
                                 .padding(start = 20.dp)
-                                .constrainAs(text1) {
+                                .fillMaxWidth(0.5f)
+                                .constrainAs(text) {
                                     start.linkTo(parent.start)
                                     top.linkTo(parent.top)
                                 },
                             text = transactionModel.category,
                             fontFamily = fontInter,
                             fontWeight = FontWeight.Medium,
+                            fontSize = SMALLEST_TEXT_SIZE,
+                            color = colorGray,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 2
+                        )
+
+                        Text(
+                            modifier = Modifier
+                                .padding(start = 20.dp)
+                                .fillMaxWidth(0.5f)
+                                .constrainAs(text1) {
+                                    start.linkTo(parent.start)
+                                    top.linkTo(text.bottom)
+                                },
+                            text = transactionModel.subCategory,
+                            fontFamily = fontInter,
+                            fontWeight = FontWeight.Medium,
                             fontSize = TEXT_FIELD_SIZE,
-                            color = MaterialTheme.colors.textColorBW
+                            color = textColorBW,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 2
                         )
 
                         if (extraInfoStatus) {
@@ -120,13 +142,13 @@ fun TransactionsItemView(
                                     .padding(start = 20.dp)
                                     .constrainAs(text2) {
                                         start.linkTo(text1.start)
-                                        top.linkTo(text3.bottom)
+                                        top.linkTo(text1.bottom)
                                     },
                                 text = transactionModel.info,
                                 fontFamily = fontInter,
                                 fontWeight = FontWeight.Medium,
                                 fontSize = EXTRA_SMALL_TEXT_SIZE,
-                                color = MaterialTheme.colors.textColorBW,
+                                color = textColorBW,
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis
                             )
@@ -139,11 +161,15 @@ fun TransactionsItemView(
                                     top.linkTo(parent.top)
                                     end.linkTo(parent.end)
                                 },
-                            text = "${transactionTypeToSymbol(transactionType = transactionModel.transaction_type)} ${transactionModel.amount} ${currency.last()}",
+                            text = "${transactionTypeToSymbol(transactionType = transactionModel.transaction_type)} ${
+                                if (currency.last().toString() == INDIAN_CURRENCY) simplifyAmountIndia(
+                                    transactionModel.amount
+                                ) else simplifyAmount(transactionModel.amount)
+                            } ${currency.last()}",
                             fontFamily = fontInter,
                             fontWeight = FontWeight.Medium,
                             fontSize = TEXT_FIELD_SIZE,
-                            color = MaterialTheme.colors.textColorBW,
+                            color = textColorBW,
                         )
 
                     }
