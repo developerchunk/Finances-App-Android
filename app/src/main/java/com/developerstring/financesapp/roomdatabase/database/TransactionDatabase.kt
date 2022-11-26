@@ -9,9 +9,8 @@ import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 // we can add our database tables here
 @Database(
     entities = [TransactionModel::class],
-    version = 5,
+    version = 1,
     exportSchema = true,
-    autoMigrations = [AutoMigration(from = 1, to = 5)]
 )
 abstract class TransactionDatabase : RoomDatabase() {
 

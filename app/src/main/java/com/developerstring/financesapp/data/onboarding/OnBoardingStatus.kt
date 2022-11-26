@@ -19,7 +19,6 @@ class OnBoardingStatus(private val context: Context) {
         val ON_BOARDING_STATUS_KEY_ = stringPreferencesKey(ON_BOARDING_STATUS_KEY)
     }
 
-
     // get saved onBoardingStatus
     val getOnBoardingStatus: Flow<String?> = context.dataStore.data
         .map { preferences ->

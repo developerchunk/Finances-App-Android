@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7d082648889bdd7e4092b1ae586be583",
+    "identityHash": "9e787cf2b7d20008e6d119bac599b975",
     "entities": [
       {
         "tableName": "transaction_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` INTEGER NOT NULL, `transaction_type` TEXT NOT NULL, `category` TEXT NOT NULL, `date` TEXT NOT NULL, `day` INTEGER NOT NULL, `month` INTEGER NOT NULL, `year` INTEGER NOT NULL, `info` TEXT NOT NULL, `place` TEXT NOT NULL, `eventID` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` INTEGER NOT NULL, `transaction_type` TEXT NOT NULL, `category` TEXT NOT NULL, `date` TEXT NOT NULL, `day` INTEGER NOT NULL, `month` INTEGER NOT NULL, `year` INTEGER NOT NULL, `info` TEXT NOT NULL, `place` TEXT NOT NULL, `eventID` TEXT NOT NULL, `subCategory` TEXT NOT NULL, `categoryOther` TEXT NOT NULL, `subCategoryOther` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -73,6 +73,24 @@
             "columnName": "eventID",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "subCategory",
+            "columnName": "subCategory",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categoryOther",
+            "columnName": "categoryOther",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subCategoryOther",
+            "columnName": "subCategoryOther",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -88,7 +106,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7d082648889bdd7e4092b1ae586be583')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9e787cf2b7d20008e6d119bac599b975')"
     ]
   }
 }

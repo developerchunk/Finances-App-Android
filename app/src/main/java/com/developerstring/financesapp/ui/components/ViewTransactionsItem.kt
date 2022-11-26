@@ -18,6 +18,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
+import com.developerstring.financesapp.util.Constants.OTHER
 import com.developerstring.financesapp.util.simplifyAmount
 import com.developerstring.financesapp.util.simplifyAmountIndia
 import com.developerstring.financesapp.util.transactionTypeToSymbol
@@ -100,7 +101,7 @@ fun TransactionsItemView(
                 ) {
                     ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
 
-                        val (text,text1, text2, text3) = createRefs()
+                        val (text, text1, text2, text3) = createRefs()
 
                         Text(
                             modifier = Modifier
@@ -110,7 +111,9 @@ fun TransactionsItemView(
                                     start.linkTo(parent.start)
                                     top.linkTo(parent.top)
                                 },
-                            text = transactionModel.category,
+                            text =
+                            if (transactionModel.category == OTHER) transactionModel.categoryOther
+                            else transactionModel.category,
                             fontFamily = fontInter,
                             fontWeight = FontWeight.Medium,
                             fontSize = SMALLEST_TEXT_SIZE,
@@ -127,13 +130,15 @@ fun TransactionsItemView(
                                     start.linkTo(parent.start)
                                     top.linkTo(text.bottom)
                                 },
-                            text = transactionModel.subCategory,
+                            text =
+                            if (transactionModel.subCategory == OTHER) transactionModel.subCategoryOther
+                            else transactionModel.subCategory,
                             fontFamily = fontInter,
                             fontWeight = FontWeight.Medium,
                             fontSize = TEXT_FIELD_SIZE,
                             color = textColorBW,
                             overflow = TextOverflow.Ellipsis,
-                            maxLines = 2
+                            maxLines = 2,
                         )
 
                         if (extraInfoStatus) {
@@ -162,7 +167,9 @@ fun TransactionsItemView(
                                     end.linkTo(parent.end)
                                 },
                             text = "${transactionTypeToSymbol(transactionType = transactionModel.transaction_type)} ${
-                                if (currency.last().toString() == INDIAN_CURRENCY) simplifyAmountIndia(
+                                if (currency.last()
+                                        .toString() == INDIAN_CURRENCY
+                                ) simplifyAmountIndia(
                                     transactionModel.amount
                                 ) else simplifyAmount(transactionModel.amount)
                             } ${currency.last()}",

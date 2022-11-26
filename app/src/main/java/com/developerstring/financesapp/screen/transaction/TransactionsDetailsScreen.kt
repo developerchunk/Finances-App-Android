@@ -147,6 +147,8 @@ fun TransactionDetailsScreen(
                             year = it.year,
                             info = it.info,
                             place = it.place,
+                            categoryOther = it.categoryOther,
+                            subCategoryOther = it.subCategoryOther,
                         )
                         sharedViewModel.updateTransaction(transactionModel = transactionModel)
                         profileViewModel.saveTotalAmount(

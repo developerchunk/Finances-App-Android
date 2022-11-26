@@ -2,6 +2,7 @@ package com.developerstring.financesapp.screen.navscreens
 
 import android.content.Context
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -97,7 +99,9 @@ fun ProfileScreen(
             ) {
 
                 Row(
-                    modifier = Modifier.padding(horizontal = 30.dp).fillMaxSize()
+                    modifier = Modifier
+                        .padding(horizontal = 30.dp)
+                        .fillMaxSize()
                 ) {
                     ConstraintLayout(
                         modifier = Modifier
@@ -138,7 +142,7 @@ fun ProfileScreen(
 
                         Text(
                             modifier = Modifier
-                                .width(screenWidth/3)
+                                .width(screenWidth / 3)
                                 .constrainAs(text) {
                                     start.linkTo(parent.start)
                                     top.linkTo(parent.top)
@@ -182,12 +186,11 @@ fun ProfileScreen(
                     context = context,
                     darkThemeEnable = darkThemeEnable
                 ) { title ->
-                    navController.navigate(
-                        when (title) {
-                            PROFILE -> NavRoute.EditProfileScreen.route
-                            else -> BottomNavRoute.Profile.route
+                    when (title) {
+                        PROFILE -> {
+                            navController.navigate(NavRoute.EditProfileScreen.route)
                         }
-                    )
+                    }
                 }
             }
         }
@@ -206,14 +209,24 @@ fun ProfileOptionsContent(
     onClick: (String) -> Unit
 ) {
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+    ) {
         Row(
             modifier = Modifier
                 .padding(top = 20.dp, start = 40.dp, end = 40.dp)
                 .fillMaxWidth()
-                .clickable {
-                    onClick(title)
-                },
+                .clickable(
+                    indication = null,
+                    interactionSource = interactionSource,
+                    onClick = {
+                        onClick(title)
+                    }
+                ),
             verticalAlignment = CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
