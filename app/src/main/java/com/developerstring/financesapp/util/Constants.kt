@@ -3,6 +3,11 @@ package com.developerstring.financesapp.util
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.developerstring.financesapp.R
+import com.developerstring.financesapp.ui.theme.Dark
+import com.developerstring.financesapp.ui.theme.DarkGreen
+import com.developerstring.financesapp.ui.theme.Green
+import com.developerstring.financesapp.ui.theme.UIBlue
+import com.developerstring.financesapp.util.dataclass.ActivityCardData
 
 object Constants {
 
@@ -43,6 +48,7 @@ object Constants {
     )
 
     const val INDIAN_CURRENCY = "₹"
+    var CURRENCY = "₹"
 
     // Chip Selection Add Transaction
     const val SPENT = "spent"
@@ -111,4 +117,25 @@ object Constants {
 
     const val YES = "YES"
     const val NO = "NO"
+
+    const val ACTIVITY_CHART_SCREEN_KEY = "activity_chart_screen"
+    const val CATEGORY_CHART_SCREEN_KEY = "category_chart_screen"
+
+    val ActivityCardContent = listOf(
+        ActivityCardData(
+            text = "Activity\nChart",
+            icon = R.drawable.chart_icon,
+            bgColor = Dark,
+            cardColor = UIBlue,
+            key = ACTIVITY_CHART_SCREEN_KEY
+        ),
+        ActivityCardData(
+            text = "Category\nChart",
+            icon = R.drawable.category_icon,
+            bgColor = DarkGreen,
+            cardColor = Green,
+            key = CATEGORY_CHART_SCREEN_KEY
+        ),
+    )
+
 }

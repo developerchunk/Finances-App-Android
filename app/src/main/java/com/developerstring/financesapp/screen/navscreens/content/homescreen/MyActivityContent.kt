@@ -1,6 +1,9 @@
 package com.developerstring.financesapp.screen.navscreens.content.homescreen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
@@ -11,11 +14,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.developerstring.financesapp.R
+import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.ui.components.BarChart
@@ -30,13 +36,18 @@ fun MyActivityContent(
     day_: Int,
     month_: Int,
     year_: Int,
-    currency: String
+    currency: String,
+    navController: NavController
 ) {
 
     var day = listOf<Int>()
     var month = listOf<Int>()
     var year = listOf<Int>()
     var weekTransactions = listOf<Int>()
+
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
 
     lastWeekDateCalculator(
         day = day_,
@@ -65,8 +76,15 @@ fun MyActivityContent(
     Surface(
         modifier = Modifier
             .padding(start = 20.dp, end = 20.dp, top = 30.dp, bottom = 10.dp)
-            .fillMaxWidth(),
-        elevation = 4.dp,
+            .fillMaxWidth()
+            .clickable(
+                indication = null,
+                interactionSource = interactionSource,
+                onClick = {
+                    navController.navigate(NavRoute.ActivityChartScreen.route)
+                }
+            ),
+        elevation = 5.dp,
         color = contentColorLBLD,
         shape = RoundedCornerShape(20.dp)
     ) {
@@ -75,6 +93,7 @@ fun MyActivityContent(
             modifier = Modifier
                 .padding(15.dp)
                 .fillMaxWidth()
+                .background(color = Color.Transparent)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -181,17 +200,18 @@ fun MonthTransactions(
     sharedViewModel: SharedViewModel,
     dates: (List<Int>) -> Unit,
     monthData: (List<Int>) -> Unit,
+    month: Int,
+    year: Int,
+    transactionType: String
 ) {
 
     var days = listOf<Int>()
     var months = listOf<Int>()
     var years = listOf<Int>()
 
-    val calender = Calendar.getInstance()
-
     monthDateCalculator(
-        month = calender.get(Calendar.MONTH)+1,
-        year = calender.get(Calendar.YEAR),
+        month = month,
+        year = year,
         day_ = {
             days = it
         },
@@ -208,7 +228,7 @@ fun MonthTransactions(
             day = days[i].toString(),
             month = months[i].toString(),
             year = years[i].toString(),
-            transaction_type = SPENT,
+            transaction_type = transactionType,
             day_no = i
         )
     }

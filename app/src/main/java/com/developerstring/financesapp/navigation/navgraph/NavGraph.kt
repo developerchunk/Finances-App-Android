@@ -3,6 +3,7 @@ package com.developerstring.financesapp.navigation.navgraph
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.developerstring.financesapp.navigation.Graph
+import com.developerstring.financesapp.screen.charts.ActivityChartScreen
 import com.developerstring.financesapp.screen.navscreens.profile.EditProfileScreen
 import com.developerstring.financesapp.screen.transaction.AddTransaction
 import com.developerstring.financesapp.screen.transaction.TransactionDetailsScreen
@@ -55,6 +56,16 @@ fun NavGraphBuilder.navGraph(
         ) {
             EditProfileScreen(
                 profileViewModel = profileViewModel,
+                navController = navController,
+//                id = task.arguments?.getInt(DETAIL_TRANSACTION_KEY)!!.toInt()
+            )
+        }
+        composable(
+            route = NavRoute.ActivityChartScreen.route
+        ) {
+            ActivityChartScreen(
+                sharedViewModel = sharedViewModel,
+                publicSharedViewModel = publicSharedViewModel,
                 navController = navController,
 //                id = task.arguments?.getInt(DETAIL_TRANSACTION_KEY)!!.toInt()
             )

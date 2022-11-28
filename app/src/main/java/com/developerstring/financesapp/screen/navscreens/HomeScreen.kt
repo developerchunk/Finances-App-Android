@@ -10,11 +10,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,12 +31,15 @@ import com.developerstring.financesapp.screen.navscreens.content.homescreen.MyAc
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
+import com.developerstring.financesapp.ui.components.ActivityCardItems
 import com.developerstring.financesapp.ui.components.DisplayAlertDialog
 import com.developerstring.financesapp.ui.components.MessageBar
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.*
+import com.developerstring.financesapp.util.Constants.CURRENCY
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
 import com.developerstring.financesapp.util.Constants.OTHER
+import com.developerstring.financesapp.util.dataclass.ActivityCardData
 import com.developerstring.financesapp.util.state.MessageBarState
 import java.text.SimpleDateFormat
 import java.util.*
@@ -51,6 +56,8 @@ fun HomeScreen(
     val savings by profileViewModel.profileSavings.collectAsState()
     val currency by profileViewModel.profileCurrency.collectAsState()
 
+    CURRENCY = currency.last().toString()
+
     val totalSpent by sharedViewModel.monthSpent.collectAsState()
     val totalSavings by sharedViewModel.monthSavings.collectAsState()
 
@@ -63,8 +70,6 @@ fun HomeScreen(
     var savingsPercent by remember {
         mutableStateOf(0f)
     }
-
-    val buttonColor = Brush.horizontalGradient(colors = listOf(UIBlue, LightUIBlue))
 
     val spentSum = totalSpent.sum()
     val savingsSum = totalSavings.sum()
@@ -185,65 +190,103 @@ fun HomeScreen(
                 modifier = Modifier
                     .padding(top = 20.dp, start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = 18.dp,
+                    alignment = Alignment.CenterHorizontally
+                )
             ) {
                 // Add Payment
-                Box(
-                    modifier = Modifier
-                        .padding(end = 5.dp)
-                        .width(170.dp)
-                        .height(38.dp)
-                        .background(brush = buttonColor, shape = RoundedCornerShape(20.dp))
-                        .clickable(
-                            interactionSource = interactionSource,
-                            indication = null,
-                            onClick = {
-                                navController.navigate(NavRoute.AddTransactionScreen.route)
-                            }
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
+                ActivityCardItems(
+                    activityCardData = ActivityCardData(
                         text = stringResource(id = R.string.add_payment),
-                        fontFamily = fontInter,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = MEDIUM_TEXT_SIZE,
-                        color = Color.White
-                    )
-                }
+                        icon = R.drawable.add_payment_icon,
+                        bgColor = Dark,
+                        cardColor = UIBlue,
+                        key = ""
+                    ),
+                    size = Size(width = 155f, height = 170f),
+                    imageCard = 70.dp,
+                    cardCorner = 30.dp,
+                    imageScale = ContentScale.FillBounds,
+                    iconCardTopPadding = 18.dp,
+                    onClick = {
+                        navController.navigate(NavRoute.AddTransactionScreen.route)
+                    }
+                )
+//                Box(
+//                    modifier = Modifier
+//                        .padding(end = 10.dp)
+//                        .width(170.dp)
+//                        .height(45.dp)
+//                        .background(brush = buttonColor, shape = RoundedCornerShape(15.dp))
+//                        .clickable(
+//                            interactionSource = interactionSource,
+//                            indication = null,
+//                            onClick = {
+//                                navController.navigate(NavRoute.AddTransactionScreen.route)
+//                            }
+//                        ),
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Text(
+//                        text = stringResource(id = R.string.add_payment),
+//                        fontFamily = fontInter,
+//                        fontWeight = FontWeight.Medium,
+//                        fontSize = MEDIUM_TEXT_SIZE,
+//                        color = Color.White
+//                    )
+//                }
                 // History
-                Box(
-                    modifier = Modifier
-                        .padding(start = 5.dp)
-                        .width(170.dp)
-                        .height(38.dp)
-                        .background(brush = buttonColor, shape = RoundedCornerShape(20.dp))
-                        .clickable(
-                            interactionSource = interactionSource,
-                            indication = null,
-                            onClick = {
-                                navController.navigate(NavRoute.ViewHistoryScreen.route)
-                                // to get all transactions
-                                sharedViewModel.getAllTransactions()
-                            }
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
+                ActivityCardItems(
+                    activityCardData = ActivityCardData(
                         text = stringResource(id = R.string.history),
-                        fontFamily = fontInter,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = MEDIUM_TEXT_SIZE,
-                        color = Color.White
-                    )
-                }
+                        icon = R.drawable.history_icon,
+                        bgColor = DarkGreen,
+                        cardColor = Green,
+                        key = ""
+                    ),
+                    size = Size(width = 155f, height = 170f),
+                    imageCard = 70.dp,
+                    cardCorner = 30.dp,
+                    imageScale = ContentScale.FillBounds,
+                    iconCardTopPadding = 18.dp,
+                    onClick = {
+                        navController.navigate(NavRoute.ViewHistoryScreen.route)
+                        // to get all transactions
+                        sharedViewModel.getAllTransactions()
+                    }
+                )
+//                Box(
+//                    modifier = Modifier
+//                        .padding(start = 5.dp)
+//                        .width(170.dp)
+//                        .height(45.dp)
+//                        .background(brush = buttonColor, shape = RoundedCornerShape(15.dp))
+//                        .clickable(
+//                            interactionSource = interactionSource,
+//                            indication = null,
+//                            onClick = {
+//
+//                            }
+//                        ),
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Text(
+//                        text = stringResource(id = R.string.history),
+//                        fontFamily = fontInter,
+//                        fontWeight = FontWeight.Medium,
+//                        fontSize = MEDIUM_TEXT_SIZE,
+//                        color = Color.White
+//                    )
+//                }
             }
             MyActivityContent(
                 sharedViewModel = sharedViewModel,
                 day_ = day,
                 month_ = month,
                 year_ = year,
-                currency = currency
+                currency = currency,
+                navController = navController
             )
         }
 

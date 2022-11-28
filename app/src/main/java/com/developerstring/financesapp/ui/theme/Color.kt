@@ -2,6 +2,7 @@ package com.developerstring.financesapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.White
 import com.developerstring.financesapp.util.Constants.DARK_THEME_ENABLE
@@ -21,9 +22,13 @@ val SlightDark = Color(0xFF1C2A36)
 val Dark = Color(0xFF16212B)
 val ExtraDark = Color(0xFF131E29)
 val UIBlue = Color(0xFF1E90FF)
+val DarkBlue = Color(0xFF0067CC)
+val DarkerBlue = Color(0xFF134064)
 val LightUIBlue = Color(0xFF6CBEFF)
+val LighterUIBlue = Color(0xFFC3F1FF)
 val LightBlue = Color(0xFFB5DAFF)
 val LighterBlue = Color(0xFFE4F5FF)
+val DarkGreen = Color(0xFF0C2B28)
 val Green = Color(0xFF04B6A5)
 val LightGreen = Color(0xFF03DAC5)
 val WhiteGreen = Color(0xFFADFFF7)
@@ -34,6 +39,9 @@ val textColorBW: Color
 
 val colorGray: Color
     get() = if (!DARK_THEME_ENABLE) Gray else LighterGray
+
+val colorLightGray: Color
+    get() = if (!DARK_THEME_ENABLE) DarkGray else LighterGray
 
 val colorDarkGray: Color
     get() = if (!DARK_THEME_ENABLE) ExtraLightGray else LightDark
@@ -54,7 +62,7 @@ val textColorBLG: Color
     get() = if (!DARK_THEME_ENABLE) Black else SlightGray
 
 val contentColorLBLD: Color
-    get() = if (!DARK_THEME_ENABLE) LighterBlue else LightDark
+    get() = if (!DARK_THEME_ENABLE) LighterUIBlue else DarkerBlue
 
 val contentColorCard: Color
     get() = if (!DARK_THEME_ENABLE) White else LightDark
