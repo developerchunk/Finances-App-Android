@@ -11,7 +11,7 @@
     <string name="create_profile_screen_2_savings">Savings(optional)</string>
     <string name="profile">Profile</string>
     <string name="total_balance">Total Balance</string>
-    <string name="add_payment">Add Payment</string>
+    <string name="add_payment">Add\nPayment</string>
     <string name="history">History</string>
     <string name="spent">Spent</string>
     <string name="saving">Saving</string>

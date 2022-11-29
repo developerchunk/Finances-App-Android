@@ -48,18 +48,6 @@ fun SplashScreen(
         // logic behind navigation after splash screen
         if (onBoarding.value == YES) {
             if (profileCreate.value == YES) {
-                // get current month spending
-                sharedViewModel.searchMonthSpent(
-                    month = SimpleDateFormat("M").format(Date()),
-                    year = SimpleDateFormat("yyyy").format(Date())
-                )
-                // setDayPaymentArray
-                sharedViewModel.setDayPaymentArray()
-                // get current month savings
-                sharedViewModel.searchMonthSavings(
-                    month = SimpleDateFormat("M").format(Date()),
-                    year = SimpleDateFormat("yyyy").format(Date())
-                )
                 // get profile details
                 profileViewModel.getProfileDetails(context = context)
                 navController.navigate(route = SetUpNavRoute.MainSetUpNavRoute.route)

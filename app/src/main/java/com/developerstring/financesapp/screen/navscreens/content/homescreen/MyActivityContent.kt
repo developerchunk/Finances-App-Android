@@ -23,12 +23,12 @@ import androidx.navigation.NavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
+import com.developerstring.financesapp.ui.components.ActivityBarChart
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.ui.components.BarChart
 import com.developerstring.financesapp.util.*
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
-import com.developerstring.financesapp.util.Constants.SPENT
-import java.util.Calendar
+import com.developerstring.financesapp.util.state.RoundTypeBarChart
 
 @Composable
 fun MyActivityContent(
@@ -187,7 +187,14 @@ fun WeeklyTransactionChart(
         BarChart(
             data = amount,
             date = dates,
-            height = 100.dp
+            height = 100.dp,
+            roundType = RoundTypeBarChart.CIRCULAR_SHAPE,
+            barWidth = 17.dp,
+            barColor = UIBlue,
+            backBarColor = LightGray.copy(alpha = if (Constants.DARK_THEME_ENABLE) 0.5f else 0.2f),
+            barArrangement = Arrangement.End,
+            alignment = Alignment.End,
+            point = dates.last(),
         )
 
 //        Text(text = amount.toString())

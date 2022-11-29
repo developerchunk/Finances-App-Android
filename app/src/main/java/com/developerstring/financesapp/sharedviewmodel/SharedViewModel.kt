@@ -15,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -145,47 +146,50 @@ class SharedViewModel @Inject constructor(
     }
 
     private var _monthSpent =
-        MutableStateFlow<List<Int>>(emptyList())
-    val monthSpent: StateFlow<List<Int>> = _monthSpent
+        MutableStateFlow<Long>(0)
+    val monthSpent: StateFlow<Long> = _monthSpent
     fun searchMonthSpent(
         month: String,
         year: String
     ) {
         viewModelScope.launch {
-            repository.searchMonthPayment(month = month, year = year, transaction_type = SPENT)
+            repository.getMonthSum(month = month, year = year, transaction_type = SPENT)
                 .collect {
-                    _monthSpent.value = it
+                    _monthSpent.value = it?:0
                 }
         }
     }
 
     private var _monthAddFund =
-        MutableStateFlow<List<Int>>(emptyList())
-    val monthAddFund: StateFlow<List<Int>> = _monthAddFund
+        MutableStateFlow<Long>(0)
+    val monthAddFund: StateFlow<Long> = _monthAddFund
     fun searchMonthAddFund(
         month: String,
         year: String
     ) {
         viewModelScope.launch {
-            repository.searchMonthPayment(month = month, year = year, transaction_type = SPENT)
+            repository.getMonthSum(month = month, year = year, transaction_type = SPENT)
                 .collect {
-                    _monthAddFund.value = it
+                    _monthAddFund.value = it?:0
                 }
         }
     }
 
     private var _monthSavings =
-        MutableStateFlow<List<Int>>(emptyList())
-    val monthSavings: StateFlow<List<Int>> = _monthSavings
+        MutableStateFlow<Long>(0)
+    val monthSavings: StateFlow<Long> = _monthSavings
     fun searchMonthSavings(
         month: String,
         year: String
     ) {
-        viewModelScope.launch {
-            repository.searchMonthPayment(month = month, year = year, transaction_type = SAVINGS)
-                .collect {
-                    _monthSavings.value = it
-                }
+        try {
+            viewModelScope.launch {
+                repository.getMonthSum(month = month, year = year, transaction_type = SAVINGS)
+                    .collect {
+                        _monthSavings.value = it?:0
+                    }
+            }
+        } catch (_: Exception) {
         }
     }
 
@@ -285,6 +289,49 @@ class SharedViewModel @Inject constructor(
     fun setDayPaymentArray() {
         for (i in 0..30) {
             _dayPayment.value.add(0)
+        }
+    }
+
+    private val _quarterMonth1 = MutableStateFlow<Long>(0)
+    val quarterMonth1 : StateFlow<Long> = _quarterMonth1
+    fun getQuarterMonth1(
+        month: String,
+        year: String,
+        transaction_type: String
+    ) {
+        viewModelScope.launch {
+            repository.getMonthSum(month = month, year = year, transaction_type = transaction_type)
+                .collect {
+                    _quarterMonth1.value = it?:0
+                }
+        }
+    }
+    private val _quarterMonth2 = MutableStateFlow<Long>(0)
+    val quarterMonth2 : StateFlow<Long> = _quarterMonth2
+    fun getQuarterMonth2(
+        month: String,
+        year: String,
+        transaction_type: String
+    ) {
+        viewModelScope.launch {
+            repository.getMonthSum(month = month, year = year, transaction_type = transaction_type)
+                .collect {
+                    _quarterMonth2.value = it?:0
+                }
+        }
+    }
+    private val _quarterMonth3 = MutableStateFlow<Long>(0)
+    val quarterMonth3 : StateFlow<Long> = _quarterMonth3
+    fun getQuarterMonth3(
+        month: String,
+        year: String,
+        transaction_type: String
+    ) {
+        viewModelScope.launch {
+            repository.getMonthSum(month = month, year = year, transaction_type = transaction_type)
+                .collect {
+                    _quarterMonth3.value = it?:0
+                }
         }
     }
 

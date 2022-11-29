@@ -58,6 +58,19 @@ fun HomeScreen(
 
     CURRENCY = currency.last().toString()
 
+    // get current month spending
+    sharedViewModel.searchMonthSpent(
+        month = SimpleDateFormat("M").format(Date()),
+        year = SimpleDateFormat("yyyy").format(Date())
+    )
+    // setDayPaymentArray
+    sharedViewModel.setDayPaymentArray()
+    // get current month savings
+    sharedViewModel.searchMonthSavings(
+        month = SimpleDateFormat("M").format(Date()),
+        year = SimpleDateFormat("yyyy").format(Date())
+    )
+
     val totalSpent by sharedViewModel.monthSpent.collectAsState()
     val totalSavings by sharedViewModel.monthSavings.collectAsState()
 
@@ -71,8 +84,8 @@ fun HomeScreen(
         mutableStateOf(0f)
     }
 
-    val spentSum = totalSpent.sum()
-    val savingsSum = totalSavings.sum()
+    val spentSum = totalSpent
+    val savingsSum = totalSavings
 
     spentPercent = (spentSum.toFloat() / spent.toFloat())
     savingsPercent = (savingsSum.toFloat() / savings.toFloat())
@@ -80,8 +93,6 @@ fun HomeScreen(
     val day = SimpleDateFormat("d").format(Date()).toInt()
     val month = SimpleDateFormat("M").format(Date()).toInt()
     val year = SimpleDateFormat("yyyy").format(Date()).toInt()
-
-    val interactionSource = remember { MutableInteractionSource() }
 
     var openDialog by remember {
         mutableStateOf(false)
@@ -132,10 +143,10 @@ fun HomeScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             modifier = Modifier.wrapContentSize(unbounded = true),
-                            text = if (currency == INDIAN_CURRENCY) simplifyAmountIndia(spentSum) else simplifyAmount(
-                                spentSum
+                            text = if (currency == INDIAN_CURRENCY) simplifyAmountIndia(spentSum.toInt()) else simplifyAmount(
+                                spentSum.toInt()
                             ),
-                            fontSize = MEDIUM_TEXT_SIZE,
+                            fontSize = TEXT_FIELD_SIZE,
                             fontFamily = fontInter,
                             fontWeight = FontWeight.Medium,
                             color = UIBlue,
@@ -164,10 +175,10 @@ fun HomeScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             modifier = Modifier.wrapContentSize(unbounded = true),
-                            text = if (currency == INDIAN_CURRENCY) simplifyAmountIndia(savingsSum) else simplifyAmount(
-                                savingsSum
+                            text = if (currency == INDIAN_CURRENCY) simplifyAmountIndia(savingsSum.toInt()) else simplifyAmount(
+                                savingsSum.toInt()
                             ),
-                            fontSize = MEDIUM_TEXT_SIZE,
+                            fontSize = TEXT_FIELD_SIZE,
                             fontFamily = fontInter,
                             fontWeight = FontWeight.Medium,
                             color = greenIconColor,
@@ -204,11 +215,11 @@ fun HomeScreen(
                         cardColor = UIBlue,
                         key = ""
                     ),
-                    size = Size(width = 155f, height = 170f),
-                    imageCard = 70.dp,
+                    size = Size(width = 155f, height = 160f),
+                    imageCard = 60.dp,
                     cardCorner = 30.dp,
                     imageScale = ContentScale.FillBounds,
-                    iconCardTopPadding = 18.dp,
+                    iconCardTopPadding = 16.dp,
                     onClick = {
                         navController.navigate(NavRoute.AddTransactionScreen.route)
                     }
@@ -245,11 +256,11 @@ fun HomeScreen(
                         cardColor = Green,
                         key = ""
                     ),
-                    size = Size(width = 155f, height = 170f),
-                    imageCard = 70.dp,
+                    size = Size(width = 155f, height = 160f),
+                    imageCard = 60.dp,
                     cardCorner = 30.dp,
                     imageScale = ContentScale.FillBounds,
-                    iconCardTopPadding = 18.dp,
+                    iconCardTopPadding = 16.dp,
                     onClick = {
                         navController.navigate(NavRoute.ViewHistoryScreen.route)
                         // to get all transactions

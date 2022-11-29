@@ -23,6 +23,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.developerstring.financesapp.ui.theme.LARGE_TEXT_SIZE
+import com.developerstring.financesapp.ui.theme.TEXT_FIELD_SIZE
 import com.developerstring.financesapp.util.dataclass.ActivityCardData
 
 @Composable
@@ -111,7 +113,7 @@ fun ActivityCardItems(
                         text = activityCardData.text,
                         color = Color.White,
                         fontWeight = FontWeight.Medium,
-                        fontSize = 22.sp,
+                        fontSize = TEXT_FIELD_SIZE,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )

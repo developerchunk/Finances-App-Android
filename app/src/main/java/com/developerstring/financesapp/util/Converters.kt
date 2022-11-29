@@ -279,3 +279,13 @@ fun monthToName(
     }
 
 }
+
+fun Int.yearOnMonth(month: Int): Int {
+
+    return when(month) {
+        0 -> this-1
+        13 -> this+1
+        else -> this
+    }
+
+}

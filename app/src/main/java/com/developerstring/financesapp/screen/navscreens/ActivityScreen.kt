@@ -50,7 +50,7 @@ fun ActivityScreen(
                 imageScale = ContentScale.FillBounds,
                 iconCardTopPadding = 20.dp
             ) { key ->
-                navController.navigate(route = NavRoute.ActivityChartScreen.route)
+                navController.navigate(route = key)
             }
         }
 

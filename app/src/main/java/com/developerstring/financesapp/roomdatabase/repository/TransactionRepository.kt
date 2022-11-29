@@ -50,6 +50,13 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
             transaction_type = transaction_type
         )
     }
+    fun getMonthSum(month: String, year: String, transaction_type: String): Flow<Long?> {
+        return transactionDao.getMonthSum(
+            month = month,
+            year = year,
+            transaction_type = transaction_type
+        )
+    }
 
     fun searchDayPayment(
         day: String,
