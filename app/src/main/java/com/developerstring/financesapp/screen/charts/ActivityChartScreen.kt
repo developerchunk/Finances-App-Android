@@ -2,6 +2,7 @@ package com.developerstring.financesapp.screen.charts
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -17,8 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.screen.navscreens.content.homescreen.MonthTransactions
@@ -41,6 +45,7 @@ import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import java.util.Calendar
+import kotlin.math.roundToInt
 
 @Composable
 fun ActivityChartScreen(
@@ -50,6 +55,8 @@ fun ActivityChartScreen(
 ) {
 
     val calender = Calendar.getInstance()
+    var month = calender.get(Calendar.MONTH) + 1
+    var year = calender.get(Calendar.YEAR)
 
     val monthChart = "Month"
     val quarterChart = "Quarter"
@@ -135,14 +142,20 @@ fun ActivityChartScreen(
             monthChart -> {
                 MonthActivityChart(
                     sharedViewModel = sharedViewModel,
-                    month_ = calender.get(Calendar.MONTH) + 1,
-                    year_ = calender.get(Calendar.YEAR)
+                    month_ = month,
+                    year_ = year,
+                    swipeMonth = {
+                        month = it
+                    },
+                    swipeYear = {
+                        year = it
+                    }
                 )
             }
             quarterChart -> {
                 QuarterActivityChart(
                     sharedViewModel = sharedViewModel,
-                    month_ = calender.get(Calendar.MONTH) + 1,
+                    month_ = calender.get(Calendar.MONTH)+1,
                     year_ = calender.get(Calendar.YEAR)
                 )
             }
@@ -156,7 +169,9 @@ fun ActivityChartScreen(
 fun MonthActivityChart(
     sharedViewModel: SharedViewModel,
     month_: Int,
-    year_: Int
+    year_: Int,
+    swipeMonth: (Int) -> Unit,
+    swipeYear: (Int) -> Unit
 ) {
 
     var monthPayment by remember {
@@ -170,7 +185,7 @@ fun MonthActivityChart(
 //    val data_ = mutableStateListOf<LineChartData>()
 
     var month by remember {
-        mutableStateOf(month_)
+        mutableStateOf(month_+1)
     }
     var year by remember {
         mutableStateOf(year_)
@@ -181,6 +196,18 @@ fun MonthActivityChart(
     var sel by remember {
         mutableStateOf(false)
     }
+
+    var offsetX by remember {
+        mutableStateOf(0f)
+    }
+    var offsetY by remember {
+        mutableStateOf(0f)
+    }
+
+    var swipeEnable by remember {
+        mutableStateOf(true)
+    }
+
 
     MonthTransactions(
         sharedViewModel = sharedViewModel,
@@ -209,6 +236,10 @@ fun MonthActivityChart(
             transactionType = selectedTransactionType
         )
         sel = false
+    }
+
+    LaunchedEffect(key1 = true) {
+        swipeEnable = true
     }
 
     LaunchedEffect(key1 = selectedTransactionType, month) {
@@ -290,10 +321,13 @@ fun MonthActivityChart(
 
         }
 
+        val context = LocalContext.current
+        val coordinates = LocalConfiguration.current
+        val width = coordinates.screenWidthDp
         Column(
             modifier = Modifier
                 .padding(start = 15.dp, end = 20.dp, top = 40.dp, bottom = 10.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
         ) {
             LineChart(
                 infos = data,
