@@ -75,13 +75,6 @@ fun LineChart(
         Animatable(if (DARK_THEME_ENABLE) WhiteGreen else LightBlue)
     }
 
-    var offsetX by remember {
-        mutableStateOf(0f)
-    }
-    var offsetY by remember {
-        mutableStateOf(0f)
-    }
-
     LaunchedEffect(key1 = true) {
         animate = true
         transparentGraphColor.animateTo(
@@ -91,8 +84,6 @@ fun LineChart(
     }
 
     Column(modifier = modifier) {
-
-        Text(text = offsetX.toString(), color = textColorBW)
 
         Canvas(modifier = Modifier
             .fillMaxWidth()
@@ -147,8 +138,6 @@ fun LineChart(
                     quadraticBezierTo(
                         x1, y1, lastX, (y1 + y2) / 2f
                     )
-
-                    offsetX = y2
 
                 }
             }
