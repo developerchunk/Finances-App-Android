@@ -1,8 +1,6 @@
 package com.developerstring.financesapp.screen.charts
 
-import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -18,11 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.screen.navscreens.content.homescreen.MonthTransactions
@@ -45,7 +41,6 @@ import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import java.util.Calendar
-import kotlin.math.roundToInt
 
 @Composable
 fun ActivityChartScreen(
@@ -55,7 +50,7 @@ fun ActivityChartScreen(
 ) {
 
     val calender = Calendar.getInstance()
-    var month = calender.get(Calendar.MONTH) + 1
+    var month = calender.get(Calendar.MONTH)+1
     var year = calender.get(Calendar.YEAR)
 
     val monthChart = "Month"
@@ -185,7 +180,7 @@ fun MonthActivityChart(
 //    val data_ = mutableStateListOf<LineChartData>()
 
     var month by remember {
-        mutableStateOf(month_+1)
+        mutableStateOf(month_)
     }
     var year by remember {
         mutableStateOf(year_)
@@ -195,13 +190,6 @@ fun MonthActivityChart(
     }
     var sel by remember {
         mutableStateOf(false)
-    }
-
-    var offsetX by remember {
-        mutableStateOf(0f)
-    }
-    var offsetY by remember {
-        mutableStateOf(0f)
     }
 
     var swipeEnable by remember {
@@ -424,6 +412,10 @@ fun QuarterActivityChart(
             month3 = 1
             year3++
         }
+        14 -> {
+            month3 = 2
+            year3++
+        }
         0 -> {
             month3 = 12
             year3--
@@ -578,8 +570,8 @@ fun QuarterActivityChart(
         ) {
 
             ActivityBarChart(
-                data = amount,
-                date = listOf(month, month2, month3),
+                graphBarData = amount,
+                xAxisScaleData = listOf(month, month2, month3),
                 amount = quarterList,
                 height = 300.dp,
                 roundType = RoundTypeBarChart.TOP_CURVE,
@@ -588,6 +580,7 @@ fun QuarterActivityChart(
                 backBarColor = Color.Transparent,
                 barArrangement = Arrangement.SpaceEvenly,
                 point = month_,
+                point_size = 7.dp
             )
 
         }

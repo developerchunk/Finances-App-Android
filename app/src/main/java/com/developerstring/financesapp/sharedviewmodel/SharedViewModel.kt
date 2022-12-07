@@ -335,4 +335,33 @@ class SharedViewModel @Inject constructor(
         }
     }
 
+    private var _categorySum =
+        MutableStateFlow<ArrayList<Long>>(arrayListOf())
+    val categorySum: StateFlow<ArrayList<Long>> = _categorySum
+
+    fun setCategorySumArray() {
+        for (i in 0..11) {
+            _categorySum.value.add(index = i, element = 0)
+        }
+    }
+
+    fun getCategorySum(
+        month: String,
+        year: String,
+        category: String,
+        transaction_type: String,
+        month_no: Int
+    ) {
+        viewModelScope.launch {
+            repository.getCategorySum(
+                month = month,
+                year = year,
+                category = category,
+                transaction_type = transaction_type
+            ).collect {
+                _categorySum.value.set(index = month_no, element = it?:0)
+            }
+        }
+    }
+
 }

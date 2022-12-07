@@ -5,18 +5,16 @@ import com.developerstring.financesapp.util.Constants.LATEST_FIRST
 import com.developerstring.financesapp.util.Constants.OLD_FIRST
 import com.developerstring.financesapp.util.Constants.SAVINGS
 import com.developerstring.financesapp.util.Constants.SPENT
-import com.developerstring.financesapp.util.Constants.SUB_CATEGORY
 import com.developerstring.financesapp.util.Constants.THIS_MONTH
 import com.developerstring.financesapp.util.Constants.oldFirstFilter
 import java.text.DecimalFormat
 import java.util.*
-import kotlin.collections.Map
 import kotlin.math.abs
 
 fun String.keyToTransactionType(): String {
     return when (this) {
         SPENT -> "Spent"
-        ADD_FUND -> "Add Fund"
+        ADD_FUND -> "Add Amount"
         SAVINGS -> "Savings"
         else -> ""
     }
@@ -83,7 +81,7 @@ fun lastWeekDateCalculator(
     year_: (List<Int>) -> Unit,
 ) {
 
-    var days = day + 1
+    var days = day+1
     var months = month
     var years = year
 
@@ -93,7 +91,7 @@ fun lastWeekDateCalculator(
 
     for (i in 1..7) {
 
-        if (days != 0) {
+        if (days != 1) {
             days -= 1
             dates.add(days)
             mMonth.add(months)
@@ -112,7 +110,7 @@ fun lastWeekDateCalculator(
             days = monthLastDate(
                 month = months,
                 year = years
-            ) + 1
+            )
             dates.add(days)
         }
     }

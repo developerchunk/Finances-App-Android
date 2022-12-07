@@ -38,8 +38,8 @@ import kotlin.math.roundToInt
 
 @Composable
 fun ActivityBarChart(
-    data: List<Float>,
-    date: List<Int>,
+    graphBarData: List<Float>,
+    xAxisScaleData: List<Int>,
     amount: List<Int>,
     height: Dp,
     roundType: RoundTypeBarChart,
@@ -48,17 +48,26 @@ fun ActivityBarChart(
     backBarColor: Color,
     barArrangement: Arrangement.Horizontal,
     point: Int,
+    point_size: Dp
 ) {
+    // for getting screen width and height you can use LocalConfiguration
     val configuration = LocalConfiguration.current
-
+    // getting width of the screen
     val width = configuration.screenWidthDp.dp
 
-    val bottomSpacing = 40.dp
+    // bottom height of the X-Axis Scale
+    val xAxisScaleHeight = 40.dp
 
-    val spacing by remember {
+    val yAxisScaleSpacing by remember {
         mutableStateOf(100f)
     }
+    val yAxisTextWidth by remember {
+        mutableStateOf(100.dp)
+    }
+    // Y-Axis scale values
+    val yAxisValues = amount+0
 
+    // Bar shape
     val barShape =
         when (roundType) {
             RoundTypeBarChart.CIRCULAR_SHAPE -> CircleShape
@@ -66,6 +75,7 @@ fun ActivityBarChart(
         }
 
     val density = LocalDensity.current
+    // Y-Axis Scale Text Paint
     val textPaint = remember(density) {
         Paint().apply {
             color = textColorBW.hashCode()
@@ -73,7 +83,9 @@ fun ActivityBarChart(
             textSize = density.run { 12.sp.toPx() }
         }
     }
+    // for y coordinates of Y-Axis Scale to create horizontal dotted line indicating Y-Axis scale
     val yCoordinates = mutableStateListOf<Float>()
+    // for dotted lines effects
     val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
 
     Box(
@@ -82,9 +94,10 @@ fun ActivityBarChart(
         contentAlignment = Alignment.TopStart
     ) {
 
+        // Y-Axis Scale and Horizontal dotted lines on Graph indicating Y-Axis Scales
         Column(
             modifier = Modifier
-                .padding(top = bottomSpacing - 0.dp, end = 3.dp)
+                .padding(top = xAxisScaleHeight - 0.dp, end = 3.dp)
                 .height(height)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -92,75 +105,63 @@ fun ActivityBarChart(
 
             Canvas(modifier = Modifier.fillMaxSize()) {
 
-                val priceStep = (amount.max()) / 3f
+                // Y-Axis Scale Text
+                val yAxisScaleText = (yAxisValues.max()) / 3f
                 (0..3).forEach { i ->
                     drawContext.canvas.nativeCanvas.apply {
                         drawText(
-                            if (CURRENCY == INDIAN_CURRENCY) simplifyAmountIndia(round(amount.min() + priceStep * i).roundToInt())
-                            else simplifyAmount(round(amount.min() + priceStep * i).roundToInt()),
+                            if (CURRENCY == INDIAN_CURRENCY) simplifyAmountIndia(round(yAxisValues.min() + yAxisScaleText * i).roundToInt())
+                            else simplifyAmount(round(yAxisValues.min() + yAxisScaleText * i).roundToInt()),
                             30f,
-                            size.height - spacing - i * size.height / 3f,
+                            size.height - yAxisScaleSpacing - i * size.height / 3f,
                             textPaint
                         )
                     }
-                    yCoordinates.add(size.height - spacing - i * size.height / 3f)
+                    yCoordinates.add(size.height - yAxisScaleSpacing - i * size.height / 3f)
                 }
 
-                drawLine(
-                    start = Offset(x = spacing + 30f, y = yCoordinates[1]),
-                    end = Offset(x = size.width, y = yCoordinates[1]),
-                    color = Color.Gray,
-                    strokeWidth = 5f,
-                    pathEffect = pathEffect
-                )
-                drawLine(
-                    start = Offset(x = spacing + 30f, y = yCoordinates[2]),
-                    end = Offset(x = size.width, y = yCoordinates[2]),
-                    color = Color.Gray,
-                    strokeWidth = 5f,
-                    pathEffect = pathEffect
-                )
-                drawLine(
-                    start = Offset(x = spacing + 30f, y = yCoordinates[3]),
-                    end = Offset(x = size.width, y = yCoordinates[3]),
-                    color = Color.Gray,
-                    strokeWidth = 5f,
-                    pathEffect = pathEffect
-                )
-
+                // Horizontal dotted lines on Graph indicating Y-Axis Scales
+                (1..3).forEach {
+                    drawLine(
+                        start = Offset(x = yAxisScaleSpacing + 30f, y = yCoordinates[it]),
+                        end = Offset(x = size.width, y = yCoordinates[it]),
+                        color = Color.Gray,
+                        strokeWidth = 5f,
+                        pathEffect = pathEffect
+                    )
+                }
             }
 
         }
 
+        // Simple Graph with Bar Graphs and X-Axis Scale
         Box(
             modifier = Modifier
                 .padding(start = 50.dp)
-                .width(width - 100.dp)
-                .height(height + bottomSpacing),
+                .width(width - yAxisTextWidth)
+                .height(height + xAxisScaleHeight),
             contentAlignment = Alignment.BottomCenter
         ) {
-
             Row(
                 modifier = Modifier
-                    .width(width - 100.dp),
+                    .width(width - yAxisTextWidth),
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = barArrangement
             ) {
                 // graph
-                data.forEachIndexed { index, value ->
+                graphBarData.forEachIndexed { index, value ->
 
+                    // animation will be triggered onStart and when the value changes
                     var animationTriggered by remember {
                         mutableStateOf(false)
                     }
-
-                    val animatedHeight by animateFloatAsState(
+                    val graphBarHeight by animateFloatAsState(
                         targetValue = if (animationTriggered) value else 0f,
                         animationSpec = tween(
                             durationMillis = 1000,
                             delayMillis = 0
                         )
                     )
-
                     LaunchedEffect(key1 = true) {
                         animationTriggered = true
                     }
@@ -171,6 +172,7 @@ fun ActivityBarChart(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
+                        // Graph
                         Box(
                             modifier = Modifier
                                 .padding(bottom = 5.dp)
@@ -184,20 +186,20 @@ fun ActivityBarChart(
                                 modifier = Modifier
                                     .clip(barShape)
                                     .fillMaxWidth()
-                                    .fillMaxHeight(animatedHeight)
+                                    .fillMaxHeight(graphBarHeight)
                                     .background(barColor)
                             )
                         }
 
+                        // Scale X-Axis and Bottom part of Graph
                         Column(
                             modifier = Modifier.height(
-                                bottomSpacing
+                                xAxisScaleHeight
                             ),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Top
                         ) {
-
-
+                            // small vertical line joining the horizontal X-Axis line
                             Box(
                                 modifier = Modifier
                                     .clip(
@@ -210,24 +212,24 @@ fun ActivityBarChart(
                                     .height(10.dp)
                                     .background(color = colorGray)
                             )
-
-
+                            // scale X-Axis
                             Text(
                                 modifier = Modifier
                                     .padding(
                                         bottom = 3.dp
                                     ),
-                                text = date[index].toString(),
+                                text = xAxisScaleData[index].toString(),
                                 fontSize = 14.sp,
                                 fontFamily = fontInter,
                                 fontWeight = FontWeight.Medium,
                                 textAlign = TextAlign.Center,
                                 color = textColorBW,
                             )
-                            if (date[index] == point) {
+                            // pointing a index on X-Axis
+                            if (xAxisScaleData[index] == point) {
                                 Box(
                                     modifier = Modifier
-                                        .size(7.dp)
+                                        .size(point_size)
                                         .clip(CircleShape)
                                         .background(LightGreen)
                                         .align(Alignment.CenterHorizontally)
@@ -242,6 +244,7 @@ fun ActivityBarChart(
 
             }
 
+            // horizontal line on X-Axis below the Graph
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -250,7 +253,7 @@ fun ActivityBarChart(
             ) {
                 Box(
                     modifier = Modifier
-                        .padding(bottom = 43.dp)
+                        .padding(bottom = xAxisScaleHeight + 3.dp)
                         .clip(RoundedCornerShape(2.dp))
                         .fillMaxWidth()
                         .height(5.dp)

@@ -527,7 +527,10 @@ fun TransactionContent(
                         userScrollEnabled = true
                     ) {
                         items(
-                            subCategories.getOrDefault(category, defaultValue = otherSubCategories)
+                            if (category != OTHER) subCategories.getOrDefault(
+                                category,
+                                defaultValue = otherSubCategories
+                            ) else otherSubCategories
                         ) {
                             CategoryItems(title = it) { title ->
                                 subCategory = title

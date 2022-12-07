@@ -83,14 +83,15 @@ object Constants {
         "Food",
         "Beverages",
         "Sports",
-        "Learning",
+        "Education",
         "Travel",
         "Rent",
         "Bills",
         "Fees",
         "Transaction",
         "Gift",
-        "Other"
+        "Other",
+        "Drinks"
     ).sorted()
 
     val SUB_CATEGORY = mapOf(
@@ -110,8 +111,66 @@ object Constants {
             "Chocolates",
             "Packets",
             "Drinks",
-            "IceCream",
+            "Ice-Cream",
             "Water Bottle",
+        ),
+        "Sports" to listOf(
+            "Equipments",
+            "Fees",
+            "Sports Wear",
+        ),
+        "Education" to listOf(
+            "Course",
+            "Fees",
+            "Books",
+            "Stationary",
+        ),
+        "Travel" to listOf(
+            "Fees",
+            "Equipments",
+            "Stationary",
+            "Cloths",
+            "Backpacks",
+            "Shoes",
+        ),
+        "Rent" to listOf(
+            "House",
+            "Shop",
+        ),
+        "Bills" to listOf(
+            "Recharge",
+            "Electric Bill",
+            "Water Bill",
+            "Gas Bill",
+        ),
+        "Fees" to listOf(
+            "School",
+            "College",
+            "Course",
+            "Classes",
+            "Dance Class",
+            "Music Class",
+        ),
+        "Transaction" to listOf(
+            "Add Amount",
+            "Bank",
+            "Cash",
+            "UPI",
+            "Card",
+            "Net Banking",
+        ),
+        "Gift" to listOf(
+            "Money",
+            "Objects",
+        ),
+        "Drinks" to listOf(
+            "Coco-Cola",
+            "Pepsi",
+            "Cold Drinks",
+            "Fruit Juice",
+        ),
+        "Other" to listOf(
+           "Other"
         ),
     )
 

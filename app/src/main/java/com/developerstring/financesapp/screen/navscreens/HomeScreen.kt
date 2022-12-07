@@ -3,15 +3,12 @@ package com.developerstring.financesapp.screen.navscreens
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
@@ -63,8 +60,10 @@ fun HomeScreen(
         month = SimpleDateFormat("M").format(Date()),
         year = SimpleDateFormat("yyyy").format(Date())
     )
-    // setDayPaymentArray
+    // setArray
     sharedViewModel.setDayPaymentArray()
+    sharedViewModel.setCategorySumArray()
+
     // get current month savings
     sharedViewModel.searchMonthSavings(
         month = SimpleDateFormat("M").format(Date()),

@@ -52,4 +52,7 @@ interface TransactionDao {
     @Query("SELECT amount FROM transaction_table WHERE day=:day AND month=:month AND year=:year AND transaction_type=:transaction_type")
     fun searchDayPayment(day: String,month: String,year: String, transaction_type: String): Flow<List<Int>>
 
+    @Query("SELECT SUM(amount) FROM transaction_table WHERE month = :month AND year = :year AND category = :category AND transaction_type = :transaction_type")
+    fun getCategorySum(month: String,year: String,category: String, transaction_type: String): Flow<Long?>
+
 }
