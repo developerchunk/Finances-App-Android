@@ -150,27 +150,17 @@ fun LineChart(
                 }
 
             val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-            drawLine(
-                start = Offset(x = spacing, y = yCoordinates[1]),
-                end = Offset(x = size.width, y = yCoordinates[1]),
-                color = Color.Gray,
-                strokeWidth = 5f,
-                pathEffect = pathEffect
-            )
-            drawLine(
-                start = Offset(x = spacing, y = yCoordinates[2]),
-                end = Offset(x = size.width, y = yCoordinates[2]),
-                color = Color.Gray,
-                strokeWidth = 5f,
-                pathEffect = pathEffect
-            )
-            drawLine(
-                start = Offset(x = spacing, y = yCoordinates[3]),
-                end = Offset(x = size.width, y = yCoordinates[3]),
-                color = Color.Gray,
-                strokeWidth = 5f,
-                pathEffect = pathEffect
-            )
+
+            (1..3).forEach{
+                drawLine(
+                    start = Offset(x = spacing, y = yCoordinates[it]),
+                    end = Offset(x = size.width, y = yCoordinates[it]),
+                    color = Color.Gray,
+                    strokeWidth = 5f,
+                    pathEffect = pathEffect
+                )
+            }
+
             // graph
             drawLine(
                 start = Offset(x = spacing - 20f, y = size.height - spacing),
