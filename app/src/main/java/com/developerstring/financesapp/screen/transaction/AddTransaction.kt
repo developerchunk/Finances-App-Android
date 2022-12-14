@@ -87,7 +87,7 @@ fun AddTransaction(
         ) {
 
             IconButton(
-                modifier = Modifier.size(30.dp, 30.dp),
+                modifier = Modifier.size(30.dp),
                 onClick = {
                     navController.popBackStack()
                 }) {
@@ -886,44 +886,6 @@ fun TransactionContent(
                     )
                 }
             }
-
-
-//            Button(
-//                modifier = Modifier
-//                    .width(220.dp)
-//                    .height(45.dp),
-//                colors = ButtonDefaults.buttonColors(
-//                    backgroundColor = MaterialTheme.colors.contentBackgroundColor
-//                ),
-//                shape = RoundedCornerShape(25.dp),
-//                onClick = {
-//                    if (
-//                        amount.isNotEmpty() &&
-//                        category.isNotEmpty() &&
-//                        transactionType.isNotEmpty() &&
-//                        date.isNotEmpty()
-//                    ) {
-//                        onSaveClicked(
-//                            TransactionModel(
-//                                amount = amount.toInt(),
-//                                transaction_type = transactionType,
-//                                category = category,
-//                                date = date,
-//                                day = day,
-//                                month = month,
-//                                year = year,
-//                                info = extraInfo,
-//                                place = place,
-//                            ),
-//                        )
-//                    } else {
-//                        Toast.makeText(context, "Please fill all details", Toast.LENGTH_SHORT)
-//                            .show()
-//                    }
-//                },
-//            ) {
-//                Text(text = "Save", color = Color.White, fontSize = 20.sp)
-//            }
 
             Spacer(
                 modifier = Modifier

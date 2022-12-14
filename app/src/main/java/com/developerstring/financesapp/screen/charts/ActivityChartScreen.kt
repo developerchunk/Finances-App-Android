@@ -4,10 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
@@ -18,9 +15,12 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.developerstring.financesapp.R
 import com.developerstring.financesapp.screen.navscreens.content.homescreen.MonthTransactions
 import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
@@ -63,13 +63,7 @@ fun ActivityChartScreen(
         mutableStateOf(monthChart)
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundColor)
-            .verticalScroll(rememberScrollState())
-    ) {
-
+    Scaffold(topBar = {
         Surface(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -102,11 +96,13 @@ fun ActivityChartScreen(
                     }
                     Text(
                         modifier = Modifier.padding(start = 10.dp),
-                        text = "My Activity",
+                        text = stringResource(id = R.string.my_activity),
                         fontFamily = fontOpenSans,
                         fontWeight = FontWeight.Medium,
                         fontSize = LARGE_TEXT_SIZE,
-                        color = textColorBW
+                        color = textColorBW,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                     )
                 }
 
@@ -132,31 +128,35 @@ fun ActivityChartScreen(
             }
 
         }
+    }) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor)
+                .verticalScroll(rememberScrollState())
+        ) {
 
-        when (chartTypeSelected) {
-            monthChart -> {
-                MonthActivityChart(
-                    sharedViewModel = sharedViewModel,
-                    month_ = month,
-                    year_ = year,
-                    swipeMonth = {
-                        month = it
-                    },
-                    swipeYear = {
-                        year = it
-                    }
-                )
+            when (chartTypeSelected) {
+                monthChart -> {
+                    MonthActivityChart(
+                        sharedViewModel = sharedViewModel,
+                        month_ = month,
+                        year_ = year,
+                    )
+                }
+                quarterChart -> {
+                    QuarterActivityChart(
+                        sharedViewModel = sharedViewModel,
+                        month_ = calender.get(Calendar.MONTH)+1,
+                        year_ = calender.get(Calendar.YEAR)
+                    )
+                }
             }
-            quarterChart -> {
-                QuarterActivityChart(
-                    sharedViewModel = sharedViewModel,
-                    month_ = calender.get(Calendar.MONTH)+1,
-                    year_ = calender.get(Calendar.YEAR)
-                )
-            }
+
         }
-
     }
+
+
 
 }
 
@@ -165,8 +165,6 @@ fun MonthActivityChart(
     sharedViewModel: SharedViewModel,
     month_: Int,
     year_: Int,
-    swipeMonth: (Int) -> Unit,
-    swipeYear: (Int) -> Unit
 ) {
 
     var monthPayment by remember {
@@ -318,7 +316,7 @@ fun MonthActivityChart(
                 .fillMaxWidth()
         ) {
             LineChart(
-                infos = data,
+                chartInfo = data,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(300.dp),

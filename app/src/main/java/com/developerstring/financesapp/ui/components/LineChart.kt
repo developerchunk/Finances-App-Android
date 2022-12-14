@@ -2,22 +2,17 @@ package com.developerstring.financesapp.ui.components
 
 import android.graphics.Paint
 import android.graphics.Path
-import android.widget.Toast
 import androidx.compose.animation.Animatable
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,7 +28,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun LineChart(
-    infos: List<LineChartData> = emptyList(),
+    chartInfo: List<LineChartData> = emptyList(),
     modifier: Modifier = Modifier,
     graphColor: Color = Color.Green,
     textColor: Int
@@ -43,11 +38,11 @@ fun LineChart(
 
     val spacing = 100f
 
-    val upperValue = remember(infos) {
-        (infos.maxOfOrNull { it.amount }?.plus(1))?.roundToInt() ?: 0
+    val upperValue = remember(chartInfo) {
+        (chartInfo.maxOfOrNull { it.amount }?.plus(1))?.roundToInt() ?: 0
     }
-    val lowerValue = remember(infos) {
-        infos.minOfOrNull { it.amount }?.toInt() ?: 0
+    val lowerValue = remember(chartInfo) {
+        chartInfo.minOfOrNull { it.amount }?.toInt() ?: 0
     }
     val density = LocalDensity.current
     val textPaint = remember(density) {
@@ -91,9 +86,9 @@ fun LineChart(
 
             canvasHeight = size.height
 
-            val spacePerHour = (size.width - spacing) / infos.size
-            (0 until infos.size - 1 step 7).forEach { i ->
-                val info = infos[i]
+            val spacePerHour = (size.width - spacing) / chartInfo.size
+            (0 until chartInfo.size - 1 step 7).forEach { i ->
+                val info = chartInfo[i]
                 val hour = info.date
                 drawContext.canvas.nativeCanvas.apply {
                     drawText(
@@ -120,9 +115,9 @@ fun LineChart(
 
             var lastX = 0f
             val strokePath = androidx.compose.ui.graphics.Path().apply {
-                for (i in infos.indices) {
-                    val info = infos[i]
-                    val nextInfo = infos.getOrNull(i + 1) ?: infos.last()
+                for (i in chartInfo.indices) {
+                    val info = chartInfo[i]
+                    val nextInfo = chartInfo.getOrNull(i + 1) ?: chartInfo.last()
                     val leftRatio = (info.amount - lowerValue) / (upperValue - lowerValue)
                     val rightRatio =
                         (nextInfo.amount - lowerValue) / (upperValue - lowerValue)
