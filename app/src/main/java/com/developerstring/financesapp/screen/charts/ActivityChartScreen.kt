@@ -580,6 +580,28 @@ fun QuarterActivityChart(
 
         }
 
+        FlowRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp),
+            mainAxisSpacing = 16.dp,
+            crossAxisSpacing = 16.dp,
+            mainAxisAlignment = MainAxisAlignment.Center,
+            crossAxisAlignment = FlowCrossAxisAlignment.Center
+        ) {
+            ADD_TRANSACTION_TYPE.forEach {
+
+                SimpleChipButton(
+                    text = it,
+                    select = transactionType,
+                    onClick = { key ->
+                        transactionType = key
+                    }
+                )
+
+            }
+        }
+
     }
 
 }
