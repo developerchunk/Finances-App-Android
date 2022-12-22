@@ -2,31 +2,41 @@ package com.developerstring.financesapp.screen.charts
 
 import android.icu.util.Calendar
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
+import com.developerstring.financesapp.ui.components.CustomChip
 import com.developerstring.financesapp.ui.components.PieChart
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.Constants.SUB_CATEGORY
+import com.developerstring.financesapp.util.categorySortToText
+import com.developerstring.financesapp.util.state.CategorySortState
+import com.developerstring.financesapp.util.textToCategorySort
+import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun CategoryChartScreen(
     sharedViewModel: SharedViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
 
     var data by remember {
@@ -35,18 +45,60 @@ fun CategoryChartScreen(
 
     val calendar = Calendar.getInstance()
 
-    val month = calendar.get(Calendar.MONTH)+1
+    val month = calendar.get(Calendar.MONTH) + 1
     val year = calendar.get(Calendar.YEAR)
 
-    MonthCategorySum(sharedViewModel = sharedViewModel, month = month.toString(), year = year.toString(), data = { data = it })
+    MonthCategorySum(
+        sharedViewModel = sharedViewModel,
+        month = month.toString(),
+        year = year.toString(),
+        data = { data = it })
 
     // creating the Data of Pie Chart which contains Category and Amount spent in that category
     val rawData = mutableMapOf<String, Long>()
     SUB_CATEGORY.keys.sorted().forEachIndexed { index, value ->
         rawData[value] = data[index]
     }
+    var categorySortEnable by remember {
+        mutableStateOf(false)
+    }
 
-    val chartData = rawData.toList().sortedBy { (_, value) -> value }.reversed().toMap()
+    LaunchedEffect(key1 = true) {
+        categorySortEnable = true
+    }
+
+    var categorySortState by remember {
+        mutableStateOf(CategorySortState.HIGH_TO_LOW)
+    }
+
+    val categorySortList = mutableListOf(
+        CategorySortState.HIGH_TO_LOW,
+        CategorySortState.LOW_TO_HIGH,
+        CategorySortState.BY_NAME,
+    )
+
+    var chartData = rawData.toList().sortedBy { (_, value) -> value }.reversed().toMap()
+
+    if (categorySortEnable) {
+        chartData = when (categorySortState) {
+            CategorySortState.HIGH_TO_LOW -> {
+                rawData.toList().sortedBy { (_, value) -> value }.reversed().toMap()
+            }
+            CategorySortState.LOW_TO_HIGH -> {
+                rawData.toList().sortedBy { (_, value) -> value }.sortedBy { (_, value) -> value==0L }.toMap()
+            }
+            CategorySortState.BY_NAME -> {
+                rawData.toList().sortedBy { (key, _) -> key }.sortedBy { (_, value) -> value==0L }.toMap().toMap()
+            }
+        }
+    }
+
+    val brushBackground = Brush.horizontalGradient(
+        colors = listOf(
+            Color.Transparent,
+            backgroundColor,
+        ),
+    )
 
     Scaffold(topBar = {
         Surface(
@@ -99,14 +151,80 @@ fun CategoryChartScreen(
                 .verticalScroll(rememberScrollState())
         ) {
 
-            Column(modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 50.dp)
+            Row(
+                modifier = Modifier
+                    .padding(top = 5.dp, start = 20.dp)
+                    .fillMaxWidth()
+                    .height(TOP_APP_BAR_HEIGHT),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Text(
+                    text = stringResource(id = R.string.sort_by),
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = fontInter,
+                    fontSize = TEXT_FIELD_SIZE,
+                    color = textColorBW
+                )
+
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 20.dp)) {
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState()),
+                    ) {
+                        FlowRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 10.dp, end = 30.dp),
+                            mainAxisSpacing = 14.dp,
+                            crossAxisSpacing = 14.dp
+                        ) {
+                            categorySortList.forEach {
+                                CustomChip(
+                                    title = it.categorySortToText(),
+                                    selected = categorySortState.categorySortToText(),
+                                    image = Icons.Rounded.Check,
+                                    key = false,
+                                    onSelected = { selected ->
+                                       categorySortState = selected.textToCategorySort()
+                                    },
+                                    selectedColor = UIBlue,
+                                    color = colorDarkGray,
+                                    textColor = textColorBW,
+                                    selectedTextColor = Color.White,
+                                    iconColor = Color.White
+                                )
+                            }
+                        }
+
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(modifier = Modifier
+                            .width(50.dp)
+                            .height(40.dp)
+                            .background(brushBackground))
+                    }
+                }
+
+
+            }
+
+            Column(
+                modifier = Modifier
+                    .padding(top = 30.dp)
+                    .fillMaxWidth()
             ) {
 
 
                 PieChart(
-                    data = chartData
+                    data = chartData,
                 )
 
             }

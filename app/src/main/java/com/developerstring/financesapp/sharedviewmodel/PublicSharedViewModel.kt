@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
+import com.developerstring.financesapp.util.state.CategorySortState
 import com.developerstring.financesapp.util.state.MessageBarState
 
 class PublicSharedViewModel : ViewModel() {
@@ -13,5 +14,4 @@ class PublicSharedViewModel : ViewModel() {
     )
 
     var messageShow: MutableState<Boolean> = mutableStateOf(false)
-
 }

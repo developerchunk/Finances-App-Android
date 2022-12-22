@@ -20,6 +20,7 @@
     <string name="categories_chart">Categories Chart</string>
     <string name="last_week">Last 7 Days</string>
     <string name="spent_this_week">Spent this week</string>
+    <string name="sort_by">Sort By: </string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>

@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.runtime.*
@@ -310,7 +311,14 @@ fun TransactionContent(
                     selected = transactionType,
                     onSelected = {
                         transactionType = it
-                    }
+                    },
+                    image = Icons.Filled.Check,
+                    key = true,
+                    selectedColor = UIBlue,
+                    color = colorDarkGray,
+                    selectedTextColor = Color.White,
+                    textColor = textColorBW,
+                    iconColor = Color.White
                 )
             }
         }

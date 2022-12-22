@@ -7,6 +7,7 @@ import com.developerstring.financesapp.util.Constants.SAVINGS
 import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.Constants.THIS_MONTH
 import com.developerstring.financesapp.util.Constants.oldFirstFilter
+import com.developerstring.financesapp.util.state.CategorySortState
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.math.abs
@@ -81,7 +82,7 @@ fun lastWeekDateCalculator(
     year_: (List<Int>) -> Unit,
 ) {
 
-    var days = day+1
+    var days = day + 1
     var months = month
     var years = year
 
@@ -258,7 +259,7 @@ fun monthToName(
     month: Int
 ): String {
 
-    return when(month) {
+    return when (month) {
         1 -> "January"
         2 -> "February"
         3 -> "March"
@@ -278,12 +279,19 @@ fun monthToName(
 
 }
 
-fun Int.yearOnMonth(month: Int): Int {
-
-    return when(month) {
-        0 -> this-1
-        13 -> this+1
-        else -> this
+fun CategorySortState.categorySortToText(): String {
+    return when (this) {
+        CategorySortState.HIGH_TO_LOW -> "High To Low"
+        CategorySortState.LOW_TO_HIGH -> "Low To High"
+        CategorySortState.BY_NAME -> "By Name"
     }
+}
 
+fun String.textToCategorySort(): CategorySortState {
+    return when (this) {
+        "High To Low" -> CategorySortState.HIGH_TO_LOW
+        "Low To High" -> CategorySortState.LOW_TO_HIGH
+        "By Name" -> CategorySortState.BY_NAME
+        else -> CategorySortState.HIGH_TO_LOW
+    }
 }

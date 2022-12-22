@@ -133,16 +133,7 @@ fun TopAppBarHistory(
 @Composable
 fun TopAppBarFilterContent(
     selectedList: (String) -> Unit
-//    chipNames: List<String>,
 ) {
-
-//    val subCategory = mutableListOf<String>()
-
-//    SUB_CATEGORY.values.forEach { list ->
-//        list.forEach {
-//            subCategory.add(it)
-//        }
-//    }
 
     val filterList = FILTER_NAME.plus(CATEGORIES)
 

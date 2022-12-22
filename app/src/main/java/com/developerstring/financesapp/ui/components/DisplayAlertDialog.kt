@@ -71,7 +71,7 @@ fun DisplayAlertDialog(
             },
             dismissButton = {
                 OutlinedButton(
-                    modifier = Modifier.padding(end = 30.dp, bottom = 30.dp),
+                    modifier = Modifier.padding(end = 10.dp, bottom = 30.dp),
                     onClick = {
                         onCloseClicked()
                     },

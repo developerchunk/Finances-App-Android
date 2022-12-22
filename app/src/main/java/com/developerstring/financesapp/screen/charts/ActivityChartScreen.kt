@@ -307,9 +307,6 @@ fun MonthActivityChart(
 
         }
 
-        val context = LocalContext.current
-        val coordinates = LocalConfiguration.current
-        val width = coordinates.screenWidthDp
         Column(
             modifier = Modifier
                 .padding(start = 15.dp, end = 20.dp, top = 40.dp, bottom = 10.dp)

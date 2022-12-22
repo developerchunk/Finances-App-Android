@@ -10,11 +10,14 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -25,8 +28,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.developerstring.financesapp.R
+import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.financesapp.ui.theme.*
-import kotlin.math.roundToInt
+import com.developerstring.financesapp.util.Constants.CURRENCY
+import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
+import com.developerstring.financesapp.util.categorySortToText
+import com.developerstring.financesapp.util.simplifyAmount
+import com.developerstring.financesapp.util.simplifyAmountIndia
+import com.developerstring.financesapp.util.state.CategorySortState
+import com.developerstring.financesapp.util.textToCategorySort
+import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun PieChart(
@@ -94,7 +105,11 @@ fun PieChart(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Column(Modifier.size((radiusOuter.value * 2f).dp)) {
+        Column(
+            Modifier.size((radiusOuter.value * 2f).dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Box(
                 modifier = Modifier
                     .size(animateSize.dp),
@@ -135,7 +150,7 @@ fun PieChart(
                 data = data,
                 floatValue = dataPercentage,
                 color = color,
-                screenWidth = screenWidth
+                screenWidth = screenWidth,
             )
         }
 
@@ -153,7 +168,7 @@ fun DetailsPieChart(
     data: Map<String, Long>,
     floatValue: List<Float>,
     color: List<Color>,
-    screenWidth: Dp
+    screenWidth: Dp,
 ) {
 
     Column(
@@ -208,7 +223,9 @@ fun PieChartDetailItem(
 
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    modifier = Modifier.padding(start = 20.dp).widthIn(max = screenWidth/2f),
+                    modifier = Modifier
+                        .padding(start = 20.dp)
+                        .widthIn(max = screenWidth / 2f),
                     text = data.first,
                     fontFamily = fontInter,
                     fontSize = TEXT_FIELD_SIZE,
@@ -219,7 +236,7 @@ fun PieChartDetailItem(
 
                 Text(
                     modifier = Modifier.padding(start = 10.dp),
-                    text = (floatValue.toInt().toFloat()/10f).toString() + "%",
+                    text = (floatValue.toInt().toFloat() / 10f).toString() + "%",
                     fontSize = TEXT_FIELD_SIZE,
                     fontFamily = fontInter,
                     color = textColorBW
@@ -239,7 +256,9 @@ fun PieChartDetailItem(
 
                 Text(
                     modifier = Modifier.padding(start = 10.dp),
-                    text = data.second.toString(),
+                    text =
+                    if (CURRENCY == INDIAN_CURRENCY) simplifyAmountIndia(data.second.toInt())
+                    else simplifyAmount(data.second.toInt()),
                     fontSize = MEDIUM_TEXT_SIZE,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Bold,
