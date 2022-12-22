@@ -577,7 +577,6 @@ fun QuarterActivityChart(
                 point = month_,
                 point_size = 7.dp
             )
-
         }
 
         FlowRow(
