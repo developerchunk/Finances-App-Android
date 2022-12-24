@@ -216,12 +216,3 @@ fun CreateProfileScreen2(
     }
 
 }
-
-@Preview(showBackground = true)
-@Composable
-fun CreateProfileScreen2Preview() {
-    CreateProfileScreen2(
-        navController = rememberNavController(),
-        profileViewModel = ProfileViewModel()
-    )
-}

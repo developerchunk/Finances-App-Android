@@ -3,11 +3,10 @@ package com.developerstring.financesapp.di
 import android.content.Context
 import androidx.room.Room
 import com.developerstring.financesapp.roomdatabase.database.TransactionDatabase
-import com.developerstring.financesapp.util.Constants.DATABASE_NAME
+import com.developerstring.financesapp.util.Constants.TRANSACTION_DB_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -23,11 +22,15 @@ object TransactionDatabaseModule {
     ) = Room.databaseBuilder(
         context,
         TransactionDatabase::class.java,
-        DATABASE_NAME
+        TRANSACTION_DB_NAME
     ).build()
 
     @Singleton
     @Provides
     fun provideDao(database: TransactionDatabase) = database.transactionDao()
+
+    @Singleton
+    @Provides
+    fun provideProfileDao(database: TransactionDatabase) = database.profileDao()
 
 }

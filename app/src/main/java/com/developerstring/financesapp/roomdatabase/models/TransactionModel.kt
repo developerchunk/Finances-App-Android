@@ -2,9 +2,9 @@ package com.developerstring.financesapp.roomdatabase.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.developerstring.financesapp.util.Constants.DATABASE_TABLE
+import com.developerstring.financesapp.util.Constants.TRANSACTION_DB_TABLE
 
-@Entity(tableName = DATABASE_TABLE)
+@Entity(tableName = TRANSACTION_DB_TABLE)
 data class TransactionModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,

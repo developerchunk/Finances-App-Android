@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9e787cf2b7d20008e6d119bac599b975",
+    "identityHash": "6d1fc45c6a8c545d9b49088c22d8db50",
     "entities": [
       {
         "tableName": "transaction_table",
@@ -101,12 +101,68 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "profile_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `total_amount` INTEGER NOT NULL, `currency` INTEGER NOT NULL, `month_spent` INTEGER NOT NULL, `month_saving` INTEGER NOT NULL, `theme` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "total_amount",
+            "columnName": "total_amount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currency",
+            "columnName": "currency",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "month_spent",
+            "columnName": "month_spent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "month_saving",
+            "columnName": "month_saving",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "theme",
+            "columnName": "theme",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9e787cf2b7d20008e6d119bac599b975')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6d1fc45c6a8c545d9b49088c22d8db50')"
     ]
   }
 }

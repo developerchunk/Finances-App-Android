@@ -5,12 +5,48 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.developerstring.financesapp.data.onboarding.OnBoardingStatus
 import com.developerstring.financesapp.data.profile.ProfileDataStore
+import com.developerstring.financesapp.roomdatabase.models.ProfileModel
+import com.developerstring.financesapp.roomdatabase.models.TransactionModel
+import com.developerstring.financesapp.roomdatabase.repository.ProfileRepository
 import com.developerstring.financesapp.util.Constants.YES
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ProfileViewModel : ViewModel() {
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
+    private val repository: ProfileRepository
+) : ViewModel() {
+
+    private val _selectedProfile: MutableStateFlow<ProfileModel?> = MutableStateFlow(null)
+    val selectedProfile: MutableStateFlow<ProfileModel?> = _selectedProfile
+
+    fun getSelectedTransaction(profileId: Int) {
+        viewModelScope.launch {
+            repository.getSelectedProfile(profileId = profileId).collect { task ->
+                _selectedProfile.value = task
+            }
+        }
+    }
+
+    fun addTransaction(
+        profileModel: ProfileModel
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addProfile(profileModel = profileModel)
+        }
+    }
+
+    fun updateTransaction(
+        profileModel: ProfileModel
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateProfile(profileModel = profileModel)
+        }
+    }
 
     // onBoarding
     fun saveOnBoardingStatus(context: Context) {
@@ -35,6 +71,7 @@ class ProfileViewModel : ViewModel() {
             ProfileDataStore(context).saveThemeSetting(darkTheme)
         }
     }
+
     private val _themeSetting = MutableStateFlow(true)
     val themeSetting: StateFlow<Boolean> = _themeSetting
     fun getThemeSetting(context: Context) {
@@ -118,6 +155,7 @@ class ProfileViewModel : ViewModel() {
             }
         }
     }
+
     // save total amount
     fun saveTotalAmount(
         context: Context,

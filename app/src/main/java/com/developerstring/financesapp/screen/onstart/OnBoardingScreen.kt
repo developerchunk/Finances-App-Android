@@ -295,17 +295,3 @@ fun OnBoardingContent(
 
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun OnBoardingContentPreview() {
-    OnBoardingContent(
-        image = R.drawable.ic_on_boarding_1,
-        title = stringResource(id = R.string.on_boarding_title_4),
-        text = stringResource(id = R.string.on_boarding_text_4),
-        button = stringResource(id = R.string.on_boarding_button_4),
-        page = 4,
-        navController = rememberNavController(),
-        profileViewModel = ProfileViewModel()
-    )
-}

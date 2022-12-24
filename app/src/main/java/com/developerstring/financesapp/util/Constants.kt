@@ -14,9 +14,12 @@ object Constants {
     // theme settings
     var DARK_THEME_ENABLE = true
 
-    // Database
-    const val DATABASE_TABLE = "transaction_table"
-    const val DATABASE_NAME = "transaction_database"
+    // Transaction Database
+    const val TRANSACTION_DB_TABLE = "transaction_table"
+    const val TRANSACTION_DB_NAME = "transaction_database"
+
+    // Profile Database Table
+    const val PROFIlE_DB_TABLE = "profile_table"
 
     // OnBoarding
     const val ON_BOARDING_STATUS = "onBoardingStatus"
