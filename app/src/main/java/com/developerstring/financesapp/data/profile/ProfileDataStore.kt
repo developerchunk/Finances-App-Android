@@ -23,7 +23,6 @@ class ProfileDataStore(private val context: Context) {
         private val Context.dataStore_: DataStore<Preferences> by preferencesDataStore(PROFILE_DATA)
         val PROFILE_CREATED_STATUS = stringPreferencesKey(PROFILE_CREATED_STATUS_KEY)
         val THEME_SETTING = booleanPreferencesKey(THEME_SETTING_KEY)
-
     }
 
     // get saved profileCreatedStatus
