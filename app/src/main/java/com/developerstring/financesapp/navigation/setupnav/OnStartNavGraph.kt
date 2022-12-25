@@ -9,6 +9,7 @@ import com.developerstring.financesapp.screen.MainScreen
 import com.developerstring.financesapp.screen.onstart.*
 import com.developerstring.financesapp.screen.profilecreate.CreateProfileScreen
 import com.developerstring.financesapp.screen.profilecreate.CreateProfileScreen2
+import com.developerstring.financesapp.screen.profilecreate.LanguageScreen
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
@@ -43,6 +44,12 @@ fun NavGraphBuilder.onStartNavGraph(
                 profileViewModel = profileViewModel,
                 sharedViewModel = sharedViewModel
             )
+        }
+        // LanguageScreenSetUpNavRoute
+        composable(
+            route = SetUpNavRoute.LanguageScreenSetUpNavRoute.route
+        ) {
+            LanguageScreen(navController = navController, profileViewModel = profileViewModel)
         }
         // CreateProfileSetUpNavRoute
         composable(

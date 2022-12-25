@@ -21,6 +21,8 @@
     <string name="last_week">Last 7 Days</string>
     <string name="spent_this_week">Spent this week</string>
     <string name="sort_by">Sort By: </string>
+    <string name="select_language">Select a Language</string>
+    <string name="select_language_desc">You want to continue with…</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>

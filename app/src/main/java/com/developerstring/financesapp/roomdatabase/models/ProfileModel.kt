@@ -13,5 +13,6 @@ data class ProfileModel(
     val currency: String = "",
     val month_spent: Int = 0,
     val month_saving: Int = 0,
-    val theme: String = ""
+    val theme: String = "",
+    val language: String = ""
 )

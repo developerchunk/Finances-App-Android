@@ -274,7 +274,7 @@ fun OnBoardingContent(
                             4 -> if (profileCreate.value == YES) {
                                 SetUpNavRoute.MainSetUpNavRoute.route
                             } else {
-                                SetUpNavRoute.CreateProfileSetUpNavRoute.route
+                                SetUpNavRoute.LanguageScreenSetUpNavRoute.route
                             }
                             else -> SetUpNavRoute.BoardingSetUpNavRoute4.route
                         }

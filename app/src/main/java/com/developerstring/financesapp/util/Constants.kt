@@ -205,4 +205,18 @@ object Constants {
         ),
     )
 
+    const val ENGLISH = "English"
+    const val MARATHI = "Marathi (मराठी)"
+    const val HINDI = "Hindi (हिंदी)"
+    const val TELUGU = "Telugu (తెలుగు)"
+    const val GUJARATI = "Gujarati (ગુજરાતી)"
+
+    val LANGUAGES = listOf(
+        ENGLISH,
+        MARATHI,
+        HINDI,
+        TELUGU,
+        GUJARATI,
+    ).sorted()
+
 }

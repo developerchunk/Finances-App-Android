@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "cc00d69d5934e32cdd0fb557e569839f",
+    "identityHash": "c15e6dfd0e77234e4c45d13a5069491c",
     "entities": [
       {
         "tableName": "transaction_table",
@@ -104,7 +104,7 @@
       },
       {
         "tableName": "profile_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `total_amount` INTEGER NOT NULL, `currency` TEXT NOT NULL, `month_spent` INTEGER NOT NULL, `month_saving` INTEGER NOT NULL, `theme` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `total_amount` INTEGER NOT NULL, `currency` TEXT NOT NULL, `month_spent` INTEGER NOT NULL, `month_saving` INTEGER NOT NULL, `theme` TEXT NOT NULL, `language` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -147,6 +147,12 @@
             "columnName": "theme",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "language",
+            "columnName": "language",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -162,7 +168,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cc00d69d5934e32cdd0fb557e569839f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c15e6dfd0e77234e4c45d13a5069491c')"
     ]
   }
 }

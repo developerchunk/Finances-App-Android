@@ -30,6 +30,7 @@ class ProfileViewModel @Inject constructor(
     private var currency by mutableStateOf("")
     private var monthlySpent by mutableStateOf(0)
     private var monthlySavings by mutableStateOf(0)
+    private var language by mutableStateOf("")
 
     // onBoarding
     fun saveOnBoardingStatus(context: Context) {
@@ -65,6 +66,17 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    // Profile Language
+    fun saveProfileLanguage(
+        language_: String,
+        updateLanguage: Boolean
+    ) {
+        language = language_
+        if (updateLanguage) {
+            updateProfileLanguage()
+        }
+    }
+
     // Profile Details
     fun saveProfileDetails1(
         name_: String,
@@ -95,7 +107,8 @@ class ProfileViewModel @Inject constructor(
                 currency = currency,
                 month_spent = monthlySpent,
                 month_saving = monthlySavings,
-                theme = DARK_THEME
+                theme = DARK_THEME,
+                language = language
             )
         )
 
@@ -113,12 +126,14 @@ class ProfileViewModel @Inject constructor(
     private val _profileCurrency = MutableStateFlow("")
     private val _profileSpending = MutableStateFlow(0)
     private val _profileSavings = MutableStateFlow(0)
+    private val _profileLanguage = MutableStateFlow("")
 
     val profileName: StateFlow<String> = _profileName
     val profileTotalAmount: StateFlow<Int> = _profileTotalAmount
     val profileCurrency: StateFlow<String> = _profileCurrency
     val profileSpending: StateFlow<Int> = _profileSpending
     val profileSavings: StateFlow<Int> = _profileSavings
+    val profileLanguage: StateFlow<String> = _profileLanguage
 
     fun getProfileDetails() {
 
@@ -134,6 +149,7 @@ class ProfileViewModel @Inject constructor(
             _profileCurrency.value = _selectedProfile.value!!.currency
             _profileSpending.value = _selectedProfile.value!!.month_spent
             _profileSavings.value = _selectedProfile.value!!.month_saving
+            _profileLanguage.value = _selectedProfile.value!!.language
         }
     }
 
@@ -143,6 +159,13 @@ class ProfileViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             repository.updateProfileAmount(profileId = PROFILE_ID, amount = amount)
+        }
+    }
+
+    // update Language
+    private fun updateProfileLanguage() {
+        viewModelScope.launch {
+            repository.updateProfileLanguage(profileId = PROFILE_ID, language = language)
         }
     }
 

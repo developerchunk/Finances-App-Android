@@ -30,4 +30,8 @@ class ProfileRepository @Inject constructor(private val profileDao: ProfileDao) 
         profileDao.updateProfileTheme(profileId = profileId, theme = theme)
     }
 
+    suspend fun updateProfileLanguage(profileId: Int, language: String) {
+        profileDao.updateProfileLanguage(profileId = profileId, language = language)
+    }
+
 }

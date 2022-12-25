@@ -23,4 +23,7 @@ interface ProfileDao {
     @Query("UPDATE profile_table SET theme=:theme WHERE id=:profileId")
     suspend fun updateProfileTheme(profileId: Int,theme: String)
 
+    @Query("UPDATE profile_table SET language=:language WHERE id=:profileId")
+    suspend fun updateProfileLanguage(profileId: Int,language: String)
+
 }
