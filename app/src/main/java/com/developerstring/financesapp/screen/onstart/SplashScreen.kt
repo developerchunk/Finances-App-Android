@@ -49,7 +49,7 @@ fun SplashScreen(
         if (onBoarding.value == YES) {
             if (profileCreate.value == YES) {
                 // get profile details
-                profileViewModel.getProfileDetails(context = context)
+                profileViewModel.getProfileDetails()
                 navController.navigate(route = SetUpNavRoute.MainSetUpNavRoute.route)
             } else {
                 navController.navigate(route = SetUpNavRoute.CreateProfileSetUpNavRoute.route)

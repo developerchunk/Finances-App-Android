@@ -143,7 +143,6 @@ fun AddTransaction(
             ) {
                 sharedViewModel.addTransaction(transactionModel = it)
                 profileViewModel.saveTotalAmount(
-                    context = context,
                     amount = when (it.transaction_type) {
                         SPENT -> (totalAmount - it.amount)
                         ADD_FUND -> (totalAmount + it.amount)

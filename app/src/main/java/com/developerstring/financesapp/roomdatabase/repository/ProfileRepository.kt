@@ -22,4 +22,12 @@ class ProfileRepository @Inject constructor(private val profileDao: ProfileDao) 
         profileDao.updateProfileData(profileModel = profileModel)
     }
 
+    suspend fun updateProfileAmount(profileId: Int, amount: Int) {
+        profileDao.updateProfileAmount(profileId = profileId, amount = amount)
+    }
+
+    suspend fun updateProfileTheme(profileId: Int, theme: String) {
+        profileDao.updateProfileTheme(profileId = profileId, theme = theme)
+    }
+
 }

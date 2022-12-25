@@ -102,7 +102,6 @@ fun TransactionDetailsScreen(
 
             IconButton(onClick = {
                 profileViewModel.saveTotalAmount(
-                    context = context,
                     amount = settleDeleteTransaction(
                         transactionType = getTransactionModel!!.transaction_type,
                         totalAmount = totalAmount,
@@ -152,7 +151,6 @@ fun TransactionDetailsScreen(
                         )
                         sharedViewModel.updateTransaction(transactionModel = transactionModel)
                         profileViewModel.saveTotalAmount(
-                            context = context,
                             amount = settleTransactionAmount(
                                 totalAmount = totalAmount,
                                 oldAmount = oldAmount,

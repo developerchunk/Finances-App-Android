@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6d1fc45c6a8c545d9b49088c22d8db50",
+    "identityHash": "cc00d69d5934e32cdd0fb557e569839f",
     "entities": [
       {
         "tableName": "transaction_table",
@@ -104,7 +104,7 @@
       },
       {
         "tableName": "profile_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `total_amount` INTEGER NOT NULL, `currency` INTEGER NOT NULL, `month_spent` INTEGER NOT NULL, `month_saving` INTEGER NOT NULL, `theme` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `total_amount` INTEGER NOT NULL, `currency` TEXT NOT NULL, `month_spent` INTEGER NOT NULL, `month_saving` INTEGER NOT NULL, `theme` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -127,7 +127,7 @@
           {
             "fieldPath": "currency",
             "columnName": "currency",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -153,7 +153,7 @@
           "columnNames": [
             "id"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
@@ -162,7 +162,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6d1fc45c6a8c545d9b49088c22d8db50')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cc00d69d5934e32cdd0fb557e569839f')"
     ]
   }
 }

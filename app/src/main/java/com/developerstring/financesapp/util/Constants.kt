@@ -20,6 +20,7 @@ object Constants {
 
     // Profile Database Table
     const val PROFIlE_DB_TABLE = "profile_table"
+    const val PROFILE_ID = 1
 
     // OnBoarding
     const val ON_BOARDING_STATUS = "onBoardingStatus"
@@ -40,14 +41,18 @@ object Constants {
 
 //    var LAST_TRANSACTION = ""
 
-    const val DARK_THEME = "Dark Theme"
-    const val PROFILE = "Profile"
-    const val MANAGE_DATA = "Manage Data"
+    const val DARK_THEME = "dark_theme"
+    const val LIGHT_THEME = "light_theme"
+    const val PINK_THEME = "pink_theme"
 
-    val PROFILE_CONTENT_LIST = mapOf<String, Int>(
-        PROFILE to R.drawable.profile_edit,
-        MANAGE_DATA to R.drawable.setting_icon,
-        DARK_THEME to R.drawable.themes_icon,
+    const val DARK_THEME_TEXT = "Dark Theme"
+    const val PROFILE_TEXT = "Profile"
+    const val MANAGE_DATA_TEXT = "Manage Data"
+
+    val PROFILE_CONTENT_LIST = mapOf(
+        PROFILE_TEXT to R.drawable.profile_edit,
+        MANAGE_DATA_TEXT to R.drawable.setting_icon,
+        DARK_THEME_TEXT to R.drawable.themes_icon,
     )
 
     const val INDIAN_CURRENCY = "₹"

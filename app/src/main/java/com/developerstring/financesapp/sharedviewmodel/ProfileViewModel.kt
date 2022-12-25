@@ -1,13 +1,17 @@
 package com.developerstring.financesapp.sharedviewmodel
 
 import android.content.Context
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.developerstring.financesapp.data.onboarding.OnBoardingStatus
 import com.developerstring.financesapp.data.profile.ProfileDataStore
 import com.developerstring.financesapp.roomdatabase.models.ProfileModel
-import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.roomdatabase.repository.ProfileRepository
+import com.developerstring.financesapp.util.Constants.DARK_THEME
+import com.developerstring.financesapp.util.Constants.PROFILE_ID
 import com.developerstring.financesapp.util.Constants.YES
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -21,32 +25,11 @@ class ProfileViewModel @Inject constructor(
     private val repository: ProfileRepository
 ) : ViewModel() {
 
-    private val _selectedProfile: MutableStateFlow<ProfileModel?> = MutableStateFlow(null)
-    val selectedProfile: MutableStateFlow<ProfileModel?> = _selectedProfile
-
-    fun getSelectedTransaction(profileId: Int) {
-        viewModelScope.launch {
-            repository.getSelectedProfile(profileId = profileId).collect { task ->
-                _selectedProfile.value = task
-            }
-        }
-    }
-
-    fun addTransaction(
-        profileModel: ProfileModel
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.addProfile(profileModel = profileModel)
-        }
-    }
-
-    fun updateTransaction(
-        profileModel: ProfileModel
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.updateProfile(profileModel = profileModel)
-        }
-    }
+    private var name by mutableStateOf("")
+    private var totalAmount by mutableStateOf(0)
+    private var currency by mutableStateOf("")
+    private var monthlySpent by mutableStateOf(0)
+    private var monthlySavings by mutableStateOf(0)
 
     // onBoarding
     fun saveOnBoardingStatus(context: Context) {
@@ -84,17 +67,15 @@ class ProfileViewModel @Inject constructor(
 
     // Profile Details
     fun saveProfileDetails1(
-        context: Context,
-        name: String,
-        amount: Int,
-        currency: String,
+        name_: String,
+        amount_: Int,
+        currency_: String,
     ) {
-        val profileDataStore = ProfileDataStore(context)
-        viewModelScope.launch {
-            profileDataStore.saveName(name)
-            profileDataStore.saveTotalAmount(amount)
-            profileDataStore.saveCurrency(currency)
-        }
+
+        name = name_
+        totalAmount = amount_
+        currency = currency_
+
     }
 
     fun saveProfileDetail2(
@@ -102,15 +83,31 @@ class ProfileViewModel @Inject constructor(
         spending: Int,
         savings: Int,
     ) {
+
+        monthlySpent = spending
+        monthlySavings = savings
+
+        addProfile(
+            profileModel = ProfileModel(
+                id = PROFILE_ID,
+                name = name,
+                total_amount = totalAmount,
+                currency = currency,
+                month_spent = monthlySpent,
+                month_saving = monthlySavings,
+                theme = DARK_THEME
+            )
+        )
+
         val profileDataStore = ProfileDataStore(context)
         viewModelScope.launch {
-            profileDataStore.saveMonthlySpending(spending)
-            profileDataStore.saveMonthlySavings(savings)
             profileDataStore.saveProfileCreatedStatus("YES")
         }
     }
 
     // profile details
+    private val _selectedProfile: MutableStateFlow<ProfileModel?> = MutableStateFlow(null)
+
     private val _profileName = MutableStateFlow("")
     private val _profileTotalAmount = MutableStateFlow(0)
     private val _profileCurrency = MutableStateFlow("")
@@ -123,46 +120,29 @@ class ProfileViewModel @Inject constructor(
     val profileSpending: StateFlow<Int> = _profileSpending
     val profileSavings: StateFlow<Int> = _profileSavings
 
-    fun getProfileDetails(context: Context) {
-        // name
+    fun getProfileDetails() {
+
         viewModelScope.launch {
-            ProfileDataStore(context = context).getName.collect {
-                _profileName.value = it!!
+            repository.getSelectedProfile(profileId = PROFILE_ID).collect { task ->
+                _selectedProfile.value = task
             }
         }
-        // currency
-        viewModelScope.launch {
-            ProfileDataStore(context = context).getCurrency.collect {
-                _profileCurrency.value = it!!
-            }
-        }
-        // savings
-        viewModelScope.launch {
-            ProfileDataStore(context = context).getMonthlySavings.collect {
-                _profileSavings.value = it!!
-            }
-        }
-        // total amount
-        viewModelScope.launch {
-            ProfileDataStore(context = context).getTotalAmount.collect {
-                _profileTotalAmount.value = it!!
-            }
-        }
-        // spending
-        viewModelScope.launch {
-            ProfileDataStore(context = context).getMonthlySpending.collect {
-                _profileSpending.value = it!!
-            }
+
+        if (_selectedProfile.value != null) {
+            _profileName.value = _selectedProfile.value!!.name
+            _profileTotalAmount.value = _selectedProfile.value!!.total_amount
+            _profileCurrency.value = _selectedProfile.value!!.currency
+            _profileSpending.value = _selectedProfile.value!!.month_spent
+            _profileSavings.value = _selectedProfile.value!!.month_saving
         }
     }
 
     // save total amount
     fun saveTotalAmount(
-        context: Context,
         amount: Int
     ) {
         viewModelScope.launch {
-            ProfileDataStore(context = context).saveTotalAmount(amount)
+            repository.updateProfileAmount(profileId = PROFILE_ID, amount = amount)
         }
     }
 
@@ -176,5 +156,21 @@ class ProfileViewModel @Inject constructor(
             }
         }
 
+    }
+
+    private fun addProfile(
+        profileModel: ProfileModel
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addProfile(profileModel = profileModel)
+        }
+    }
+
+    fun updateProfile(
+        profileModel: ProfileModel
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateProfile(profileModel = profileModel)
+        }
     }
 }

@@ -17,4 +17,10 @@ interface ProfileDao {
     @Update
     suspend fun updateProfileData(profileModel: ProfileModel)
 
+    @Query("UPDATE profile_table SET total_amount=:amount WHERE id=:profileId")
+    suspend fun updateProfileAmount(profileId: Int,amount: Int)
+
+    @Query("UPDATE profile_table SET theme=:theme WHERE id=:profileId")
+    suspend fun updateProfileTheme(profileId: Int,theme: String)
+
 }

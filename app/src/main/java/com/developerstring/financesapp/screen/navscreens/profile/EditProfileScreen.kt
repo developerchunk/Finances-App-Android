@@ -30,8 +30,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
+import com.developerstring.financesapp.roomdatabase.models.ProfileModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.Constants.PROFILE_ID
 
 @Composable
 fun EditProfileScreen(
@@ -64,8 +66,6 @@ fun EditProfileScreen(
     var newSavings by remember {
         mutableStateOf(savings.toString())
     }
-
-    val context = LocalContext.current
 
     var expanded by remember { mutableStateOf(false) }
     val list = stringArrayResource(id = R.array.currencies)
@@ -121,17 +121,15 @@ fun EditProfileScreen(
                     savings != newSavings.toInt()
                 ) {
 
-                    profileViewModel.saveProfileDetails1(
-                        context = context,
-                        name = newName,
-                        amount = amount.toInt(),
-                        currency = selectedCurrency
-                    )
-
-                    profileViewModel.saveProfileDetail2(
-                        context = context,
-                        spending = newSpending.toInt(),
-                        savings = newSavings.toInt()
+                    profileViewModel.updateProfile(
+                        profileModel = ProfileModel(
+                            id = PROFILE_ID,
+                            name = newName,
+                            currency = selectedCurrency,
+                            total_amount = amount.toInt(),
+                            month_spent = newSpending.toInt(),
+                            month_saving = newSavings.toInt()
+                        )
                     )
 
                     navController.popBackStack()

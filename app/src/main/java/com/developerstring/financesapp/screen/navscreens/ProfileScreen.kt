@@ -30,14 +30,13 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
-import com.developerstring.financesapp.navigation.bottomnav.BottomNavRoute
 import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.screen.navscreens.content.profilescreen.CustomSwitchButton
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
-import com.developerstring.financesapp.util.Constants.DARK_THEME
-import com.developerstring.financesapp.util.Constants.PROFILE
+import com.developerstring.financesapp.util.Constants.DARK_THEME_TEXT
+import com.developerstring.financesapp.util.Constants.PROFILE_TEXT
 import com.developerstring.financesapp.util.Constants.PROFILE_CONTENT_LIST
 
 @Composable
@@ -49,7 +48,7 @@ fun ProfileScreen(
 
     val context = LocalContext.current
 
-    profileViewModel.getProfileDetails(context = context)
+    profileViewModel.getProfileDetails()
     profileViewModel.getThemeSetting(context = context)
 
     val profileName by profileViewModel.profileName.collectAsState()
@@ -187,7 +186,7 @@ fun ProfileScreen(
                     darkThemeEnable = darkThemeEnable
                 ) { title ->
                     when (title) {
-                        PROFILE -> {
+                        PROFILE_TEXT -> {
                             navController.navigate(NavRoute.EditProfileScreen.route)
                         }
                     }
@@ -238,7 +237,7 @@ fun ProfileOptionsContent(
                 color = textColorBW
             )
 
-            if (title == DARK_THEME) {
+            if (title == DARK_THEME_TEXT) {
                 CustomSwitchButton(
                     switchPadding = 3.dp,
                     buttonSizeWidth = 60.dp,

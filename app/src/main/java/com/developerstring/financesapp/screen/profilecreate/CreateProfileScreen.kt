@@ -282,10 +282,9 @@ fun CreateProfileScreen(
                         selectedCurrency.isNotEmpty()
                     ) {
                         profileViewModel.saveProfileDetails1(
-                            context = context,
-                            name = name.value,
-                            amount = amount.value.toInt(),
-                            currency = selectedCurrency
+                            name_ = name.value,
+                            amount_ = amount.value.toInt(),
+                            currency_ = selectedCurrency
                         )
                         navController.popBackStack()
                         navController.navigate(SetUpNavRoute.CreateProfileSetUpNavRoute2.route)
