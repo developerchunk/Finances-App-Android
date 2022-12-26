@@ -123,7 +123,7 @@ class ProfileViewModel @Inject constructor(
 
     private val _profileName = MutableStateFlow("")
     private val _profileTotalAmount = MutableStateFlow(0)
-    private val _profileCurrency = MutableStateFlow("")
+    private val _profileCurrency = MutableStateFlow("$")
     private val _profileSpending = MutableStateFlow(0)
     private val _profileSavings = MutableStateFlow(0)
     private val _profileLanguage = MutableStateFlow("")

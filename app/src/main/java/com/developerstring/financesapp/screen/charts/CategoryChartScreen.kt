@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
+import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.components.CustomChip
 import com.developerstring.financesapp.ui.components.PieChart
@@ -37,7 +38,10 @@ import com.google.accompanist.flowlayout.FlowRow
 fun CategoryChartScreen(
     sharedViewModel: SharedViewModel,
     navController: NavController,
+    profileViewModel: ProfileViewModel
 ) {
+
+    val currency = profileViewModel.profileCurrency.collectAsState().value.last().toString()
 
     var data by remember {
         mutableStateOf(listOf<Long>())
@@ -225,6 +229,7 @@ fun CategoryChartScreen(
 
                 PieChart(
                     data = chartData,
+                    currency = currency
                 )
 
             }

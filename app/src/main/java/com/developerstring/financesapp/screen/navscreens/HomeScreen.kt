@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,7 +33,6 @@ import com.developerstring.financesapp.ui.components.DisplayAlertDialog
 import com.developerstring.financesapp.ui.components.MessageBar
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.*
-import com.developerstring.financesapp.util.Constants.CURRENCY
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
 import com.developerstring.financesapp.util.Constants.OTHER
 import com.developerstring.financesapp.util.dataclass.ActivityCardData
@@ -49,16 +47,13 @@ fun HomeScreen(
     profileViewModel: ProfileViewModel,
     publicSharedViewModel: PublicSharedViewModel
 ) {
-    val context = LocalContext.current
 
     profileViewModel.getProfileDetails()
 
     val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
     val spent by profileViewModel.profileSpending.collectAsState()
     val savings by profileViewModel.profileSavings.collectAsState()
-    val currency by profileViewModel.profileCurrency.collectAsState()
-
-    CURRENCY = currency.last().toString()
+    val currency = profileViewModel.profileCurrency.collectAsState().value
 
     // get current month spending
     sharedViewModel.searchMonthSpent(

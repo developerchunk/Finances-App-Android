@@ -13,8 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -22,12 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.screen.navscreens.content.homescreen.MonthTransactions
-import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
+import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
-import com.developerstring.financesapp.ui.components.*
+import com.developerstring.financesapp.ui.components.ActivityBarChart
+import com.developerstring.financesapp.ui.components.LineChart
+import com.developerstring.financesapp.ui.components.SimpleChipButton
+import com.developerstring.financesapp.ui.components.TabLayoutChartScreen
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.ADD_TRANSACTION_TYPE
-import com.developerstring.financesapp.util.Constants.CURRENCY
 import com.developerstring.financesapp.util.Constants.DARK_THEME_ENABLE
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
 import com.developerstring.financesapp.util.Constants.SPENT
@@ -40,18 +40,18 @@ import com.developerstring.financesapp.util.state.RoundTypeBarChart
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
-import java.util.Calendar
+import java.util.*
 
 @Composable
 fun ActivityChartScreen(
     sharedViewModel: SharedViewModel,
-    publicSharedViewModel: PublicSharedViewModel,
+    profileViewModel: ProfileViewModel,
     navController: NavController
 ) {
 
     val calender = Calendar.getInstance()
-    var month = calender.get(Calendar.MONTH)+1
-    var year = calender.get(Calendar.YEAR)
+    val month = calender.get(Calendar.MONTH)+1
+    val year = calender.get(Calendar.YEAR)
 
     val monthChart = "Month"
     val quarterChart = "Quarter"
@@ -62,6 +62,8 @@ fun ActivityChartScreen(
     var chartTypeSelected by remember {
         mutableStateOf(monthChart)
     }
+
+    val currency = profileViewModel.profileCurrency.collectAsState().value.last().toString()
 
     Scaffold(topBar = {
         Surface(
@@ -142,13 +144,15 @@ fun ActivityChartScreen(
                         sharedViewModel = sharedViewModel,
                         month_ = month,
                         year_ = year,
+                        currency = currency
                     )
                 }
                 quarterChart -> {
                     QuarterActivityChart(
                         sharedViewModel = sharedViewModel,
                         month_ = calender.get(Calendar.MONTH)+1,
-                        year_ = calender.get(Calendar.YEAR)
+                        year_ = calender.get(Calendar.YEAR),
+                        currency = currency
                     )
                 }
             }
@@ -165,6 +169,7 @@ fun MonthActivityChart(
     sharedViewModel: SharedViewModel,
     month_: Int,
     year_: Int,
+    currency: String
 ) {
 
     var monthPayment by remember {
@@ -279,9 +284,9 @@ fun MonthActivityChart(
                 )
                 Text(
                     text = "${selectedTransactionType.keyToTransactionType()} ${
-                        if (CURRENCY == INDIAN_CURRENCY) simplifyAmountIndia(monthPayment.sum())
+                        if (currency == INDIAN_CURRENCY) simplifyAmountIndia(monthPayment.sum())
                         else simplifyAmount(monthPayment.sum())
-                    }$CURRENCY",
+                    }$currency",
                     fontSize = SMALL_TEXT_SIZE,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium,
@@ -318,7 +323,8 @@ fun MonthActivityChart(
                     .fillMaxWidth()
                     .height(300.dp),
                 textColor = textColorBW.hashCode(),
-                graphColor = if (DARK_THEME_ENABLE) LightGreen else UIBlue
+                graphColor = if (DARK_THEME_ENABLE) LightGreen else UIBlue,
+                currency = currency
             )
         }
 
@@ -352,7 +358,8 @@ fun MonthActivityChart(
 fun QuarterActivityChart(
     sharedViewModel: SharedViewModel,
     month_: Int,
-    year_: Int
+    year_: Int,
+    currency: String
 ) {
 
     var month by remember {
@@ -522,9 +529,9 @@ fun QuarterActivityChart(
                 )
                 Text(
                     text = "Total ${transactionType.keyToTransactionType()} ${
-                        if (CURRENCY == INDIAN_CURRENCY) simplifyAmountIndia(quarterList.sum())
+                        if (currency == INDIAN_CURRENCY) simplifyAmountIndia(quarterList.sum())
                         else simplifyAmount(quarterList.sum())
-                    }$CURRENCY",
+                    }$currency",
                     fontSize = SMALL_TEXT_SIZE,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium,
@@ -575,7 +582,8 @@ fun QuarterActivityChart(
                 backBarColor = Color.Transparent,
                 barArrangement = Arrangement.SpaceEvenly,
                 point = month_,
-                point_size = 7.dp
+                point_size = 7.dp,
+                currency = currency
             )
         }
 

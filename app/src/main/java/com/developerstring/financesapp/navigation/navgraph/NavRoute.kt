@@ -8,6 +8,7 @@ sealed class NavRoute(val route: String) {
     object ViewHistoryScreen : NavRoute("view_history_screen")
     object TransactionDetailsScreen : NavRoute("transaction_details_screen")
     object EditProfileScreen : NavRoute("edit_profile_screen")
+    object EditLanguageScreen : NavRoute("edit_language_screen")
 
     object ActivityChartScreen : NavRoute(ACTIVITY_CHART_SCREEN_KEY)
     object CategoryChartScreen : NavRoute(CATEGORY_CHART_SCREEN_KEY)

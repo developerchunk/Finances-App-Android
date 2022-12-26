@@ -23,6 +23,7 @@
     <string name="sort_by">Sort By: </string>
     <string name="select_language">Select a Language</string>
     <string name="select_language_desc">You want to continue with…</string>
+    <string name="language">Language</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>

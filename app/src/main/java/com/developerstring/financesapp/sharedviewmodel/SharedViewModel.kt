@@ -22,7 +22,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SharedViewModel @Inject constructor(
     private val repository: TransactionRepository,
-    private val repositoryProfile: ProfileRepository,
 ) : ViewModel() {
 
     private var _allTransactions =

@@ -1,10 +1,13 @@
 package com.developerstring.financesapp.navigation.navgraph
 
-import androidx.navigation.*
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.developerstring.financesapp.navigation.Graph
 import com.developerstring.financesapp.screen.charts.ActivityChartScreen
 import com.developerstring.financesapp.screen.charts.CategoryChartScreen
+import com.developerstring.financesapp.screen.navscreens.profile.EditLanguageScreen
 import com.developerstring.financesapp.screen.navscreens.profile.EditProfileScreen
 import com.developerstring.financesapp.screen.transaction.AddTransaction
 import com.developerstring.financesapp.screen.transaction.TransactionDetailsScreen
@@ -49,7 +52,6 @@ fun NavGraphBuilder.navGraph(
                 profileViewModel = profileViewModel,
                 navController = navController,
                 publicSharedViewModel = publicSharedViewModel
-//                id = task.arguments?.getInt(DETAIL_TRANSACTION_KEY)!!.toInt()
             )
         }
         composable(
@@ -58,7 +60,14 @@ fun NavGraphBuilder.navGraph(
             EditProfileScreen(
                 profileViewModel = profileViewModel,
                 navController = navController,
-//                id = task.arguments?.getInt(DETAIL_TRANSACTION_KEY)!!.toInt()
+            )
+        }
+        composable(
+            route = NavRoute.EditLanguageScreen.route
+        ) {
+            EditLanguageScreen(
+                profileViewModel = profileViewModel,
+                navController = navController,
             )
         }
         composable(
@@ -66,9 +75,8 @@ fun NavGraphBuilder.navGraph(
         ) {
             ActivityChartScreen(
                 sharedViewModel = sharedViewModel,
-                publicSharedViewModel = publicSharedViewModel,
+                profileViewModel = profileViewModel,
                 navController = navController,
-//                id = task.arguments?.getInt(DETAIL_TRANSACTION_KEY)!!.toInt()
             )
         }
         composable(
@@ -77,7 +85,7 @@ fun NavGraphBuilder.navGraph(
             CategoryChartScreen(
                 sharedViewModel = sharedViewModel,
                 navController = navController,
-//                id = task.arguments?.getInt(DETAIL_TRANSACTION_KEY)!!.toInt()
+                profileViewModel = profileViewModel
             )
         }
     }

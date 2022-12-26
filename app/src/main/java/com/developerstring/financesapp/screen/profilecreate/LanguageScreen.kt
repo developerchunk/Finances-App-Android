@@ -24,6 +24,7 @@ import androidx.navigation.NavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
+import com.developerstring.financesapp.ui.components.LanguageScreenItem
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.ENGLISH
 import com.developerstring.financesapp.util.Constants.LANGUAGES
@@ -115,61 +116,5 @@ fun LanguageScreen(
         }
     }
 
-
-}
-
-@Composable
-fun LanguageScreenItem(
-    title: String,
-    selected: String,
-    interactionSource: MutableInteractionSource,
-    onClick: (String) -> Unit
-) {
-
-    Row(
-        modifier = Modifier
-            .padding(start = 30.dp, bottom = 40.dp, end = 30.dp)
-            .background(backgroundColor)
-            .fillMaxWidth()
-            .clickable(
-                indication = null,
-                interactionSource = interactionSource,
-                onClick = {
-                    onClick(title)
-                }
-            ),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            if (title == selected) {
-                Box(
-                    modifier = Modifier
-                        .padding(end = 10.dp)
-                        .size(7.dp)
-                        .background(
-                            color = Green,
-                            shape = CircleShape
-                        )
-                )
-            }
-            Text(
-                text = title,
-                fontFamily = fontInter,
-                fontWeight = FontWeight.Medium,
-                fontSize = MEDIUM_TEXT_SIZE,
-                color = textColorBW
-            )
-        }
-
-        Icon(
-            imageVector = Icons.Rounded.Check,
-            contentDescription = "check",
-            tint = if (title == selected) UIBlue else Color.Transparent
-        )
-
-
-    }
 
 }

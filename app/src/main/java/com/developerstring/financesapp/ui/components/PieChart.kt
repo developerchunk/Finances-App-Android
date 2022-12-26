@@ -1,19 +1,16 @@
 package com.developerstring.financesapp.ui.components
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.CheckCircle
-import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,16 +25,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.developerstring.financesapp.R
-import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.financesapp.ui.theme.*
-import com.developerstring.financesapp.util.Constants.CURRENCY
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
-import com.developerstring.financesapp.util.categorySortToText
 import com.developerstring.financesapp.util.simplifyAmount
 import com.developerstring.financesapp.util.simplifyAmountIndia
-import com.developerstring.financesapp.util.state.CategorySortState
-import com.developerstring.financesapp.util.textToCategorySort
-import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun PieChart(
@@ -45,6 +36,7 @@ fun PieChart(
     radiusOuter: Dp = 90.dp,
     chartBarWidth: Dp = 20.dp,
     animDuration: Int = 1000,
+    currency: String
 ) {
 
     val totalSum = data.values.sum()
@@ -151,6 +143,7 @@ fun PieChart(
                 floatValue = dataPercentage,
                 color = color,
                 screenWidth = screenWidth,
+                currency = currency
             )
         }
 
@@ -169,6 +162,7 @@ fun DetailsPieChart(
     floatValue: List<Float>,
     color: List<Color>,
     screenWidth: Dp,
+    currency: String
 ) {
 
     Column(
@@ -183,7 +177,8 @@ fun DetailsPieChart(
                 data = value.toPair(),
                 color = color[index],
                 floatValue = floatValue[index],
-                screenWidth = screenWidth
+                screenWidth = screenWidth,
+                currency = currency
             )
 
         }
@@ -198,7 +193,8 @@ fun PieChartDetailItem(
     floatValue: Float,
     color: Color,
     boxSize: Dp = 35.dp,
-    screenWidth: Dp
+    screenWidth: Dp,
+    currency: String
 ) {
 
     Row(
@@ -257,8 +253,15 @@ fun PieChartDetailItem(
                 Text(
                     modifier = Modifier.padding(start = 10.dp),
                     text =
-                    if (CURRENCY == INDIAN_CURRENCY) simplifyAmountIndia(data.second.toInt())
+                    if (currency == INDIAN_CURRENCY) simplifyAmountIndia(data.second.toInt())
                     else simplifyAmount(data.second.toInt()),
+                    fontSize = MEDIUM_TEXT_SIZE,
+                    fontFamily = fontInter,
+                    fontWeight = FontWeight.Bold,
+                    color = colorGray
+                )
+                Text(
+                    text = currency,
                     fontSize = MEDIUM_TEXT_SIZE,
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Bold,

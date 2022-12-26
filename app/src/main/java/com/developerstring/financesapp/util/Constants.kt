@@ -46,17 +46,18 @@ object Constants {
     const val PINK_THEME = "pink_theme"
 
     const val DARK_THEME_TEXT = "Dark Theme"
+    const val LANGUAGE_TEXT = "Language"
     const val PROFILE_TEXT = "Profile"
-    const val MANAGE_DATA_TEXT = "Manage Data"
+    private const val MANAGE_DATA_TEXT = "Manage Data"
 
     val PROFILE_CONTENT_LIST = mapOf(
         PROFILE_TEXT to R.drawable.profile_edit,
         MANAGE_DATA_TEXT to R.drawable.setting_icon,
         DARK_THEME_TEXT to R.drawable.themes_icon,
+        LANGUAGE_TEXT to R.drawable.language_icon,
     )
 
     const val INDIAN_CURRENCY = "₹"
-    var CURRENCY = "₹"
 
     // Chip Selection Add Transaction
     const val SPENT = "spent"

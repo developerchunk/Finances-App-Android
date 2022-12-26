@@ -36,6 +36,7 @@ import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.DARK_THEME_TEXT
+import com.developerstring.financesapp.util.Constants.LANGUAGE_TEXT
 import com.developerstring.financesapp.util.Constants.PROFILE_TEXT
 import com.developerstring.financesapp.util.Constants.PROFILE_CONTENT_LIST
 
@@ -159,15 +160,6 @@ fun ProfileScreen(
                     }
                 }
 
-//                Row(
-//                    modifier = Modifier
-//                        .padding(horizontal = 30.dp)
-//                        .fillMaxSize(),
-//                    horizontalArrangement = Arrangement.SpaceBetween,
-//                    verticalAlignment = CenterVertically
-//                ) {
-//                }
-
             }
 
         }
@@ -188,6 +180,9 @@ fun ProfileScreen(
                     when (title) {
                         PROFILE_TEXT -> {
                             navController.navigate(NavRoute.EditProfileScreen.route)
+                        }
+                        LANGUAGE_TEXT -> {
+                            navController.navigate(NavRoute.EditLanguageScreen.route)
                         }
                     }
                 }

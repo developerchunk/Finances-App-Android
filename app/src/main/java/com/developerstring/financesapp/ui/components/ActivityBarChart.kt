@@ -28,7 +28,6 @@ import com.developerstring.financesapp.ui.theme.LightGreen
 import com.developerstring.financesapp.ui.theme.colorGray
 import com.developerstring.financesapp.ui.theme.fontInter
 import com.developerstring.financesapp.ui.theme.textColorBW
-import com.developerstring.financesapp.util.Constants.CURRENCY
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
 import com.developerstring.financesapp.util.simplifyAmount
 import com.developerstring.financesapp.util.simplifyAmountIndia
@@ -48,7 +47,8 @@ fun ActivityBarChart(
     backBarColor: Color,
     barArrangement: Arrangement.Horizontal,
     point: Int,
-    point_size: Dp
+    point_size: Dp,
+    currency: String
 ) {
     // for getting screen width and height you can use LocalConfiguration
     val configuration = LocalConfiguration.current
@@ -110,7 +110,7 @@ fun ActivityBarChart(
                 (0..3).forEach { i ->
                     drawContext.canvas.nativeCanvas.apply {
                         drawText(
-                            if (CURRENCY == INDIAN_CURRENCY) simplifyAmountIndia(round(yAxisValues.min() + yAxisScaleText * i).roundToInt())
+                            if (currency == INDIAN_CURRENCY) simplifyAmountIndia(round(yAxisValues.min() + yAxisScaleText * i).roundToInt())
                             else simplifyAmount(round(yAxisValues.min() + yAxisScaleText * i).roundToInt()),
                             30f,
                             size.height - yAxisScaleSpacing - i * size.height / 3f,

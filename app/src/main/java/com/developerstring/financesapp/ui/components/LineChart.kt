@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.developerstring.financesapp.ui.theme.*
-import com.developerstring.financesapp.util.Constants.CURRENCY
 import com.developerstring.financesapp.util.Constants.DARK_THEME_ENABLE
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
 import com.developerstring.financesapp.util.dataclass.LineChartData
@@ -31,7 +30,8 @@ fun LineChart(
     chartInfo: List<LineChartData> = emptyList(),
     modifier: Modifier = Modifier,
     graphColor: Color = Color.Green,
-    textColor: Int
+    textColor: Int,
+    currency: String
 ) {
 
     val yCoordinates = mutableStateListOf<Float>()
@@ -103,7 +103,7 @@ fun LineChart(
             (0..3).forEach { i ->
                 drawContext.canvas.nativeCanvas.apply {
                     drawText(
-                        if (CURRENCY == INDIAN_CURRENCY) simplifyAmountIndia(round(lowerValue + priceStep * i).roundToInt())
+                        if (currency == INDIAN_CURRENCY) simplifyAmountIndia(round(lowerValue + priceStep * i).roundToInt())
                         else simplifyAmount(round(lowerValue + priceStep * i).roundToInt()),
                         30f,
                         size.height - spacing - i * size.height / 3.4f,

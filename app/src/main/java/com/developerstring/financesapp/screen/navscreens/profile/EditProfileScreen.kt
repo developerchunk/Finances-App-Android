@@ -74,8 +74,6 @@ fun EditProfileScreen(
 
     val heightTextFields by remember { mutableStateOf(55.dp) }
 
-    val interactionSource = remember { MutableInteractionSource() }
-
     val scrollState = rememberScrollState()
 
     Column(
