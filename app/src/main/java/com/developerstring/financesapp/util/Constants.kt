@@ -28,11 +28,6 @@ object Constants {
 
     // Profile
     const val PROFILE_DATA = "profileData"
-    const val PROFILE_NAME_KEY = "name"
-    const val PROFILE_TOTAL_AMOUNT_KEY = "total_amount"
-    const val PROFILE_CURRENCY_KEY = "currency"
-    const val PROFILE_MONTHLY_SPENDING_KEY = "monthly_spending"
-    const val PROFILE_MONTHLY_SAVINGS_KEY = "monthly_savings"
     const val PROFILE_CREATED_STATUS_KEY = "profile_created"
 
     // Themes
@@ -82,10 +77,7 @@ object Constants {
         OLD_FIRST
     )
 
-//    const val CATEGORY_LIST_KEY = "category"
-//    const val SUB_CATEGORY_LIST_KEY = "sub_category"
     const val OTHER = "Other"
-
 
     // Category List
     val CATEGORIES = listOf(
@@ -178,8 +170,8 @@ object Constants {
             "Cold Drinks",
             "Fruit Juice",
         ),
-        "Other" to listOf(
-           "Other"
+        OTHER to listOf(
+           OTHER
         ),
     )
 
