@@ -17,6 +17,7 @@
     <string name="saving">Saving</string>
     <string name="payment">Payment</string>
     <string name="my_activity">My Activity</string>
+    <string name="activity_chart">Activity\nChart</string>
     <string name="categories_chart">Categories Chart</string>
     <string name="last_week">Last 7 Days</string>
     <string name="spent_this_week">Spent this week</string>
@@ -24,6 +25,9 @@
     <string name="select_language">Select a Language</string>
     <string name="select_language_desc">You want to continue with…</string>
     <string name="language">Language</string>
+
+    <string name="less">Less</string>
+    <string name="more">More</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -50,9 +54,6 @@
 
     <string name="filter">Filter</string>
 
-    <string name="delete_transaction">Delete \%1$s\ \%1$s\</string>
-    <string name="delete_transaction_message">Are you sure you want to delete \n\nCategory: \%1$s\ \nSub Category: \%1$s\ \nDate: \%1$s\</string>
-
 <!--    Currencies-->
     <string-array name="currencies">
         <item>Indian Rupee- ₹</item>
@@ -76,4 +77,54 @@
     <string name="on_boarding_title_4">Lets Started</string>
     <string name="on_boarding_text_4">Start saving, managing, and tracking \nyour finances</string>
     <string name="on_boarding_button_4">Done</string>
+
+
+<!--    Marathi Text-->
+    <string name="add_payment_marathi">पेमेंट\nलिहा</string>
+    <string name="history_marathi">पेमेंट\nइतिहास</string>
+    <string name="total_balance_marathi">एकूण शिल्लक</string>
+    <string name="spent_marathi">खर्च केला</string>
+    <string name="savings_marathi">बचत</string>
+    <string name="my_activity_marathi">माझी क्रिया</string>
+    <string name="last_week_marathi">शेवटचे ७ दिवस</string>
+    <string name="spent_week_marathi">शेवटचे ७ दिवस</string>
+    <string name="spent_this_week_marathi">या आठवड्यात खर्च केला</string>
+    <string name="less_marathi">कमी</string>
+    <string name="more_marathi">अधिक</string>
+    <string name="activity_chart_marathi">क्रिया चार्ट</string>
+    <string name="categories_chart_marathi">श्रेणी चार्ट</string>
+
+    <string name="create_profile_screen_name_marathi">नाव*</string>
+    <string name="create_profile_screen_amount_marathi">एकूण रक्कम*</string>
+    <string name="create_profile_screen_currency_marathi">चलन (रुपये)*</string>
+    <string name="create_profile_screen_2_spending_marathi">खर्च*</string>
+    <string name="create_profile_screen_2_savings_marathi">बचत(इच्छेप्रमाणे)</string>
+    <string name="profile_marathi">प्रोफाइल</string>
+
+    <string name="amount_text_field_marathi">रक्कम*</string>
+    <string name="category_text_field_marathi">श्रेणी*</string>
+    <string name="other_category_text_field_marathi">श्रेणी निर्दिष्ट करा (इच्छेप्रमाणे)</string>
+    <string name="sub_category_text_field_marathi">उप श्रेणी*</string>
+    <string name="other_sub_category_text_field_marathi">उप श्रेण निर्दिष्ट करा (इच्छेप्रमाणे)</string>
+    <string name="date_text_field_marathi">तारीख*</string>
+    <string name="extra_info_text_field_marathi">अतिरिक्त माहिती (इच्छेप्रमाणे)</string>
+    <string name="place_info_text_field_marathi">ठिकाण (इच्छेप्रमाणे)</string>
+
+    <string name="create_profile_screen_text_1_marathi">तुमच्याबद्दल मूलभूत माहिती</string>
+    <string name="create_profile_screen_text_2_marathi">तुमच्या मासिक आधारावर\nरक्कम भरा</string>
+
+    <string name="sort_by_marathi">क्रम: </string>
+
+    <string name="home_bottom_nav_marathi">होम</string>
+    <string name="activity_bottom_nav_marathi">क्रिया</string>
+    <string name="profile_bottom_nav_marathi">प्रोफाइल</string>
+
+    <string name="search_marathi">शोधा</string>
+    <string name="search_placeholder_marathi">येथे शोधा</string>
+    <string name="filter_marathi">फिल्टर</string>
+
+    <string name="yes_marathi">हो</string>
+    <string name="no_marathi">नाही</string>
+
+
 </resources>

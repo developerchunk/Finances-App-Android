@@ -295,3 +295,11 @@ fun String.textToCategorySort(): CategorySortState {
         else -> CategorySortState.HIGH_TO_LOW
     }
 }
+
+fun String.convertStringToAlphabets(): String {
+    return this.filter { it in 'A'..'Z' || it in 'a'..'z' || it == ' '|| it == ','|| it == '.' }
+}
+
+fun String.convertStringToInt(): String {
+    return this.filter { it in '0'..'9' }
+}

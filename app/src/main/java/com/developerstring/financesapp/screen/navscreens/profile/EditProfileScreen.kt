@@ -1,7 +1,6 @@
 package com.developerstring.financesapp.screen.navscreens.profile
 
 import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -34,6 +32,8 @@ import com.developerstring.financesapp.roomdatabase.models.ProfileModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.PROFILE_ID
+import com.developerstring.financesapp.util.convertStringToAlphabets
+import com.developerstring.financesapp.util.convertStringToInt
 
 @Composable
 fun EditProfileScreen(
@@ -179,7 +179,7 @@ fun EditProfileScreen(
                         ),
                     value = newName,
                     onValueChange = {
-                        newName = it
+                        newName = it.convertStringToAlphabets()
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
@@ -307,7 +307,7 @@ fun EditProfileScreen(
                         ),
                     value = amount,
                     onValueChange = {
-                        amount = it
+                        amount = it.convertStringToInt()
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
@@ -352,7 +352,7 @@ fun EditProfileScreen(
                         ),
                     value = newSpending,
                     onValueChange = {
-                        newSpending = it
+                        newSpending = it.convertStringToInt()
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
@@ -397,7 +397,7 @@ fun EditProfileScreen(
                         ),
                     value = newSavings,
                     onValueChange = {
-                        newSavings = it
+                        newSavings = it.convertStringToInt()
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,

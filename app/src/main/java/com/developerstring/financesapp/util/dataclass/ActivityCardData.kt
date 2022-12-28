@@ -3,7 +3,7 @@ package com.developerstring.financesapp.util.dataclass
 import androidx.compose.ui.graphics.Color
 
 data class ActivityCardData(
-    val text: String,
+    val text: Int,
     val icon: Int,
     val bgColor: Color,
     val cardColor: Color,

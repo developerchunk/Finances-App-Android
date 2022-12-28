@@ -183,14 +183,14 @@ object Constants {
 
     val ActivityCardContent = listOf(
         ActivityCardData(
-            text = "Activity\nChart",
+            text = R.string.activity_chart,
             icon = R.drawable.chart_icon,
             bgColor = Dark,
             cardColor = UIBlue,
             key = ACTIVITY_CHART_SCREEN_KEY
         ),
         ActivityCardData(
-            text = "Category\nChart",
+            text = R.string.categories_chart,
             icon = R.drawable.category_icon,
             bgColor = DarkGreen,
             cardColor = Green,

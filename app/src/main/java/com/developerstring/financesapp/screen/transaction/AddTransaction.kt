@@ -52,6 +52,8 @@ import com.developerstring.financesapp.util.Constants.OTHER
 import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.Constants.SUB_CATEGORY
 import com.developerstring.financesapp.util.addZeroToStart
+import com.developerstring.financesapp.util.convertStringToAlphabets
+import com.developerstring.financesapp.util.convertStringToInt
 import com.developerstring.financesapp.util.mapListToList
 import com.developerstring.financesapp.util.state.MessageBarState
 import com.google.accompanist.flowlayout.FlowRow
@@ -67,7 +69,6 @@ fun AddTransaction(
 ) {
 
     val shape: Shape = RoundedCornerShape(10.dp)
-    val context = LocalContext.current
 
     val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
 
@@ -277,7 +278,7 @@ fun TransactionContent(
                     ),
                 value = amount,
                 onValueChange = {
-                    amount = it
+                    amount = it.convertStringToInt()
                 },
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,
@@ -438,7 +439,7 @@ fun TransactionContent(
                         ),
                     value = otherCategory,
                     onValueChange = {
-                        otherCategory = it
+                        otherCategory = it.convertStringToAlphabets()
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
@@ -577,7 +578,7 @@ fun TransactionContent(
                         ),
                     value = otherSubCategory,
                     onValueChange = {
-                        otherSubCategory = it
+                        otherSubCategory = it.convertStringToAlphabets()
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
@@ -702,7 +703,7 @@ fun TransactionContent(
                         )
                 )
                 Text(
-                    text = if (moreClicked) "Less" else "More",
+                    text = stringResource(id = if (moreClicked) R.string.less else R.string.more),
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Normal,
                     fontSize = 16.sp,
@@ -752,7 +753,7 @@ fun TransactionContent(
                             ),
                         value = extraInfo,
                         onValueChange = {
-                            extraInfo = it
+                            extraInfo = it.convertStringToAlphabets()
                         },
                         colors = TextFieldDefaults.textFieldColors(
                             backgroundColor = Color.Transparent,
@@ -798,7 +799,7 @@ fun TransactionContent(
                             ),
                         value = place,
                         onValueChange = {
-                            place = it
+                            place = it.convertStringToAlphabets()
                         },
                         colors = TextFieldDefaults.textFieldColors(
                             backgroundColor = Color.Transparent,

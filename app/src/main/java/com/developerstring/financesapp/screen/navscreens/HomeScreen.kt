@@ -208,7 +208,7 @@ fun HomeScreen(
                 // Add Payment
                 ActivityCardItems(
                     activityCardData = ActivityCardData(
-                        text = stringResource(id = R.string.add_payment),
+                        text = R.string.add_payment,
                         icon = R.drawable.add_payment_icon,
                         bgColor = Dark,
                         cardColor = UIBlue,
@@ -223,33 +223,10 @@ fun HomeScreen(
                         navController.navigate(NavRoute.AddTransactionScreen.route)
                     }
                 )
-//                Box(
-//                    modifier = Modifier
-//                        .padding(end = 10.dp)
-//                        .width(170.dp)
-//                        .height(45.dp)
-//                        .background(brush = buttonColor, shape = RoundedCornerShape(15.dp))
-//                        .clickable(
-//                            interactionSource = interactionSource,
-//                            indication = null,
-//                            onClick = {
-//                                navController.navigate(NavRoute.AddTransactionScreen.route)
-//                            }
-//                        ),
-//                    contentAlignment = Alignment.Center
-//                ) {
-//                    Text(
-//                        text = stringResource(id = R.string.add_payment),
-//                        fontFamily = fontInter,
-//                        fontWeight = FontWeight.Medium,
-//                        fontSize = MEDIUM_TEXT_SIZE,
-//                        color = Color.White
-//                    )
-//                }
                 // History
                 ActivityCardItems(
                     activityCardData = ActivityCardData(
-                        text = stringResource(id = R.string.history),
+                        text = R.string.history,
                         icon = R.drawable.history_icon,
                         bgColor = DarkGreen,
                         cardColor = Green,
@@ -266,29 +243,6 @@ fun HomeScreen(
                         sharedViewModel.getAllTransactions()
                     }
                 )
-//                Box(
-//                    modifier = Modifier
-//                        .padding(start = 5.dp)
-//                        .width(170.dp)
-//                        .height(45.dp)
-//                        .background(brush = buttonColor, shape = RoundedCornerShape(15.dp))
-//                        .clickable(
-//                            interactionSource = interactionSource,
-//                            indication = null,
-//                            onClick = {
-//
-//                            }
-//                        ),
-//                    contentAlignment = Alignment.Center
-//                ) {
-//                    Text(
-//                        text = stringResource(id = R.string.history),
-//                        fontFamily = fontInter,
-//                        fontWeight = FontWeight.Medium,
-//                        fontSize = MEDIUM_TEXT_SIZE,
-//                        color = Color.White
-//                    )
-//                }
             }
             MyActivityContent(
                 sharedViewModel = sharedViewModel,

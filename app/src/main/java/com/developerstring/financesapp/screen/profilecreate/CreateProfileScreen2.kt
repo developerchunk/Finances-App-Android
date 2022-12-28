@@ -1,10 +1,13 @@
 package com.developerstring.financesapp.screen.profilecreate
 
 import android.widget.Toast
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -19,15 +22,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.convertStringToInt
 
 @Composable
 fun CreateProfileScreen2(
@@ -102,7 +104,7 @@ fun CreateProfileScreen2(
                         ),
                     value = spending.value,
                     onValueChange = {
-                        spending.value = it
+                        spending.value = it.convertStringToInt()
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
@@ -148,7 +150,7 @@ fun CreateProfileScreen2(
                         ),
                     value = savings.value,
                     onValueChange = {
-                        savings.value = it
+                        savings.value = it.convertStringToInt()
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,

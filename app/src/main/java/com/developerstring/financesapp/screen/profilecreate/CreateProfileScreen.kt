@@ -32,6 +32,8 @@ import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.convertStringToAlphabets
+import com.developerstring.financesapp.util.convertStringToInt
 
 @Composable
 fun CreateProfileScreen(
@@ -109,7 +111,7 @@ fun CreateProfileScreen(
                         ),
                     value = name.value,
                     onValueChange = {
-                        name.value = it
+                        name.value = it.convertStringToAlphabets()
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
@@ -156,7 +158,7 @@ fun CreateProfileScreen(
                         ),
                     value = amount.value,
                     onValueChange = {
-                        amount.value = it
+                        amount.value = it.convertStringToInt()
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
