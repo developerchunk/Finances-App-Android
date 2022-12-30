@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
@@ -40,7 +42,6 @@ fun EditProfileScreen(
     profileViewModel: ProfileViewModel,
     navController: NavController
 ) {
-
 
     val name by profileViewModel.profileName.collectAsState()
     val currency by profileViewModel.profileCurrency.collectAsState()
@@ -415,6 +416,132 @@ fun EditProfileScreen(
                     ),
                     singleLine = true
                 )
+            }
+
+            // group of Category textField
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 3.dp, bottom = 2.dp),
+                    text = stringResource(id = R.string.category_text_field),
+                    fontSize = TEXT_FIELD_SIZE,
+                    color = textColorBLG,
+                    fontFamily = fontInter,
+                    fontWeight = FontWeight.Medium
+                )
+
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 55.dp)
+                        .border(
+                            width = 1.8.dp,
+                            color = textColorBLG,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                        .onGloballyPositioned { coordinates ->
+                            textFieldSize = coordinates.size.toSize()
+                        }
+                        .clickable {
+
+                        },
+                    shape = RoundedCornerShape(15.dp),
+                    backgroundColor = backgroundColor
+                ) {
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(0.8f).padding(start = 20.dp),
+                            text = "Edit Category List",
+                            fontSize = TEXT_FIELD_SIZE,
+                            color = textColorBW,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+
+                        Icon(
+                            imageVector = Icons.Rounded.Edit,
+                            contentDescription = "currency_icon",
+                            Modifier
+                                .padding(end = 15.dp)
+                                .size(24.dp),
+                            tint = textColorBW
+                        )
+                    }
+
+
+                }
+
+            }
+
+            // group of Sub Category textField
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 3.dp, bottom = 2.dp),
+                    text = stringResource(id = R.string.sub_category_text_field),
+                    fontSize = TEXT_FIELD_SIZE,
+                    color = textColorBLG,
+                    fontFamily = fontInter,
+                    fontWeight = FontWeight.Medium
+                )
+
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 55.dp)
+                        .border(
+                            width = 1.8.dp,
+                            color = textColorBLG,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                        .onGloballyPositioned { coordinates ->
+                            textFieldSize = coordinates.size.toSize()
+                        }
+                        .clickable {
+
+                        },
+                    shape = RoundedCornerShape(15.dp),
+                    backgroundColor = backgroundColor
+                ) {
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(0.8f).padding(start = 20.dp),
+                            text = "Edit Sub Category List",
+                            fontSize = TEXT_FIELD_SIZE,
+                            color = textColorBW,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+
+                        Icon(
+                            imageVector = Icons.Rounded.Edit,
+                            contentDescription = "currency_icon",
+                            Modifier
+                                .padding(end = 15.dp)
+                                .size(24.dp),
+                            tint = textColorBW
+                        )
+                    }
+
+
+                }
+
             }
         }
 
