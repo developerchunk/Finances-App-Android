@@ -5,7 +5,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
@@ -21,6 +20,7 @@ import com.developerstring.financesapp.R
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.components.LanguageScreenItem
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.Constants.LANGUAGE
 import com.developerstring.financesapp.util.Constants.LANGUAGES
 
 @Composable
@@ -107,6 +107,7 @@ fun EditLanguageScreen(
                     interactionSource = interactionSource,
                     onClick = { value ->
                         selected = value
+                        LANGUAGE = value
                     })
             }
 

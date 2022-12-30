@@ -51,6 +51,7 @@ import com.developerstring.financesapp.util.Constants.CATEGORIES
 import com.developerstring.financesapp.util.Constants.OTHER
 import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.Constants.SUB_CATEGORY
+import com.developerstring.financesapp.util.Constants.TRANSACTION
 import com.developerstring.financesapp.util.addZeroToStart
 import com.developerstring.financesapp.util.convertStringToAlphabets
 import com.developerstring.financesapp.util.convertStringToInt
@@ -311,6 +312,9 @@ fun TransactionContent(
                     selected = transactionType,
                     onSelected = {
                         transactionType = it
+                        if (transactionType == ADD_FUND) {
+                            category = TRANSACTION
+                        }
                     },
                     image = Icons.Filled.Check,
                     key = true,
@@ -869,8 +873,10 @@ fun TransactionContent(
                                         )
                                     )
 
-                                    publicSharedViewModel.messageBarState.value =
-                                        MessageBarState.OPENED
+                                    if (transactionModel == TransactionModel()){
+                                        publicSharedViewModel.messageBarState.value =
+                                            MessageBarState.OPENED
+                                    }
 
                                 } else {
                                     Toast

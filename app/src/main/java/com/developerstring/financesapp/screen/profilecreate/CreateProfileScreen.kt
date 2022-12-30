@@ -32,6 +32,7 @@ import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.LanguageText
 import com.developerstring.financesapp.util.convertStringToAlphabets
 import com.developerstring.financesapp.util.convertStringToInt
 
@@ -54,6 +55,9 @@ fun CreateProfileScreen(
 
     val scrollState = rememberScrollState()
 
+    val language = profileViewModel.language
+    val languageText = LanguageText(language = language)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -66,7 +70,7 @@ fun CreateProfileScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 30.dp),
-                text = stringResource(id = R.string.profile),
+                text = stringResource(id = languageText.profile),
                 fontSize = MAX_TEXT_SIZE,
                 color = textColorBW,
                 fontFamily = fontOpenSans,
@@ -77,7 +81,7 @@ fun CreateProfileScreen(
             Text(
                 modifier = Modifier
                     .padding(top = 50.dp, start = 30.dp),
-                text = stringResource(id = R.string.create_profile_screen_text_1),
+                text = stringResource(id = languageText.createProfileScreenText1),
                 fontSize = MEDIUM_TEXT_SIZE,
                 color = colorGray,
                 fontFamily = fontInter,
@@ -93,7 +97,7 @@ fun CreateProfileScreen(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.create_profile_screen_name),
+                    text = stringResource(id = languageText.createProfileScreenName),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -140,7 +144,7 @@ fun CreateProfileScreen(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.create_profile_screen_amount),
+                    text = stringResource(id = languageText.createProfileScreenAmount),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -186,7 +190,7 @@ fun CreateProfileScreen(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.create_profile_screen_currency),
+                    text = stringResource(id = languageText.createProfileScreenCurrency),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -296,7 +300,7 @@ fun CreateProfileScreen(
                     }
                 },
             ) {
-                Text(text = "Next", color = Color.White, fontSize = 20.sp)
+                Text(text = stringResource(id = languageText.next), color = Color.White, fontSize = 20.sp)
             }
 
             Spacer(

@@ -101,6 +101,9 @@ fun HomeScreen(
         mutableStateOf(TransactionModel())
     }
 
+    val language by profileViewModel.profileLanguage.collectAsState()
+    val languageText = LanguageText(language = language)
+
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
 
         Column(
@@ -121,7 +124,8 @@ fun HomeScreen(
                     total_amount = totalAmount,
                     spentPercent = if (spentPercent <= 1f) spentPercent else 1f,
                     savingPercent = if (savingsPercent <= 1f) savingsPercent else 1f,
-                    currency = currency.last().toString()
+                    currency = currency.last().toString(),
+                    text = stringResource(id = languageText.totalBalance)
                 )
             }
 
@@ -153,7 +157,7 @@ fun HomeScreen(
                         )
                         Text(
                             modifier = Modifier.wrapContentSize(unbounded = true),
-                            text = stringResource(id = R.string.spent),
+                            text = stringResource(id = languageText.spent),
                             fontSize = MEDIUM_TEXT_SIZE,
                             fontFamily = fontInter,
                             fontWeight = FontWeight.Medium,
@@ -185,7 +189,7 @@ fun HomeScreen(
                         )
                         Text(
                             modifier = Modifier.wrapContentSize(unbounded = true),
-                            text = stringResource(id = R.string.saving),
+                            text = stringResource(id = languageText.saving),
                             fontSize = MEDIUM_TEXT_SIZE,
                             fontFamily = fontInter,
                             fontWeight = FontWeight.Medium,
@@ -208,7 +212,7 @@ fun HomeScreen(
                 // Add Payment
                 ActivityCardItems(
                     activityCardData = ActivityCardData(
-                        text = R.string.add_payment,
+                        text = languageText.addPayment,
                         icon = R.drawable.add_payment_icon,
                         bgColor = Dark,
                         cardColor = UIBlue,
@@ -226,7 +230,7 @@ fun HomeScreen(
                 // History
                 ActivityCardItems(
                     activityCardData = ActivityCardData(
-                        text = R.string.history,
+                        text = languageText.history,
                         icon = R.drawable.history_icon,
                         bgColor = DarkGreen,
                         cardColor = Green,
@@ -250,7 +254,8 @@ fun HomeScreen(
                 month_ = month,
                 year_ = year,
                 currency = currency,
-                navController = navController
+                navController = navController,
+                language = language
             )
         }
 
@@ -340,7 +345,8 @@ fun TopGraphMainScreen(
     radiusInner: Dp = 70.dp,
     strokeWidth: Dp = 12.dp,
     animDuration: Int = 1000,
-    currency: String
+    currency: String,
+    text: String
 ) {
 
     val lightGreenColor: MutableState<Color> =
@@ -384,7 +390,7 @@ fun TopGraphMainScreen(
                 color = textColorBW
             )
             Text(
-                text = stringResource(id = R.string.total_balance),
+                text = text,
                 fontSize = EXTRA_SMALL_TEXT_SIZE,
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium,

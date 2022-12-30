@@ -1,8 +1,11 @@
 package com.developerstring.financesapp.util
 
+import com.developerstring.financesapp.util.Constants.ACTIVITY_ROUTE
 import com.developerstring.financesapp.util.Constants.ADD_FUND
+import com.developerstring.financesapp.util.Constants.HOME_ROUTE
 import com.developerstring.financesapp.util.Constants.LATEST_FIRST
 import com.developerstring.financesapp.util.Constants.OLD_FIRST
+import com.developerstring.financesapp.util.Constants.PROFILE_ROUTE
 import com.developerstring.financesapp.util.Constants.SAVINGS
 import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.Constants.THIS_MONTH
@@ -302,4 +305,18 @@ fun String.convertStringToAlphabets(): String {
 
 fun String.convertStringToInt(): String {
     return this.filter { it in '0'..'9' }
+}
+
+fun String.bottomNavText(
+    language: String
+): Int {
+
+    val languageText = LanguageText(language = language)
+
+    return when (this) {
+        HOME_ROUTE -> languageText.homeBottomNav
+        ACTIVITY_ROUTE -> languageText.activityBottomNav
+        PROFILE_ROUTE -> languageText.profileBottomNav
+        else -> languageText.homeBottomNav
+    }
 }

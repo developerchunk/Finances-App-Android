@@ -10,23 +10,23 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
-import com.developerstring.financesapp.ui.components.ActivityBarChart
-import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.ui.components.BarChart
+import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.*
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
 import com.developerstring.financesapp.util.state.RoundTypeBarChart
@@ -38,7 +38,8 @@ fun MyActivityContent(
     month_: Int,
     year_: Int,
     currency: String,
-    navController: NavController
+    navController: NavController,
+    language: String
 ) {
 
     var day = listOf<Int>()
@@ -49,6 +50,8 @@ fun MyActivityContent(
     val interactionSource = remember {
         MutableInteractionSource()
     }
+
+    val languageText = LanguageText(language = language)
 
     lastWeekDateCalculator(
         day = day_,
@@ -102,7 +105,7 @@ fun MyActivityContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(id = R.string.my_activity),
+                    text = stringResource(id = languageText.myActivity),
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium,
                     fontSize = TEXT_FIELD_SIZE,
@@ -127,7 +130,7 @@ fun MyActivityContent(
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
                         modifier = Modifier.padding(start = 5.dp),
-                        text = stringResource(id = R.string.last_week),
+                        text = stringResource(id = languageText.lastWeek),
                         fontFamily = fontInter,
                         fontWeight = FontWeight.Medium,
                         fontSize = EXTRA_SMALL_TEXT_SIZE,
@@ -150,7 +153,7 @@ fun MyActivityContent(
                             color = textColorBW
                         )
                         Text(
-                            text = stringResource(id = R.string.spent_this_week),
+                            text = stringResource(id = languageText.spentThisWeek),
                             fontWeight = FontWeight.Normal,
                             fontSize = SMALL_TEXT_SIZE,
                             color = textColorBW

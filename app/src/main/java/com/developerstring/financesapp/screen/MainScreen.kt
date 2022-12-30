@@ -4,14 +4,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -27,6 +32,8 @@ import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.UIBlue
 import com.developerstring.financesapp.ui.theme.backgroundColorBW
 import com.developerstring.financesapp.ui.theme.textColorBW
+import com.developerstring.financesapp.util.Constants.LANGUAGE
+import com.developerstring.financesapp.util.bottomNavText
 
 @Composable
 fun MainScreen(
@@ -36,9 +43,11 @@ fun MainScreen(
 ) {
 
     val nav = rememberNavController()
+    val language by profileViewModel.profileLanguage.collectAsState()
+    LANGUAGE = language
 
     Scaffold(
-        bottomBar = { BottomNavBar(navController = nav) },
+        bottomBar = { BottomNavBar(navController = nav, language = language) },
         content = { padding ->
             Column(
                 modifier = Modifier
@@ -59,7 +68,9 @@ fun MainScreen(
 @Composable
 fun BottomNavBar(
     navController: NavHostController,
+    language: String
 ) {
+
     val screens = listOf(
         BottomNavRoute.Home,
         BottomNavRoute.Activity,
@@ -84,7 +95,8 @@ fun BottomNavBar(
                     AddItem(
                         screen = screen,
                         currentDestination = currentDestination,
-                        navController = navController
+                        navController = navController,
+                        language = language
                     )
                 }
             }
@@ -94,10 +106,11 @@ fun BottomNavBar(
 }
 
 @Composable
-fun RowScope.AddItem(
+fun AddItem(
     screen: BottomNavRoute,
     currentDestination: NavDestination?,
-    navController: NavHostController
+    navController: NavHostController,
+    language: String
 ) {
 
     val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
@@ -132,7 +145,7 @@ fun RowScope.AddItem(
                 tint = contentColor
             )
             Text(
-                text = screen.title,
+                text = stringResource(id = screen.route.bottomNavText(language = language)),
                 color = contentColor
             )
         }

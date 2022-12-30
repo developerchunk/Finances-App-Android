@@ -3,11 +3,6 @@ package com.developerstring.financesapp.util
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.developerstring.financesapp.R
-import com.developerstring.financesapp.ui.theme.Dark
-import com.developerstring.financesapp.ui.theme.DarkGreen
-import com.developerstring.financesapp.ui.theme.Green
-import com.developerstring.financesapp.ui.theme.UIBlue
-import com.developerstring.financesapp.util.dataclass.ActivityCardData
 
 object Constants {
 
@@ -78,6 +73,7 @@ object Constants {
     )
 
     const val OTHER = "Other"
+    const val TRANSACTION = "Transaction"
 
     // Category List
     val CATEGORIES = listOf(
@@ -181,28 +177,13 @@ object Constants {
     const val ACTIVITY_CHART_SCREEN_KEY = "activity_chart_screen"
     const val CATEGORY_CHART_SCREEN_KEY = "category_chart_screen"
 
-    val ActivityCardContent = listOf(
-        ActivityCardData(
-            text = R.string.activity_chart,
-            icon = R.drawable.chart_icon,
-            bgColor = Dark,
-            cardColor = UIBlue,
-            key = ACTIVITY_CHART_SCREEN_KEY
-        ),
-        ActivityCardData(
-            text = R.string.categories_chart,
-            icon = R.drawable.category_icon,
-            bgColor = DarkGreen,
-            cardColor = Green,
-            key = CATEGORY_CHART_SCREEN_KEY
-        ),
-    )
-
     const val ENGLISH = "English"
     const val MARATHI = "Marathi (मराठी)"
     const val HINDI = "Hindi (हिंदी)"
     const val TELUGU = "Telugu (తెలుగు)"
     const val GUJARATI = "Gujarati (ગુજરાતી)"
+
+    var LANGUAGE = ENGLISH
 
     val LANGUAGES = listOf(
         ENGLISH,
@@ -211,5 +192,10 @@ object Constants {
         TELUGU,
         GUJARATI,
     ).sorted()
+
+
+    const val HOME_ROUTE = "home"
+    const val ACTIVITY_ROUTE = "activity"
+    const val PROFILE_ROUTE = "profile"
 
 }

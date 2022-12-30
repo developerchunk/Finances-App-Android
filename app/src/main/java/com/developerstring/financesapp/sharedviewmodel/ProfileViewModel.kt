@@ -30,7 +30,7 @@ class ProfileViewModel @Inject constructor(
     private var currency by mutableStateOf("")
     private var monthlySpent by mutableStateOf(0)
     private var monthlySavings by mutableStateOf(0)
-    private var language by mutableStateOf("")
+    var language by mutableStateOf("")
 
     // onBoarding
     fun saveOnBoardingStatus(context: Context) {

@@ -15,7 +15,6 @@
     <string name="history">History</string>
     <string name="spent">Spent</string>
     <string name="saving">Saving</string>
-    <string name="payment">Payment</string>
     <string name="my_activity">My Activity</string>
     <string name="activity_chart">Activity\nChart</string>
     <string name="categories_chart">Categories Chart</string>
@@ -25,6 +24,7 @@
     <string name="select_language">Select a Language</string>
     <string name="select_language_desc">You want to continue with…</string>
     <string name="language">Language</string>
+    <string name="payment">Payment</string>
 
     <string name="less">Less</string>
     <string name="more">More</string>
@@ -45,7 +45,14 @@
     <string name="activity_bottom_nav">Activity</string>
     <string name="profile_bottom_nav">Profile</string>
 
+    <string name="month">Month</string>
+    <string name="quarter">Quarter</string>
+
     <string name="search">Search</string>
+    <string name="next">Next</string>
+    <string name="finish">Finish</string>
+
+
     <string name="search_icon">search icon</string>
     <string name="close_icon">close icon</string>
 
@@ -84,7 +91,7 @@
     <string name="history_marathi">पेमेंट\nइतिहास</string>
     <string name="total_balance_marathi">एकूण शिल्लक</string>
     <string name="spent_marathi">खर्च केला</string>
-    <string name="savings_marathi">बचत</string>
+    <string name="saving_marathi">बचत</string>
     <string name="my_activity_marathi">माझी क्रिया</string>
     <string name="last_week_marathi">शेवटचे ७ दिवस</string>
     <string name="spent_week_marathi">शेवटचे ७ दिवस</string>
@@ -125,6 +132,11 @@
 
     <string name="yes_marathi">हो</string>
     <string name="no_marathi">नाही</string>
+    <string name="next_marathi">पुढे</string>
+    <string name="finish_marathi">सुरू ठेवा</string>
+    <string name="payment_marathi">पेमेंट</string>
+    <string name="month_marathi">महिना</string>
+    <string name="quarter_marathi">3 महिने</string>
 
 
 </resources>

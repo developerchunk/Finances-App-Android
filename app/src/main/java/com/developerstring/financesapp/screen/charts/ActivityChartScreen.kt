@@ -18,7 +18,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.developerstring.financesapp.R
 import com.developerstring.financesapp.screen.navscreens.content.homescreen.MonthTransactions
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
@@ -27,15 +26,12 @@ import com.developerstring.financesapp.ui.components.LineChart
 import com.developerstring.financesapp.ui.components.SimpleChipButton
 import com.developerstring.financesapp.ui.components.TabLayoutChartScreen
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.*
 import com.developerstring.financesapp.util.Constants.ADD_TRANSACTION_TYPE
 import com.developerstring.financesapp.util.Constants.DARK_THEME_ENABLE
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
 import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.dataclass.LineChartData
-import com.developerstring.financesapp.util.keyToTransactionType
-import com.developerstring.financesapp.util.monthToName
-import com.developerstring.financesapp.util.simplifyAmount
-import com.developerstring.financesapp.util.simplifyAmountIndia
 import com.developerstring.financesapp.util.state.RoundTypeBarChart
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
@@ -53,8 +49,11 @@ fun ActivityChartScreen(
     val month = calender.get(Calendar.MONTH)+1
     val year = calender.get(Calendar.YEAR)
 
-    val monthChart = "Month"
-    val quarterChart = "Quarter"
+    val language by profileViewModel.profileLanguage.collectAsState()
+    val languageText = LanguageText(language)
+
+    val monthChart = languageText.month
+    val quarterChart = languageText.quarter
 
     val chartType by remember {
         mutableStateOf(listOf(monthChart, quarterChart))
@@ -64,6 +63,7 @@ fun ActivityChartScreen(
     }
 
     val currency = profileViewModel.profileCurrency.collectAsState().value.last().toString()
+
 
     Scaffold(topBar = {
         Surface(
@@ -98,7 +98,7 @@ fun ActivityChartScreen(
                     }
                     Text(
                         modifier = Modifier.padding(start = 10.dp),
-                        text = stringResource(id = R.string.my_activity),
+                        text = stringResource(id = languageText.myActivity),
                         fontFamily = fontOpenSans,
                         fontWeight = FontWeight.Medium,
                         fontSize = LARGE_TEXT_SIZE,

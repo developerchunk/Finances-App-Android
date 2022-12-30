@@ -13,12 +13,10 @@ import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.developerstring.financesapp.R
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
@@ -27,6 +25,7 @@ import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.SAVINGS
 import com.developerstring.financesapp.util.Constants.SPENT
+import com.developerstring.financesapp.util.LanguageText
 import com.developerstring.financesapp.util.TransactionAction
 
 @Composable
@@ -34,10 +33,8 @@ fun TransactionDetailsScreen(
     sharedViewModel: SharedViewModel,
     navController: NavController,
     profileViewModel: ProfileViewModel,
-    publicSharedViewModel: PublicSharedViewModel
+    publicSharedViewModel: PublicSharedViewModel,
 ) {
-
-    val context = LocalContext.current
 
     val id = sharedViewModel.id.value
 
@@ -49,6 +46,9 @@ fun TransactionDetailsScreen(
     }
 
     val scrollState = rememberScrollState()
+
+    val language by profileViewModel.profileLanguage.collectAsState()
+    val languageText = LanguageText(language = language)
 
 //    val oldTransactionModel by mutableStateOf<TransactionModel>(getTransactionModel!!)
 
@@ -93,7 +93,7 @@ fun TransactionDetailsScreen(
             }
 
             Text(
-                text = stringResource(id = R.string.payment),
+                text = stringResource(id = languageText.payment),
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium,
                 fontSize = EXTRA_LARGE_TEXT_SIZE,
