@@ -1,6 +1,5 @@
 package com.developerstring.financesapp.screen.navscreens
 
-import android.content.Context
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -19,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,10 +33,13 @@ import com.developerstring.financesapp.screen.navscreens.content.profilescreen.C
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.Constants.DARK_THEME
+import com.developerstring.financesapp.util.Constants.DARK_THEME_ENABLE
 import com.developerstring.financesapp.util.Constants.DARK_THEME_TEXT
 import com.developerstring.financesapp.util.Constants.LANGUAGE_TEXT
-import com.developerstring.financesapp.util.Constants.PROFILE_TEXT
+import com.developerstring.financesapp.util.Constants.LIGHT_THEME
 import com.developerstring.financesapp.util.Constants.PROFILE_CONTENT_LIST
+import com.developerstring.financesapp.util.Constants.PROFILE_TEXT
 
 @Composable
 fun ProfileScreen(
@@ -47,13 +48,10 @@ fun ProfileScreen(
     navController: NavController
 ) {
 
-    val context = LocalContext.current
-
     profileViewModel.getProfileDetails()
-    profileViewModel.getThemeSetting(context = context)
 
     val profileName by profileViewModel.profileName.collectAsState()
-    val darkThemeEnable by profileViewModel.themeSetting.collectAsState()
+    val darkThemeEnable by profileViewModel.profileTheme.collectAsState()
 
     val scrollState = rememberScrollState()
 
@@ -174,8 +172,11 @@ fun ProfileScreen(
                     title = it.key,
                     icon = it.value,
                     profileViewModel = profileViewModel,
-                    context = context,
-                    darkThemeEnable = darkThemeEnable
+                    darkThemeEnable = when(darkThemeEnable) {
+                        DARK_THEME -> true
+                        LIGHT_THEME -> false
+                        else -> true
+                    }
                 ) { title ->
                     when (title) {
                         PROFILE_TEXT -> {
@@ -198,7 +199,6 @@ fun ProfileOptionsContent(
     title: String,
     icon: Int,
     profileViewModel: ProfileViewModel,
-    context: Context,
     darkThemeEnable: Boolean,
     onClick: (String) -> Unit
 ) {
@@ -240,9 +240,12 @@ fun ProfileOptionsContent(
                     darkThemeEnable = darkThemeEnable
                 ) {
                     profileViewModel.saveThemeSetting(
-                        context = context,
-                        darkTheme = it
+                        theme = when(it) {
+                            true -> DARK_THEME
+                            false -> LIGHT_THEME
+                        }
                     )
+                    DARK_THEME_ENABLE = it
                 }
             } else {
                 Image(

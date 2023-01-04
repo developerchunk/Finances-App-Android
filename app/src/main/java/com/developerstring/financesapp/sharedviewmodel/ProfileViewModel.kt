@@ -54,19 +54,9 @@ class ProfileViewModel @Inject constructor(
     }
 
     // theme setting
-    fun saveThemeSetting(context: Context, darkTheme: Boolean) {
+    fun saveThemeSetting(theme: String) {
         viewModelScope.launch {
-            ProfileDataStore(context).saveThemeSetting(darkTheme)
-        }
-    }
-
-    private val _themeSetting = MutableStateFlow(true)
-    val themeSetting: StateFlow<Boolean> = _themeSetting
-    fun getThemeSetting(context: Context) {
-        viewModelScope.launch {
-            ProfileDataStore(context).getThemeSetting.collect {
-                _themeSetting.value = it!!
-            }
+            repository.updateProfileTheme(profileId = PROFILE_ID, theme = theme)
         }
     }
 
@@ -131,6 +121,7 @@ class ProfileViewModel @Inject constructor(
     private val _profileSpending = MutableStateFlow(0)
     private val _profileSavings = MutableStateFlow(0)
     private val _profileLanguage = MutableStateFlow("")
+    private val _profileTheme = MutableStateFlow("")
 
     val profileName: StateFlow<String> = _profileName
     val profileTotalAmount: StateFlow<Int> = _profileTotalAmount
@@ -138,6 +129,7 @@ class ProfileViewModel @Inject constructor(
     val profileSpending: StateFlow<Int> = _profileSpending
     val profileSavings: StateFlow<Int> = _profileSavings
     val profileLanguage: StateFlow<String> = _profileLanguage
+    val profileTheme: StateFlow<String> = _profileTheme
 
     fun getProfileDetails() {
 
@@ -154,6 +146,7 @@ class ProfileViewModel @Inject constructor(
             _profileSpending.value = _selectedProfile.value!!.month_spent
             _profileSavings.value = _selectedProfile.value!!.month_saving
             _profileLanguage.value = _selectedProfile.value!!.language
+            _profileTheme.value = _selectedProfile.value!!.theme
         }
     }
 

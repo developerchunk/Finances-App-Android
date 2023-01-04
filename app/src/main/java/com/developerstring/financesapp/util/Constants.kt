@@ -1,13 +1,15 @@
 package com.developerstring.financesapp.util
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.developerstring.financesapp.R
 
 object Constants {
 
     // theme settings
-    var DARK_THEME_ENABLE = true
+    var DARK_THEME_ENABLE by mutableStateOf(false)
 
     // Transaction Database
     const val TRANSACTION_DB_TABLE = "transaction_table"
