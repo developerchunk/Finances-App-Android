@@ -9,9 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,10 +24,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
+import com.developerstring.financesapp.roomdatabase.models.CategoryModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.Constants.SUB_CATEGORY
 import com.developerstring.financesapp.util.LanguageText
 import com.developerstring.financesapp.util.convertStringToInt
+import com.developerstring.financesapp.util.state.RequestState
 
 @Composable
 fun CreateProfileScreen2(
@@ -48,12 +49,14 @@ fun CreateProfileScreen2(
     val language = profileViewModel.language
     val languageText = LanguageText(language = language)
 
+    profileViewModel.getAllCategories()
+    val categories by profileViewModel.allCategories.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(backgroundColor)
-            .verticalScroll(state = scrollState)
-        ,
+            .verticalScroll(state = scrollState),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
 
@@ -199,6 +202,19 @@ fun CreateProfileScreen2(
                                 savings.value.toInt()
                             }
                         )
+
+
+                        if ((categories as RequestState.Success<List<CategoryModel>>).data.isEmpty()) {
+                            SUB_CATEGORY.forEach {
+                                profileViewModel.addCategory(
+                                    CategoryModel(
+                                        category = it.key,
+                                        subCategory = it.value.toString()
+                                    )
+                                )
+                            }
+                        }
+
                         navController.popBackStack()
                         navController.navigate(SetUpNavRoute.SplashSetUpNavRoute.route)
                     } else {
@@ -207,7 +223,11 @@ fun CreateProfileScreen2(
                     }
                 },
             ) {
-                Text(text = stringResource(id = languageText.finish), color = Color.White, fontSize = 20.sp)
+                Text(
+                    text = stringResource(id = languageText.finish),
+                    color = Color.White,
+                    fontSize = 20.sp
+                )
             }
 
             Spacer(

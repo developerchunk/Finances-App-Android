@@ -220,4 +220,28 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun addCategory(
+        categoryModel: CategoryModel
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repositoryCategory.addCategory(categoryModel = categoryModel)
+        }
+    }
+
+    fun updateCategory(
+        categoryModel: CategoryModel
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repositoryCategory.updateCategory(categoryModel = categoryModel)
+        }
+    }
+
+    fun deleteCategory(
+        categoryModel: CategoryModel
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repositoryCategory.deleteCategory(categoryModel = categoryModel)
+        }
+    }
+
 }

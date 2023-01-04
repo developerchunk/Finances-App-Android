@@ -11,7 +11,7 @@ class CategoryRepository @Inject constructor(private val categoryDao: CategoryDa
 
     val getAllCategories: Flow<List<CategoryModel>> = categoryDao.getAllCategories()
 
-    suspend fun addProfile(categoryModel: CategoryModel) {
+    suspend fun addCategory(categoryModel: CategoryModel) {
         categoryDao.addCategory(categoryModel = categoryModel)
     }
 
