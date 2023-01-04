@@ -203,21 +203,23 @@ class ProfileViewModel @Inject constructor(
 
     // Category
 
-    private var _allCategories =
+    private var _allCategory =
         MutableStateFlow<RequestState<List<CategoryModel>>>(RequestState.Idle)
-    val allCategories: StateFlow<RequestState<List<CategoryModel>>> = _allCategories
+    val allCategories: StateFlow<RequestState<List<CategoryModel>>> =
+        _allCategory
 
     fun getAllCategories() {
-        _allCategories.value = RequestState.Loading
+        _allCategory.value = RequestState.Loading
         try {
             viewModelScope.launch {
                 repositoryCategory.getAllCategories.collect {
-                    _allCategories.value = RequestState.Success(it)
+                    _allCategory.value = RequestState.Success(it)
                 }
             }
         } catch (e: Exception) {
-            _allCategories.value = RequestState.Error(e)
+            _allCategory.value = RequestState.Error(e)
         }
+
     }
 
     fun addCategory(

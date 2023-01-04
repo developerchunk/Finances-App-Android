@@ -27,7 +27,7 @@ import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
 import com.developerstring.financesapp.roomdatabase.models.CategoryModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
-import com.developerstring.financesapp.util.Constants.SUB_CATEGORY
+import com.developerstring.financesapp.util.Constants
 import com.developerstring.financesapp.util.LanguageText
 import com.developerstring.financesapp.util.convertStringToInt
 import com.developerstring.financesapp.util.state.RequestState
@@ -203,17 +203,10 @@ fun CreateProfileScreen2(
                             }
                         )
 
-
-                        if ((categories as RequestState.Success<List<CategoryModel>>).data.isEmpty()) {
-                            SUB_CATEGORY.forEach {
-                                profileViewModel.addCategory(
-                                    CategoryModel(
-                                        category = it.key,
-                                        subCategory = it.value.toString()
-                                    )
-                                )
-                            }
-                        }
+                        addCategoriesToDB(
+                            categories = categories,
+                            profileViewModel = profileViewModel
+                        )
 
                         navController.popBackStack()
                         navController.navigate(SetUpNavRoute.SplashSetUpNavRoute.route)
@@ -238,6 +231,27 @@ fun CreateProfileScreen2(
 
         }
 
+    }
+
+}
+
+fun addCategoriesToDB(
+    categories: RequestState<List<CategoryModel>>,
+    profileViewModel: ProfileViewModel
+) {
+
+    val separator = ","
+
+    if (categories is RequestState.Success) {
+        if (categories.data.isEmpty())
+            Constants.SUB_CATEGORY.forEach {
+                profileViewModel.addCategory(
+                    CategoryModel(
+                        category = it.key,
+                        subCategory = it.value.joinToString(separator)
+                    )
+                )
+            }
     }
 
 }

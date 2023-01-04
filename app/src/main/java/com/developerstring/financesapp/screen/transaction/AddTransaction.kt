@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
+import com.developerstring.financesapp.roomdatabase.models.CategoryModel
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
@@ -47,16 +48,15 @@ import com.developerstring.financesapp.ui.components.CustomChip
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.ADD_TRANSACTION_TYPE
-import com.developerstring.financesapp.util.Constants.CATEGORIES
 import com.developerstring.financesapp.util.Constants.OTHER
 import com.developerstring.financesapp.util.Constants.SPENT
-import com.developerstring.financesapp.util.Constants.SUB_CATEGORY
 import com.developerstring.financesapp.util.Constants.TRANSACTION
 import com.developerstring.financesapp.util.addZeroToStart
 import com.developerstring.financesapp.util.convertStringToAlphabets
 import com.developerstring.financesapp.util.convertStringToInt
 import com.developerstring.financesapp.util.mapListToList
 import com.developerstring.financesapp.util.state.MessageBarState
+import com.developerstring.financesapp.util.state.RequestState
 import com.google.accompanist.flowlayout.FlowRow
 import java.text.SimpleDateFormat
 import java.util.*
@@ -71,7 +71,10 @@ fun AddTransaction(
 
     val shape: Shape = RoundedCornerShape(10.dp)
 
+    profileViewModel.getAllCategories()
+
     val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
+    val categoryModel by profileViewModel.allCategories.collectAsState()
 
     val scrollState = rememberScrollState()
 
@@ -138,21 +141,24 @@ fun AddTransaction(
                 .padding(start = 10.dp)
                 .fillMaxSize()
         ) {
-            TransactionContent(
-                modifier = Modifier,
-                transactionModel = TransactionModel(),
-                publicSharedViewModel = publicSharedViewModel
-            ) {
-                sharedViewModel.addTransaction(transactionModel = it)
-                profileViewModel.saveTotalAmount(
-                    amount = when (it.transaction_type) {
-                        SPENT -> (totalAmount - it.amount)
-                        ADD_FUND -> (totalAmount + it.amount)
-                        else -> totalAmount
-                    }
-                )
-                navController.popBackStack()
-            }
+
+                TransactionContent(
+                    modifier = Modifier,
+                    categoryModel = categoryModel,
+                    transactionModel = TransactionModel(),
+                    publicSharedViewModel = publicSharedViewModel
+                ) {
+                    sharedViewModel.addTransaction(transactionModel = it)
+                    profileViewModel.saveTotalAmount(
+                        amount = when (it.transaction_type) {
+                            SPENT -> (totalAmount - it.amount)
+                            ADD_FUND -> (totalAmount + it.amount)
+                            else -> totalAmount
+                        }
+                    )
+                    navController.popBackStack()
+                }
+
         }
     }
 
@@ -162,6 +168,7 @@ fun AddTransaction(
 @Composable
 fun TransactionContent(
     modifier: Modifier,
+    categoryModel: RequestState<List<CategoryModel>>,
     publicSharedViewModel: PublicSharedViewModel,
     transactionModel: TransactionModel,
     onSaveClicked: (TransactionModel) -> Unit,
@@ -181,7 +188,6 @@ fun TransactionContent(
     var subCategory by remember { mutableStateOf(transactionModel.subCategory) }
     var otherSubCategory by remember { mutableStateOf(transactionModel.subCategoryOther) }
     val otherSubCategories = mutableListOf(OTHER)
-    otherSubCategories.addAll(SUB_CATEGORY.mapListToList())
     var extraInfo by remember { mutableStateOf(transactionModel.info) }
     var place by remember { mutableStateOf(transactionModel.place) }
     var transactionType by remember {
@@ -208,9 +214,15 @@ fun TransactionContent(
     // Chip Selection
     val chipList = ADD_TRANSACTION_TYPE
 
-    val categories = CATEGORIES
-    val subCategories = SUB_CATEGORY
-
+    val categories = mutableListOf<String>()
+    val subCategories = mutableMapOf<String, List<String>>()
+    if (categoryModel is RequestState.Success) {
+        categoryModel.data.forEachIndexed { index, value ->
+            categories.add(index = index, element = value.category)
+            subCategories[value.category] = value.subCategory.split(",").toList()
+        }
+        otherSubCategories.addAll(subCategories.mapListToList())
+    }
 
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -873,7 +885,7 @@ fun TransactionContent(
                                         )
                                     )
 
-                                    if (transactionModel == TransactionModel()){
+                                    if (transactionModel == TransactionModel()) {
                                         publicSharedViewModel.messageBarState.value =
                                             MessageBarState.OPENED
                                     }

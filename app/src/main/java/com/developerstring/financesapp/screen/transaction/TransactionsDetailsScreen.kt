@@ -41,6 +41,8 @@ fun TransactionDetailsScreen(
     val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
 
     val getTransactionModel by sharedViewModel.selectedTransaction.collectAsState()
+    val categoryModel by profileViewModel.allCategories.collectAsState()
+
     var transactionModel by remember {
         mutableStateOf(TransactionModel())
     }
@@ -130,6 +132,7 @@ fun TransactionDetailsScreen(
             if (getTransactionModel!=null) {
                 TransactionContent(
                     modifier = Modifier,
+                    categoryModel = categoryModel,
                     transactionModel = getTransactionModel!!,
                     publicSharedViewModel = publicSharedViewModel,
                     onSaveClicked = {
