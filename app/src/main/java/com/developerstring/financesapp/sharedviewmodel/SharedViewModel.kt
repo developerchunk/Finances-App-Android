@@ -1,17 +1,17 @@
 package com.developerstring.financesapp.sharedviewmodel
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
-import com.developerstring.financesapp.roomdatabase.repository.ProfileRepository
 import com.developerstring.financesapp.roomdatabase.repository.TransactionRepository
 import com.developerstring.financesapp.util.Constants.SAVINGS
 import com.developerstring.financesapp.util.Constants.SPENT
+import com.developerstring.financesapp.util.TransactionAction
 import com.developerstring.financesapp.util.state.FilterTransactionState
 import com.developerstring.financesapp.util.state.RequestState
 import com.developerstring.financesapp.util.state.SearchBarState
-import com.developerstring.financesapp.util.TransactionAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -194,12 +194,16 @@ class SharedViewModel @Inject constructor(
     }
 
     private var _lastTransactionID = MutableStateFlow(0)
-    val lastTransactionID: StateFlow<Int> = _lastTransactionID
+    val lastTransactionID: StateFlow<Int?> = _lastTransactionID
     fun getLastTransactionID() {
-        viewModelScope.launch {
-            repository.getLastTransaction().collect { id_ ->
-                _lastTransactionID.value = id_
+        try {
+            viewModelScope.launch {
+                repository.getLastTransaction().collect { id_ ->
+                    _lastTransactionID.value = id_?:0
+                }
             }
+        } catch (_:Exception) {
+
         }
     }
 

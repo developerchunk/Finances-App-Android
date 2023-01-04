@@ -33,4 +33,8 @@ object TransactionDatabaseModule {
     @Provides
     fun provideProfileDao(database: TransactionDatabase) = database.profileDao()
 
+    @Singleton
+    @Provides
+    fun provideCategoryDao(database: TransactionDatabase) = database.categoryDao()
+
 }

@@ -539,7 +539,6 @@ fun EditProfileScreen(
                         )
                     }
 
-
                 }
 
             }

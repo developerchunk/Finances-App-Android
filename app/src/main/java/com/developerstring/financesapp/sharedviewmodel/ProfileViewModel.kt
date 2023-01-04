@@ -8,11 +8,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.developerstring.financesapp.data.onboarding.OnBoardingStatus
 import com.developerstring.financesapp.data.profile.ProfileDataStore
+import com.developerstring.financesapp.roomdatabase.models.CategoryModel
 import com.developerstring.financesapp.roomdatabase.models.ProfileModel
+import com.developerstring.financesapp.roomdatabase.repository.CategoryRepository
 import com.developerstring.financesapp.roomdatabase.repository.ProfileRepository
 import com.developerstring.financesapp.util.Constants.DARK_THEME
 import com.developerstring.financesapp.util.Constants.PROFILE_ID
 import com.developerstring.financesapp.util.Constants.YES
+import com.developerstring.financesapp.util.state.RequestState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +25,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val repository: ProfileRepository
+    private val repository: ProfileRepository,
+    private val repositoryCategory: CategoryRepository
 ) : ViewModel() {
 
     private var name by mutableStateOf("")
@@ -196,4 +200,24 @@ class ProfileViewModel @Inject constructor(
             repository.updateProfile(profileModel = profileModel)
         }
     }
+
+    // Category
+
+    private var _allCategories =
+        MutableStateFlow<RequestState<List<CategoryModel>>>(RequestState.Idle)
+    val allCategories: StateFlow<RequestState<List<CategoryModel>>> = _allCategories
+
+    fun getAllCategories() {
+        _allCategories.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                repositoryCategory.getAllCategories.collect {
+                    _allCategories.value = RequestState.Success(it)
+                }
+            }
+        } catch (e: Exception) {
+            _allCategories.value = RequestState.Error(e)
+        }
+    }
+
 }

@@ -266,7 +266,7 @@ fun HomeScreen(
                 val lastTransactionID = sharedViewModel.lastTransactionID.collectAsState()
 
                 MessageBarContent(
-                    id = lastTransactionID.value,
+                    id = lastTransactionID.value!!,
                     publicSharedViewModel = publicSharedViewModel,
                     sharedViewModel = sharedViewModel
                 ) {

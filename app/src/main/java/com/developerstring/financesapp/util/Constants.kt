@@ -17,6 +17,9 @@ object Constants {
     const val PROFIlE_DB_TABLE = "profile_table"
     const val PROFILE_ID = 1
 
+    // Category Database Table
+    const val CATEGORY_DB_TABLE = "category_table"
+
     // OnBoarding
     const val ON_BOARDING_STATUS = "onBoardingStatus"
     const val ON_BOARDING_STATUS_KEY = "on_boarding_status"
