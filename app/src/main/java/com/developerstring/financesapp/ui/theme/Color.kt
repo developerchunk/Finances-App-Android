@@ -82,3 +82,11 @@ val lightGreenGraphColor: Color
 
 val lightBlueGraphColor: Color
     get() = if (!DARK_THEME_ENABLE) LightBlue else LightBlue.copy(alpha = 0.3f)
+
+val colorList = listOf(
+    UIBlue,
+    LightGreen,
+    Yellow,
+    Purple500,
+    Orange
+)

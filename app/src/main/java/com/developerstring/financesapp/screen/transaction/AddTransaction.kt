@@ -148,6 +148,7 @@ fun AddTransaction(
                     transactionModel = TransactionModel(),
                     publicSharedViewModel = publicSharedViewModel
                 ) {
+                    profileViewModel.getProfileAmount()
                     sharedViewModel.addTransaction(transactionModel = it)
                     profileViewModel.saveTotalAmount(
                         amount = when (it.transaction_type) {

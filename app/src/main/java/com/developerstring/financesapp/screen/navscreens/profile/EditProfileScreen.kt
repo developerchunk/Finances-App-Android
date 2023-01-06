@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
+import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.roomdatabase.models.ProfileModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
@@ -446,7 +447,7 @@ fun EditProfileScreen(
                             textFieldSize = coordinates.size.toSize()
                         }
                         .clickable {
-
+                                   navController.navigate(route = NavRoute.EditCategoryScreen.route)
                         },
                     shape = RoundedCornerShape(15.dp),
                     backgroundColor = backgroundColor
@@ -476,68 +477,6 @@ fun EditProfileScreen(
                         )
                     }
 
-
-                }
-
-            }
-
-            // group of Sub Category textField
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    modifier = Modifier
-                        .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.sub_category_text_field),
-                    fontSize = TEXT_FIELD_SIZE,
-                    color = textColorBLG,
-                    fontFamily = fontInter,
-                    fontWeight = FontWeight.Medium
-                )
-
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 55.dp)
-                        .border(
-                            width = 1.8.dp,
-                            color = textColorBLG,
-                            shape = RoundedCornerShape(15.dp)
-                        )
-                        .onGloballyPositioned { coordinates ->
-                            textFieldSize = coordinates.size.toSize()
-                        }
-                        .clickable {
-
-                        },
-                    shape = RoundedCornerShape(15.dp),
-                    backgroundColor = backgroundColor
-                ) {
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(0.8f).padding(start = 20.dp),
-                            text = "Edit Sub Category List",
-                            fontSize = TEXT_FIELD_SIZE,
-                            color = textColorBW,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
-                        )
-
-                        Icon(
-                            imageVector = Icons.Rounded.Edit,
-                            contentDescription = "currency_icon",
-                            Modifier
-                                .padding(end = 15.dp)
-                                .size(24.dp),
-                            tint = textColorBW
-                        )
-                    }
 
                 }
 

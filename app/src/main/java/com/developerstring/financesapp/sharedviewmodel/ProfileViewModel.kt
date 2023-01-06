@@ -150,6 +150,14 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun getProfileAmount() {
+        viewModelScope.launch {
+            repository.getProfileAmount(profileId = PROFILE_ID).collect { amount ->
+                _profileTotalAmount.value = amount?:0
+            }
+        }
+    }
+
     // save total amount
     fun saveTotalAmount(
         amount: Int
@@ -206,7 +214,7 @@ class ProfileViewModel @Inject constructor(
         try {
             viewModelScope.launch {
                 repositoryCategory.getAllCategories.collect {
-                    _allCategory.value = RequestState.Success(it)
+                    _allCategory.value = RequestState.Success(it.sortedBy { categoryModel -> categoryModel.category })
                 }
             }
         } catch (e: Exception) {

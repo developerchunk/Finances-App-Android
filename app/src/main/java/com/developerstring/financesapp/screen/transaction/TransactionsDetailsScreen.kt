@@ -52,7 +52,6 @@ fun TransactionDetailsScreen(
     val language by profileViewModel.profileLanguage.collectAsState()
     val languageText = LanguageText(language = language)
 
-//    val oldTransactionModel by mutableStateOf<TransactionModel>(getTransactionModel!!)
 
     var oldAmount by mutableStateOf(0)
     try {
@@ -153,6 +152,7 @@ fun TransactionDetailsScreen(
                             subCategoryOther = it.subCategoryOther,
                         )
                         sharedViewModel.updateTransaction(transactionModel = transactionModel)
+                        profileViewModel.getProfileAmount()
                         profileViewModel.saveTotalAmount(
                             amount = settleTransactionAmount(
                                 totalAmount = totalAmount,
