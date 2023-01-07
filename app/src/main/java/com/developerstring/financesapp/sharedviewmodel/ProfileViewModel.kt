@@ -1,6 +1,7 @@
 package com.developerstring.financesapp.sharedviewmodel
 
 import android.content.Context
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -153,7 +154,7 @@ class ProfileViewModel @Inject constructor(
     fun getProfileAmount() {
         viewModelScope.launch {
             repository.getProfileAmount(profileId = PROFILE_ID).collect { amount ->
-                _profileTotalAmount.value = amount?:0
+                _profileTotalAmount.value = amount ?: 0
             }
         }
     }
@@ -214,11 +215,29 @@ class ProfileViewModel @Inject constructor(
         try {
             viewModelScope.launch {
                 repositoryCategory.getAllCategories.collect {
-                    _allCategory.value = RequestState.Success(it.sortedBy { categoryModel -> categoryModel.category })
+                    _allCategory.value =
+                        RequestState.Success(it.sortedBy { categoryModel -> categoryModel.category })
                 }
             }
         } catch (e: Exception) {
             _allCategory.value = RequestState.Error(e)
+        }
+
+    }
+
+    // Selected Category
+    var categoryId: MutableState<Int> = mutableStateOf(0)
+    private var _selectedCategory = MutableStateFlow<CategoryModel?>(null)
+    val selectedCategories: StateFlow<CategoryModel?> = _selectedCategory
+
+    fun getSelectedCategories() {
+        try {
+            viewModelScope.launch {
+                repositoryCategory.getSelectedCategory(id = categoryId.value).collect {
+                    _selectedCategory.value = it
+                }
+            }
+        } catch (_: Exception) {
         }
 
     }
@@ -236,6 +255,24 @@ class ProfileViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             repositoryCategory.updateCategory(categoryModel = categoryModel)
+        }
+    }
+
+    fun updateCategoryName(
+        id: Int,
+        category: String
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repositoryCategory.updateCategoryName(id = id, category = category)
+        }
+    }
+
+    fun updateSubCategoryName(
+        id: Int,
+        subCategory: String
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repositoryCategory.updateSubCategoryName(id = id, subCategory = subCategory)
         }
     }
 

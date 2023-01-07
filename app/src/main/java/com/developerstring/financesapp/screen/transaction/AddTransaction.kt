@@ -49,6 +49,7 @@ import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.ADD_TRANSACTION_TYPE
 import com.developerstring.financesapp.util.Constants.OTHER
+import com.developerstring.financesapp.util.Constants.SEPARATOR_LIST
 import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.Constants.TRANSACTION
 import com.developerstring.financesapp.util.addZeroToStart
@@ -220,7 +221,7 @@ fun TransactionContent(
     if (categoryModel is RequestState.Success) {
         categoryModel.data.forEachIndexed { index, value ->
             categories.add(index = index, element = value.category)
-            subCategories[value.category] = value.subCategory.split(",").toList()
+            subCategories[value.category] = value.subCategory.split(SEPARATOR_LIST).toList()
         }
         otherSubCategories.addAll(subCategories.mapListToList())
     }

@@ -25,7 +25,9 @@
     <string name="select_language_desc">You want to continue with…</string>
     <string name="language">Language</string>
     <string name="payment">Payment</string>
-    <string name="categories_edit">Edit Categories</string>
+    <string name="category_edit">Edit Category</string>
+    <string name="categories">Categories</string>
+    <string name="enter_subcategory">Enter Sub Category</string>
 
     <string name="less">Less</string>
     <string name="more">More</string>

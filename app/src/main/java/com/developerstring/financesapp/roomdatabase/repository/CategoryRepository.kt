@@ -11,12 +11,24 @@ class CategoryRepository @Inject constructor(private val categoryDao: CategoryDa
 
     val getAllCategories: Flow<List<CategoryModel>> = categoryDao.getAllCategories()
 
+    fun getSelectedCategory(id: Int): Flow<CategoryModel?> {
+        return categoryDao.getSelectedCategory(id)
+    }
+
     suspend fun addCategory(categoryModel: CategoryModel) {
         categoryDao.addCategory(categoryModel = categoryModel)
     }
 
     suspend fun updateCategory(categoryModel: CategoryModel) {
         categoryDao.updateCategory(categoryModel = categoryModel)
+    }
+
+    suspend fun updateCategoryName(id: Int, category: String) {
+        categoryDao.updateCategoryName(id = id,category = category)
+    }
+
+    suspend fun updateSubCategoryName(id: Int, subCategory: String) {
+        categoryDao.updateSubCategoryName(id = id, subCategory = subCategory)
     }
 
     suspend fun deleteCategory(categoryModel: CategoryModel) {

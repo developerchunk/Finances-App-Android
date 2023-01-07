@@ -8,6 +8,9 @@ import com.developerstring.financesapp.R
 
 object Constants {
 
+    // String Joining in List
+    const val SEPARATOR_LIST = ","
+
     // theme settings
     var DARK_THEME_ENABLE by mutableStateOf(false)
 

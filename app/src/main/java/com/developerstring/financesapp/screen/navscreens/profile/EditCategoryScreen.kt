@@ -1,5 +1,8 @@
 package com.developerstring.financesapp.screen.navscreens.profile
 
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -10,31 +13,30 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
+import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.roomdatabase.models.CategoryModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.state.RequestState
+import kotlinx.coroutines.delay
 
 @Composable
 fun EditCategoryScreen(
     profileViewModel: ProfileViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
 
     profileViewModel.getAllCategories()
@@ -56,14 +58,14 @@ fun EditCategoryScreen(
             }) {
                 Icon(
                     modifier = Modifier.size(28.dp),
-                    imageVector = Icons.Rounded.Close,
+                    imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = "close",
                     tint = textColorBW
                 )
             }
 
             Text(
-                text = stringResource(id = R.string.categories_edit),
+                text = stringResource(id = R.string.categories),
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium,
                 fontSize = EXTRA_LARGE_TEXT_SIZE,
@@ -76,8 +78,8 @@ fun EditCategoryScreen(
             }) {
                 Icon(
                     modifier = Modifier.size(28.dp),
-                    imageVector = Icons.Rounded.Check,
-                    contentDescription = "check",
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription = "add",
                     tint = textColorBW
                 )
             }
@@ -85,19 +87,28 @@ fun EditCategoryScreen(
         }
 
     }) {
-        Column(modifier = Modifier.fillMaxSize().background(backgroundColor)) {
-            CategoryScreenContent(categoryModel = categoryModel)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor)
+        ) {
+            CategoryScreenContent(
+                categoryModel = categoryModel,
+                profileViewModel = profileViewModel,
+                navController = navController
+            )
 
         }
 
     }
 
-
 }
 
 @Composable
 fun CategoryScreenContent(
-    categoryModel: RequestState<List<CategoryModel>>
+    categoryModel: RequestState<List<CategoryModel>>,
+    profileViewModel: ProfileViewModel,
+    navController: NavController
 ) {
 
     val scrollState = rememberScrollState()
@@ -108,13 +119,21 @@ fun CategoryScreenContent(
 
     Column(
         modifier = Modifier
-            .padding(top = 10.dp)
+            .padding(top = 30.dp)
             .fillMaxSize()
             .verticalScroll(scrollState)
     ) {
         if (categoryModel is RequestState.Success) {
             categoryModel.data.forEach { value ->
-                CategoryItem(categoryModel = value, interactionSource = interactionSource)
+                CategoryItem(
+                    categoryModel = value,
+                    interactionSource = interactionSource,
+                    onClick = { id ->
+                        profileViewModel.categoryId.value = id
+                        profileViewModel.getSelectedCategories()
+                        navController.navigate(route = NavRoute.EditCategoryDetailScreen.route)
+                    }
+                )
             }
         }
     }
@@ -123,21 +142,46 @@ fun CategoryScreenContent(
 @Composable
 fun CategoryItem(
     categoryModel: CategoryModel,
-    interactionSource: MutableInteractionSource
+    interactionSource: MutableInteractionSource,
+    onClick: (Int) -> Unit
 ) {
+
+    var animated by remember {
+        mutableStateOf(false)
+    }
+
+    val color = remember {
+        Animatable(colorList.random())
+    }
+    val color2 = remember {
+        Animatable(colorList.random())
+    }
+
+    val barHeight =
+        animateDpAsState(
+            targetValue = if (animated) 60.dp else 0.dp,
+            animationSpec = tween(durationMillis = 2000)
+        )
+
+    LaunchedEffect(key1 = true) {
+        delay(300)
+        animated = true
+        color.animateTo(colorList.random(), animationSpec = tween(durationMillis = 2000, delayMillis = 0))
+    }
 
     Surface(
         modifier = Modifier
-            .padding(vertical = 15.dp, horizontal = 25.dp)
+            .padding(start = 25.dp, end = 25.dp, bottom = 25.dp, top = 5.dp)
             .fillMaxWidth()
             .clickable(
                 indication = null,
                 interactionSource = interactionSource,
                 onClick = {
-
+                    onClick(categoryModel.id)
                 }),
         elevation = 5.dp,
-        color = backgroundColor
+        color = Color.Transparent,
+        shape = RoundedCornerShape(20.dp)
     ) {
 
         Row(
@@ -154,10 +198,20 @@ fun CategoryItem(
                 modifier = Modifier
                     .padding(start = 20.dp, top = 10.dp, bottom = 10.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .width(15.dp)
                     .height(60.dp)
-                    .background(colorList.random())
-            )
+                    .width(15.dp)
+                    .background(color2.value)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .fillMaxWidth()
+                        .height(barHeight.value)
+                        .background(color.value)
+                )
+            }
+
+
 
             Row(
                 modifier = Modifier
@@ -192,44 +246,6 @@ fun CategoryItem(
 
         }
 
-    }
-
-}
-
-@Composable
-fun SubCategoryItem(
-    subCategory: String
-) {
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
-    ) {
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(1.dp))
-                .height(40.dp)
-                .width(2.dp)
-                .background(colorGray)
-        )
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(1.dp))
-                .height(2.dp)
-                .width(15.dp)
-                .background(colorGray)
-        )
-        Text(
-            modifier = Modifier
-                .padding(start = 15.dp),
-            text = subCategory,
-            fontSize = MEDIUM_TEXT_SIZE,
-            fontFamily = fontOpenSans,
-            color = textColorBW,
-            maxLines = 1,
-            textAlign = TextAlign.Center
-        )
     }
 
 }

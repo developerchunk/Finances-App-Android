@@ -300,11 +300,12 @@ fun String.textToCategorySort(): CategorySortState {
 }
 
 fun String.convertStringToAlphabets(): String {
-    return this.filter { it in 'A'..'Z' || it in 'a'..'z' || it == ' '|| it == ','|| it == '.' || it in '0'..'9' }.take(25)
+    return this.filterNot { it == '<' || it == '>' || it == '/' || it == '#' || it == '\'' || it == '"' || it == '\\' || it == '{' || it == '}' || it == '[' || it == ']' || it == '!' || it == '%' || it == '$' || it == '?' || it == '.' }
+        .take(35)
 }
 
 fun String.convertStringToInt(): String {
-    return this.filter { it in '0'..'9'}.take(10)
+    return this.filter { it in '0'..'9' }.take(10)
 }
 
 fun String.bottomNavText(
