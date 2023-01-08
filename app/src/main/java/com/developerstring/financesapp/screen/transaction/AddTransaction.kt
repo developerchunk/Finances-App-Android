@@ -15,9 +15,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
+import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.roomdatabase.models.CategoryModel
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
@@ -143,23 +146,24 @@ fun AddTransaction(
                 .fillMaxSize()
         ) {
 
-                TransactionContent(
-                    modifier = Modifier,
-                    categoryModel = categoryModel,
-                    transactionModel = TransactionModel(),
-                    publicSharedViewModel = publicSharedViewModel
-                ) {
-                    profileViewModel.getProfileAmount()
-                    sharedViewModel.addTransaction(transactionModel = it)
-                    profileViewModel.saveTotalAmount(
-                        amount = when (it.transaction_type) {
-                            SPENT -> (totalAmount - it.amount)
-                            ADD_FUND -> (totalAmount + it.amount)
-                            else -> totalAmount
-                        }
-                    )
-                    navController.popBackStack()
-                }
+            TransactionContent(
+                modifier = Modifier,
+                categoryModel = categoryModel,
+                transactionModel = TransactionModel(),
+                publicSharedViewModel = publicSharedViewModel,
+                navController = navController
+            ) {
+                profileViewModel.getProfileAmount()
+                sharedViewModel.addTransaction(transactionModel = it)
+                profileViewModel.saveTotalAmount(
+                    amount = when (it.transaction_type) {
+                        SPENT -> (totalAmount - it.amount)
+                        ADD_FUND -> (totalAmount + it.amount)
+                        else -> totalAmount
+                    }
+                )
+                navController.popBackStack()
+            }
 
         }
     }
@@ -173,10 +177,11 @@ fun TransactionContent(
     categoryModel: RequestState<List<CategoryModel>>,
     publicSharedViewModel: PublicSharedViewModel,
     transactionModel: TransactionModel,
-    onSaveClicked: (TransactionModel) -> Unit,
+    navController: NavController,
+    onSaveClicked: (TransactionModel) -> Unit
 ) {
 
-    var amount by remember {
+    var amount by rememberSaveable {
         mutableStateOf(
             if (transactionModel.amount == 0) {
                 ""
@@ -185,14 +190,14 @@ fun TransactionContent(
             }
         )
     }
-    var category by remember { mutableStateOf(transactionModel.category) }
-    var otherCategory by remember { mutableStateOf(transactionModel.categoryOther) }
-    var subCategory by remember { mutableStateOf(transactionModel.subCategory) }
-    var otherSubCategory by remember { mutableStateOf(transactionModel.subCategoryOther) }
+    var category by rememberSaveable { mutableStateOf(transactionModel.category) }
+    var otherCategory by rememberSaveable { mutableStateOf(transactionModel.categoryOther) }
+    var subCategory by rememberSaveable { mutableStateOf(transactionModel.subCategory) }
+    var otherSubCategory by rememberSaveable { mutableStateOf(transactionModel.subCategoryOther) }
     val otherSubCategories = mutableListOf(OTHER)
-    var extraInfo by remember { mutableStateOf(transactionModel.info) }
-    var place by remember { mutableStateOf(transactionModel.place) }
-    var transactionType by remember {
+    var extraInfo by rememberSaveable { mutableStateOf(transactionModel.info) }
+    var place by rememberSaveable { mutableStateOf(transactionModel.place) }
+    var transactionType by rememberSaveable {
         mutableStateOf(
             if (transactionModel.transaction_type == "") {
                 SPENT
@@ -201,26 +206,26 @@ fun TransactionContent(
             }
         )
     }
-    var date by remember { mutableStateOf("") }
-    var time by remember { mutableStateOf("") }
-    var dateClicked by remember { mutableStateOf(false) }
+    var date by rememberSaveable { mutableStateOf("") }
+    var time by rememberSaveable { mutableStateOf("") }
+    var dateClicked by rememberSaveable { mutableStateOf(false) }
 
     val context = LocalContext.current
 
     val heightTextFields by remember { mutableStateOf(55.dp) }
 
     val interactionSource = remember { MutableInteractionSource() }
-    var categoriesExpanded by remember { mutableStateOf(false) }
-    var subCategoriesExpanded by remember { mutableStateOf(false) }
+    var categoriesExpanded by rememberSaveable { mutableStateOf(false) }
+    var subCategoriesExpanded by rememberSaveable { mutableStateOf(false) }
 
     // Chip Selection
     val chipList = ADD_TRANSACTION_TYPE
 
-    val categories = mutableListOf<String>()
+    val categories = mutableMapOf<Int, String>()
     val subCategories = mutableMapOf<String, List<String>>()
     if (categoryModel is RequestState.Success) {
-        categoryModel.data.forEachIndexed { index, value ->
-            categories.add(index = index, element = value.category)
+        categoryModel.data.forEach { value ->
+            categories[value.id] = value.category
             subCategories[value.category] = value.subCategory.split(SEPARATOR_LIST).toList()
         }
         otherSubCategories.addAll(subCategories.mapListToList())
@@ -229,24 +234,26 @@ fun TransactionContent(
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
     // for year, month, day and time
-    var year by remember { mutableStateOf(transactionModel.year) }
-    var month by remember { mutableStateOf(transactionModel.month) }
-    var day by remember { mutableStateOf(transactionModel.day) }
+    var year by rememberSaveable { mutableStateOf(transactionModel.year) }
+    var month by rememberSaveable { mutableStateOf(transactionModel.month) }
+    var day by rememberSaveable { mutableStateOf(transactionModel.day) }
 
     // for year, month, day and time temporary
-    var mYear by remember { mutableStateOf(1) }
-    var mMonth by remember { mutableStateOf(1) }
-    var mDay by remember { mutableStateOf(1) }
+    var mYear by rememberSaveable { mutableStateOf(1) }
+    var mMonth by rememberSaveable { mutableStateOf(1) }
+    var mDay by rememberSaveable { mutableStateOf(1) }
 
     // Initializing a Calendar
     val mCalendar = Calendar.getInstance()
 
-    var moreClicked by remember { mutableStateOf(false) }
+    var moreClicked by rememberSaveable { mutableStateOf(false) }
 
     // Fetching current year, month and day
-    mYear = mCalendar.get(Calendar.YEAR)
-    mMonth = mCalendar.get(Calendar.MONTH)
-    mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
+    if (date == "") {
+        mYear = mCalendar.get(Calendar.YEAR)
+        mMonth = mCalendar.get(Calendar.MONTH)
+        mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
+    }
 
     mCalendar.time = Date()
 
@@ -356,10 +363,10 @@ fun TransactionContent(
                 fontWeight = FontWeight.Medium
             )
 
-            Card(
+            TextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp)
+                    .height(heightTextFields)
                     .border(
                         width = 1.8.dp,
                         color = textColorBLG,
@@ -369,40 +376,60 @@ fun TransactionContent(
                         textFieldSize = coordinates.size.toSize()
                     }
                     .clickable(
+                        indication = null,
                         interactionSource = interactionSource,
-                        indication = null
-                    ) { categoriesExpanded = !categoriesExpanded },
-                shape = RoundedCornerShape(15.dp),
-                backgroundColor = backgroundColor
-            ) {
+                        onClick = {
+                            categoriesExpanded = !categoriesExpanded
+                        }),
+                value = category,
+                onValueChange = {
+                },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    cursorColor = textColorBW,
+                ),
+                textStyle = TextStyle(
+                    color = textColorBW,
+                    fontSize = TEXT_FIELD_SIZE
+                ),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                enabled = false,
+                singleLine = true,
+                trailingIcon = {
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        modifier = Modifier.padding(start = 20.dp),
-                        text = category,
-                        fontSize = TEXT_FIELD_SIZE,
-                        color = textColorBW
-                    )
+                    Row {
+                        Icon(
+                            imageVector =
+                            if (!categoriesExpanded) Icons.Filled.KeyboardArrowDown
+                            else Icons.Rounded.KeyboardArrowUp,
+                            contentDescription = "currency_icon",
+                            Modifier
+                                .padding(end = 15.dp)
+                                .size(28.dp),
+                            tint = textColorBLG
+                        )
+                        Icon(
+                            imageVector =
+                            if (!categoriesExpanded) Icons.Filled.Edit
+                            else Icons.Rounded.KeyboardArrowUp,
+                            contentDescription = "currency_icon",
+                            Modifier
+                                .padding(end = 15.dp)
+                                .size(28.dp)
+                                .clickable {
+                                    navController.navigate(NavRoute.EditCategoryScreen.route)
+                                },
+                            tint = UIBlue
+                        )
+                    }
 
-                    Icon(
-                        imageVector =
-                        if (!categoriesExpanded) Icons.Filled.KeyboardArrowDown
-                        else Icons.Rounded.KeyboardArrowUp,
-                        contentDescription = "currency_icon",
-                        Modifier
-                            .padding(end = 15.dp)
-                            .size(28.dp),
-                        tint = textColorBLG
-                    )
                 }
-
-
-            }
-
+            )
             AnimatedVisibility(visible = categoriesExpanded) {
                 Card(
                     modifier = Modifier
@@ -411,15 +438,13 @@ fun TransactionContent(
                     backgroundColor = backgroundColorCard,
                     elevation = 10.dp
                 ) {
-                    LazyColumn(
-                        modifier = Modifier.heightIn(max = 200.dp),
-                        userScrollEnabled = true
+                    Column(
+                        modifier = Modifier
+                            .heightIn(max = 200.dp)
+                            .verticalScroll(rememberScrollState()),
                     ) {
-                        items(
-                            categories
-                                .sorted()
-                        ) {
-                            CategoryItems(title = it) { title ->
+                        categories.values.forEach {
+                            SubCategoryItems(it) { title ->
                                 category = title
                                 categoriesExpanded = false
                             }
@@ -478,7 +503,7 @@ fun TransactionContent(
             }
         }
 
-        // Sub Category
+        // group of SubCategory textField
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -493,10 +518,10 @@ fun TransactionContent(
                 fontWeight = FontWeight.Medium
             )
 
-            Card(
+            TextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp)
+                    .height(heightTextFields)
                     .border(
                         width = 1.8.dp,
                         color = textColorBLG,
@@ -506,24 +531,31 @@ fun TransactionContent(
                         textFieldSize = coordinates.size.toSize()
                     }
                     .clickable(
+                        indication = null,
                         interactionSource = interactionSource,
-                        indication = null
-                    ) { subCategoriesExpanded = !subCategoriesExpanded },
-                shape = RoundedCornerShape(15.dp),
-                backgroundColor = backgroundColor
-            ) {
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        modifier = Modifier.padding(start = 20.dp),
-                        text = subCategory,
-                        fontSize = TEXT_FIELD_SIZE,
-                        color = textColorBW
-                    )
+                        onClick = {
+                            subCategoriesExpanded = !subCategoriesExpanded
+                        }),
+                value = subCategory,
+                onValueChange = {
+                },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    cursorColor = textColorBW,
+                ),
+                textStyle = TextStyle(
+                    color = textColorBW,
+                    fontSize = TEXT_FIELD_SIZE
+                ),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                enabled = false,
+                singleLine = true,
+                trailingIcon = {
 
                     Icon(
                         imageVector =
@@ -535,11 +567,9 @@ fun TransactionContent(
                             .size(28.dp),
                         tint = textColorBLG
                     )
+
                 }
-
-
-            }
-
+            )
             AnimatedVisibility(visible = subCategoriesExpanded) {
                 Card(
                     modifier = Modifier
@@ -558,7 +588,7 @@ fun TransactionContent(
                                 defaultValue = otherSubCategories
                             ) else otherSubCategories
                         ) {
-                            CategoryItems(title = it) { title ->
+                            SubCategoryItems(title = it) { title ->
                                 subCategory = title
                                 subCategoriesExpanded = false
                             }
@@ -662,7 +692,7 @@ fun TransactionContent(
                 }
 
                 LaunchedEffect(key1 = false) {
-                    if (transactionModel.date == "") {
+                    if (transactionModel.date == "" && date == "") {
                         date = SimpleDateFormat("dd/MM/yyyy").format(Date())
                         time = SimpleDateFormat("HHmmss").format(Date())
                         day = SimpleDateFormat("dd").format(Date()).toShort()
@@ -928,7 +958,7 @@ fun TransactionContent(
 }
 
 @Composable
-fun CategoryItems(
+fun SubCategoryItems(
     title: String,
     onSelect: (String) -> Unit
 ) {

@@ -134,6 +134,7 @@ fun TransactionDetailsScreen(
                     categoryModel = categoryModel,
                     transactionModel = getTransactionModel!!,
                     publicSharedViewModel = publicSharedViewModel,
+                    navController = navController,
                     onSaveClicked = {
 //                    Toast.makeText(context, id.toString(), Toast.LENGTH_SHORT).show()
                         transactionModel = TransactionModel(
