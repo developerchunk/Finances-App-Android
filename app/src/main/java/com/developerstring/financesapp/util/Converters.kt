@@ -1,5 +1,6 @@
 package com.developerstring.financesapp.util
 
+import com.developerstring.financesapp.roomdatabase.models.CategoryModel
 import com.developerstring.financesapp.util.Constants.ACTIVITY_ROUTE
 import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.HOME_ROUTE
@@ -11,6 +12,7 @@ import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.Constants.THIS_MONTH
 import com.developerstring.financesapp.util.Constants.oldFirstFilter
 import com.developerstring.financesapp.util.state.CategorySortState
+import com.developerstring.financesapp.util.state.RequestState
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.math.abs
@@ -320,4 +322,12 @@ fun String.bottomNavText(
         PROFILE_ROUTE -> languageText.profileBottomNav
         else -> languageText.homeBottomNav
     }
+}
+
+fun RequestState<List<CategoryModel>>.categoryStateListToList(): List<CategoryModel> {
+
+    return if (this is RequestState.Success) {
+        this.data
+    } else listOf()
+
 }

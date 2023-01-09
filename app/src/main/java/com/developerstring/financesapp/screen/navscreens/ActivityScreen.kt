@@ -29,6 +29,8 @@ fun ActivityScreen(
     navController: NavController,
 ) {
 
+    profileViewModel.getAllCategories()
+
     val language by profileViewModel.profileLanguage.collectAsState()
     val languageText = LanguageText(language = language)
 

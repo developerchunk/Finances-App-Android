@@ -343,7 +343,8 @@ class SharedViewModel @Inject constructor(
         MutableStateFlow<ArrayList<Long>>(arrayListOf())
     val categorySum: StateFlow<ArrayList<Long>> = _categorySum
 
-    fun setCategorySumArray() {
+    fun setCategorySumArray(
+    ) {
         for (i in 0..11) {
             _categorySum.value.add(index = i, element = 0)
         }

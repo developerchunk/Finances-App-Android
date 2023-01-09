@@ -22,15 +22,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
+import com.developerstring.financesapp.roomdatabase.models.CategoryModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.components.CustomChip
 import com.developerstring.financesapp.ui.components.PieChart
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.SPENT
-import com.developerstring.financesapp.util.Constants.SUB_CATEGORY
 import com.developerstring.financesapp.util.categorySortToText
 import com.developerstring.financesapp.util.state.CategorySortState
+import com.developerstring.financesapp.util.state.RequestState
 import com.developerstring.financesapp.util.textToCategorySort
 import com.google.accompanist.flowlayout.FlowRow
 
@@ -40,6 +41,27 @@ fun CategoryChartScreen(
     navController: NavController,
     profileViewModel: ProfileViewModel
 ) {
+
+    val categories by profileViewModel.allCategories.collectAsState()
+
+    Sample(
+        sharedViewModel = sharedViewModel,
+        navController = navController,
+        profileViewModel = profileViewModel,
+        categoryList = categories
+    )
+
+
+}
+
+@Composable
+fun Sample(
+    sharedViewModel: SharedViewModel,
+    navController: NavController,
+    profileViewModel: ProfileViewModel,
+    categoryList: RequestState<List<CategoryModel>>
+) {
+
 
     val currency = profileViewModel.profileCurrency.collectAsState().value.last().toString()
 
@@ -52,17 +74,27 @@ fun CategoryChartScreen(
     val month = calendar.get(Calendar.MONTH) + 1
     val year = calendar.get(Calendar.YEAR)
 
-    MonthCategorySum(
-        sharedViewModel = sharedViewModel,
-        month = month.toString(),
-        year = year.toString(),
-        data = { data = it })
+    if (categoryList is RequestState.Success) {
+        MonthCategorySum(
+            sharedViewModel = sharedViewModel,
+            month = month.toString(),
+            year = year.toString(),
+            data = { data = it },
+            categoryList = categoryList.data
+        )
+    }
+
+
 
     // creating the Data of Pie Chart which contains Category and Amount spent in that category
     val rawData = mutableMapOf<String, Long>()
-    SUB_CATEGORY.keys.sorted().forEachIndexed { index, value ->
-        rawData[value] = data[index]
+
+    if (categoryList is RequestState.Success) {
+        categoryList.data.sortedBy { it.category }.forEachIndexed { index, value ->
+            rawData[value.category] = data[index]
+        }
     }
+
     var categorySortEnable by remember {
         mutableStateOf(false)
     }
@@ -89,10 +121,12 @@ fun CategoryChartScreen(
                 rawData.toList().sortedBy { (_, value) -> value }.reversed().toMap()
             }
             CategorySortState.LOW_TO_HIGH -> {
-                rawData.toList().sortedBy { (_, value) -> value }.sortedBy { (_, value) -> value==0L }.toMap()
+                rawData.toList().sortedBy { (_, value) -> value }
+                    .sortedBy { (_, value) -> value == 0L }.toMap()
             }
             CategorySortState.BY_NAME -> {
-                rawData.toList().sortedBy { (key, _) -> key }.sortedBy { (_, value) -> value==0L }.toMap().toMap()
+                rawData.toList().sortedBy { (key, _) -> key }.sortedBy { (_, value) -> value == 0L }
+                    .toMap().toMap()
             }
         }
     }
@@ -172,12 +206,15 @@ fun CategoryChartScreen(
                     color = textColorBW
                 )
 
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 20.dp)) {
-                    Box(modifier = Modifier
+                Box(
+                    modifier = Modifier
                         .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState()),
+                        .padding(end = 20.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
                     ) {
                         FlowRow(
                             modifier = Modifier
@@ -193,7 +230,7 @@ fun CategoryChartScreen(
                                     image = Icons.Rounded.Check,
                                     key = false,
                                     onSelected = { selected ->
-                                       categorySortState = selected.textToCategorySort()
+                                        categorySortState = selected.textToCategorySort()
                                     },
                                     selectedColor = UIBlue,
                                     color = colorDarkGray,
@@ -210,10 +247,12 @@ fun CategoryChartScreen(
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Box(modifier = Modifier
-                            .width(50.dp)
-                            .height(40.dp)
-                            .background(brushBackground))
+                        Box(
+                            modifier = Modifier
+                                .width(50.dp)
+                                .height(40.dp)
+                                .background(brushBackground)
+                        )
                     }
                 }
 
@@ -237,8 +276,6 @@ fun CategoryChartScreen(
         }
 
     }
-
-
 }
 
 @Composable
@@ -246,14 +283,15 @@ fun MonthCategorySum(
     sharedViewModel: SharedViewModel,
     data: (List<Long>) -> Unit,
     month: String,
-    year: String
+    year: String,
+    categoryList: List<CategoryModel>
 ) {
 
-    SUB_CATEGORY.keys.sorted().forEachIndexed { index, value ->
+    categoryList.sortedBy { it.category }.forEachIndexed { index, value ->
         sharedViewModel.getCategorySum(
             month = month,
             year = year,
-            category = value,
+            category = value.category,
             transaction_type = SPENT,
             month_no = index
         )
