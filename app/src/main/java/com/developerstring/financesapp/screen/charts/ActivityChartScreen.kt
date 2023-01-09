@@ -99,7 +99,7 @@ fun ActivityChartScreen(
                     Text(
                         modifier = Modifier.padding(start = 10.dp),
                         text = stringResource(id = languageText.myActivity),
-                        fontFamily = fontOpenSans,
+                        fontFamily = fontInter,
                         fontWeight = FontWeight.Medium,
                         fontSize = LARGE_TEXT_SIZE,
                         color = textColorBW,

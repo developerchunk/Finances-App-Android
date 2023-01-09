@@ -14,4 +14,4 @@ val SMALLEST_TEXT_SIZE = 10.sp
 
 // top app bar
 val TOP_APP_BAR_HEIGHT = 56.dp
-val TOP_APP_BAR_ELEVATION = 2.dp
+val TOP_APP_BAR_ELEVATION = 5.dp
