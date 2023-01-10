@@ -16,10 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.developerstring.financesapp.R
 import com.developerstring.financesapp.ui.theme.UIBlue
 import com.developerstring.financesapp.ui.theme.backgroundColor
 import com.developerstring.financesapp.ui.theme.textColorBW
@@ -63,7 +65,9 @@ fun MonthYearPickerCalender(
                 ) {
 
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(top = 30.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 30.dp),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -172,7 +176,9 @@ fun MonthYearPickerCalender(
                     }
 
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(top = 20.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 20.dp),
                         horizontalArrangement = Arrangement.End
                     ) {
 
@@ -186,7 +192,7 @@ fun MonthYearPickerCalender(
                             colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.Transparent)
                         ) {
                             Text(
-                                text = "Cancel",
+                                text = stringResource(id = R.string.cancel),
                                 color = textColorBW,
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Medium
@@ -203,7 +209,7 @@ fun MonthYearPickerCalender(
                             colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.Transparent)
                         ) {
                             Text(
-                                text = "Ok",
+                                text = stringResource(id = R.string.ok),
                                 color = UIBlue,
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Medium

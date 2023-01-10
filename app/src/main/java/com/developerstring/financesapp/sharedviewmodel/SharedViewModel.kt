@@ -268,7 +268,7 @@ class SharedViewModel @Inject constructor(
     }
 
     private var _dayPayment =
-        MutableStateFlow<ArrayList<Int>>(arrayListOf<Int>())
+        MutableStateFlow(arrayListOf<Int>())
     val dayPayment: StateFlow<ArrayList<Int>> = _dayPayment
 
     fun searchMonthPayment(

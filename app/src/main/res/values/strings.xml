@@ -2,8 +2,8 @@
     <string name="app_name">FinSpare</string>
     <string name="splash_screen_title">Finances are easy</string>
     <string name="splash_screen_text">With a simple app…</string>
-    <string name="create_profile_screen_text_1">Lets get started with \nbasic details</string>
-    <string name="create_profile_screen_text_2">Set amount as per your \nmonthly basis</string>
+    <string name="create_profile_screen_text_1">Let\'s get started with \nbasic details</string>
+    <string name="create_profile_screen_text_2">Set the amount on your \nmonthly basis</string>
     <string name="create_profile_screen_name">Name*</string>
     <string name="create_profile_screen_amount">Total Amount*</string>
     <string name="create_profile_screen_currency">Currency*</string>
@@ -28,6 +28,8 @@
     <string name="category_edit">Edit Category</string>
     <string name="categories">Categories</string>
     <string name="enter_subcategory">Enter Sub Category</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 
     <string name="less">Less</string>
     <string name="more">More</string>
@@ -81,10 +83,10 @@
     <string name="on_boarding_button_2">Next</string>
     <!--    onBoarding 3-->
     <string name="on_boarding_title_3">Manage Finances</string>
-    <string name="on_boarding_text_3">Helps to manage your finances and \nview them any time</string>
+    <string name="on_boarding_text_3">It helps to manage your finances and \nview them any time</string>
     <string name="on_boarding_button_3">Next</string>
     <!--    onBoarding 4-->
-    <string name="on_boarding_title_4">Lets Started</string>
+    <string name="on_boarding_title_4">Let\'s Started</string>
     <string name="on_boarding_text_4">Start saving, managing, and tracking \nyour finances</string>
     <string name="on_boarding_button_4">Done</string>
 

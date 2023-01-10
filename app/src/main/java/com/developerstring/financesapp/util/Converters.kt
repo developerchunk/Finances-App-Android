@@ -191,8 +191,10 @@ fun String.filterListText(): String {
 
     oldFirstFilter.value = this == OLD_FIRST
 
+    val month = calender.get(Calendar.MONTH)+1
+
     return when (this) {
-        THIS_MONTH -> "${calender.get(Calendar.YEAR)}${calender.get(Calendar.MONTH) + 1}"
+        THIS_MONTH -> "${calender.get(Calendar.YEAR)}${if (month<10) 0 else ""}$month"
         LATEST_FIRST -> ""
         OLD_FIRST -> ""
         else -> this
