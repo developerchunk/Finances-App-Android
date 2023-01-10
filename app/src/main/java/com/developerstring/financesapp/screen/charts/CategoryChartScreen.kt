@@ -1,12 +1,11 @@
 package com.developerstring.financesapp.screen.charts
 
 import android.icu.util.Calendar
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -18,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +30,7 @@ import com.developerstring.financesapp.roomdatabase.models.CategoryModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.components.CustomChip
+import com.developerstring.financesapp.ui.components.MonthYearPickerCalender
 import com.developerstring.financesapp.ui.components.PieChart
 import com.developerstring.financesapp.ui.components.SimpleChipButton
 import com.developerstring.financesapp.ui.theme.*
@@ -126,7 +127,7 @@ fun CategoryChartScreen(
         ) {
 
 
-            Sample(
+            CategoryChartContent(
                 sharedViewModel = sharedViewModel,
                 categoryList = categories,
                 month_ = month,
@@ -139,8 +140,9 @@ fun CategoryChartScreen(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun Sample(
+fun CategoryChartContent(
     sharedViewModel: SharedViewModel,
     categoryList: RequestState<List<CategoryModel>>,
     month_: Int,
@@ -167,6 +169,14 @@ fun Sample(
 
     var selectedTransactionType by remember {
         mutableStateOf(SPENT)
+    }
+
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
+
+    var monthPickerClicked by remember {
+        mutableStateOf(false)
     }
 
     if (categoryList is RequestState.Success) {
@@ -257,7 +267,32 @@ fun Sample(
             .fillMaxSize()
     ) {
 
-        AnimatedVisibility(visible = menuExpanded) {
+        AnimatedVisibility(
+            visible = menuExpanded,
+            enter = slideInVertically(
+                // Start the slide from 40 (pixels) above where the content is supposed to go, to
+                // produce a parallax effect
+                initialOffsetY = { -100 },
+                animationSpec = tween(durationMillis = 1000)
+            ) + expandVertically(
+                expandFrom = Alignment.Top,
+                animationSpec = tween(durationMillis = 1000)
+            ) + scaleIn(
+                // Animate scale from 0f to 1f using the top center as the pivot point.
+                transformOrigin = TransformOrigin(0.5f, 0f),
+                animationSpec = tween(durationMillis = 1000)
+            ) + fadeIn(initialAlpha = 0.3f),
+            exit = slideOutVertically(animationSpec = tween(durationMillis = 1000))
+                    + shrinkVertically(
+                animationSpec = tween(durationMillis = 1000)
+            ) + fadeOut(animationSpec = tween(durationMillis = 1000))
+                    + scaleOut(
+                targetScale = 1.2f,
+                animationSpec = tween(
+                    durationMillis = 1000
+                )
+            )
+        ) {
             Surface(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -271,9 +306,11 @@ fun Sample(
                         .padding(start = 10.dp, end = 10.dp, top = 15.dp, bottom = 15.dp),
                 ) {
 
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp)) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp)
+                    ) {
                         Text(
                             text = stringResource(id = R.string.filter),
                             fontFamily = fontInter,
@@ -348,7 +385,16 @@ fun Sample(
                     )
                 }
 
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    modifier = Modifier.clickable(
+                        indication = null,
+                        interactionSource = interactionSource,
+                        onClick = {
+                            monthPickerClicked = true
+                        }
+                    ),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Text(
                         text = "${monthToName(month)} $year",
                         fontSize = TEXT_FIELD_SIZE,
@@ -390,6 +436,24 @@ fun Sample(
             }
 
         }
+
+
+        if (monthPickerClicked) {
+            MonthYearPickerCalender(
+                visible = true,
+                month_ = month,
+                year_ = year,
+                confirmClicked = { m,y ->
+                    monthPickerClicked = false
+                    month = m
+                    year = y
+                },
+                cancelClicked = {
+                    monthPickerClicked = false
+                }
+            )
+        }
+
 
         Row(
             modifier = Modifier

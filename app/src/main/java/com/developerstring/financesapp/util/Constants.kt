@@ -206,4 +206,19 @@ object Constants {
     const val ACTIVITY_ROUTE = "activity"
     const val PROFILE_ROUTE = "profile"
 
+    val MONTHS = mutableListOf(
+        "JAN",
+        "FEB",
+        "MAR",
+        "APR",
+        "MAY",
+        "JUN",
+        "JUL",
+        "AUG",
+        "SEP",
+        "OCT",
+        "NOV",
+        "DEC",
+    )
+
 }

@@ -1,6 +1,7 @@
 package com.developerstring.financesapp.screen.charts
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -21,10 +22,7 @@ import androidx.navigation.NavController
 import com.developerstring.financesapp.screen.navscreens.content.homescreen.MonthTransactions
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
-import com.developerstring.financesapp.ui.components.ActivityBarChart
-import com.developerstring.financesapp.ui.components.LineChart
-import com.developerstring.financesapp.ui.components.SimpleChipButton
-import com.developerstring.financesapp.ui.components.TabLayoutChartScreen
+import com.developerstring.financesapp.ui.components.*
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.*
 import com.developerstring.financesapp.util.Constants.ADD_TRANSACTION_TYPE
@@ -46,7 +44,7 @@ fun ActivityChartScreen(
 ) {
 
     val calender = Calendar.getInstance()
-    val month = calender.get(Calendar.MONTH)+1
+    val month = calender.get(Calendar.MONTH) + 1
     val year = calender.get(Calendar.YEAR)
 
     val language by profileViewModel.profileLanguage.collectAsState()
@@ -150,7 +148,7 @@ fun ActivityChartScreen(
                 quarterChart -> {
                     QuarterActivityChart(
                         sharedViewModel = sharedViewModel,
-                        month_ = calender.get(Calendar.MONTH)+1,
+                        month_ = calender.get(Calendar.MONTH) + 1,
                         year_ = calender.get(Calendar.YEAR),
                         currency = currency
                     )
@@ -159,7 +157,6 @@ fun ActivityChartScreen(
 
         }
     }
-
 
 
 }
@@ -199,6 +196,9 @@ fun MonthActivityChart(
         mutableStateOf(true)
     }
 
+    var monthPickerClicked by remember {
+        mutableStateOf(false)
+    }
 
     MonthTransactions(
         sharedViewModel = sharedViewModel,
@@ -274,7 +274,12 @@ fun MonthActivityChart(
                 )
             }
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.clickable {
+                    monthPickerClicked = true
+                },
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(
                     text = "${monthToName(month)} $year",
                     fontSize = TEXT_FIELD_SIZE,
@@ -310,6 +315,22 @@ fun MonthActivityChart(
                 )
             }
 
+        }
+
+        if (monthPickerClicked) {
+            MonthYearPickerCalender(
+                visible = true,
+                month_ = month,
+                year_ = year,
+                confirmClicked = { m, y ->
+                    monthPickerClicked = false
+                    month = m
+                    year = y
+                },
+                cancelClicked = {
+                    monthPickerClicked = false
+                }
+            )
         }
 
         Column(
@@ -395,6 +416,10 @@ fun QuarterActivityChart(
     }
 
     var sel by remember {
+        mutableStateOf(false)
+    }
+
+    var monthPickerClicked by remember {
         mutableStateOf(false)
     }
 
@@ -519,7 +544,12 @@ fun QuarterActivityChart(
                 )
             }
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.clickable {
+                    monthPickerClicked = true
+                },
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(
                     text = "${monthToName(month)} to ${monthToName(month3)} $year3",
                     fontSize = MEDIUM_TEXT_SIZE,
@@ -563,6 +593,22 @@ fun QuarterActivityChart(
                 )
             }
 
+        }
+
+        if (monthPickerClicked) {
+            MonthYearPickerCalender(
+                visible = true,
+                month_ = month,
+                year_ = year,
+                confirmClicked = { m,y ->
+                    monthPickerClicked = false
+                    month = m
+                    year = y
+                },
+                cancelClicked = {
+                    monthPickerClicked = false
+                }
+            )
         }
 
         Column(
