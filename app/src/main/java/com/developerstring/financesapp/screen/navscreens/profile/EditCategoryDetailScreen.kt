@@ -315,7 +315,7 @@ fun EditCategoryDetailScreen(
                             singleLine = false,
                             enabled = sheetState.isCollapsed,
                             trailingIcon = {
-                                if (newCategory != category) {
+                                if (newCategory != category && newCategory != "") {
                                     IconButton(onClick = {
                                         profileViewModel.updateCategoryName(
                                             id = id,
