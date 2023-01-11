@@ -2,5 +2,6 @@ package com.developerstring.financesapp.util
 
 enum class TransactionAction {
     DELETE,
-    NO_ACTION
+    NO_ACTION,
+    ADD
 }

@@ -1,5 +1,6 @@
 package com.developerstring.financesapp.screen.navscreens.profile
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -16,10 +17,12 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -28,25 +31,54 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
+import com.developerstring.financesapp.roomdatabase.models.CategoryModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
-import com.developerstring.financesapp.util.Constants.SEPARATOR_LIST
+import com.developerstring.financesapp.util.Constants
+import com.developerstring.financesapp.util.TransactionAction
 import com.developerstring.financesapp.util.convertStringToAlphabets
+import com.developerstring.financesapp.util.state.RequestState
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun EditCategoryDetailScreen(
     profileViewModel: ProfileViewModel,
     navController: NavController,
 ) {
+    profileViewModel.getAllCategories()
+
+    val categories by profileViewModel.allCategories.collectAsState()
+
+    EditCategoryDetailContent(
+        categories = categories,
+        profileViewModel = profileViewModel,
+        navController = navController
+    )
+
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun EditCategoryDetailContent(
+    categories: RequestState<List<CategoryModel>>,
+    profileViewModel: ProfileViewModel,
+    navController: NavController
+) {
+
+    if (profileViewModel.categoryId.value == 0) {
+        if (categories is RequestState.Success) {
+            val id = categories.data.maxBy { it.id }.id
+            profileViewModel.categoryId.value = id
+        }
+    }
 
     profileViewModel.getSelectedCategories()
+
     val categoryModel by profileViewModel.selectedCategories.collectAsState()
 
     var id by remember { mutableStateOf(0) }
     var category by remember { mutableStateOf("") }
-    var subCategories = mutableListOf("")
+    var subCategories = mutableListOf<String?>(null)
     var subCategorySelected by mutableStateOf(0)
     var subCategory by mutableStateOf("")
 
@@ -59,13 +91,16 @@ fun EditCategoryDetailScreen(
 //
     }
 
+    Toast.makeText(LocalContext.current, profileViewModel.categoryId.value.toString(), Toast.LENGTH_SHORT).show()
+
     try {
-        subCategories = categoryModel!!.subCategory.split(SEPARATOR_LIST) as MutableList<String>
+        subCategories =
+            (categoryModel!!.subCategory.split(Constants.SEPARATOR_LIST) as MutableList<String>).toMutableList()
         category = categoryModel!!.category
         id = categoryModel!!.id
         newCategory = category
     } catch (_: Exception) {
-
+//        Toast.makeText(LocalContext.current, profileViewModel.maxIdCategory.value.toString(), Toast.LENGTH_SHORT).show()
     }
 
     val scrollState = rememberScrollState()
@@ -81,6 +116,8 @@ fun EditCategoryDetailScreen(
     val sheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
     val scope = rememberCoroutineScope()
+
+    var deleteError by mutableStateOf(false)
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
@@ -122,15 +159,23 @@ fun EditCategoryDetailScreen(
                     ),
                     trailingIcon = {
                         IconButton(onClick = {
-                            subCategories.set(index = subCategorySelected, element = subCategory)
-                            profileViewModel.updateSubCategoryName(
-                                id = categoryModel!!.id,
-                                subCategory = subCategories.joinToString(SEPARATOR_LIST)
-                            )
-                            scope.launch {
-                                sheetState.collapse()
+
+                            if (subCategory != "") {
+                                subCategories.add(
+                                    index = subCategorySelected,
+                                    element = subCategory
+                                )
+
+                                profileViewModel.updateSubCategoryName(
+                                    id = categoryModel!!.id,
+                                    subCategory = subCategories.joinToString(Constants.SEPARATOR_LIST)
+                                )
+                                scope.launch {
+                                    sheetState.collapse()
+                                }
+                                subCategory = ""
                             }
-                            subCategory = ""
+
                         }) {
 
                             Icon(
@@ -223,8 +268,13 @@ fun EditCategoryDetailScreen(
                     scope.launch {
                         if (sheetState.isCollapsed) {
                             subCategory = ""
-                            subCategorySelected = subCategories.size
-                            subCategories.add(index = subCategories.size, element = "")
+                            subCategorySelected =
+                                if (subCategories == listOf("")) 0 else subCategories.size
+//                            if (subCategorySelected == 0) {
+////                                subCategories.add(element = "")
+//                            } else {
+//                                subCategories.add(index = subCategories.size, element = "")
+//                            }
                             sheetState.expand()
                         } else {
                             sheetState.collapse()
@@ -268,68 +318,92 @@ fun EditCategoryDetailScreen(
                         .background(backgroundColor)
                 ) {
 
-                    Card(
+                    Box(
                         modifier = Modifier
                             .padding(vertical = 20.dp, horizontal = 30.dp)
-                            .fillMaxWidth(),
-                        elevation = 5.dp,
-                        shape = RoundedCornerShape(10.dp),
-                        backgroundColor = contentColorCard
+                            .fillMaxWidth()
+                            .background(Color.Transparent),
+                        contentAlignment = Alignment.CenterEnd
                     ) {
-
-                        TextField(
+                        Card(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable(
-                                    indication = null,
-                                    interactionSource = interactionSource,
-                                    onClick = {
-                                        scope.launch {
-                                            if (sheetState.isExpanded) {
-                                                sheetState.collapse()
+                                .padding(end = 50.dp)
+                                .fillMaxWidth(),
+                            elevation = 5.dp,
+                            shape = RoundedCornerShape(10.dp),
+                            backgroundColor = contentColorCard
+                        ) {
+
+                            TextField(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable(
+                                        indication = null,
+                                        interactionSource = interactionSource,
+                                        onClick = {
+                                            scope.launch {
+                                                if (sheetState.isExpanded) {
+                                                    sheetState.collapse()
+                                                }
                                             }
                                         }
-                                    }
+                                    ),
+                                value = newCategory,
+                                onValueChange = {
+                                    newCategory = it.convertStringToAlphabets()
+                                },
+                                colors = TextFieldDefaults.textFieldColors(
+                                    backgroundColor = Color.Transparent,
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    cursorColor = textColorBW,
+                                    disabledIndicatorColor = Color.Transparent
                                 ),
-                            value = newCategory,
-                            onValueChange = {
-                                newCategory = it.convertStringToAlphabets()
-                            },
-                            colors = TextFieldDefaults.textFieldColors(
-                                backgroundColor = Color.Transparent,
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                cursorColor = textColorBW,
-                                disabledIndicatorColor = Color.Transparent
-                            ),
-                            textStyle = TextStyle(
-                                color = textColorBW,
-                                fontSize = LARGE_TEXT_SIZE,
-                                fontFamily = fontInter,
-                                fontWeight = FontWeight.Medium
-                            ),
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Text,
-                                imeAction = ImeAction.Next
-                            ),
-                            singleLine = false,
-                            enabled = sheetState.isCollapsed,
-                            trailingIcon = {
-                                if (newCategory != category && newCategory != "") {
-                                    IconButton(onClick = {
-                                        profileViewModel.updateCategoryName(
-                                            id = id,
-                                            category = newCategory
-                                        )
-                                    }) {
-                                        Icon(
-                                            imageVector = Icons.Rounded.Check,
-                                            contentDescription = "check",
-                                            tint = textColorBW
-                                        )
+                                textStyle = TextStyle(
+                                    color = textColorBW,
+                                    fontSize = LARGE_TEXT_SIZE,
+                                    fontFamily = fontInter,
+                                    fontWeight = FontWeight.Medium
+                                ),
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Text,
+                                    imeAction = ImeAction.Next
+                                ),
+                                singleLine = false,
+                                enabled = sheetState.isCollapsed,
+                                trailingIcon = {
+                                    if (newCategory != category && newCategory != "") {
+                                        IconButton(onClick = {
+                                            profileViewModel.updateCategoryName(
+                                                id = id,
+                                                category = newCategory
+                                            )
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Rounded.Check,
+                                                contentDescription = "check",
+                                                tint = textColorBW
+                                            )
+                                        }
                                     }
                                 }
-                            }
+                            )
+
+                        }
+
+
+                        Icon(
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clickable {
+                                    profileViewModel.deleteCategoryState.value =
+                                        TransactionAction.DELETE
+                                    profileViewModel.deleteCategoryModel.value = categoryModel!!
+                                    navController.popBackStack()
+                                },
+                            imageVector = Icons.Rounded.Delete,
+                            contentDescription = "delete",
+                            tint = UIBlue
                         )
 
                     }
@@ -354,31 +428,48 @@ fun EditCategoryDetailScreen(
                                 .fillMaxWidth()
                                 .padding(bottom = 100.dp)
                         ) {
-                            subCategories.forEachIndexed { index, value ->
-                                SubCategoryItem(
-                                    subCategory = value,
-                                    index = index,
-                                    interactionSource = interactionSource,
-                                    onClick = { i ->
-                                        scope.launch {
-                                            if (sheetState.isCollapsed) {
-                                                subCategorySelected = i
-                                                subCategory = subCategories[i]
-                                                sheetState.expand()
-                                            } else {
-                                                sheetState.collapse()
+                            if (subCategories != listOf("")) {
+                                subCategories.forEachIndexed { index, value ->
+                                    SubCategoryItem(
+                                        subCategory = value?:"",
+                                        index = index,
+                                        interactionSource = interactionSource,
+                                        onClick = { i ->
+                                            scope.launch {
+                                                if (sheetState.isCollapsed) {
+                                                    subCategorySelected = i
+                                                    subCategory = subCategories[i]!!
+                                                    sheetState.expand()
+                                                } else {
+                                                    sheetState.collapse()
+                                                }
                                             }
-                                        }
-                                    },
-                                    onDelete = { i ->
+                                        },
+                                        onDelete = { i ->
 
-                                        subCategories.removeAt(i)
-                                        profileViewModel.updateSubCategoryName(
-                                            id = categoryModel!!.id,
-                                            subCategory = subCategories.joinToString(SEPARATOR_LIST)
-                                        )
+                                            if (subCategories.size > 1) {
+                                                subCategories.removeAt(i)
+                                                profileViewModel.updateSubCategoryName(
+                                                    id = categoryModel!!.id,
+                                                    subCategory = subCategories.joinToString(
+                                                        Constants.SEPARATOR_LIST
+                                                    )
+                                                )
+                                            } else {
+                                                deleteError = true
+                                            }
 
-                                    })
+                                        })
+                                }
+                            }
+
+                            if (deleteError) {
+                                Toast.makeText(
+                                    LocalContext.current,
+                                    stringResource(id = R.string.delete_error_category),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                deleteError = false
                             }
                         }
                     }
@@ -388,8 +479,6 @@ fun EditCategoryDetailScreen(
         }
 
     }
-
-
 }
 
 @Composable
@@ -400,6 +489,7 @@ fun SubCategoryItem(
     onDelete: (Int) -> Unit,
     onClick: (Int) -> Unit,
 ) {
+
 
     Column(
         modifier = Modifier
@@ -470,5 +560,6 @@ fun SubCategoryItem(
                 .background(textColorBW)
         )
     }
-
 }
+
+

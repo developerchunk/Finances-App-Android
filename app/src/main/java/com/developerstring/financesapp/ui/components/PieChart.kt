@@ -67,6 +67,18 @@ fun PieChart(
         Pink.copy(1f),
         Purple500.copy(0.5f),
         Purple500.copy(1f),
+        UIBlue.copy(alpha = 0.5f),
+        UIBlue.copy(alpha = 1f),
+        Green.copy(0.5f),
+        Green.copy(1f),
+        Yellow.copy(0.5f),
+        Yellow.copy(1f),
+        Orange.copy(0.5f),
+        Orange.copy(1f),
+        Pink.copy(0.5f),
+        Pink.copy(1f),
+        Purple500.copy(0.5f),
+        Purple500.copy(1f),
     )
 
     var animationPlayed by remember { mutableStateOf(false) }

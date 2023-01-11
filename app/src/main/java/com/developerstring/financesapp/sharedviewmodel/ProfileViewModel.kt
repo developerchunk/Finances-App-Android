@@ -16,6 +16,7 @@ import com.developerstring.financesapp.roomdatabase.repository.ProfileRepository
 import com.developerstring.financesapp.util.Constants.DARK_THEME
 import com.developerstring.financesapp.util.Constants.PROFILE_ID
 import com.developerstring.financesapp.util.Constants.YES
+import com.developerstring.financesapp.util.TransactionAction
 import com.developerstring.financesapp.util.state.RequestState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -114,7 +115,8 @@ class ProfileViewModel @Inject constructor(
     }
 
     // profile details
-    private val _selectedProfile: MutableStateFlow<ProfileModel> = MutableStateFlow(ProfileModel(currency = "$"))
+    private val _selectedProfile: MutableStateFlow<ProfileModel> =
+        MutableStateFlow(ProfileModel(currency = "$"))
     val selectedProfile: StateFlow<ProfileModel> = _selectedProfile
 
     private val _profileName = MutableStateFlow("")
@@ -133,7 +135,7 @@ class ProfileViewModel @Inject constructor(
 
         viewModelScope.launch {
             repository.getSelectedProfile(profileId = PROFILE_ID).collect { task ->
-                _selectedProfile.value = task?:ProfileModel(currency = "$")
+                _selectedProfile.value = task ?: ProfileModel(currency = "$")
             }
         }
 
@@ -225,10 +227,12 @@ class ProfileViewModel @Inject constructor(
     private var _selectedCategory = MutableStateFlow<CategoryModel?>(null)
     val selectedCategories: StateFlow<CategoryModel?> = _selectedCategory
 
-    fun getSelectedCategories() {
+    fun getSelectedCategories(
+        id: Int = categoryId.value
+    ) {
         try {
             viewModelScope.launch {
-                repositoryCategory.getSelectedCategory(id = categoryId.value).collect {
+                repositoryCategory.getSelectedCategory(id = id).collect {
                     _selectedCategory.value = it
                 }
             }
@@ -271,12 +275,28 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun deleteCategory(
-        categoryModel: CategoryModel
-    ) {
+    val deleteCategoryState: MutableState<TransactionAction> =
+        mutableStateOf(TransactionAction.NO_ACTION)
+
+    var deleteCategoryModel: MutableState<CategoryModel> = mutableStateOf(CategoryModel())
+
+    private fun deleteCategoryExecute() {
         viewModelScope.launch(Dispatchers.IO) {
-            repositoryCategory.deleteCategory(categoryModel = categoryModel)
+            repositoryCategory.deleteCategory(categoryModel = deleteCategoryModel.value)
         }
+        this.deleteCategoryState.value = TransactionAction.NO_ACTION
+    }
+
+    fun categoryAction(
+        action: TransactionAction,
+    ) {
+        when (action) {
+            TransactionAction.DELETE -> deleteCategoryExecute()
+            else -> {
+
+            }
+        }
+        this.deleteCategoryState.value = TransactionAction.NO_ACTION
     }
 
 }

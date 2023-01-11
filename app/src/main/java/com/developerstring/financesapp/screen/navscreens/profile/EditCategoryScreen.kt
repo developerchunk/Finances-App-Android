@@ -38,7 +38,36 @@ fun EditCategoryScreen(
     profileViewModel: ProfileViewModel,
     navController: NavController,
 ) {
+
     val categoryModel by profileViewModel.allCategories.collectAsState()
+
+    val categoryDelete by profileViewModel.deleteCategoryState
+    profileViewModel.categoryAction(action = categoryDelete)
+
+    CategoryScreenContent(
+        categoryModel = categoryModel,
+        profileViewModel = profileViewModel,
+        navController = navController
+    )
+
+}
+
+@Composable
+fun CategoryScreenContent(
+    categoryModel: RequestState<List<CategoryModel>>,
+    profileViewModel: ProfileViewModel,
+    navController: NavController
+) {
+
+    val scrollState = rememberScrollState()
+
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
+
+    var maxCategoryId by remember {
+        mutableStateOf(CategoryModel())
+    }
 
     Scaffold(topBar = {
 
@@ -73,6 +102,15 @@ fun EditCategoryScreen(
 
             IconButton(onClick = {
 
+                profileViewModel.addCategory(
+                    categoryModel = CategoryModel(
+                        category = "Category Name",
+                        subCategory = "Sub Category-1"
+                    )
+                )
+                profileViewModel.categoryId.value = 0
+                navController.navigate(route = NavRoute.EditCategoryDetailScreen.route)
+
             }) {
                 Icon(
                     modifier = Modifier.size(28.dp),
@@ -85,56 +123,38 @@ fun EditCategoryScreen(
         }
 
     }) {
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(backgroundColor)
         ) {
-            CategoryScreenContent(
-                categoryModel = categoryModel,
-                profileViewModel = profileViewModel,
-                navController = navController
-            )
-
-        }
-
-    }
-
-}
-
-@Composable
-fun CategoryScreenContent(
-    categoryModel: RequestState<List<CategoryModel>>,
-    profileViewModel: ProfileViewModel,
-    navController: NavController
-) {
-
-    val scrollState = rememberScrollState()
-
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
-
-    Column(
-        modifier = Modifier
-            .padding(top = 30.dp)
-            .fillMaxSize()
-            .verticalScroll(scrollState)
-    ) {
-        if (categoryModel is RequestState.Success) {
-            categoryModel.data.forEach { value ->
-                CategoryItem(
-                    categoryModel = value,
-                    interactionSource = interactionSource,
-                    onClick = { id ->
-                        profileViewModel.categoryId.value = id
-                        profileViewModel.getSelectedCategories()
-                        navController.navigate(route = NavRoute.EditCategoryDetailScreen.route)
+            Column(
+                modifier = Modifier
+                    .padding(top = 30.dp)
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+            ) {
+                if (categoryModel is RequestState.Success) {
+                    categoryModel.data.forEach { value ->
+                        CategoryItem(
+                            categoryModel = value,
+                            interactionSource = interactionSource,
+                            onClick = { id ->
+                                profileViewModel.categoryId.value = id
+                                profileViewModel.getSelectedCategories(id = id)
+                                navController.navigate(route = NavRoute.EditCategoryDetailScreen.route)
+                            }
+                        )
                     }
-                )
+
+                }
             }
         }
+
     }
+
+
 }
 
 @Composable
@@ -164,7 +184,10 @@ fun CategoryItem(
     LaunchedEffect(key1 = true) {
         delay(300)
         animated = true
-        color.animateTo(colorList.random(), animationSpec = tween(durationMillis = 2000, delayMillis = 0))
+        color.animateTo(
+            colorList.random(),
+            animationSpec = tween(durationMillis = 2000, delayMillis = 0)
+        )
     }
 
     Surface(

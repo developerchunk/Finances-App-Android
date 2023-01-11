@@ -90,6 +90,11 @@
     <string name="on_boarding_text_4">Start saving, managing, and tracking \nyour finances</string>
     <string name="on_boarding_button_4">Done</string>
 
+    <string name="category_name">Category Name</string>
+    <string name="sub_category_name">Sub Category-1</string>
+    <string name="delete_error_category">At least 1 sub category should be there</string>
+    <string name="add_error_category">Max 30 Categories can be added</string>
+
 
 <!--    Marathi Text-->
     <string name="add_payment_marathi">पेमेंट\nलिहा</string>

@@ -330,7 +330,7 @@ class SharedViewModel @Inject constructor(
 
     fun setCategorySumArray(
     ) {
-        for (i in 0..11) {
+        for (i in 0..20) {
             _categorySum.value.add(index = i, element = 0)
         }
     }
