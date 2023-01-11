@@ -33,6 +33,7 @@ import androidx.navigation.NavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.roomdatabase.models.CategoryModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
+import com.developerstring.financesapp.ui.components.DisplayAlertDialog
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants
 import com.developerstring.financesapp.util.TransactionAction
@@ -86,12 +87,9 @@ fun EditCategoryDetailContent(
 
 
     val interactionSource = remember {
-
         MutableInteractionSource()
-//
     }
 
-    Toast.makeText(LocalContext.current, profileViewModel.categoryId.value.toString(), Toast.LENGTH_SHORT).show()
 
     try {
         subCategories =
@@ -100,7 +98,6 @@ fun EditCategoryDetailContent(
         id = categoryModel!!.id
         newCategory = category
     } catch (_: Exception) {
-//        Toast.makeText(LocalContext.current, profileViewModel.maxIdCategory.value.toString(), Toast.LENGTH_SHORT).show()
     }
 
     val scrollState = rememberScrollState()
@@ -118,6 +115,10 @@ fun EditCategoryDetailContent(
     val scope = rememberCoroutineScope()
 
     var deleteError by mutableStateOf(false)
+
+    var deleteDisplay by remember {
+        mutableStateOf(false)
+    }
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
@@ -396,10 +397,7 @@ fun EditCategoryDetailContent(
                             modifier = Modifier
                                 .size(32.dp)
                                 .clickable {
-                                    profileViewModel.deleteCategoryState.value =
-                                        TransactionAction.DELETE
-                                    profileViewModel.deleteCategoryModel.value = categoryModel!!
-                                    navController.popBackStack()
+                                    deleteDisplay = true
                                 },
                             imageVector = Icons.Rounded.Delete,
                             contentDescription = "delete",
@@ -423,6 +421,23 @@ fun EditCategoryDetailContent(
                             )
                         )
                     ) {
+
+                        DisplayAlertDialog(
+                            title = "Are you sure to Delete $category?",
+                            message = "\"$category\" Category and all Sub-Categories in it will be permanently deleted. \nYou will not be able to undo it.",
+                            openDialog = deleteDisplay,
+                            onCloseClicked = {
+                                             deleteDisplay = false
+                            },
+                            onYesClicked = {
+                                profileViewModel.deleteCategoryState.value =
+                                    TransactionAction.DELETE
+                                profileViewModel.deleteCategoryModel.value = categoryModel!!
+                                navController.popBackStack()
+                                deleteDisplay = false
+                            }
+                        )
+
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -431,7 +446,7 @@ fun EditCategoryDetailContent(
                             if (subCategories != listOf("")) {
                                 subCategories.forEachIndexed { index, value ->
                                     SubCategoryItem(
-                                        subCategory = value?:"",
+                                        subCategory = value ?: "",
                                         index = index,
                                         interactionSource = interactionSource,
                                         onClick = { i ->

@@ -1,5 +1,6 @@
 package com.developerstring.financesapp.screen.navscreens.profile
 
+import android.widget.Toast
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -65,8 +67,8 @@ fun CategoryScreenContent(
         MutableInteractionSource()
     }
 
-    var maxCategoryId by remember {
-        mutableStateOf(CategoryModel())
+    var addError by remember {
+        mutableStateOf(false)
     }
 
     Scaffold(topBar = {
@@ -101,15 +103,20 @@ fun CategoryScreenContent(
             )
 
             IconButton(onClick = {
-
-                profileViewModel.addCategory(
-                    categoryModel = CategoryModel(
-                        category = "Category Name",
-                        subCategory = "Sub Category-1"
-                    )
-                )
-                profileViewModel.categoryId.value = 0
-                navController.navigate(route = NavRoute.EditCategoryDetailScreen.route)
+                if (categoryModel is RequestState.Success) {
+                    if (categoryModel.data.size <= 30) {
+                        profileViewModel.addCategory(
+                            categoryModel = CategoryModel(
+                                category = "Category Name",
+                                subCategory = "Sub Category-1"
+                            )
+                        )
+                        profileViewModel.categoryId.value = 0
+                        navController.navigate(route = NavRoute.EditCategoryDetailScreen.route)
+                    } else {
+                        addError = true
+                    }
+                }
 
             }) {
                 Icon(
@@ -123,6 +130,15 @@ fun CategoryScreenContent(
         }
 
     }) {
+
+        if (addError) {
+            Toast.makeText(
+                LocalContext.current,
+                stringResource(id = R.string.add_error_category),
+                Toast.LENGTH_SHORT
+            ).show()
+            addError = false
+        }
 
         Column(
             modifier = Modifier
