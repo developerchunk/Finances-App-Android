@@ -114,21 +114,18 @@ class ProfileViewModel @Inject constructor(
     }
 
     // profile details
-    private val _selectedProfile: MutableStateFlow<ProfileModel?> = MutableStateFlow(null)
+    private val _selectedProfile: MutableStateFlow<ProfileModel> = MutableStateFlow(ProfileModel(currency = "$"))
+    val selectedProfile: StateFlow<ProfileModel> = _selectedProfile
 
     private val _profileName = MutableStateFlow("")
     private val _profileTotalAmount = MutableStateFlow(0)
     private val _profileCurrency = MutableStateFlow("$")
-    private val _profileSpending = MutableStateFlow(0)
-    private val _profileSavings = MutableStateFlow(0)
     private val _profileLanguage = MutableStateFlow("")
     private val _profileTheme = MutableStateFlow("")
 
     val profileName: StateFlow<String> = _profileName
     val profileTotalAmount: StateFlow<Int> = _profileTotalAmount
     val profileCurrency: StateFlow<String> = _profileCurrency
-    val profileSpending: StateFlow<Int> = _profileSpending
-    val profileSavings: StateFlow<Int> = _profileSavings
     val profileLanguage: StateFlow<String> = _profileLanguage
     val profileTheme: StateFlow<String> = _profileTheme
 
@@ -136,7 +133,7 @@ class ProfileViewModel @Inject constructor(
 
         viewModelScope.launch {
             repository.getSelectedProfile(profileId = PROFILE_ID).collect { task ->
-                _selectedProfile.value = task
+                _selectedProfile.value = task?:ProfileModel(currency = "$")
             }
         }
 
@@ -144,8 +141,6 @@ class ProfileViewModel @Inject constructor(
             _profileName.value = _selectedProfile.value!!.name
             _profileTotalAmount.value = _selectedProfile.value!!.total_amount
             _profileCurrency.value = _selectedProfile.value!!.currency
-            _profileSpending.value = _selectedProfile.value!!.month_spent
-            _profileSavings.value = _selectedProfile.value!!.month_saving
             _profileLanguage.value = _selectedProfile.value!!.language
             _profileTheme.value = _selectedProfile.value!!.theme
         }

@@ -160,21 +160,6 @@ class SharedViewModel @Inject constructor(
         }
     }
 
-    private var _monthAddFund =
-        MutableStateFlow<Long>(0)
-    val monthAddFund: StateFlow<Long> = _monthAddFund
-    fun searchMonthAddFund(
-        month: String,
-        year: String
-    ) {
-        viewModelScope.launch {
-            repository.getMonthSum(month = month, year = year, transaction_type = SPENT)
-                .collect {
-                    _monthAddFund.value = it?:0
-                }
-        }
-    }
-
     private var _monthSavings =
         MutableStateFlow<Long>(0)
     val monthSavings: StateFlow<Long> = _monthSavings

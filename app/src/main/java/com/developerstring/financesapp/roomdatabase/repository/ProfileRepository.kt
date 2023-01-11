@@ -9,7 +9,7 @@ import javax.inject.Inject
 @ViewModelScoped
 class ProfileRepository @Inject constructor(private val profileDao: ProfileDao) {
 
-    fun getSelectedProfile(profileId: Int): Flow<ProfileModel> {
+    fun getSelectedProfile(profileId: Int): Flow<ProfileModel?> {
         return profileDao.getSelectedProfile(profileId = profileId)
     }
 

@@ -38,7 +38,6 @@ fun EditCategoryScreen(
     profileViewModel: ProfileViewModel,
     navController: NavController,
 ) {
-    profileViewModel.getAllCategories()
     val categoryModel by profileViewModel.allCategories.collectAsState()
 
     Scaffold(topBar = {

@@ -51,7 +51,6 @@ fun BottomNavGraph(
         composable(route = BottomNavRoute.Profile.route) {
             ProfileScreen(
                 profileViewModel = profileViewModel,
-                sharedViewModel = sharedViewModel,
                 navController = navController
             )
         }

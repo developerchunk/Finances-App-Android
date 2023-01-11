@@ -42,6 +42,8 @@ fun MainScreen(
     publicSharedViewModel: PublicSharedViewModel
 ) {
 
+    profileViewModel.getProfileDetails()
+
     val nav = rememberNavController()
     val language by profileViewModel.profileLanguage.collectAsState()
     LANGUAGE = language

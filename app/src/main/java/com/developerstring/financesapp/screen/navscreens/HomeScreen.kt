@@ -9,7 +9,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -48,26 +47,23 @@ fun HomeScreen(
     publicSharedViewModel: PublicSharedViewModel
 ) {
 
-    profileViewModel.getProfileDetails()
+    val profileModel by profileViewModel.selectedProfile.collectAsState()
 
-    val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
-    val spent by profileViewModel.profileSpending.collectAsState()
-    val savings by profileViewModel.profileSavings.collectAsState()
-    val currency = profileViewModel.profileCurrency.collectAsState().value
+    val month = SimpleDateFormat("M").format(Date())
+    val year = SimpleDateFormat("yyyy").format(Date())
 
     // get current month spending
     sharedViewModel.searchMonthSpent(
-        month = SimpleDateFormat("M").format(Date()),
-        year = SimpleDateFormat("yyyy").format(Date())
+        month = month,
+        year = year
     )
     // setArray
     sharedViewModel.setDayPaymentArray()
-    sharedViewModel.setCategorySumArray()
 
     // get current month savings
     sharedViewModel.searchMonthSavings(
-        month = SimpleDateFormat("M").format(Date()),
-        year = SimpleDateFormat("yyyy").format(Date())
+        month = month,
+        year = year
     )
 
     val totalSpent by sharedViewModel.monthSpent.collectAsState()
@@ -83,15 +79,10 @@ fun HomeScreen(
         mutableStateOf(0f)
     }
 
-    val spentSum = totalSpent
-    val savingsSum = totalSavings
-
-    spentPercent = (spentSum.toFloat() / spent.toFloat())
-    savingsPercent = (savingsSum.toFloat() / savings.toFloat())
+    spentPercent = (totalSpent.toFloat() / profileModel.month_spent.toFloat())
+    savingsPercent = (totalSavings.toFloat() / profileModel.month_saving.toFloat())
 
     val day = SimpleDateFormat("d").format(Date()).toInt()
-    val month = SimpleDateFormat("M").format(Date()).toInt()
-    val year = SimpleDateFormat("yyyy").format(Date()).toInt()
 
     var openDialog by remember {
         mutableStateOf(false)
@@ -101,8 +92,7 @@ fun HomeScreen(
         mutableStateOf(TransactionModel())
     }
 
-    val language by profileViewModel.profileLanguage.collectAsState()
-    val languageText = LanguageText(language = language)
+    val languageText = LanguageText(language = profileModel.language)
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
 
@@ -121,10 +111,10 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 TopGraphMainScreen(
-                    total_amount = totalAmount,
+                    total_amount = profileModel.total_amount,
                     spentPercent = if (spentPercent <= 1f) spentPercent else 1f,
                     savingPercent = if (savingsPercent <= 1f) savingsPercent else 1f,
-                    currency = currency.last().toString(),
+                    currency = profileModel.currency.last().toString(),
                     text = stringResource(id = languageText.totalBalance)
                 )
             }
@@ -146,8 +136,8 @@ fun HomeScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             modifier = Modifier.wrapContentSize(unbounded = true),
-                            text = if (currency == INDIAN_CURRENCY) simplifyAmountIndia(spentSum.toInt()) else simplifyAmount(
-                                spentSum.toInt()
+                            text = if (profileModel.currency == INDIAN_CURRENCY) simplifyAmountIndia(totalSpent.toInt()) else simplifyAmount(
+                                totalSpent.toInt()
                             ),
                             fontSize = TEXT_FIELD_SIZE,
                             fontFamily = fontInter,
@@ -178,8 +168,8 @@ fun HomeScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             modifier = Modifier.wrapContentSize(unbounded = true),
-                            text = if (currency == INDIAN_CURRENCY) simplifyAmountIndia(savingsSum.toInt()) else simplifyAmount(
-                                savingsSum.toInt()
+                            text = if (profileModel.currency == INDIAN_CURRENCY) simplifyAmountIndia(totalSavings.toInt()) else simplifyAmount(
+                                totalSavings.toInt()
                             ),
                             fontSize = TEXT_FIELD_SIZE,
                             fontFamily = fontInter,
@@ -251,11 +241,11 @@ fun HomeScreen(
             MyActivityContent(
                 sharedViewModel = sharedViewModel,
                 day_ = day,
-                month_ = month,
-                year_ = year,
-                currency = currency,
+                month_ = month.toInt(),
+                year_ = year.toInt(),
+                currency = profileModel.currency,
                 navController = navController,
-                language = language
+                language = profileModel.language
             )
         }
 
@@ -284,7 +274,7 @@ fun HomeScreen(
             title =
             MessageBarContentLastTransaction().title(
                 transactionType = transactionModel.transaction_type,
-                currency = currency,
+                currency = profileModel.currency,
                 amount = transactionModel.amount
             ),
 
@@ -349,11 +339,6 @@ fun TopGraphMainScreen(
     text: String
 ) {
 
-    val lightGreenColor: MutableState<Color> =
-        mutableStateOf(lightGreenGraphColor)
-    val lightBlueColor: MutableState<Color> =
-        mutableStateOf(lightBlueGraphColor)
-
     var animationPlayed by remember { mutableStateOf(false) }
     val spentCurPercentage = animateFloatAsState(
         targetValue = if (animationPlayed) spentPercent else 0f,
@@ -400,7 +385,7 @@ fun TopGraphMainScreen(
 
         Canvas(modifier = Modifier.size(radiusOuter * 2)) {
             drawArc(
-                color = lightBlueColor.value,
+                color = lightBlueGraphColor,
                 -90f,
                 360f,
                 useCenter = false,
@@ -417,7 +402,7 @@ fun TopGraphMainScreen(
 
         Canvas(modifier = Modifier.size(radiusInner * 2)) {
             drawArc(
-                color = lightGreenColor.value,
+                color = lightGreenGraphColor,
                 -90f,
                 360f,
                 useCenter = false,

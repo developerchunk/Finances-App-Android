@@ -22,8 +22,6 @@ import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.YES
 import kotlinx.coroutines.delay
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Composable
 fun SplashScreen(
@@ -48,8 +46,7 @@ fun SplashScreen(
         // logic behind navigation after splash screen
         if (onBoarding.value == YES) {
             if (profileCreate.value == YES) {
-                // get profile details
-                profileViewModel.getProfileDetails()
+                sharedViewModel.setCategorySumArray()
                 navController.navigate(route = SetUpNavRoute.MainSetUpNavRoute.route)
             } else {
                 navController.navigate(route = SetUpNavRoute.CreateProfileSetUpNavRoute.route)

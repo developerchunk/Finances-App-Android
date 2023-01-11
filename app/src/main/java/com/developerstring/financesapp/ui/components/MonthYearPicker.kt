@@ -24,6 +24,7 @@ import androidx.compose.ui.window.Dialog
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.ui.theme.UIBlue
 import com.developerstring.financesapp.ui.theme.backgroundColor
+import com.developerstring.financesapp.ui.theme.fontInter
 import com.developerstring.financesapp.ui.theme.textColorBW
 import com.developerstring.financesapp.util.Constants.MONTHS
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
@@ -92,7 +93,8 @@ fun MonthYearPickerCalender(
                             text = year.toString(),
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Medium,
-                            color = textColorBW
+                            color = textColorBW,
+                            fontFamily = fontInter
                         )
 
                         Icon(
@@ -167,6 +169,8 @@ fun MonthYearPickerCalender(
                                     Text(
                                         text = it,
                                         color = if (month == it) Color.White else textColorBW,
+                                        fontFamily = fontInter,
+                                        fontWeight = FontWeight.Medium
                                     )
                                 }
                             }
@@ -195,7 +199,8 @@ fun MonthYearPickerCalender(
                                 text = stringResource(id = R.string.cancel),
                                 color = textColorBW,
                                 fontSize = 20.sp,
-                                fontWeight = FontWeight.Medium
+                                fontWeight = FontWeight.Medium,
+                                fontFamily = fontInter
                             )
                         }
 
@@ -212,7 +217,8 @@ fun MonthYearPickerCalender(
                                 text = stringResource(id = R.string.ok),
                                 color = UIBlue,
                                 fontSize = 20.sp,
-                                fontWeight = FontWeight.Medium
+                                fontWeight = FontWeight.Medium,
+                                fontFamily = fontInter
                             )
                         }
                     }

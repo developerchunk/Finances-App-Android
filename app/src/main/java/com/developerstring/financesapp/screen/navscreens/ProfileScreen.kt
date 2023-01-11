@@ -31,7 +31,6 @@ import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.screen.navscreens.content.profilescreen.CustomSwitchButton
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
-import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.DARK_THEME
 import com.developerstring.financesapp.util.Constants.DARK_THEME_ENABLE
@@ -44,11 +43,12 @@ import com.developerstring.financesapp.util.Constants.PROFILE_TEXT
 @Composable
 fun ProfileScreen(
     profileViewModel: ProfileViewModel,
-    sharedViewModel: SharedViewModel,
     navController: NavController
 ) {
 
     profileViewModel.getProfileDetails()
+
+    profileViewModel.getAllCategories()
 
     val profileName by profileViewModel.profileName.collectAsState()
     val darkThemeEnable by profileViewModel.profileTheme.collectAsState()

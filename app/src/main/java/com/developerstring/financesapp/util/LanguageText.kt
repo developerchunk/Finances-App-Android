@@ -13,31 +13,6 @@ class LanguageText(
     language: String
 ) {
 
-    val activityCardContent = listOf(
-        ActivityCardData(
-            text = when (language) {
-                ENGLISH -> R.string.activity_chart
-                MARATHI -> R.string.activity_chart_marathi
-                else -> R.string.activity_chart
-            },
-            icon = R.drawable.chart_icon,
-            bgColor = Dark,
-            cardColor = UIBlue,
-            key = Constants.ACTIVITY_CHART_SCREEN_KEY
-        ),
-        ActivityCardData(
-            text = when (language) {
-                ENGLISH -> R.string.categories_chart
-                MARATHI -> R.string.categories_chart_marathi
-                else -> R.string.categories_chart
-            },
-            icon = R.drawable.category_icon,
-            bgColor = DarkGreen,
-            cardColor = Green,
-            key = Constants.CATEGORY_CHART_SCREEN_KEY
-        ),
-    )
-
     //
     val homeBottomNav = when (Constants.LANGUAGE) {
         ENGLISH -> R.string.home_bottom_nav
@@ -121,7 +96,7 @@ class LanguageText(
     val saving = when (language) {
         ENGLISH -> R.string.saving
         MARATHI -> R.string.saving_marathi
-        else -> R.string.spent
+        else -> R.string.saving
     }
     val myActivity = when (language) {
         ENGLISH -> R.string.my_activity
@@ -253,6 +228,24 @@ class LanguageText(
         MARATHI -> R.string.quarter_marathi
         else -> R.string.quarter
     }
+
+    // ActivityScreen Charts
+    val activityCardContent = listOf(
+        ActivityCardData(
+            text = activityChart,
+            icon = R.drawable.chart_icon,
+            bgColor = Dark,
+            cardColor = UIBlue,
+            key = Constants.ACTIVITY_CHART_SCREEN_KEY
+        ),
+        ActivityCardData(
+            text = categoriesChart,
+            icon = R.drawable.category_icon,
+            bgColor = DarkGreen,
+            cardColor = Green,
+            key = Constants.CATEGORY_CHART_SCREEN_KEY
+        ),
+    )
 
 
 }

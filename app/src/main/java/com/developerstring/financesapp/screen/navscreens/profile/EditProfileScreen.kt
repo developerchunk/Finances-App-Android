@@ -12,6 +12,7 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -44,13 +45,15 @@ fun EditProfileScreen(
     navController: NavController
 ) {
 
-    val name by profileViewModel.profileName.collectAsState()
-    val currency by profileViewModel.profileCurrency.collectAsState()
-    val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
-    val spending by profileViewModel.profileSpending.collectAsState()
-    val savings by profileViewModel.profileSavings.collectAsState()
+    val profileModel by profileViewModel.selectedProfile.collectAsState()
 
-    var amount by remember {
+    val name by mutableStateOf(profileModel.name)
+    val currency by mutableStateOf(profileModel.currency)
+    val totalAmount by mutableStateOf(profileModel.total_amount)
+    val spending by mutableStateOf(profileModel.month_spent)
+    val savings by mutableStateOf(profileModel.month_saving)
+
+    var amount by rememberSaveable {
         mutableStateOf(
             if (totalAmount == 0) {
                 ""
@@ -59,19 +62,19 @@ fun EditProfileScreen(
             }
         )
     }
-    var newName by remember {
+    var newName by rememberSaveable {
         mutableStateOf(name)
     }
-    var newSpending by remember {
+    var newSpending by rememberSaveable {
         mutableStateOf(spending.toString())
     }
-    var newSavings by remember {
+    var newSavings by rememberSaveable {
         mutableStateOf(savings.toString())
     }
 
     var expanded by remember { mutableStateOf(false) }
     val list = stringArrayResource(id = R.array.currencies)
-    var selectedCurrency by remember { mutableStateOf(currency) }
+    var selectedCurrency by rememberSaveable { mutableStateOf(currency) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
     val heightTextFields by remember { mutableStateOf(55.dp) }
@@ -447,7 +450,7 @@ fun EditProfileScreen(
                             textFieldSize = coordinates.size.toSize()
                         }
                         .clickable {
-                                   navController.navigate(route = NavRoute.EditCategoryScreen.route)
+                            navController.navigate(route = NavRoute.EditCategoryScreen.route)
                         },
                     shape = RoundedCornerShape(15.dp),
                     backgroundColor = backgroundColor
@@ -459,7 +462,9 @@ fun EditProfileScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            modifier = Modifier.fillMaxWidth(0.8f).padding(start = 20.dp),
+                            modifier = Modifier
+                                .fillMaxWidth(0.8f)
+                                .padding(start = 20.dp),
                             text = "Edit Category List",
                             fontSize = TEXT_FIELD_SIZE,
                             color = textColorBW,
