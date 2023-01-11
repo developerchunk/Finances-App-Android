@@ -177,7 +177,7 @@ object Constants {
         OTHER to listOf(
            OTHER
         ),
-    )
+    ).toSortedMap()
 
     const val YES = "YES"
     const val NO = "NO"

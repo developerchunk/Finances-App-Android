@@ -44,12 +44,14 @@ fun EditCategoryDetailScreen(
     profileViewModel.getSelectedCategories()
     val categoryModel by profileViewModel.selectedCategories.collectAsState()
 
-    var category by remember {
-        mutableStateOf("")
-    }
+    var id by remember { mutableStateOf(0) }
+    var category by remember { mutableStateOf("") }
     var subCategories = mutableListOf("")
     var subCategorySelected by mutableStateOf(0)
     var subCategory by mutableStateOf("")
+
+    var newCategory by remember { mutableStateOf("") }
+
 
     val interactionSource = remember {
 
@@ -60,6 +62,8 @@ fun EditCategoryDetailScreen(
     try {
         subCategories = categoryModel!!.subCategory.split(SEPARATOR_LIST) as MutableList<String>
         category = categoryModel!!.category
+        id = categoryModel!!.id
+        newCategory = category
     } catch (_: Exception) {
 
     }
@@ -181,7 +185,7 @@ fun EditCategoryDetailScreen(
             ) {
 
                 IconButton(
-                     onClick = {
+                    onClick = {
 //                        navController.popBackStack()
                     }) {
                     Icon(
@@ -193,7 +197,6 @@ fun EditCategoryDetailScreen(
                                 onClick = {
                                     if (sheetState.isExpanded) {
                                         scope.launch {
-
                                             sheetState.collapse()
                                         }
                                     } else {
@@ -288,9 +291,9 @@ fun EditCategoryDetailScreen(
                                         }
                                     }
                                 ),
-                            value = category,
+                            value = newCategory,
                             onValueChange = {
-                                category = it.convertStringToAlphabets()
+                                newCategory = it.convertStringToAlphabets()
                             },
                             colors = TextFieldDefaults.textFieldColors(
                                 backgroundColor = Color.Transparent,
@@ -310,7 +313,23 @@ fun EditCategoryDetailScreen(
                                 imeAction = ImeAction.Next
                             ),
                             singleLine = false,
-                            enabled = sheetState.isCollapsed
+                            enabled = sheetState.isCollapsed,
+                            trailingIcon = {
+                                if (newCategory != category) {
+                                    IconButton(onClick = {
+                                        profileViewModel.updateCategoryName(
+                                            id = id,
+                                            category = newCategory
+                                        )
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Rounded.Check,
+                                            contentDescription = "check",
+                                            tint = textColorBW
+                                        )
+                                    }
+                                }
+                            }
                         )
 
                     }
