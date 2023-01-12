@@ -79,9 +79,15 @@ fun EditCategoryDetailContent(
 
     var id by remember { mutableStateOf(0) }
     var category by remember { mutableStateOf("") }
-    var subCategories = mutableListOf<String?>(null)
-    var subCategorySelected by mutableStateOf(0)
-    var subCategory by mutableStateOf("")
+    var subCategories = remember {
+        mutableListOf<String?>(null)
+    }
+    var subCategorySelected by remember {
+        mutableStateOf(0)
+    }
+    var subCategory by remember {
+        mutableStateOf("")
+    }
 
     var newCategory by remember { mutableStateOf("") }
 
