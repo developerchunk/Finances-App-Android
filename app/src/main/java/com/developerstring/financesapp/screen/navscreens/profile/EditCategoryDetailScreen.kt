@@ -79,17 +79,12 @@ fun EditCategoryDetailContent(
 
     var id by remember { mutableStateOf(0) }
     var category by remember { mutableStateOf("") }
-    var subCategories = remember {
-        mutableListOf<String?>(null)
-    }
-    var subCategorySelected by remember {
-        mutableStateOf(0)
-    }
-    var subCategory by remember {
-        mutableStateOf("")
-    }
+    var subCategories = remember { mutableListOf<String?>(null) }
+    var subCategorySelected by remember { mutableStateOf(0) }
+    var subCategory by remember { mutableStateOf("") }
 
     var newCategory by remember { mutableStateOf("") }
+    var addSubCategory by remember { mutableStateOf(false) }
 
 
     val interactionSource = remember {
@@ -120,7 +115,9 @@ fun EditCategoryDetailContent(
     val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
     val scope = rememberCoroutineScope()
 
-    var deleteError by mutableStateOf(false)
+    var deleteError by remember {
+        mutableStateOf(false)
+    }
 
     var deleteDisplay by remember {
         mutableStateOf(false)
@@ -167,7 +164,21 @@ fun EditCategoryDetailContent(
                     trailingIcon = {
                         IconButton(onClick = {
 
-                            if (subCategory != "") {
+                            if (subCategory != "" && !addSubCategory) {
+                                subCategories.set(
+                                    index = subCategorySelected,
+                                    element = subCategory
+                                )
+
+                                profileViewModel.updateSubCategoryName(
+                                    id = categoryModel!!.id,
+                                    subCategory = subCategories.joinToString(Constants.SEPARATOR_LIST)
+                                )
+                                scope.launch {
+                                    sheetState.collapse()
+                                }
+                                subCategory = ""
+                            } else if (addSubCategory) {
                                 subCategories.add(
                                     index = subCategorySelected,
                                     element = subCategory
@@ -181,6 +192,7 @@ fun EditCategoryDetailContent(
                                     sheetState.collapse()
                                 }
                                 subCategory = ""
+                                addSubCategory = false
                             }
 
                         }) {
@@ -282,6 +294,7 @@ fun EditCategoryDetailContent(
 //                            } else {
 //                                subCategories.add(index = subCategories.size, element = "")
 //                            }
+                            addSubCategory = true
                             sheetState.expand()
                         } else {
                             sheetState.collapse()
