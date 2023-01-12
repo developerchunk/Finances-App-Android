@@ -292,8 +292,8 @@ fun CreateProfileScreen(
                             amount_ = amount.value.toInt(),
                             currency_ = selectedCurrency
                         )
-                        navController.popBackStack()
                         navController.navigate(SetUpNavRoute.CreateProfileSetUpNavRoute2.route)
+                        navController.popBackStack()
                     } else {
                         Toast.makeText(context, "Please fill all details", Toast.LENGTH_SHORT)
                             .show()
