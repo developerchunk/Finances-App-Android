@@ -50,10 +50,15 @@ fun EditCategoryDetailScreen(
 
     val categories by profileViewModel.allCategories.collectAsState()
 
+    profileViewModel.getSelectedCategories()
+
+    val categoryModel by profileViewModel.selectedCategories.collectAsState()
+
     EditCategoryDetailContent(
         categories = categories,
         profileViewModel = profileViewModel,
-        navController = navController
+        navController = navController,
+        categoryModel = categoryModel
     )
 
 }
@@ -63,8 +68,10 @@ fun EditCategoryDetailScreen(
 fun EditCategoryDetailContent(
     categories: RequestState<List<CategoryModel>>,
     profileViewModel: ProfileViewModel,
-    navController: NavController
+    navController: NavController,
+    categoryModel: CategoryModel?
 ) {
+
 
     if (profileViewModel.categoryId.value == 0) {
         if (categories is RequestState.Success) {
@@ -73,9 +80,6 @@ fun EditCategoryDetailContent(
         }
     }
 
-    profileViewModel.getSelectedCategories()
-
-    val categoryModel by profileViewModel.selectedCategories.collectAsState()
 
     var id by remember { mutableStateOf(0) }
     var category by remember { mutableStateOf("") }
@@ -84,6 +88,7 @@ fun EditCategoryDetailContent(
     var subCategory by remember { mutableStateOf("") }
 
     var newCategory by remember { mutableStateOf("") }
+    var newSubCategory by remember { mutableStateOf("") }
     var addSubCategory by remember { mutableStateOf(false) }
 
 
@@ -95,8 +100,8 @@ fun EditCategoryDetailContent(
     try {
         subCategories =
             (categoryModel!!.subCategory.split(Constants.SEPARATOR_LIST) as MutableList<String>).toMutableList()
-        category = categoryModel!!.category
-        id = categoryModel!!.id
+        category = categoryModel.category
+        id = categoryModel.id
         newCategory = category
     } catch (_: Exception) {
     }
@@ -163,31 +168,35 @@ fun EditCategoryDetailContent(
                     ),
                     trailingIcon = {
                         IconButton(onClick = {
-
                             if (subCategory != "" && !addSubCategory) {
-                                subCategories.set(
-                                    index = subCategorySelected,
-                                    element = subCategory
-                                )
+                                if (newSubCategory != subCategory) {
+                                    subCategories.set(
+                                        index = subCategorySelected,
+                                        element = subCategory
+                                    )
 
-                                profileViewModel.updateSubCategoryName(
-                                    id = categoryModel!!.id,
-                                    subCategory = subCategories.joinToString(Constants.SEPARATOR_LIST)
-                                )
+                                    profileViewModel.updateSubCategoryName(
+                                        id = categoryModel!!.id,
+                                        subCategory = subCategories.joinToString(Constants.SEPARATOR_LIST)
+                                    )
+                                }
                                 scope.launch {
                                     sheetState.collapse()
                                 }
                                 subCategory = ""
+                                addSubCategory = false
                             } else if (addSubCategory) {
-                                subCategories.add(
-                                    index = subCategorySelected,
-                                    element = subCategory
-                                )
+                                if (subCategory != "") {
+                                    subCategories.add(
+                                        index = subCategorySelected,
+                                        element = subCategory
+                                    )
 
-                                profileViewModel.updateSubCategoryName(
-                                    id = categoryModel!!.id,
-                                    subCategory = subCategories.joinToString(Constants.SEPARATOR_LIST)
-                                )
+                                    profileViewModel.updateSubCategoryName(
+                                        id = categoryModel!!.id,
+                                        subCategory = subCategories.joinToString(Constants.SEPARATOR_LIST)
+                                    )
+                                }
                                 scope.launch {
                                     sheetState.collapse()
                                 }
@@ -393,6 +402,7 @@ fun EditCategoryDetailContent(
                                 enabled = sheetState.isCollapsed,
                                 trailingIcon = {
                                     if (newCategory != category && newCategory != "") {
+                                        addSubCategory = false
                                         IconButton(onClick = {
                                             profileViewModel.updateCategoryName(
                                                 id = id,
@@ -446,7 +456,7 @@ fun EditCategoryDetailContent(
                             message = "\"$category\" Category and all Sub-Categories in it will be permanently deleted. \nYou will not be able to undo it.",
                             openDialog = deleteDisplay,
                             onCloseClicked = {
-                                             deleteDisplay = false
+                                deleteDisplay = false
                             },
                             onYesClicked = {
                                 profileViewModel.deleteCategoryState.value =
@@ -469,10 +479,12 @@ fun EditCategoryDetailContent(
                                         index = index,
                                         interactionSource = interactionSource,
                                         onClick = { i ->
+                                            addSubCategory = false
                                             scope.launch {
                                                 if (sheetState.isCollapsed) {
                                                     subCategorySelected = i
                                                     subCategory = subCategories[i]!!
+                                                    newSubCategory = subCategories[i]!!
                                                     sheetState.expand()
                                                 } else {
                                                     sheetState.collapse()
@@ -480,7 +492,7 @@ fun EditCategoryDetailContent(
                                             }
                                         },
                                         onDelete = { i ->
-
+                                            addSubCategory = false
                                             if (subCategories.size > 1) {
                                                 subCategories.removeAt(i)
                                                 profileViewModel.updateSubCategoryName(

@@ -4,13 +4,10 @@ import android.widget.Toast
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
@@ -46,30 +43,15 @@ fun EditCategoryScreen(
     val categoryDelete by profileViewModel.deleteCategoryState
     profileViewModel.categoryAction(action = categoryDelete)
 
-    CategoryScreenContent(
-        categoryModel = categoryModel,
-        profileViewModel = profileViewModel,
-        navController = navController
-    )
-
-}
-
-@Composable
-fun CategoryScreenContent(
-    categoryModel: RequestState<List<CategoryModel>>,
-    profileViewModel: ProfileViewModel,
-    navController: NavController
-) {
-
-    val scrollState = rememberScrollState()
+    var addError by remember {
+        mutableStateOf(false)
+    }
 
     val interactionSource = remember {
         MutableInteractionSource()
     }
 
-    var addError by remember {
-        mutableStateOf(false)
-    }
+    val scrollState = rememberScrollState()
 
     Scaffold(topBar = {
 
@@ -102,30 +84,14 @@ fun CategoryScreenContent(
                 maxLines = 1
             )
 
-            IconButton(onClick = {
-                if (categoryModel is RequestState.Success) {
-                    if (categoryModel.data.size <= 30) {
-                        profileViewModel.addCategory(
-                            categoryModel = CategoryModel(
-                                category = "Category Name",
-                                subCategory = "Sub Category-1"
-                            )
-                        )
-                        profileViewModel.categoryId.value = 0
-                        navController.navigate(route = NavRoute.EditCategoryDetailScreen.route)
-                    } else {
-                        addError = true
-                    }
+            AddCategoryIcon(
+                categoryModel = categoryModel,
+                profileViewModel = profileViewModel,
+                navController = navController,
+                addError = { errorState ->
+                    addError = errorState
                 }
-
-            }) {
-                Icon(
-                    modifier = Modifier.size(28.dp),
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = "add",
-                    tint = textColorBW
-                )
-            }
+            )
 
         }
 
@@ -140,36 +106,91 @@ fun CategoryScreenContent(
             addError = false
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(backgroundColor)
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(top = 30.dp)
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-            ) {
-                if (categoryModel is RequestState.Success) {
-                    categoryModel.data.forEach { value ->
-                        CategoryItem(
-                            categoryModel = value,
-                            interactionSource = interactionSource,
-                            onClick = { id ->
-                                profileViewModel.categoryId.value = id
-                                profileViewModel.getSelectedCategories(id = id)
-                                navController.navigate(route = NavRoute.EditCategoryDetailScreen.route)
-                            }
-                        )
-                    }
+        CategoryScreenContent(
+            categoryModel = categoryModel,
+            profileViewModel = profileViewModel,
+            navController = navController,
+            interactionSource = interactionSource,
+            scrollState = scrollState
+        )
 
-                }
-            }
-        }
 
     }
 
+}
+
+
+@Composable
+fun AddCategoryIcon(
+    categoryModel: RequestState<List<CategoryModel>>,
+    profileViewModel: ProfileViewModel,
+    navController: NavController,
+    addError: (Boolean) -> Unit
+) {
+
+    IconButton(onClick = {
+        if (categoryModel is RequestState.Success) {
+            if (categoryModel.data.size <= 30) {
+                profileViewModel.addCategory(
+                    categoryModel = CategoryModel(
+                        category = "Category Name",
+                        subCategory = "Sub Category-1"
+                    )
+                )
+                profileViewModel.categoryId.value = 0
+                navController.navigate(route = NavRoute.EditCategoryDetailScreen.route)
+            } else {
+                addError(true)
+            }
+        }
+
+    }) {
+        Icon(
+            modifier = Modifier.size(28.dp),
+            imageVector = Icons.Rounded.Add,
+            contentDescription = "add",
+            tint = textColorBW
+        )
+    }
+
+}
+
+@Composable
+fun CategoryScreenContent(
+    categoryModel: RequestState<List<CategoryModel>>,
+    profileViewModel: ProfileViewModel,
+    navController: NavController,
+    interactionSource: MutableInteractionSource,
+    scrollState: ScrollState
+) {
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(top = 30.dp)
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+        ) {
+            if (categoryModel is RequestState.Success) {
+                categoryModel.data.forEach { value ->
+                    CategoryItem(
+                        categoryModel = value,
+                        interactionSource = interactionSource,
+                        onClick = { id ->
+                            profileViewModel.categoryId.value = id
+                            profileViewModel.getSelectedCategories(id = id)
+                            navController.navigate(route = NavRoute.EditCategoryDetailScreen.route)
+                        }
+                    )
+                }
+
+            }
+        }
+    }
 
 }
 
