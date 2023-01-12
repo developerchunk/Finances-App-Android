@@ -80,7 +80,6 @@ fun EditCategoryDetailContent(
         }
     }
 
-
     var id by remember { mutableStateOf(0) }
     var category by remember { mutableStateOf("") }
     var subCategories = remember { mutableListOf<String?>(null) }
