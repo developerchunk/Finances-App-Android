@@ -1,5 +1,7 @@
 package com.developerstring.financesapp.ui.components
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -17,12 +19,12 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import com.developerstring.financesapp.ui.theme.*
-import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
-import com.developerstring.financesapp.util.Constants.OTHER
+import com.developerstring.financesapp.util.Constants
 import com.developerstring.financesapp.util.simplifyAmount
 import com.developerstring.financesapp.util.simplifyAmountIndia
 import com.developerstring.financesapp.util.transactionTypeToSymbol
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun TransactionsItemView(
     transactionModel: TransactionModel,
@@ -39,153 +41,170 @@ fun TransactionsItemView(
         MutableInteractionSource()
     }
 
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = true) {
+        expanded = true
+    }
+
+
     val extraInfoStatus = transactionModel.info != ""
 
-    Surface(
-        modifier = Modifier
-            .padding(
-                start = 20.dp,
-                end = 20.dp,
-                top = if (sameDate) 0.dp else 10.dp
-            )
-            .fillMaxWidth()
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = {
-                    navigateToDetails(transactionModel.id)
-                }),
-        color = Color.Transparent,
-    ) {
+    Column(modifier = Modifier.fillMaxWidth().heightIn(min = 100.dp)) {
+        AnimatedVisibility(
+            visible = expanded,
+            enter = scaleIn() + expandVertically(expandFrom = Alignment.CenterVertically, animationSpec = tween(durationMillis = 2000)),
 
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 10.dp)
-                    .alpha(if (sameDate) 0f else 1f),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-
-
-                Text(
-                    text = transactionModel.day.toString(),
-                    fontSize = TEXT_FIELD_SIZE,
-                    fontFamily = fontInter,
-                    fontWeight = FontWeight.Medium,
-                    color = textColorBW
-                )
-                Text(
-                    text = "${transactionModel.month}/${transactionModel.year}",
-                    fontSize = EXTRA_SMALL_TEXT_SIZE,
-                    fontFamily = fontInter,
-                    fontWeight = FontWeight.Medium,
-                    color = textColorBW
-                )
-
-
-            }
-
+        ) {
             Surface(
-                elevation = 5.dp,
-                modifier = Modifier.padding(10.dp),
-                shape = RoundedCornerShape(10.dp),
-                color = contentColorCard
+                modifier = Modifier
+                    .padding(
+                        start = 20.dp,
+                        end = 20.dp,
+                        top = if (sameDate) 0.dp else 10.dp
+                    )
+                    .fillMaxWidth()
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null,
+                        onClick = {
+                            navigateToDetails(transactionModel.id)
+                        }),
+                color = Color.Transparent,
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 20.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
 
-                        val (text, text1, text2, text3) = createRefs()
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 10.dp)
+                            .alpha(if (sameDate) 0f else 1f),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
 
-                        Text(
-                            modifier = Modifier
-                                .padding(start = 20.dp)
-                                .fillMaxWidth(0.5f)
-                                .constrainAs(text) {
-                                    start.linkTo(parent.start)
-                                    top.linkTo(parent.top)
-                                },
-                            text =
-                            if (transactionModel.category == OTHER) transactionModel.categoryOther
-                            else transactionModel.category,
-                            fontFamily = fontInter,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = SMALLEST_TEXT_SIZE,
-                            color = colorGray,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 2
-                        )
 
                         Text(
-                            modifier = Modifier
-                                .padding(start = 20.dp)
-                                .fillMaxWidth(0.5f)
-                                .constrainAs(text1) {
-                                    start.linkTo(parent.start)
-                                    top.linkTo(text.bottom)
-                                },
-                            text =
-                            if (transactionModel.subCategory == OTHER) transactionModel.subCategoryOther
-                            else transactionModel.subCategory,
-                            fontFamily = fontInter,
-                            fontWeight = FontWeight.Medium,
+                            text = transactionModel.day.toString(),
                             fontSize = TEXT_FIELD_SIZE,
-                            color = textColorBW,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 2,
-                        )
-
-                        if (extraInfoStatus) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(start = 20.dp)
-                                    .constrainAs(text2) {
-                                        start.linkTo(text1.start)
-                                        top.linkTo(text1.bottom)
-                                    },
-                                text = transactionModel.info,
-                                fontFamily = fontInter,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = EXTRA_SMALL_TEXT_SIZE,
-                                color = textColorBW,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-
-                        Text(
-                            modifier = Modifier
-                                .padding(end = 20.dp)
-                                .constrainAs(text3) {
-                                    top.linkTo(parent.top)
-                                    end.linkTo(parent.end)
-                                },
-                            text = "${transactionTypeToSymbol(transactionType = transactionModel.transaction_type)} ${
-                                if (currency.last()
-                                        .toString() == INDIAN_CURRENCY
-                                ) simplifyAmountIndia(
-                                    transactionModel.amount
-                                ) else simplifyAmount(transactionModel.amount)
-                            } ${currency.last()}",
                             fontFamily = fontInter,
                             fontWeight = FontWeight.Medium,
-                            fontSize = TEXT_FIELD_SIZE,
-                            color = textColorBW,
+                            color = textColorBW
                         )
+                        Text(
+                            text = "${transactionModel.month}/${transactionModel.year}",
+                            fontSize = EXTRA_SMALL_TEXT_SIZE,
+                            fontFamily = fontInter,
+                            fontWeight = FontWeight.Medium,
+                            color = textColorBW
+                        )
+
 
                     }
 
+                    Surface(
+                        elevation = 5.dp,
+                        modifier = Modifier.padding(10.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        color = contentColorCard
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 20.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
+
+                                val (text, text1, text2, text3) = createRefs()
+
+                                Text(
+                                    modifier = Modifier
+                                        .padding(start = 20.dp)
+                                        .fillMaxWidth(0.5f)
+                                        .constrainAs(text) {
+                                            start.linkTo(parent.start)
+                                            top.linkTo(parent.top)
+                                        },
+                                    text =
+                                    if (transactionModel.category == Constants.OTHER) transactionModel.categoryOther
+                                    else transactionModel.category,
+                                    fontFamily = fontInter,
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = SMALLEST_TEXT_SIZE,
+                                    color = colorGray,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 2
+                                )
+
+                                Text(
+                                    modifier = Modifier
+                                        .padding(start = 20.dp)
+                                        .fillMaxWidth(0.5f)
+                                        .constrainAs(text1) {
+                                            start.linkTo(parent.start)
+                                            top.linkTo(text.bottom)
+                                        },
+                                    text =
+                                    if (transactionModel.subCategory == Constants.OTHER) transactionModel.subCategoryOther
+                                    else transactionModel.subCategory,
+                                    fontFamily = fontInter,
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = TEXT_FIELD_SIZE,
+                                    color = textColorBW,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 2,
+                                )
+
+                                if (extraInfoStatus) {
+                                    Text(
+                                        modifier = Modifier
+                                            .padding(start = 20.dp)
+                                            .constrainAs(text2) {
+                                                start.linkTo(text1.start)
+                                                top.linkTo(text1.bottom)
+                                            },
+                                        text = transactionModel.info,
+                                        fontFamily = fontInter,
+                                        fontWeight = FontWeight.Medium,
+                                        fontSize = EXTRA_SMALL_TEXT_SIZE,
+                                        color = textColorBW,
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
+
+                                Text(
+                                    modifier = Modifier
+                                        .padding(end = 20.dp)
+                                        .constrainAs(text3) {
+                                            top.linkTo(parent.top)
+                                            end.linkTo(parent.end)
+                                        },
+                                    text = "${transactionTypeToSymbol(transactionType = transactionModel.transaction_type)} ${
+                                        if (currency.last()
+                                                .toString() == Constants.INDIAN_CURRENCY
+                                        ) simplifyAmountIndia(
+                                            transactionModel.amount
+                                        ) else simplifyAmount(transactionModel.amount)
+                                    } ${currency.last()}",
+                                    fontFamily = fontInter,
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = TEXT_FIELD_SIZE,
+                                    color = textColorBW,
+                                )
+
+                            }
+
+                        }
+                    }
+
                 }
+
             }
-
         }
-
     }
 
 
