@@ -3,6 +3,7 @@ package com.developerstring.financesapp.screen.transaction
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
@@ -43,6 +44,8 @@ fun ViewHistoryScreen(
     val searchedTransactions by sharedViewModel.searchedTransactions.collectAsState()
     val filterSearchedTransactions by sharedViewModel.filterSearchedTransactions.collectAsState()
 
+    val currency by profileViewModel.profileCurrency.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBarHistory(
@@ -53,16 +56,26 @@ fun ViewHistoryScreen(
             )
         }
     ) {
-        TransactionHistoryContain(
-            sharedViewModel = sharedViewModel,
-            profileViewModel = profileViewModel,
-            navController = navController,
-            allTransactions = allTransactions,
-            searchTransactions = searchedTransactions,
-            filterSearchTransactions = filterSearchedTransactions,
-            searchBarState = searchBarState,
-            filterState = filterState
-        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues = it)
+                .background(backgroundColor)
+        ) {
+            TransactionHistoryContain(
+                sharedViewModel = sharedViewModel,
+                navController = navController,
+                allTransactions = allTransactions,
+                searchTransactions = searchedTransactions,
+                filterSearchTransactions = filterSearchedTransactions,
+                searchBarState = searchBarState,
+                filterState = filterState,
+                currency = currency
+            )
+        }
+
+
     }
 
 }
@@ -70,62 +83,54 @@ fun ViewHistoryScreen(
 @Composable
 fun TransactionHistoryContain(
     sharedViewModel: SharedViewModel,
-    profileViewModel: ProfileViewModel,
     navController: NavController,
     allTransactions: RequestState<List<TransactionModel>>,
     searchTransactions: RequestState<List<TransactionModel>>,
     filterSearchTransactions: RequestState<List<TransactionModel>>,
     searchBarState: SearchBarState,
-    filterState: FilterTransactionState
+    filterState: FilterTransactionState,
+    currency: String
 ) {
 
-    val currency by profileViewModel.profileCurrency.collectAsState()
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundColor)
-    ) {
-
-        if (searchBarState == SearchBarState.TRIGGERED && filterState == FilterTransactionState.OPENED) {
-            if (filterSearchTransactions is RequestState.Success) {
-                HistoryTransactionContent(
-                    allTransactions = filterSearchTransactions.data,
-                    currency = currency,
-                    sharedViewModel = sharedViewModel,
-                    navController = navController
-                )
-            }
-        } else if (searchBarState == SearchBarState.TRIGGERED) {
-            if (searchTransactions is RequestState.Success) {
-                HistoryTransactionContent(
-                    allTransactions = searchTransactions.data,
-                    currency = currency,
-                    sharedViewModel = sharedViewModel,
-                    navController = navController
-                )
-            }
-        } else if (filterState == FilterTransactionState.OPENED) {
-            if (searchTransactions is RequestState.Success) {
-                HistoryTransactionContent(
-                    allTransactions = searchTransactions.data,
-                    currency = currency,
-                    sharedViewModel = sharedViewModel,
-                    navController = navController
-                )
-            }
-        } else {
-            if (allTransactions is RequestState.Success) {
-                HistoryTransactionContent(
-                    allTransactions = allTransactions.data,
-                    currency = currency,
-                    sharedViewModel = sharedViewModel,
-                    navController = navController
-                )
-            }
+    if (searchBarState == SearchBarState.TRIGGERED && filterState == FilterTransactionState.OPENED) {
+        if (filterSearchTransactions is RequestState.Success) {
+            HistoryTransactionContent(
+                allTransactions = filterSearchTransactions.data,
+                currency = currency,
+                sharedViewModel = sharedViewModel,
+                navController = navController
+            )
         }
-
+    } else if (searchBarState == SearchBarState.TRIGGERED) {
+        if (searchTransactions is RequestState.Success) {
+            HistoryTransactionContent(
+                allTransactions = searchTransactions.data,
+                currency = currency,
+                sharedViewModel = sharedViewModel,
+                navController = navController
+            )
+        }
+    } else if (filterState == FilterTransactionState.OPENED) {
+        if (searchTransactions is RequestState.Success) {
+            HistoryTransactionContent(
+                allTransactions = searchTransactions.data,
+                currency = currency,
+                sharedViewModel = sharedViewModel,
+                navController = navController
+            )
+        }
+    } else {
+        if (allTransactions is RequestState.Success) {
+            HistoryTransactionContent(
+                allTransactions = allTransactions.data,
+                currency = currency,
+                sharedViewModel = sharedViewModel,
+                navController = navController
+            )
+        }
     }
+
+
 }
 
 @Composable
@@ -139,11 +144,11 @@ fun HistoryTransactionContent(
     LazyColumn {
         items(
             items =
-                if (oldFirstFilter.value) {
-                    allTransactions.reversed()
-                } else {
-                    allTransactions
-                }
+            if (oldFirstFilter.value) {
+                allTransactions.reversed()
+            } else {
+                allTransactions
+            }
         ) {
             TransactionsItemView(
                 transactionModel = it,

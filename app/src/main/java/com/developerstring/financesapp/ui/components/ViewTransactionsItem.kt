@@ -49,15 +49,19 @@ fun TransactionsItemView(
         expanded = true
     }
 
-
     val extraInfoStatus = transactionModel.info != ""
 
-    Column(modifier = Modifier.fillMaxWidth().heightIn(min = 100.dp)) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .heightIn(min = 100.dp)) {
         AnimatedVisibility(
             visible = expanded,
-            enter = scaleIn() + expandVertically(expandFrom = Alignment.CenterVertically, animationSpec = tween(durationMillis = 2000)),
+            enter = scaleIn() + expandVertically(
+                expandFrom = Alignment.CenterVertically,
+                animationSpec = tween(durationMillis = 1000)
+            ),
 
-        ) {
+            ) {
             Surface(
                 modifier = Modifier
                     .padding(
@@ -75,7 +79,10 @@ fun TransactionsItemView(
                 color = Color.Transparent,
             ) {
 
-                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Column(
                         modifier = Modifier
                             .padding(horizontal = 10.dp)

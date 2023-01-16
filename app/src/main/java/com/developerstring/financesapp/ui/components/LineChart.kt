@@ -3,7 +3,9 @@ package com.developerstring.financesapp.ui.components
 import android.graphics.Paint
 import android.graphics.Path
 import androidx.compose.animation.Animatable
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +18,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.ui.theme.LightBlue
+import com.developerstring.financesapp.ui.theme.WhiteGreen
+import com.developerstring.financesapp.ui.theme.backgroundColor
 import com.developerstring.financesapp.util.Constants.DARK_THEME_ENABLE
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
 import com.developerstring.financesapp.util.dataclass.LineChartData
@@ -27,14 +31,14 @@ import kotlin.math.roundToInt
 
 @Composable
 fun LineChart(
-    chartInfo: List<LineChartData> = emptyList(),
     modifier: Modifier = Modifier,
+    chartInfo: List<LineChartData> = emptyList(),
     graphColor: Color = Color.Green,
     textColor: Int,
     currency: String
 ) {
 
-    val yCoordinates = mutableStateListOf<Float>()
+    val yCoordinates = mutableListOf<Float>()
 
     val spacing = 100f
 

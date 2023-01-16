@@ -1,6 +1,5 @@
 package com.developerstring.financesapp.screen.charts
 
-import android.icu.util.Calendar
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
@@ -41,6 +40,7 @@ import com.developerstring.financesapp.util.state.RequestState
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
+import java.util.*
 
 @Composable
 fun CategoryChartScreen(
@@ -121,6 +121,7 @@ fun CategoryChartScreen(
 
         Column(
             modifier = Modifier
+                .padding(it)
                 .fillMaxSize()
                 .background(backgroundColor)
                 .verticalScroll(rememberScrollState())

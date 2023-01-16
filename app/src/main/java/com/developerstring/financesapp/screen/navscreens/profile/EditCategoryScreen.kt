@@ -106,13 +106,21 @@ fun EditCategoryScreen(
             addError = false
         }
 
-        CategoryScreenContent(
-            categoryModel = categoryModel,
-            profileViewModel = profileViewModel,
-            navController = navController,
-            interactionSource = interactionSource,
-            scrollState = scrollState
-        )
+        Column(
+            modifier = Modifier
+                .padding(paddingValues = it)
+                .fillMaxSize()
+        ) {
+
+            CategoryScreenContent(
+                categoryModel = categoryModel,
+                profileViewModel = profileViewModel,
+                navController = navController,
+                interactionSource = interactionSource,
+                scrollState = scrollState
+            )
+
+        }
 
 
     }
@@ -171,10 +179,14 @@ fun CategoryScreenContent(
     ) {
         Column(
             modifier = Modifier
-                .padding(top = 30.dp)
                 .fillMaxSize()
                 .verticalScroll(scrollState)
         ) {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(20.dp)
+            )
             if (categoryModel is RequestState.Success) {
                 categoryModel.data.forEach { value ->
                     CategoryItem(

@@ -128,7 +128,9 @@ fun ActivityChartScreen(
             }
 
         }
-    }) {
+    }) { it ->
+
+        it.toString()
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -175,7 +177,7 @@ fun MonthActivityChart(
     var dates by remember {
         mutableStateOf(listOf<Int>())
     }
-    val data = mutableStateListOf<LineChartData>()
+    val data = mutableListOf<LineChartData>()
 
 //    val data_ = mutableStateListOf<LineChartData>()
 

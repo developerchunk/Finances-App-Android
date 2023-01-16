@@ -53,14 +53,18 @@ fun TransactionDetailsScreen(
     val languageText = LanguageText(language = language)
 
 
-    var oldAmount by mutableStateOf(0)
+    var oldAmount by remember {
+        mutableStateOf(0)
+    }
     try {
         oldAmount = getTransactionModel!!.amount
     } catch (e: Exception) {
 //        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
     }
 
-    var oldTransactionType by mutableStateOf<String?>("")
+    var oldTransactionType by remember {
+        mutableStateOf<String?>("")
+    }
     try {
         oldTransactionType = getTransactionModel!!.transaction_type
     } catch (_: Exception) {

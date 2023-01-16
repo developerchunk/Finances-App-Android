@@ -47,34 +47,28 @@ fun EditProfileScreen(
 
     val profileModel by profileViewModel.selectedProfile.collectAsState()
 
-    val name by mutableStateOf(profileModel.name)
-    val currency by mutableStateOf(profileModel.currency)
-    val totalAmount by mutableStateOf(profileModel.total_amount)
-    val spending by mutableStateOf(profileModel.month_spent)
-    val savings by mutableStateOf(profileModel.month_saving)
-
     var amount by rememberSaveable {
         mutableStateOf(
-            if (totalAmount == 0) {
+            if (profileModel.total_amount == 0) {
                 ""
             } else {
-                totalAmount.toString()
+                profileModel.total_amount.toString()
             }
         )
     }
     var newName by rememberSaveable {
-        mutableStateOf(name)
+        mutableStateOf(profileModel.name)
     }
     var newSpending by rememberSaveable {
-        mutableStateOf(spending.toString())
+        mutableStateOf(profileModel.month_spent.toString())
     }
     var newSavings by rememberSaveable {
-        mutableStateOf(savings.toString())
+        mutableStateOf(profileModel.month_saving.toString())
     }
 
     var expanded by remember { mutableStateOf(false) }
     val list = stringArrayResource(id = R.array.currencies)
-    var selectedCurrency by rememberSaveable { mutableStateOf(currency) }
+    var selectedCurrency by rememberSaveable { mutableStateOf(profileModel.currency) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
     val heightTextFields by remember { mutableStateOf(55.dp) }
@@ -117,11 +111,11 @@ fun EditProfileScreen(
 
             IconButton(onClick = {
                 if (
-                    name != newName ||
-                    currency != selectedCurrency ||
-                    totalAmount != amount.toInt() ||
-                    spending != newSpending.toInt() ||
-                    savings != newSavings.toInt()
+                    profileModel.name != newName ||
+                    profileModel.currency != selectedCurrency ||
+                    profileModel.total_amount != amount.toInt() ||
+                    profileModel.month_spent != newSpending.toInt() ||
+                    profileModel.month_saving != newSavings.toInt()
                 ) {
 
                     profileViewModel.updateProfile(

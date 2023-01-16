@@ -84,7 +84,7 @@ fun ActivityBarChart(
         }
     }
     // for y coordinates of Y-Axis Scale to create horizontal dotted line indicating Y-Axis scale
-    val yCoordinates = mutableStateListOf<Float>()
+    val yCoordinates = mutableListOf<Float>()
     // for dotted lines effects
     val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
 

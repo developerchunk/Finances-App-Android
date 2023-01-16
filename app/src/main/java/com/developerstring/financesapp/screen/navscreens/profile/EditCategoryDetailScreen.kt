@@ -323,6 +323,7 @@ fun EditCategoryDetailContent(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(paddingValues = it)
                     .background(backgroundColor)
                     .clickable(
                         indication = null,
