@@ -54,25 +54,6 @@ fun PieChart(
         dataPercentage.add(index, ((value.toFloat() / totalSum.toFloat()) * 1000f))
     }
 
-    val color = listOf(
-        UIBlue.copy(alpha = 0.5f),
-        UIBlue.copy(alpha = 1f),
-        Purple200.copy(0.5f),
-        Purple200.copy(1f),
-        Green.copy(0.5f),
-        Green.copy(1f),
-        Yellow.copy(0.5f),
-        Yellow.copy(1f),
-        Orange.copy(0.5f),
-        Orange.copy(1f),
-        Purple500.copy(0.5f),
-        Purple500.copy(1f),
-        Pink.copy(0.5f),
-        Pink.copy(1f),
-        Purple700.copy(0.5f),
-        Purple700.copy(1f),
-    )
-
     var animationPlayed by remember { mutableStateOf(false) }
 
     var lastValue = 0f
@@ -119,7 +100,7 @@ fun PieChart(
                     floatValue.forEachIndexed { index, value ->
                         if (value != 0f) {
                             drawArc(
-                                color = color[index],
+                                color = COLORS_LIST_30[index],
                                 lastValue,
                                 value,
                                 useCenter = false,
@@ -145,7 +126,7 @@ fun PieChart(
             DetailsPieChart(
                 data = data,
                 floatValue = dataPercentage,
-                color = color,
+                color = COLORS_LIST_30,
                 screenWidth = screenWidth,
                 currency = currency
             )

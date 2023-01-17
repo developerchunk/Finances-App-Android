@@ -107,9 +107,9 @@ fun CategoryChartScreen(
                 }) {
                     Icon(
                         modifier = Modifier
-                            .width(20.dp)
+                            .width(22.dp)
                             .height(24.dp),
-                        painter = painterResource(id = R.drawable.menu_expand),
+                        painter = painterResource(id = R.drawable.filter_menu_icon),
                         contentDescription = "back_arrow",
                         tint = textColorBW
                     )

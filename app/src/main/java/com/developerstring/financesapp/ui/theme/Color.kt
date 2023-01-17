@@ -15,6 +15,13 @@ val Teal200 = Color(0xFF03DAC5)
 val Yellow = Color(0xFFFFC114)
 val Orange = Color(0xFFFF5722)
 val Pink = Color(0xFFFB2576)
+val GreenBlue = Color(0xFF288BA8)
+val LightishGreen = Color(0xFFDAF7A6)
+val DarkYellow = Color(0xFF9A7D0A)
+val Salmon = Color(0xFFFF8D85)
+val Brown = Color(0xFF8F4700)
+val DarkPink = Color(0xFFB619E0)
+val DarkOrange = Color(0xFFD32E05)
 
 val LightPurple = Color(0xFFC9D4FF)
 val LightGray = Color(0xFF636B7B)
@@ -89,4 +96,37 @@ val colorList = listOf(
     Yellow,
     Purple500,
     Orange
+)
+
+val COLORS_LIST_30 = listOf(
+    UIBlue.copy(alpha = 0.5f),
+    UIBlue.copy(alpha = 1f),
+    Purple200.copy(0.5f),
+    Purple200.copy(1f),
+    Green.copy(0.5f),
+    Green.copy(1f),
+    Yellow.copy(0.5f),
+    Yellow.copy(1f),
+    Orange.copy(0.5f),
+    Orange.copy(1f),
+    Purple500.copy(0.5f),
+    Purple500.copy(1f),
+    Pink.copy(0.5f),
+    Pink.copy(1f),
+    Purple700.copy(0.5f),
+    Purple700.copy(1f),
+    GreenBlue.copy(0.5f),
+    GreenBlue.copy(1f),
+    LightishGreen.copy(0.5f),
+    LightishGreen.copy(1f),
+    DarkYellow.copy(0.5f),
+    DarkYellow.copy(1f),
+    Salmon.copy(0.5f),
+    Salmon.copy(1f),
+    Brown.copy(0.5f),
+    Brown.copy(1f),
+    DarkPink.copy(0.5f),
+    DarkPink.copy(1f),
+    DarkOrange.copy(0.5f),
+    DarkOrange.copy(1f),
 )
