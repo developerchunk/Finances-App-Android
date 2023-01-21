@@ -693,11 +693,11 @@ fun TransactionContent(
 
                 LaunchedEffect(key1 = false) {
                     if (transactionModel.date == "" && date == "") {
-                        date = SimpleDateFormat("dd/MM/yyyy").format(Date())
-                        time = SimpleDateFormat("HHmmss").format(Date())
-                        day = SimpleDateFormat("dd").format(Date()).toShort()
-                        month = SimpleDateFormat("MM").format(Date()).toShort()
-                        year = SimpleDateFormat("yyyy").format(Date()).toShort()
+                        date = SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH).format(Date())
+                        time = SimpleDateFormat("HHmmss",Locale.ENGLISH).format(Date())
+                        day = SimpleDateFormat("dd",Locale.ENGLISH).format(Date()).toShort()
+                        month = SimpleDateFormat("MM",Locale.ENGLISH).format(Date()).toShort()
+                        year = SimpleDateFormat("yyyy",Locale.ENGLISH).format(Date()).toShort()
                     } else {
                         date = "$day/$month/$year"
                     }
