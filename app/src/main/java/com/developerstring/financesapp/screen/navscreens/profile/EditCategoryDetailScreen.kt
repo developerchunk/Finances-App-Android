@@ -1,5 +1,6 @@
 package com.developerstring.financesapp.screen.navscreens.profile
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -54,11 +55,17 @@ fun EditCategoryDetailScreen(
 
     val categoryModel by profileViewModel.selectedCategories.collectAsState()
 
+    val categoriesSize by profileViewModel.categoriesSize
+
+    val context = LocalContext.current
+
     EditCategoryDetailContent(
         categories = categories,
         profileViewModel = profileViewModel,
         navController = navController,
-        categoryModel = categoryModel
+        categoryModel = categoryModel,
+        categoriesSize = categoriesSize,
+        context = context
     )
 
 }
@@ -69,9 +76,10 @@ fun EditCategoryDetailContent(
     categories: RequestState<List<CategoryModel>>,
     profileViewModel: ProfileViewModel,
     navController: NavController,
-    categoryModel: CategoryModel?
+    categoryModel: CategoryModel?,
+    categoriesSize: Int,
+    context: Context
 ) {
-
 
     if (profileViewModel.categoryId.value == 0) {
         if (categories is RequestState.Success) {
@@ -426,7 +434,11 @@ fun EditCategoryDetailContent(
                             modifier = Modifier
                                 .size(32.dp)
                                 .clickable {
-                                    deleteDisplay = true
+                                    if (categoriesSize>1) {
+                                        deleteDisplay = true
+                                    } else {
+                                        Toast.makeText(context, "Minimum 1 Category should remain", Toast.LENGTH_SHORT).show()
+                                    }
                                 },
                             imageVector = Icons.Rounded.Delete,
                             contentDescription = "delete",

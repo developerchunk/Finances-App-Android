@@ -188,6 +188,9 @@ fun CategoryScreenContent(
                     .height(20.dp)
             )
             if (categoryModel is RequestState.Success) {
+
+                profileViewModel.categoriesSize.value = categoryModel.data.size
+
                 categoryModel.data.forEach { value ->
                     CategoryItem(
                         categoryModel = value,

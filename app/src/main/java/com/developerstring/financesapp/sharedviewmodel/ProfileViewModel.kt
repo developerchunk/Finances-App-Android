@@ -38,6 +38,8 @@ class ProfileViewModel @Inject constructor(
     private var monthlySavings by mutableStateOf(0)
     var language by mutableStateOf("")
 
+    var categoriesSize: MutableState<Int> = mutableStateOf(0)
+
     // onBoarding
     fun saveOnBoardingStatus(context: Context) {
         viewModelScope.launch {
