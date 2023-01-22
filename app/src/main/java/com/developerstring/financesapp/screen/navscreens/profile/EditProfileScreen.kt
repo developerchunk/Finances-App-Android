@@ -80,6 +80,7 @@ fun EditProfileScreen(
             .fillMaxSize()
             .background(backgroundColor)
             .verticalScroll(state = scrollState)
+            .padding(bottom = 50.dp)
     ) {
 
         Row(
