@@ -583,10 +583,13 @@ fun TransactionContent(
                         userScrollEnabled = true
                     ) {
                         items(
-                            if (category != OTHER) subCategories.getOrDefault(
-                                category,
-                                defaultValue = otherSubCategories
-                            ) else otherSubCategories
+                            if (category != OTHER) {
+
+                                subCategories.getOrElse(
+                                    category,
+                                    defaultValue = { otherSubCategories })
+
+                            } else otherSubCategories
                         ) {
                             SubCategoryItems(title = it) { title ->
                                 subCategory = title
@@ -693,11 +696,11 @@ fun TransactionContent(
 
                 LaunchedEffect(key1 = false) {
                     if (transactionModel.date == "" && date == "") {
-                        date = SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH).format(Date())
-                        time = SimpleDateFormat("HHmmss",Locale.ENGLISH).format(Date())
-                        day = SimpleDateFormat("dd",Locale.ENGLISH).format(Date()).toShort()
-                        month = SimpleDateFormat("MM",Locale.ENGLISH).format(Date()).toShort()
-                        year = SimpleDateFormat("yyyy",Locale.ENGLISH).format(Date()).toShort()
+                        date = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(Date())
+                        time = SimpleDateFormat("HHmmss", Locale.ENGLISH).format(Date())
+                        day = SimpleDateFormat("dd", Locale.ENGLISH).format(Date()).toShort()
+                        month = SimpleDateFormat("MM", Locale.ENGLISH).format(Date()).toShort()
+                        year = SimpleDateFormat("yyyy", Locale.ENGLISH).format(Date()).toShort()
                     } else {
                         date = "$day/$month/$year"
                     }
