@@ -49,7 +49,7 @@ fun SplashScreen(
                 sharedViewModel.setCategorySumArray()
                 navController.navigate(route = SetUpNavRoute.MainSetUpNavRoute.route)
             } else {
-                navController.navigate(route = SetUpNavRoute.CreateProfileSetUpNavRoute.route)
+                navController.navigate(route = SetUpNavRoute.LanguageScreenSetUpNavRoute.route)
             }
         } else {
             navController.navigate(route = SetUpNavRoute.BoardingSetUpNavRoute1.route)

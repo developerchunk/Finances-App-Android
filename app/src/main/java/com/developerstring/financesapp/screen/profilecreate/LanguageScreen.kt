@@ -98,16 +98,16 @@ fun LanguageScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(
+                onClick = {
+                    navController.popBackStack()
+                    profileViewModel.saveProfileLanguage(language_ = selected, updateLanguage = false)
+                    navController.navigate(route = SetUpNavRoute.CreateProfileSetUpNavRoute.route)
+                },
                 modifier = Modifier
                     .width(220.dp)
                     .height(buttonHeight),
                 colors = ButtonDefaults.buttonColors(contentBackgroundColor),
                 shape = RoundedCornerShape(25.dp),
-                onClick = {
-                    profileViewModel.saveProfileLanguage(language_ = selected, updateLanguage = false)
-                    navController.navigate(route = SetUpNavRoute.CreateProfileSetUpNavRoute.route)
-                    navController.popBackStack()
-                }
             ){
                 Text(text = "Continue", color = Color.White, fontSize = 20.sp)
             }
