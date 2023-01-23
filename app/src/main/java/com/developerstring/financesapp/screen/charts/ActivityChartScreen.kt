@@ -128,14 +128,14 @@ fun ActivityChartScreen(
             }
 
         }
-    }) { it ->
+    }) {
 
-        it.toString()
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(backgroundColor)
                 .verticalScroll(rememberScrollState())
+                .padding(it)
         ) {
 
             when (chartTypeSelected) {
