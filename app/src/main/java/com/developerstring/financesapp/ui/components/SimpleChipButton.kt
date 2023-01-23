@@ -4,7 +4,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -17,9 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.developerstring.financesapp.ui.theme.*
-import com.developerstring.financesapp.util.Constants.DARK_THEME_ENABLE
 import com.developerstring.financesapp.util.keyToTransactionType
-import kotlinx.coroutines.flow.debounce
 
 @Composable
 fun SimpleChipButton(
@@ -44,7 +43,7 @@ fun SimpleChipButton(
                 }
             )
             .padding(vertical = 5.dp),
-        color = if (selected) LightBlue else contentColorCard,
+        color = if (selected) LightestBlue else contentColorCard,
         border = BorderStroke(
             width = if (selected) 0.dp else 1.dp,
             color = if (selected) Color.Transparent else SlightGray

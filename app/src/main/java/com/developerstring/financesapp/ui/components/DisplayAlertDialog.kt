@@ -1,10 +1,12 @@
 package com.developerstring.financesapp.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,8 +52,9 @@ fun DisplayAlertDialog(
             confirmButton = {
                 Button(
                     modifier = Modifier.padding(end = 20.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = UIBlue),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = LightestBlue),
                     shape = CircleShape,
+                    elevation = ButtonDefaults.elevation(0.dp),
                     onClick = {
                         onYesClicked()
                         onCloseClicked()
@@ -59,7 +62,7 @@ fun DisplayAlertDialog(
                 ) {
                     Text(
                         text = stringResource(id = R.string.yes),
-                        color = Color.White,
+                        color = UIBlue,
                         fontSize = LARGE_TEXT_SIZE,
                         fontFamily = fontOpenSans,
                         fontWeight = FontWeight.Bold
@@ -67,14 +70,14 @@ fun DisplayAlertDialog(
                 }
             },
             dismissButton = {
-                OutlinedButton(
+                Button(
                     modifier = Modifier.padding(end = 10.dp, bottom = 30.dp),
                     onClick = {
                         onCloseClicked()
                     },
-                    border = BorderStroke(1.dp,color = textColorBW),
-                    colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.Transparent),
-                    shape = CircleShape
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                    shape = CircleShape,
+                    elevation = ButtonDefaults.elevation(0.dp)
                 ) {
                     Text(
                         text = stringResource(id = R.string.no),

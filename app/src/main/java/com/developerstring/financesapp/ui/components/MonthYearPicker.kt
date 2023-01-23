@@ -3,11 +3,14 @@ package com.developerstring.financesapp.ui.components
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
@@ -22,10 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.developerstring.financesapp.R
-import com.developerstring.financesapp.ui.theme.UIBlue
-import com.developerstring.financesapp.ui.theme.backgroundColor
-import com.developerstring.financesapp.ui.theme.fontInter
-import com.developerstring.financesapp.ui.theme.textColorBW
+import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.MONTHS
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
@@ -186,14 +186,13 @@ fun MonthYearPickerCalender(
                         horizontalArrangement = Arrangement.End
                     ) {
 
-                        OutlinedButton(
+                        Button(
                             modifier = Modifier.padding(end = 10.dp, bottom = 30.dp),
                             onClick = {
                                 cancelClicked()
                             },
-                            shape = CircleShape,
-                            border = BorderStroke(1.dp, color = Color.Transparent),
-                            colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.Transparent)
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                            elevation = ButtonDefaults.elevation(0.dp)
                         ) {
                             Text(
                                 text = stringResource(id = R.string.cancel),
@@ -204,20 +203,20 @@ fun MonthYearPickerCalender(
                             )
                         }
 
-                        OutlinedButton(
+                        Button(
                             modifier = Modifier.padding(end = 20.dp, bottom = 30.dp),
                             onClick = {
                                 confirmClicked(MONTHS.indexOf(month) + 1, year)
                             },
                             shape = CircleShape,
-                            border = BorderStroke(1.dp, color = UIBlue),
-                            colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.Transparent)
+                            colors = ButtonDefaults.buttonColors(backgroundColor = LightestBlue),
+                            elevation = ButtonDefaults.elevation(0.dp)
                         ) {
                             Text(
                                 text = stringResource(id = R.string.ok),
                                 color = UIBlue,
                                 fontSize = 20.sp,
-                                fontWeight = FontWeight.Medium,
+                                fontWeight = FontWeight.Bold,
                                 fontFamily = fontInter
                             )
                         }
