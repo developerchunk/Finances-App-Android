@@ -130,14 +130,6 @@ fun AddTransaction(
 
             }
 
-            Text(
-                modifier = Modifier.padding(start = 20.dp),
-                text = "Event",
-                fontSize = LARGE_TEXT_SIZE,
-                fontFamily = fontInter,
-                fontWeight = FontWeight.Medium,
-                color = textColorBW
-            )
         }
 
         Column(
