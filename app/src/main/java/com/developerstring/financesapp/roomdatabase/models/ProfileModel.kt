@@ -14,5 +14,6 @@ data class ProfileModel(
     val month_spent: Int = 0,
     val month_saving: Int = 0,
     val theme: String = "",
-    val language: String = ""
+    val language: String = "",
+    val time24Hours: Boolean = false
 )

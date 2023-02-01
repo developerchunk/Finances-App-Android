@@ -19,9 +19,6 @@ class CategoryRepository @Inject constructor(private val categoryDao: CategoryDa
         categoryDao.addCategory(categoryModel = categoryModel)
     }
 
-    suspend fun updateCategory(categoryModel: CategoryModel) {
-        categoryDao.updateCategory(categoryModel = categoryModel)
-    }
 
     suspend fun updateCategoryName(id: Int, category: String) {
         categoryDao.updateCategoryName(id = id,category = category)

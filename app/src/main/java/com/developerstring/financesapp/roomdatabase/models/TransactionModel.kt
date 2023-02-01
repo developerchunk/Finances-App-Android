@@ -13,6 +13,7 @@ data class TransactionModel(
     val category: String = "",
     val date: String = "",
     val day: Short = 0,
+    val time: String = "",
     val month: Short = 0,
     val year: Short = 0,
     val info: String = "",

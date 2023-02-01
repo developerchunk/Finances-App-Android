@@ -136,7 +136,7 @@ fun HomeScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             modifier = Modifier.wrapContentSize(unbounded = true),
-                            text = if (profileModel.currency == INDIAN_CURRENCY) simplifyAmountIndia(totalSpent.toInt()) else simplifyAmount(
+                            text = if (profileModel.currency.last().toString() == INDIAN_CURRENCY) simplifyAmountIndia(totalSpent.toInt()) else simplifyAmount(
                                 totalSpent.toInt()
                             ),
                             fontSize = TEXT_FIELD_SIZE,
@@ -168,7 +168,7 @@ fun HomeScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             modifier = Modifier.wrapContentSize(unbounded = true),
-                            text = if (profileModel.currency == INDIAN_CURRENCY) simplifyAmountIndia(totalSavings.toInt()) else simplifyAmount(
+                            text = if (profileModel.currency.last().toString() == INDIAN_CURRENCY) simplifyAmountIndia(totalSavings.toInt()) else simplifyAmount(
                                 totalSavings.toInt()
                             ),
                             fontSize = TEXT_FIELD_SIZE,
@@ -243,7 +243,7 @@ fun HomeScreen(
                 day_ = day,
                 month_ = month.toInt(),
                 year_ = year.toInt(),
-                currency = profileModel.currency,
+                currency = profileModel.currency.last().toString(),
                 navController = navController,
                 language = profileModel.language
             )
@@ -331,8 +331,8 @@ fun TopGraphMainScreen(
     total_amount: Int,
     spentPercent: Float,
     savingPercent: Float,
-    radiusOuter: Dp = 90.dp,
-    radiusInner: Dp = 70.dp,
+    radiusOuter: Dp = 100.dp,
+    radiusInner: Dp = 80.dp,
     strokeWidth: Dp = 12.dp,
     animDuration: Int = 1000,
     currency: String,

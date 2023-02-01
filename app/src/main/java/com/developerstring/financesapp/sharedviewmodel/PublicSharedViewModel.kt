@@ -13,5 +13,5 @@ class PublicSharedViewModel : ViewModel() {
 
     var messageShow: MutableState<Boolean> = mutableStateOf(false)
 
-    var editCategoryId: MutableState<Int> = mutableStateOf(0)
+    var showTimeViewHistory: MutableState<Int> = mutableStateOf(0)
 }

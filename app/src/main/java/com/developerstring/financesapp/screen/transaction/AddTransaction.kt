@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,6 +49,7 @@ import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.components.CustomChip
+import com.developerstring.financesapp.ui.components.timepicker.*
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.ADD_TRANSACTION_TYPE
@@ -76,9 +78,11 @@ fun AddTransaction(
     val shape: Shape = RoundedCornerShape(10.dp)
 
     profileViewModel.getAllCategories()
+    profileViewModel.getTime24Hours()
 
     val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
     val categoryModel by profileViewModel.allCategories.collectAsState()
+    val time24Hours by profileViewModel.profileTime24Hours.collectAsState()
 
     val scrollState = rememberScrollState()
 
@@ -143,7 +147,9 @@ fun AddTransaction(
                 categoryModel = categoryModel,
                 transactionModel = TransactionModel(),
                 publicSharedViewModel = publicSharedViewModel,
-                navController = navController
+                navController = navController,
+                time24Hours = time24Hours,
+                profileViewModel = profileViewModel
             ) {
                 profileViewModel.getProfileAmount()
                 sharedViewModel.addTransaction(transactionModel = it)
@@ -170,8 +176,12 @@ fun TransactionContent(
     publicSharedViewModel: PublicSharedViewModel,
     transactionModel: TransactionModel,
     navController: NavController,
-    onSaveClicked: (TransactionModel) -> Unit
+    time24Hours: Boolean,
+    profileViewModel: ProfileViewModel,
+    onSaveClicked: (TransactionModel) -> Unit,
 ) {
+
+    val configuration = LocalConfiguration.current
 
     var amount by rememberSaveable {
         mutableStateOf(
@@ -187,6 +197,7 @@ fun TransactionContent(
     var subCategory by rememberSaveable { mutableStateOf(transactionModel.subCategory) }
     var otherSubCategory by rememberSaveable { mutableStateOf(transactionModel.subCategoryOther) }
     val otherSubCategories = mutableListOf(OTHER)
+    var timeTransactionModel by rememberSaveable { mutableStateOf(transactionModel.time) }
     var extraInfo by rememberSaveable { mutableStateOf(transactionModel.info) }
     var place by rememberSaveable { mutableStateOf(transactionModel.place) }
     var transactionType by rememberSaveable {
@@ -240,11 +251,73 @@ fun TransactionContent(
 
     var moreClicked by rememberSaveable { mutableStateOf(false) }
 
+    // time data
+    var hour by rememberSaveable { mutableStateOf(0) }
+    var minute by rememberSaveable {
+        mutableStateOf("00")
+    }
+    var meridiem by remember {
+        mutableStateOf(Meridiem.HOUR24)
+    }
+    var timePickerVisible by remember {
+        mutableStateOf(false)
+    }
+
     // Fetching current year, month and day
     if (date == "") {
         mYear = mCalendar.get(Calendar.YEAR)
         mMonth = mCalendar.get(Calendar.MONTH)
         mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
+    }
+
+    LaunchedEffect(key1 = true) {
+        if (timeTransactionModel == "") {
+            hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            minute = Calendar.getInstance().get(Calendar.MINUTE).timeConvert()
+            if (time24Hours) {
+                meridiem = Meridiem.HOUR24
+            } else {
+                if (hour>13) {
+                    hour -= 12
+                    meridiem = Meridiem.PM
+                } else meridiem = Meridiem.AM
+            }
+
+            convertToMeridiemTime(
+                hours = hour,
+                oldMeridiem = meridiem,
+                currentMeridiem = Meridiem.HOUR24,
+                time = {
+                    timeTransactionModel = it.first.timeConvert()+minute
+                }
+            )
+
+        } else {
+            timeTransactionModel.stringToTime(
+                returnTime = {
+                    hour = it.first.toInt()
+                    minute = it.second
+                }
+            )
+
+            if (time24Hours) {
+                meridiem = Meridiem.HOUR24
+            } else {
+                if (hour>13) {
+                    hour -= 12
+                    meridiem = Meridiem.PM
+                } else meridiem = Meridiem.AM
+            }
+
+            convertToMeridiemTime(
+                hours = hour,
+                oldMeridiem = meridiem,
+                currentMeridiem = Meridiem.HOUR24,
+                time = {
+                    timeTransactionModel = it.first.timeConvert()+minute
+                }
+            )
+        }
     }
 
     mCalendar.time = Date()
@@ -306,7 +379,7 @@ fun TransactionContent(
                 ),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
+                    imeAction = ImeAction.Done
                 ),
                 singleLine = true
             )
@@ -406,9 +479,7 @@ fun TransactionContent(
                             tint = textColorBLG
                         )
                         Icon(
-                            imageVector =
-                            if (!categoriesExpanded) Icons.Filled.Edit
-                            else Icons.Rounded.KeyboardArrowUp,
+                            imageVector = Icons.Filled.Edit,
                             contentDescription = "currency_icon",
                             Modifier
                                 .padding(end = 15.dp)
@@ -770,6 +841,102 @@ fun TransactionContent(
                 modifier = modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
+                // group of Time textField
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(start = 3.dp, bottom = 2.dp),
+                        text = stringResource(id = R.string.time_text_field),
+                        fontSize = TEXT_FIELD_SIZE,
+                        color = textColorBLG,
+                        fontFamily = fontInter,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = heightTextFields)
+                            .border(
+                                width = 1.8.dp,
+                                color = textColorBLG,
+                                shape = RoundedCornerShape(15.dp)
+                            )
+                            .clickable(
+                                indication = null,
+                                interactionSource = interactionSource,
+                                onClick = {
+                                    timePickerVisible = true
+                                }
+                            ),
+                        value = "$hour:$minute ${if (meridiem==Meridiem.HOUR24) "" else meridiem.name}",
+                        onValueChange = {
+                        },
+//                        "${hour.timeConvert()}:$minute ${if (meridiem == Meridiem.HOUR24) "" else meridiem.name}"
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            cursorColor = textColorBW,
+                        ),
+                        textStyle = TextStyle(
+                            color = textColorBW,
+                            fontSize = TEXT_FIELD_SIZE
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        enabled = false,
+                        singleLine = false
+                    )
+                }
+
+                if (timePickerVisible) {
+                    TimePicker(
+                        visible = true,
+                        currentMeridiem = meridiem,
+                        interactionSource = interactionSource,
+                        configuration = configuration,
+                        currentHour = hour,
+                        currentMinute1 = minute.first().digitToInt(),
+                        currentMinute2 = minute.last().digitToInt(),
+                        onSelected = { it, m ->
+                            if (m==Meridiem.HOUR24) {
+                                profileViewModel.updateTime24Hours(
+                                    time24Hours = true
+                                )
+                            } else {
+                                profileViewModel.updateTime24Hours(
+                                    time24Hours = false
+                                )
+                            }
+                            it.stringToTime(
+                                returnTime = { time ->
+                                    hour = time.first.toInt()
+                                    minute = time.second
+                                    meridiem = m
+                                    convertToMeridiemTime(
+                                        hours = hour,
+                                        oldMeridiem = meridiem,
+                                        currentMeridiem = Meridiem.HOUR24,
+                                        time = {
+                                            timeTransactionModel = it.first.timeConvert()+minute
+                                        }
+                                    )
+                                }
+                            )
+                            timePickerVisible = false
+                        },
+                        onCanceled = {
+                            timePickerVisible = false
+                        }
+                    )
+                }
+
                 // group of Extra Info textField
                 Column(
                     modifier = Modifier
@@ -856,7 +1023,7 @@ fun TransactionContent(
                         ),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next
+                            imeAction = ImeAction.Done
                         ),
                         singleLine = true
                     )
@@ -904,6 +1071,7 @@ fun TransactionContent(
                                             date = "$year${month.addZeroToStart()}${day.addZeroToStart()}$time",
                                             day = day,
                                             month = month,
+                                            time = timeTransactionModel,
                                             year = year,
                                             info = extraInfo,
                                             place = place,

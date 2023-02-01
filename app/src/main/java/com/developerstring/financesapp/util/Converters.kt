@@ -42,7 +42,10 @@ fun simplifyAmount(amount: Int): String {
 
     var simplify = ""
 
-    if (abs(amount / 1000000) >= 1) {
+    if (abs(amount / 1000000000) >= 1) {
+        am = amount.toFloat() / 1000000000
+        simplify = df.format(am) + "B"
+    } else if (abs(amount / 1000000) >= 1) {
         am = amount.toFloat() / 1000000
         simplify = df.format(am) + "M"
     } else if (abs(amount / 1000) >= 1) {

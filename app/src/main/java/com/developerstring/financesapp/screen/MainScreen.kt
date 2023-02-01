@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -31,6 +32,7 @@ import com.developerstring.financesapp.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.UIBlue
 import com.developerstring.financesapp.ui.theme.backgroundColorBW
+import com.developerstring.financesapp.ui.theme.fontInter
 import com.developerstring.financesapp.ui.theme.textColorBW
 import com.developerstring.financesapp.util.Constants.LANGUAGE
 import com.developerstring.financesapp.util.bottomNavText
@@ -43,6 +45,7 @@ fun MainScreen(
 ) {
 
     profileViewModel.getProfileDetails()
+    profileViewModel.getTime24Hours()
 
     val nav = rememberNavController()
     val language by profileViewModel.profileLanguage.collectAsState()
@@ -89,7 +92,7 @@ fun BottomNavBar(
                 modifier = Modifier
                     .background(backgroundColorBW)
                     .fillMaxWidth()
-                    .padding(bottom = 5.dp),
+                    .padding(bottom = 5.dp, top = 5.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -148,7 +151,9 @@ fun AddItem(
             )
             Text(
                 text = stringResource(id = screen.route.bottomNavText(language = language)),
-                color = contentColor
+                color = contentColor,
+                fontWeight = FontWeight.Medium,
+                fontFamily = fontInter
             )
         }
     }

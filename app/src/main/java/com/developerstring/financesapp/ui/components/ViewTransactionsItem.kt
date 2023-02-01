@@ -14,10 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
+import com.developerstring.financesapp.ui.components.timepicker.Meridiem
+import com.developerstring.financesapp.ui.components.timepicker.stringToTime
+import com.developerstring.financesapp.ui.components.timepicker.timeConvert
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants
 import com.developerstring.financesapp.util.simplifyAmount
@@ -29,10 +33,13 @@ import com.developerstring.financesapp.util.transactionTypeToSymbol
 fun TransactionsItemView(
     transactionModel: TransactionModel,
     currency: String,
-    navigateToDetails: (id: Int) -> Unit
+    navigateToDetails: (id: Int) -> Unit,
+    timeShow: Boolean,
+    time24Hours: Boolean
 ) {
 
 //    val sameDate = TRANS == transactionModel.date
+
     val sameDate by remember {
         mutableStateOf(false)
     }
@@ -45,15 +52,48 @@ fun TransactionsItemView(
         mutableStateOf(false)
     }
 
+    var hour by remember {
+        mutableStateOf(0)
+    }
+
+    var minute by remember {
+        mutableStateOf(0)
+    }
+
+    var meridiem by remember {
+        mutableStateOf(Meridiem.HOUR24)
+    }
+
+    transactionModel.time.stringToTime(
+        returnTime = {
+            hour = it.first.toInt()
+            minute = it.second.toInt()
+        }
+    )
+
+    if (time24Hours) {
+        meridiem = Meridiem.HOUR24
+    } else {
+        if (hour > 13) {
+            hour -= 12
+            meridiem = Meridiem.PM
+        } else {
+            meridiem = Meridiem.AM
+        }
+    }
+
+
     LaunchedEffect(key1 = true) {
         expanded = true
     }
 
     val extraInfoStatus = transactionModel.info != ""
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .heightIn(min = 100.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 100.dp)
+    ) {
         AnimatedVisibility(
             visible = expanded,
             enter = scaleIn() + expandVertically(
@@ -116,13 +156,32 @@ fun TransactionsItemView(
                         shape = RoundedCornerShape(10.dp),
                         color = contentColorCard
                     ) {
-                        Row(
+                        Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 20.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
+                                .padding(top = if (timeShow) 10.dp else 20.dp, bottom = 20.dp),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+
+                            if (timeShow) {
+                                Text(
+                                    modifier = Modifier
+                                        .padding(start = 20.dp, bottom = 10.dp)
+                                        .fillMaxWidth(),
+                                    text =
+                                    "Time: ${hour.timeConvert()}:${minute.timeConvert()}" +
+                                            " ${if (meridiem == Meridiem.HOUR24) "" else meridiem.name}",
+                                    fontFamily = fontOpenSans,
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = EXTRA_SMALL_TEXT_SIZE,
+                                    color = textColorBW,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1,
+                                    textAlign = TextAlign.Start
+                                )
+                            }
+
                             ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
 
                                 val (text, text1, text2, text3) = createRefs()
@@ -140,7 +199,7 @@ fun TransactionsItemView(
                                     else transactionModel.category,
                                     fontFamily = fontInter,
                                     fontWeight = FontWeight.Medium,
-                                    fontSize = SMALLEST_TEXT_SIZE,
+                                    fontSize = EXTRA_SMALL_TEXT_SIZE,
                                     color = colorGray,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 2

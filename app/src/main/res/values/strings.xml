@@ -30,6 +30,7 @@
     <string name="enter_subcategory">Enter Sub Category</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="setting">Setting</string>
 
     <string name="less">Less</string>
     <string name="more">More</string>
@@ -43,6 +44,7 @@
     <string name="sub_category_text_field">Sub Category*</string>
     <string name="other_sub_category_text_field">Specify Sub Category (Optional)</string>
     <string name="date_text_field">Date*</string>
+    <string name="time_text_field">Time (Optional)</string>
     <string name="extra_info_text_field">Extra Info (Optional)</string>
     <string name="place_info_text_field">Place (Optional)</string>
 
@@ -124,6 +126,7 @@
     <string name="sub_category_text_field_marathi">उप श्रेणी*</string>
     <string name="other_sub_category_text_field_marathi">उप श्रेण निर्दिष्ट करा (इच्छेप्रमाणे)</string>
     <string name="date_text_field_marathi">तारीख*</string>
+    <string name="time_text_field_marathi">Time (इच्छेप्रमाणे)</string>
     <string name="extra_info_text_field_marathi">अतिरिक्त माहिती (इच्छेप्रमाणे)</string>
     <string name="place_info_text_field_marathi">ठिकाण (इच्छेप्रमाणे)</string>
 

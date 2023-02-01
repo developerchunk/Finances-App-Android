@@ -46,6 +46,8 @@ fun ViewHistoryScreen(
 
     val currency by profileViewModel.profileCurrency.collectAsState()
 
+    val time24Hours by profileViewModel.profileTime24Hours.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBarHistory(
@@ -71,7 +73,8 @@ fun ViewHistoryScreen(
                 filterSearchTransactions = filterSearchedTransactions,
                 searchBarState = searchBarState,
                 filterState = filterState,
-                currency = currency
+                currency = currency,
+                time24Hours = time24Hours
             )
         }
 
@@ -89,7 +92,8 @@ fun TransactionHistoryContain(
     filterSearchTransactions: RequestState<List<TransactionModel>>,
     searchBarState: SearchBarState,
     filterState: FilterTransactionState,
-    currency: String
+    currency: String,
+    time24Hours: Boolean
 ) {
 
     if (searchBarState == SearchBarState.TRIGGERED && filterState == FilterTransactionState.OPENED) {
@@ -98,7 +102,8 @@ fun TransactionHistoryContain(
                 allTransactions = filterSearchTransactions.data,
                 currency = currency,
                 sharedViewModel = sharedViewModel,
-                navController = navController
+                navController = navController,
+                time24Hours = time24Hours
             )
         }
     } else if (searchBarState == SearchBarState.TRIGGERED) {
@@ -107,7 +112,8 @@ fun TransactionHistoryContain(
                 allTransactions = searchTransactions.data,
                 currency = currency,
                 sharedViewModel = sharedViewModel,
-                navController = navController
+                navController = navController,
+                time24Hours = time24Hours
             )
         }
     } else if (filterState == FilterTransactionState.OPENED) {
@@ -116,7 +122,8 @@ fun TransactionHistoryContain(
                 allTransactions = searchTransactions.data,
                 currency = currency,
                 sharedViewModel = sharedViewModel,
-                navController = navController
+                navController = navController,
+                time24Hours = time24Hours
             )
         }
     } else {
@@ -125,7 +132,8 @@ fun TransactionHistoryContain(
                 allTransactions = allTransactions.data,
                 currency = currency,
                 sharedViewModel = sharedViewModel,
-                navController = navController
+                navController = navController,
+                time24Hours = time24Hours
             )
         }
     }
@@ -138,7 +146,8 @@ fun HistoryTransactionContent(
     allTransactions: List<TransactionModel>,
     currency: String,
     sharedViewModel: SharedViewModel,
-    navController: NavController
+    navController: NavController,
+    time24Hours: Boolean
 ) {
 
     LazyColumn {
@@ -157,7 +166,9 @@ fun HistoryTransactionContent(
                     sharedViewModel.id.value = id
                     sharedViewModel.getSelectedTransaction(transactionID = id)
                     navController.navigate(route = NavRoute.TransactionDetailsScreen.route)
-                }
+                },
+                timeShow = true,
+                time24Hours = time24Hours
             )
         }
     }

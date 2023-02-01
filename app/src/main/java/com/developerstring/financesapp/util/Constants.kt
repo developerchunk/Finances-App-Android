@@ -41,16 +41,15 @@ object Constants {
 
     const val DARK_THEME = "dark_theme"
     const val LIGHT_THEME = "light_theme"
-    const val PINK_THEME = "pink_theme"
 
     const val DARK_THEME_TEXT = "Dark Theme"
     const val LANGUAGE_TEXT = "Language"
     const val PROFILE_TEXT = "Profile"
-    private const val MANAGE_DATA_TEXT = "Manage Data"
+    const val SETTING = "Setting"
 
     val PROFILE_CONTENT_LIST = mapOf(
         PROFILE_TEXT to R.drawable.profile_edit,
-        MANAGE_DATA_TEXT to R.drawable.setting_icon,
+        SETTING to R.drawable.setting_icon,
         DARK_THEME_TEXT to R.drawable.themes_icon,
         LANGUAGE_TEXT to R.drawable.language_icon,
     )

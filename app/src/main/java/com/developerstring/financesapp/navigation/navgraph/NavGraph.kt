@@ -7,10 +7,7 @@ import androidx.navigation.navigation
 import com.developerstring.financesapp.navigation.Graph
 import com.developerstring.financesapp.screen.charts.ActivityChartScreen
 import com.developerstring.financesapp.screen.charts.CategoryChartScreen
-import com.developerstring.financesapp.screen.navscreens.profile.EditCategoryDetailScreen
-import com.developerstring.financesapp.screen.navscreens.profile.EditCategoryScreen
-import com.developerstring.financesapp.screen.navscreens.profile.EditLanguageScreen
-import com.developerstring.financesapp.screen.navscreens.profile.EditProfileScreen
+import com.developerstring.financesapp.screen.navscreens.profile.*
 import com.developerstring.financesapp.screen.transaction.AddTransaction
 import com.developerstring.financesapp.screen.transaction.TransactionDetailsScreen
 import com.developerstring.financesapp.screen.transaction.ViewHistoryScreen
@@ -104,6 +101,16 @@ fun NavGraphBuilder.navGraph(
             EditCategoryDetailScreen(
                 navController = navController,
                 profileViewModel = profileViewModel,
+            )
+        }
+
+        composable(
+            route = NavRoute.SettingScreen.route
+        ) {
+            SettingScreen(
+                sharedViewModel = sharedViewModel,
+                profileViewModel = profileViewModel,
+                navController = navController,
             )
         }
     }

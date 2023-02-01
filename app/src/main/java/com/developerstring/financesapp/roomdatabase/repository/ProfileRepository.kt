@@ -17,6 +17,14 @@ class ProfileRepository @Inject constructor(private val profileDao: ProfileDao) 
         return profileDao.getProfileAmount(profileId = profileId)
     }
 
+    fun getTime24Hours(profileId: Int): Flow<Boolean?> {
+        return profileDao.getTime24Hours(profileId = profileId)
+    }
+
+    suspend fun updateTime24Hours(profileId: Int,time24Hours: Boolean) {
+        profileDao.updateTime24Hours(profileId = profileId, time24Hours = time24Hours)
+    }
+
     suspend fun addProfile(profileModel: ProfileModel) {
         profileDao.addProfile(profileModel = profileModel)
     }

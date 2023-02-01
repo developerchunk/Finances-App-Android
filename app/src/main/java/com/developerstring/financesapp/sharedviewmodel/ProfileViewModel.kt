@@ -92,6 +92,7 @@ class ProfileViewModel @Inject constructor(
         context: Context,
         spending: Int,
         savings: Int,
+        time24Hours: Boolean
     ) {
 
         monthlySpent = spending
@@ -106,7 +107,8 @@ class ProfileViewModel @Inject constructor(
                 month_spent = monthlySpent,
                 month_saving = monthlySavings,
                 theme = DARK_THEME,
-                language = language
+                language = language,
+                time24Hours = time24Hours
             )
         )
 
@@ -126,12 +128,15 @@ class ProfileViewModel @Inject constructor(
     private val _profileCurrency = MutableStateFlow("$")
     private val _profileLanguage = MutableStateFlow("")
     private val _profileTheme = MutableStateFlow("")
+    private val _profileTime24Hours = MutableStateFlow(false)
+
 
     val profileName: StateFlow<String> = _profileName
     val profileTotalAmount: StateFlow<Int> = _profileTotalAmount
     val profileCurrency: StateFlow<String> = _profileCurrency
     val profileLanguage: StateFlow<String> = _profileLanguage
     val profileTheme: StateFlow<String> = _profileTheme
+    val profileTime24Hours: StateFlow<Boolean> = _profileTime24Hours
 
     fun getProfileDetails() {
 
@@ -141,13 +146,12 @@ class ProfileViewModel @Inject constructor(
             }
         }
 
-        if (_selectedProfile.value != null) {
-            _profileName.value = _selectedProfile.value!!.name
-            _profileTotalAmount.value = _selectedProfile.value!!.total_amount
-            _profileCurrency.value = _selectedProfile.value!!.currency
-            _profileLanguage.value = _selectedProfile.value!!.language
-            _profileTheme.value = _selectedProfile.value!!.theme
-        }
+        _profileName.value = _selectedProfile.value.name
+        _profileTotalAmount.value = _selectedProfile.value.total_amount
+        _profileCurrency.value = _selectedProfile.value.currency
+        _profileLanguage.value = _selectedProfile.value.language
+        _profileTheme.value = _selectedProfile.value.theme
+        _profileTime24Hours.value = _selectedProfile.value.time24Hours
     }
 
     fun getProfileAmount() {
@@ -251,14 +255,6 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun updateCategory(
-        categoryModel: CategoryModel
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repositoryCategory.updateCategory(categoryModel = categoryModel)
-        }
-    }
-
     fun updateCategoryName(
         id: Int,
         category: String
@@ -299,6 +295,23 @@ class ProfileViewModel @Inject constructor(
             }
         }
         this.deleteCategoryState.value = TransactionAction.NO_ACTION
+    }
+
+    fun getTime24Hours() {
+        viewModelScope.launch {
+            repository.getTime24Hours(profileId = PROFILE_ID).collect {
+                _profileTime24Hours.value = it ?: false
+            }
+        }
+    }
+
+    fun updateTime24Hours(
+        profileId: Int = PROFILE_ID,
+        time24Hours: Boolean
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateTime24Hours(profileId = profileId, time24Hours = time24Hours)
+        }
     }
 
 }

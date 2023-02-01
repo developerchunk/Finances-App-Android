@@ -49,6 +49,10 @@ fun CreateProfileScreen2(
     val language = profileViewModel.language
     val languageText = LanguageText(language = language)
 
+    val time24Hours by remember {
+        mutableStateOf(false)
+    }
+
     profileViewModel.getAllCategories()
     val categories by profileViewModel.allCategories.collectAsState()
 
@@ -200,7 +204,8 @@ fun CreateProfileScreen2(
                                 (spending.value.toInt() / 3)
                             } else {
                                 savings.value.toInt()
-                            }
+                            },
+                            time24Hours = time24Hours
                         )
 
                         addCategoriesToDB(

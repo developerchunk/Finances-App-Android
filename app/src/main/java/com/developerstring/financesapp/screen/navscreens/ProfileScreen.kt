@@ -39,6 +39,7 @@ import com.developerstring.financesapp.util.Constants.LANGUAGE_TEXT
 import com.developerstring.financesapp.util.Constants.LIGHT_THEME
 import com.developerstring.financesapp.util.Constants.PROFILE_CONTENT_LIST
 import com.developerstring.financesapp.util.Constants.PROFILE_TEXT
+import com.developerstring.financesapp.util.Constants.SETTING
 
 @Composable
 fun ProfileScreen(
@@ -47,8 +48,8 @@ fun ProfileScreen(
 ) {
 
     profileViewModel.getProfileDetails()
-
     profileViewModel.getAllCategories()
+    profileViewModel.getTime24Hours()
 
     val profileName by profileViewModel.profileName.collectAsState()
     val darkThemeEnable by profileViewModel.profileTheme.collectAsState()
@@ -184,6 +185,9 @@ fun ProfileScreen(
                         }
                         LANGUAGE_TEXT -> {
                             navController.navigate(NavRoute.EditLanguageScreen.route)
+                        }
+                        SETTING -> {
+                            navController.navigate(NavRoute.SettingScreen.route)
                         }
                     }
                 }

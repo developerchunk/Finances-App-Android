@@ -38,7 +38,10 @@ fun TransactionDetailsScreen(
 
     val id = sharedViewModel.id.value
 
+    profileViewModel.getTime24Hours()
+
     val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
+    val time24Hours by profileViewModel.profileTime24Hours.collectAsState()
 
     val getTransactionModel by sharedViewModel.selectedTransaction.collectAsState()
     val categoryModel by profileViewModel.allCategories.collectAsState()
@@ -149,6 +152,7 @@ fun TransactionDetailsScreen(
                             subCategory = it.subCategory,
                             date = it.date,
                             day = it.day,
+                            time = it.time,
                             month = it.month,
                             year = it.year,
                             info = it.info,
@@ -168,7 +172,9 @@ fun TransactionDetailsScreen(
                             )
                         )
                         navController.popBackStack()
-                    }
+                    },
+                    time24Hours = time24Hours,
+                    profileViewModel = profileViewModel
                 )
             }
         }

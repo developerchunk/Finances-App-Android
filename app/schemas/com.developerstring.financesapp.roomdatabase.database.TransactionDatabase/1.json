@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "2f11b884e710e176848324891a5c81d1",
+    "identityHash": "1d8e537bafd8c88f6a213e20dafa4b45",
     "entities": [
       {
         "tableName": "transaction_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` INTEGER NOT NULL, `transaction_type` TEXT NOT NULL, `category` TEXT NOT NULL, `date` TEXT NOT NULL, `day` INTEGER NOT NULL, `month` INTEGER NOT NULL, `year` INTEGER NOT NULL, `info` TEXT NOT NULL, `place` TEXT NOT NULL, `eventID` TEXT NOT NULL, `subCategory` TEXT NOT NULL, `categoryOther` TEXT NOT NULL, `subCategoryOther` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` INTEGER NOT NULL, `transaction_type` TEXT NOT NULL, `category` TEXT NOT NULL, `date` TEXT NOT NULL, `day` INTEGER NOT NULL, `time` TEXT NOT NULL, `month` INTEGER NOT NULL, `year` INTEGER NOT NULL, `info` TEXT NOT NULL, `place` TEXT NOT NULL, `eventID` TEXT NOT NULL, `subCategory` TEXT NOT NULL, `categoryOther` TEXT NOT NULL, `subCategoryOther` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -42,6 +42,12 @@
             "fieldPath": "day",
             "columnName": "day",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -94,17 +100,17 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [],
         "foreignKeys": []
       },
       {
         "tableName": "profile_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `total_amount` INTEGER NOT NULL, `currency` TEXT NOT NULL, `month_spent` INTEGER NOT NULL, `month_saving` INTEGER NOT NULL, `theme` TEXT NOT NULL, `language` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `total_amount` INTEGER NOT NULL, `currency` TEXT NOT NULL, `month_spent` INTEGER NOT NULL, `month_saving` INTEGER NOT NULL, `theme` TEXT NOT NULL, `language` TEXT NOT NULL, `time24Hours` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -153,13 +159,19 @@
             "columnName": "language",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "time24Hours",
+            "columnName": "time24Hours",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [],
         "foreignKeys": []
@@ -188,10 +200,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [],
         "foreignKeys": []
@@ -200,7 +212,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2f11b884e710e176848324891a5c81d1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1d8e537bafd8c88f6a213e20dafa4b45')"
     ]
   }
 }
