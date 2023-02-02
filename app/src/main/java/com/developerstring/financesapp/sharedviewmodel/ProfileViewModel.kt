@@ -14,6 +14,7 @@ import com.developerstring.financesapp.roomdatabase.models.ProfileModel
 import com.developerstring.financesapp.roomdatabase.repository.CategoryRepository
 import com.developerstring.financesapp.roomdatabase.repository.ProfileRepository
 import com.developerstring.financesapp.util.Constants.DARK_THEME
+import com.developerstring.financesapp.util.Constants.NO
 import com.developerstring.financesapp.util.Constants.PROFILE_ID
 import com.developerstring.financesapp.util.Constants.YES
 import com.developerstring.financesapp.util.TransactionAction
@@ -114,7 +115,14 @@ class ProfileViewModel @Inject constructor(
 
         val profileDataStore = ProfileDataStore(context)
         viewModelScope.launch {
-            profileDataStore.saveProfileCreatedStatus("YES")
+            profileDataStore.saveProfileCreatedStatus(YES)
+        }
+    }
+
+    fun profileCreatedStatus(context: Context,value: String) {
+        val profileDataStore = ProfileDataStore(context)
+        viewModelScope.launch {
+            profileDataStore.saveProfileCreatedStatus(NO)
         }
     }
 
@@ -311,6 +319,12 @@ class ProfileViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateTime24Hours(profileId = profileId, time24Hours = time24Hours)
+        }
+    }
+
+    fun deleteAllProfiles() {
+        viewModelScope.launch {
+            repository.deleteAllProfiles()
         }
     }
 

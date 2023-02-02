@@ -36,7 +36,8 @@ val fontOpenSans = FontFamily(
 
 val fontInter = FontFamily(
     Font(R.font.inter_regular, FontWeight.Normal),
-    Font(R.font.inter_medium, FontWeight.Medium)
+    Font(R.font.inter_medium, FontWeight.Medium),
+    Font(R.font.inter_bold, FontWeight.Bold),
 )
 
 val fontPoppins = FontFamily(

@@ -1,5 +1,6 @@
 package com.developerstring.financesapp.screen.profilecreate
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -45,7 +46,7 @@ fun LanguageScreen(
 
     val buttonHeight = 45.dp
 
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
+    Column(modifier = Modifier.fillMaxSize().background(backgroundColor), verticalArrangement = Arrangement.Top) {
 
         Column(
             modifier = Modifier

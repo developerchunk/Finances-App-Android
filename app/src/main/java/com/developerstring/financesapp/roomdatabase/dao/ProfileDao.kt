@@ -19,7 +19,7 @@ interface ProfileDao {
     @Query("UPDATE profile_table SET time24Hours=:time24Hours WHERE id=:profileId")
     suspend fun updateTime24Hours(profileId: Int,time24Hours: Boolean)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addProfile(profileModel: ProfileModel)
 
     @Update
@@ -33,5 +33,8 @@ interface ProfileDao {
 
     @Query("UPDATE profile_table SET language=:language WHERE id=:profileId")
     suspend fun updateProfileLanguage(profileId: Int,language: String)
+
+    @Query("DELETE FROM profile_table")
+    suspend fun deleteAllProfiles()
 
 }

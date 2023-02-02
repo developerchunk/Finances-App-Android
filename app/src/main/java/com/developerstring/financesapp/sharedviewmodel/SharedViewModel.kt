@@ -354,4 +354,10 @@ class SharedViewModel @Inject constructor(
         }
     }
 
+    fun deleteAllTransactions() {
+        viewModelScope.launch {
+            repository.deleteAllTransaction()
+        }
+    }
+
 }

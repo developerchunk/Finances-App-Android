@@ -82,22 +82,6 @@ object Constants {
     const val OTHER = "Other"
     const val TRANSACTION = "Transaction"
 
-    // Category List
-    val CATEGORIES = listOf(
-        "Food",
-        "Beverages",
-        "Sports",
-        "Education",
-        "Travel",
-        "Rent",
-        "Bills",
-        "Fees",
-        "Transaction",
-        "Gift",
-        "Other",
-        "Drinks"
-    ).sorted()
-
     val SUB_CATEGORY = mapOf(
         "Food" to listOf(
             "Breakfast",
@@ -218,6 +202,18 @@ object Constants {
         "OCT",
         "NOV",
         "DEC",
+    )
+
+    const val TIME_FORMAT = "24 Hours Format"
+    const val RESET_CATEGORIES = "Reset Categories"
+    const val DELETE_ALL_TRANSACTIONS = "Delete all Transactions"
+    const val DELETE_PROFILE = "Delete Profile"
+
+    val SETTINGS = mapOf(
+        TIME_FORMAT to R.drawable.profile_edit,
+        RESET_CATEGORIES to R.drawable.reset_icon,
+        DELETE_ALL_TRANSACTIONS to R.drawable.delete_outline_icon,
+        DELETE_PROFILE to R.drawable.profile_delete,
     )
 
 }

@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.developerstring.financesapp.navigation.Graph
+import com.developerstring.financesapp.navigation.setupnav.onStartNavGraph
 import com.developerstring.financesapp.screen.charts.ActivityChartScreen
 import com.developerstring.financesapp.screen.charts.CategoryChartScreen
 import com.developerstring.financesapp.screen.navscreens.profile.*
@@ -26,6 +27,12 @@ fun NavGraphBuilder.navGraph(
         route = Graph.NavGraph,
         startDestination = NavRoute.AddTransactionScreen.route
     ) {
+        onStartNavGraph(
+            navController = navController,
+            profileViewModel = profileViewModel,
+            sharedViewModel = sharedViewModel,
+            publicSharedViewModel = publicSharedViewModel
+        )
         composable(NavRoute.AddTransactionScreen.route) {
             AddTransaction(
                 navController = navController,

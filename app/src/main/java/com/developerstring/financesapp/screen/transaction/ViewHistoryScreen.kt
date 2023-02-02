@@ -33,6 +33,8 @@ fun ViewHistoryScreen(
 
     oldFirstFilter.value = false
 
+    profileViewModel.getAllCategories()
+
     val transactionAction = sharedViewModel.transactionAction
     sharedViewModel.transactionAction(action = transactionAction.value)
 
@@ -48,6 +50,8 @@ fun ViewHistoryScreen(
 
     val time24Hours by profileViewModel.profileTime24Hours.collectAsState()
 
+    val categories by profileViewModel.allCategories.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBarHistory(
@@ -55,6 +59,7 @@ fun ViewHistoryScreen(
                 navController = navController,
                 searchBarState = searchBarState,
                 searchBarText = searchBarText,
+                categoriesModels = categories
             )
         }
     ) {
@@ -167,7 +172,6 @@ fun HistoryTransactionContent(
                     sharedViewModel.getSelectedTransaction(transactionID = id)
                     navController.navigate(route = NavRoute.TransactionDetailsScreen.route)
                 },
-                timeShow = true,
                 time24Hours = time24Hours
             )
         }

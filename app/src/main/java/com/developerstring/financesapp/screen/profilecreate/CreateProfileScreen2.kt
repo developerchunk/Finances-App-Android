@@ -214,7 +214,7 @@ fun CreateProfileScreen2(
                         )
 
                         navController.popBackStack()
-                        navController.navigate(SetUpNavRoute.SplashSetUpNavRoute.route)
+                        navController.navigate(SetUpNavRoute.SplashScreenSetUpNavRoute.route)
                     } else {
                         Toast.makeText(context, "Please enter spending amount", Toast.LENGTH_SHORT)
                             .show()

@@ -32,6 +32,14 @@
     <string name="ok">OK</string>
     <string name="setting">Setting</string>
 
+    <string name="enter_captcha">Enter the captcha</string>
+
+    <string name="delete_all_transaction_title">Sure to DELETE all Transactions?</string>
+    <string name="delete_all_transaction_message">You are just one step away from deleting all your transactions from the app. You cannot undo the action afterward.</string>
+
+    <string name="delete_all_profiles_title">Sure to DELETE your Profile?</string>
+    <string name="delete_all_profiles_message">You are just one step away from deleting your profile in the app. You cannot undo the action afterward.</string>
+
     <string name="less">Less</string>
     <string name="more">More</string>
 
@@ -68,7 +76,7 @@
 
     <string name="filter">Filter</string>
 
-<!--    Currencies-->
+    <!--    Currencies-->
     <string-array name="currencies">
         <item>Indian Rupee- ₹</item>
         <item>Dollar- $</item>
@@ -98,7 +106,7 @@
     <string name="add_error_category">Max 30 Categories can be added</string>
 
 
-<!--    Marathi Text-->
+    <!--    Marathi Text-->
     <string name="add_payment_marathi">पेमेंट\nलिहा</string>
     <string name="history_marathi">पेमेंट\nइतिहास</string>
     <string name="total_balance_marathi">एकूण शिल्लक</string>

@@ -306,9 +306,9 @@ fun String.textToCategorySort(): CategorySortState {
     }
 }
 
-fun String.convertStringToAlphabets(): String {
+fun String.convertStringToAlphabets(length: Int = 35): String {
     return this.filterNot { it == '<' || it == '>' || it == '/' || it == '#' || it == '\'' || it == '"' || it == '\\' || it == '{' || it == '}' || it == '[' || it == ']' || it == '!' || it == '%' || it == '$' || it == '?' || it == '.' }
-        .take(35)
+        .take(length)
 }
 
 fun String.convertStringToInt(): String {
@@ -335,4 +335,13 @@ fun RequestState<List<CategoryModel>>.categoryStateListToList(): List<CategoryMo
         this.data
     } else listOf()
 
+}
+
+fun randomCaptcha(
+    length: Int
+): String {
+    val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+    return (1..length)
+        .map { allowedChars.random() }
+        .joinToString("")
 }

@@ -15,7 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.developerstring.financesapp.ui.theme.LighterUIBlue
+import com.developerstring.financesapp.ui.theme.backgroundColorTimePicker
+import com.developerstring.financesapp.ui.theme.textColorBW
 
 @Composable
 fun MinutePicker(
@@ -53,9 +54,9 @@ fun MinutePicker(
                     disable = disable,
                     disableMinutes = disableMinutes,
                     size = (screenWidth / buttonSize).dp,
-                    color = LighterUIBlue,
+                    color = backgroundColorTimePicker,
                     disableColor = Color.Gray,
-                    textColor = Color.Black,
+                    textColor = textColorBW,
                     spacing = spacing,
                     selected = { selected ->
                         minutes(selected)

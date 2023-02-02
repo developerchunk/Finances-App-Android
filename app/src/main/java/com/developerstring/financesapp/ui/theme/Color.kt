@@ -23,6 +23,7 @@ val Brown = Color(0xFF8F4700)
 val DarkPink = Color(0xFFB619E0)
 val DarkOrange = Color(0xFFD32E05)
 
+val UIWhite = Color(0xFFF4F6F0)
 val LightPurple = Color(0xFFC9D4FF)
 val LightGray = Color(0xFF636B7B)
 val SlightGray = Color(0xFF8D95A3)
@@ -47,7 +48,7 @@ val WhiteGreen = Color(0xFFADFFF7)
 val LightWhiteBlue = Color(0xFFF9FCFF)
 
 val textColorBW: Color
-    get() = if (!DARK_THEME_ENABLE) Black else White
+    get() = if (!DARK_THEME_ENABLE) Dark else UIWhite
 
 val colorGray: Color
     get() = if (!DARK_THEME_ENABLE) Gray else LighterGray
@@ -69,6 +70,9 @@ val backgroundColorBW: Color
 
 val backgroundColorCard: Color
     get() = if (!DARK_THEME_ENABLE) White else LightGray
+
+val backgroundColorTimePicker: Color
+    get() = if (!DARK_THEME_ENABLE) LighterUIBlue else LightUIBlue.copy(alpha = 0.15f)
 
 val textColorBLG: Color
     get() = if (!DARK_THEME_ENABLE) Black else SlightGray

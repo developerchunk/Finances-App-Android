@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -34,7 +33,6 @@ fun TransactionsItemView(
     transactionModel: TransactionModel,
     currency: String,
     navigateToDetails: (id: Int) -> Unit,
-    timeShow: Boolean,
     time24Hours: Boolean
 ) {
 
@@ -147,6 +145,15 @@ fun TransactionsItemView(
                             color = textColorBW
                         )
 
+                        Text(
+                            text = "${hour.timeConvert()}:${minute.timeConvert()}" +
+                                    " ${if (meridiem == Meridiem.HOUR24) "" else meridiem.name}",
+                            fontSize = SMALLEST_TEXT_SIZE,
+                            fontFamily = fontOpenSans,
+                            fontWeight = FontWeight.Medium,
+                            color = textColorBW
+                        )
+
 
                     }
 
@@ -159,28 +166,10 @@ fun TransactionsItemView(
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = if (timeShow) 10.dp else 20.dp, bottom = 20.dp),
+                                .padding(vertical = 20.dp),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-
-                            if (timeShow) {
-                                Text(
-                                    modifier = Modifier
-                                        .padding(start = 20.dp, bottom = 10.dp)
-                                        .fillMaxWidth(),
-                                    text =
-                                    "Time: ${hour.timeConvert()}:${minute.timeConvert()}" +
-                                            " ${if (meridiem == Meridiem.HOUR24) "" else meridiem.name}",
-                                    fontFamily = fontOpenSans,
-                                    fontWeight = FontWeight.Medium,
-                                    fontSize = EXTRA_SMALL_TEXT_SIZE,
-                                    color = textColorBW,
-                                    overflow = TextOverflow.Ellipsis,
-                                    maxLines = 1,
-                                    textAlign = TextAlign.Start
-                                )
-                            }
 
                             ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
 

@@ -45,4 +45,8 @@ class ProfileRepository @Inject constructor(private val profileDao: ProfileDao) 
         profileDao.updateProfileLanguage(profileId = profileId, language = language)
     }
 
+    suspend fun deleteAllProfiles() {
+        profileDao.deleteAllProfiles()
+    }
+
 }

@@ -22,7 +22,7 @@ fun NavGraphBuilder.onStartNavGraph(
 ) {
     navigation(
         route = Graph.ON_START_NAV_GRAPH,
-        startDestination = SetUpNavRoute.SplashSetUpNavRoute.route
+        startDestination = SetUpNavRoute.SplashScreenSetUpNavRoute.route
     ) {
         // MainSetUpNavRoute
         composable(
@@ -37,7 +37,7 @@ fun NavGraphBuilder.onStartNavGraph(
 
         // Splash SetUpNavRoute
         composable(
-            route = SetUpNavRoute.SplashSetUpNavRoute.route
+            route = SetUpNavRoute.SplashScreenSetUpNavRoute.route
         ) {
             SplashScreen(
                 navController = navController,

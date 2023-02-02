@@ -29,24 +29,33 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
+import com.developerstring.financesapp.roomdatabase.models.CategoryModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
-import com.developerstring.financesapp.util.Constants.CATEGORIES
 import com.developerstring.financesapp.util.Constants.FILTER_NAME
+import com.developerstring.financesapp.util.filterListText
 import com.developerstring.financesapp.util.state.FilterTransactionState
+import com.developerstring.financesapp.util.state.RequestState
 import com.developerstring.financesapp.util.state.SearchBarState
 import com.developerstring.financesapp.util.state.TrailingIconStateSearch
-import com.developerstring.financesapp.util.filterListText
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun TopAppBarHistory(
     sharedViewModel: SharedViewModel,
+    categoriesModels: RequestState<List<CategoryModel>>,
     navController: NavController,
     searchBarState: SearchBarState,
     searchBarText: String,
 ) {
 
+    var categories by remember {
+        mutableStateOf(listOf<String>())
+    }
+
+    if (categoriesModels is RequestState.Success) {
+        categories = categoriesModels.data.map { it.category }.sorted()
+    }
 
     var filter by sharedViewModel.filterState
     var filterText by remember {
@@ -61,12 +70,13 @@ fun TopAppBarHistory(
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = backgroundColor
+        color = backgroundColorBW
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.Transparent)
+                .padding(bottom = 10.dp)
         ) {
 
             when (searchBarState) {
@@ -105,7 +115,10 @@ fun TopAppBarHistory(
                 }
             }
 
+
+
             TopAppBarFilterContent(
+                categories = categories,
                 selectedList = {
                     filterText = it
                     if (filterText.isNotEmpty()) {
@@ -132,16 +145,17 @@ fun TopAppBarHistory(
 
 @Composable
 fun TopAppBarFilterContent(
-    selectedList: (String) -> Unit
+    categories: List<String>,
+    selectedList: (String) -> Unit,
 ) {
 
-    val filterList = FILTER_NAME.plus(CATEGORIES)
+    val filterList = FILTER_NAME.plus(categories)
 
 
     val expandBackground = Brush.horizontalGradient(
         colors = listOf(
             Color.Transparent,
-            backgroundColor,
+            backgroundColorBW,
         ),
     )
 
@@ -218,7 +232,7 @@ fun TopAppBarFilterContent(
             modifier = Modifier
                 .height(40.dp)
                 .width(50.dp)
-                .background(backgroundColor),
+                .background(Color.Transparent),
             contentAlignment = Alignment.TopStart
         ) {
 
@@ -385,21 +399,6 @@ fun SearchedTopAppBarHistory(
                                 }
                             }
                         }
-
-//                        when (trailingIconState) {
-//                            TrailingIconState.READY_TO_DELETE -> {
-//                                onTextChange("")
-//                                trailingIconState = TrailingIconState.READY_TO_CLOSE
-//                            }
-//                            TrailingIconState.READY_TO_CLOSE -> {
-//                                if (text.isNotEmpty()) {
-//                                    onTextChange("")
-//                                } else {
-//                                    onCloseClicked()
-//                                    trailingIconState = TrailingIconState.READY_TO_DELETE
-//                                }
-//                            }
-//                        }
                     }
                 ) {
                     Icon(

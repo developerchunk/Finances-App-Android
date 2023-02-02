@@ -454,6 +454,7 @@ fun TransactionContent(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     cursorColor = textColorBW,
+                    disabledIndicatorColor = Color.Transparent
                 ),
                 textStyle = TextStyle(
                     color = textColorBW,
@@ -552,6 +553,7 @@ fun TransactionContent(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         cursorColor = textColorBW,
+                        disabledIndicatorColor = Color.Transparent
                     ),
                     textStyle = TextStyle(
                         color = textColorBW,
@@ -607,6 +609,7 @@ fun TransactionContent(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     cursorColor = textColorBW,
+                    disabledIndicatorColor = Color.Transparent
                 ),
                 textStyle = TextStyle(
                     color = textColorBW,
@@ -881,6 +884,7 @@ fun TransactionContent(
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                             cursorColor = textColorBW,
+                            disabledIndicatorColor = Color.Transparent
                         ),
                         textStyle = TextStyle(
                             color = textColorBW,

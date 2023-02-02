@@ -17,8 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.developerstring.financesapp.ui.theme.LighterUIBlue
 import com.developerstring.financesapp.ui.theme.UIBlue
+import com.developerstring.financesapp.ui.theme.backgroundColorTimePicker
+import com.developerstring.financesapp.ui.theme.textColorBW
 
 @Composable
 fun ClockTimePicker(
@@ -52,7 +53,7 @@ fun ClockTimePicker(
         modifier = Modifier
             .size(radius+10.dp)
             .rotate(90f)
-            .background(LighterUIBlue, shape = CircleShape),
+            .background(backgroundColorTimePicker, shape = CircleShape),
         contentAlignment = Alignment.Center
     ) {
 
@@ -62,6 +63,74 @@ fun ClockTimePicker(
                 .background(UIBlue, shape = CircleShape)
         )
 
+        hours.forEachIndexed { index, value ->
+
+            Box(
+                modifier = Modifier
+                    .width(radius)
+                    .rotate(rotation[index]),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+
+                if (selectedHour == value) {
+                    Box(
+                        modifier = Modifier
+                            .width(radius / 2)
+                            .padding(
+                                end = 30.dp,
+                            )
+                            .height(5.dp)
+                            .background(color = UIBlue)
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(selectedSize),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Box(
+                        modifier = Modifier
+                            .size(selectedSize)
+                            .clickable(indication = null, interactionSource = interactionSource) {
+                                selectedHour = value
+                                clickedHour(selectedHour)
+                            },
+                        contentAlignment = Alignment.Center,
+                    ) {
+
+                        val animatedSize by animateDpAsState(
+                            targetValue = if (selectedHour == value) selectedSize-10.dp else 0.dp,
+                            animationSpec = tween(
+                                durationMillis = 500,
+                                easing = LinearOutSlowInEasing
+                            )
+                        )
+                        Box(
+                            modifier = Modifier
+                                .size(
+                                    animatedSize
+                                )
+                                .background(
+                                    color = UIBlue,
+                                    shape = CircleShape
+                                )
+                        )
+                        Text(
+                            modifier = Modifier
+                                .rotate(-rotation[index] - 90f),
+                            text = value.toString(),
+                            color = if (selectedHour==value) Color.White else textColorBW
+                        )
+                    }
+
+                }
+
+            }
+        }
 
         if (format24) {
             hours24.forEachIndexed { index, value ->
@@ -124,7 +193,7 @@ fun ClockTimePicker(
                                 modifier = Modifier
                                     .rotate(-rotation[index] - 90f),
                                 text = value.toString(),
-                                color = if (selectedHour==value) Color.White else Color.Black,
+                                color = if (selectedHour==value) Color.White else textColorBW,
                                 fontSize = 12.sp
                             )
                         }
@@ -132,75 +201,6 @@ fun ClockTimePicker(
                     }
 
                 }
-            }
-        }
-
-        hours.forEachIndexed { index, value ->
-
-            Box(
-                modifier = Modifier
-                    .width(radius)
-                    .rotate(rotation[index]),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-
-                if (selectedHour == value) {
-                    Box(
-                        modifier = Modifier
-                            .width(radius / 2)
-                            .padding(
-                                end = 30.dp,
-                            )
-                            .height(5.dp)
-                            .background(color = UIBlue)
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(selectedSize),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    Box(
-                        modifier = Modifier
-                            .size(selectedSize)
-                            .clickable(indication = null, interactionSource = interactionSource) {
-                                selectedHour = value
-                                clickedHour(selectedHour)
-                            },
-                        contentAlignment = Alignment.Center,
-                    ) {
-
-                        val animatedSize by animateDpAsState(
-                            targetValue = if (selectedHour == value) selectedSize-10.dp else 0.dp,
-                            animationSpec = tween(
-                                durationMillis = 500,
-                                easing = LinearOutSlowInEasing
-                            )
-                        )
-                        Box(
-                            modifier = Modifier
-                                .size(
-                                    animatedSize
-                                )
-                                .background(
-                                    color = UIBlue,
-                                    shape = CircleShape
-                                )
-                        )
-                        Text(
-                            modifier = Modifier
-                                .rotate(-rotation[index] - 90f),
-                            text = value.toString(),
-                            color = if (selectedHour==value) Color.White else Color.Black
-                        )
-                    }
-
-                }
-
             }
         }
 

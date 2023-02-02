@@ -18,9 +18,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.developerstring.financesapp.ui.theme.LighterUIBlue
 import com.developerstring.financesapp.ui.theme.UIBlue
 import com.developerstring.financesapp.ui.theme.backgroundColor
+import com.developerstring.financesapp.ui.theme.backgroundColorTimePicker
 import com.developerstring.financesapp.ui.theme.textColorBW
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -273,7 +273,7 @@ fun TimePicker(
                                     }
                                 )
                                 .background(
-                                    color = LighterUIBlue,
+                                    color = backgroundColorTimePicker,
                                     shape = CircleShape
                                 )
                                 .padding(vertical = 7.dp, horizontal = 16.dp)
@@ -321,7 +321,7 @@ fun TimePickerText(
             },
         elevation = 0.dp,
         shape = RoundedCornerShape(5.dp),
-        backgroundColor = if (selected) LighterUIBlue else Color.Transparent
+        backgroundColor = if (selected) backgroundColorTimePicker else Color.Transparent
     ) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             if (timePicked == TimePick.HOUR) {
@@ -380,7 +380,7 @@ fun MeridiemPick(
                     },
                 elevation = 0.dp,
                 shape = RoundedCornerShape(5.dp),
-                backgroundColor = if (selected == it) LighterUIBlue else Color.Transparent
+                backgroundColor = if (selected == it) backgroundColorTimePicker else Color.Transparent
             ) {
 
                 Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Center) {
