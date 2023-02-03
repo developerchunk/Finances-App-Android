@@ -40,6 +40,13 @@
     <string name="delete_all_profiles_title">Sure to DELETE your Profile?</string>
     <string name="delete_all_profiles_message">You are just one step away from deleting your profile in the app. You cannot undo the action afterward.</string>
 
+    <string name="reset_categories_title">Sure to RESET All your Categories?</string>
+    <string name="reset_categories_message">You are just one step away from resetting your all categories in the app. You cannot undo the action afterward.</string>
+
+    <string name="delete_all_transactions_toast">All Your Transactions are Deleted.</string>
+    <string name="delete_all_profiles_toast">Your Profile Details are Deleted.</string>
+    <string name="reset_categories_toast">All your Categories are Reset.</string>
+
     <string name="less">Less</string>
     <string name="more">More</string>
 

@@ -1,5 +1,6 @@
 package com.developerstring.financesapp.screen.navscreens.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -22,6 +23,7 @@ import androidx.navigation.NavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
 import com.developerstring.financesapp.screen.navscreens.content.profilescreen.CustomSwitchButton
+import com.developerstring.financesapp.screen.profilecreate.addCategoriesToDB
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.components.DisplayAlertDialog
@@ -30,6 +32,7 @@ import com.developerstring.financesapp.util.Constants.DARK_THEME_ENABLE
 import com.developerstring.financesapp.util.Constants.DELETE_ALL_TRANSACTIONS
 import com.developerstring.financesapp.util.Constants.DELETE_PROFILE
 import com.developerstring.financesapp.util.Constants.NO
+import com.developerstring.financesapp.util.Constants.RESET_CATEGORIES
 import com.developerstring.financesapp.util.Constants.SETTINGS
 import com.developerstring.financesapp.util.Constants.TIME_FORMAT
 
@@ -52,7 +55,15 @@ fun SettingScreen(
         mutableStateOf(false)
     }
 
+    var deleteAllCategories by remember {
+        mutableStateOf(false)
+    }
+
     val context = LocalContext.current
+
+    val deleteAllTransactionToast = stringResource(id = R.string.delete_all_transactions_toast)
+    val deleteAllProfilesToast = stringResource(id = R.string.delete_all_profiles_toast)
+    val resetAllCategoriesToast = stringResource(id = R.string.reset_categories_toast)
 
     Scaffold(topBar = {
 
@@ -119,6 +130,9 @@ fun SettingScreen(
                             DELETE_PROFILE -> {
                                 alertDialogShow = true
                             }
+                            RESET_CATEGORIES -> {
+                                alertDialogShow = true
+                            }
                         }
                     }
                 )
@@ -138,6 +152,7 @@ fun SettingScreen(
                         },
                         onYesClicked = {
                             sharedViewModel.deleteAllTransactions()
+                            Toast.makeText(context, deleteAllTransactionToast, Toast.LENGTH_LONG).show()
                         })
                 }
                 DELETE_PROFILE -> {
@@ -156,6 +171,7 @@ fun SettingScreen(
                                 value = NO
                             )
                             profileViewModel.deleteAllProfiles()
+                            Toast.makeText(context, deleteAllProfilesToast, Toast.LENGTH_LONG).show()
                             navController.popBackStack()
                             navController.navigate(route = SetUpNavRoute.SplashScreenSetUpNavRoute.route)
                             DARK_THEME_ENABLE = true
@@ -163,10 +179,37 @@ fun SettingScreen(
                     )
 
                 }
+
+                RESET_CATEGORIES -> {
+                    DisplayAlertDialog(
+                        title = stringResource(id = R.string.reset_categories_title),
+                        message = stringResource(id = R.string.reset_categories_message),
+                        openDialog = alertDialogShow,
+                        captchaVerification = true,
+                        onCloseClicked = {
+                            alertDialogShow = false
+                            settingSelected = ""
+                        },
+                        onYesClicked = {
+                            profileViewModel.deleteAllCategories()
+                            deleteAllCategories = true
+                        }
+                    )
+                }
             }
 
 
         }
+    }
+
+    if (deleteAllCategories) {
+        val categories by profileViewModel.allCategories.collectAsState()
+        addCategoriesToDB(
+            categories = categories,
+            profileViewModel = profileViewModel
+        )
+        Toast.makeText(context, resetAllCategoriesToast, Toast.LENGTH_LONG).show()
+        deleteAllCategories = false
     }
 
 }

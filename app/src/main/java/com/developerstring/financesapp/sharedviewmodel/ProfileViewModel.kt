@@ -328,4 +328,11 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    // delete all categories
+    fun deleteAllCategories() {
+        viewModelScope.launch {
+            repositoryCategory.deleteAllProfiles()
+        }
+    }
+
 }

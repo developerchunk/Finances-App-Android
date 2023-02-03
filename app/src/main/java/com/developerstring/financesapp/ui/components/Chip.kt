@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -19,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.developerstring.financesapp.ui.theme.*
@@ -66,7 +66,13 @@ fun CustomChip(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(text = if (key) title.keyToTransactionType() else title, color = contentColor, fontSize = 16.sp)
+            Text(
+                text = if (key) title.keyToTransactionType() else title,
+                color = contentColor,
+                fontSize = 16.sp,
+                fontFamily = fontInter,
+                fontWeight = FontWeight.Medium
+            )
             AnimatedVisibility(visible = isSelected) {
                 Icon(
                     imageVector = image,
