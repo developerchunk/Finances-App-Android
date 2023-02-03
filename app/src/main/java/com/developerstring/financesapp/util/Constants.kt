@@ -81,6 +81,7 @@ object Constants {
 
     const val OTHER = "Other"
     const val TRANSACTION = "Transaction"
+    const val INVESTMENT = "Investment"
 
     val SUB_CATEGORY = mapOf(
         "Food" to listOf(
@@ -156,6 +157,15 @@ object Constants {
             "Pepsi",
             "Cold Drinks",
             "Fruit Juice",
+        ),
+        "Investment" to listOf(
+            "Mutual Funds",
+            "Stocks",
+            "ETFs",
+            "FD",
+            "Bonds",
+            "Real State",
+            "Gold",
         ),
         OTHER to listOf(
            OTHER

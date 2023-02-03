@@ -53,7 +53,9 @@ import com.developerstring.financesapp.ui.components.timepicker.*
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.ADD_TRANSACTION_TYPE
+import com.developerstring.financesapp.util.Constants.INVESTMENT
 import com.developerstring.financesapp.util.Constants.OTHER
+import com.developerstring.financesapp.util.Constants.SAVINGS
 import com.developerstring.financesapp.util.Constants.SEPARATOR_LIST
 import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.Constants.TRANSACTION
@@ -229,7 +231,8 @@ fun TransactionContent(
     if (categoryModel is RequestState.Success) {
         categoryModel.data.forEach { value ->
             categories[value.id] = value.category
-            subCategories[value.category] = value.subCategory.split(SEPARATOR_LIST).toList()
+            subCategories[value.category] =
+                value.subCategory.split(SEPARATOR_LIST).toList().plus(OTHER)
         }
         otherSubCategories.addAll(subCategories.mapListToList())
     }
@@ -277,7 +280,7 @@ fun TransactionContent(
             if (time24Hours) {
                 meridiem = Meridiem.HOUR24
             } else {
-                if (hour>13) {
+                if (hour > 13) {
                     hour -= 12
                     meridiem = Meridiem.PM
                 } else meridiem = Meridiem.AM
@@ -288,7 +291,7 @@ fun TransactionContent(
                 oldMeridiem = meridiem,
                 currentMeridiem = Meridiem.HOUR24,
                 time = {
-                    timeTransactionModel = it.first.timeConvert()+minute
+                    timeTransactionModel = it.first.timeConvert() + minute
                 }
             )
 
@@ -303,7 +306,7 @@ fun TransactionContent(
             if (time24Hours) {
                 meridiem = Meridiem.HOUR24
             } else {
-                if (hour>13) {
+                if (hour > 13) {
                     hour -= 12
                     meridiem = Meridiem.PM
                 } else meridiem = Meridiem.AM
@@ -314,7 +317,7 @@ fun TransactionContent(
                 oldMeridiem = meridiem,
                 currentMeridiem = Meridiem.HOUR24,
                 time = {
-                    timeTransactionModel = it.first.timeConvert()+minute
+                    timeTransactionModel = it.first.timeConvert() + minute
                 }
             )
         }
@@ -323,6 +326,7 @@ fun TransactionContent(
     mCalendar.time = Date()
 
     val buttonColor = Brush.horizontalGradient(colors = listOf(UIBlue, LightUIBlue))
+
 
     Column(
         modifier = modifier
@@ -398,8 +402,9 @@ fun TransactionContent(
                     selected = transactionType,
                     onSelected = {
                         transactionType = it
-                        if (transactionType == ADD_FUND) {
-                            category = TRANSACTION
+                        when(transactionType) {
+                            ADD_FUND -> category = TRANSACTION
+                            SAVINGS -> category = INVESTMENT
                         }
                     },
                     image = Icons.Filled.Check,
@@ -655,7 +660,7 @@ fun TransactionContent(
                                     category,
                                     defaultValue = { otherSubCategories })
 
-                            } else otherSubCategories
+                            } else otherSubCategories.distinct()
                         ) {
                             SubCategoryItems(title = it) { title ->
                                 subCategory = title
@@ -668,7 +673,7 @@ fun TransactionContent(
             }
         }
 
-        // group of Other Category
+        // group of Other Sub Category
         AnimatedVisibility(visible = subCategory == OTHER) {
             Column(
                 modifier = Modifier
@@ -875,7 +880,7 @@ fun TransactionContent(
                                     timePickerVisible = true
                                 }
                             ),
-                        value = "$hour:$minute ${if (meridiem==Meridiem.HOUR24) "" else meridiem.name}",
+                        value = "$hour:$minute ${if (meridiem == Meridiem.HOUR24) "" else meridiem.name}",
                         onValueChange = {
                         },
 //                        "${hour.timeConvert()}:$minute ${if (meridiem == Meridiem.HOUR24) "" else meridiem.name}"
@@ -909,7 +914,7 @@ fun TransactionContent(
                         currentMinute1 = minute.first().digitToInt(),
                         currentMinute2 = minute.last().digitToInt(),
                         onSelected = { it, m ->
-                            if (m==Meridiem.HOUR24) {
+                            if (m == Meridiem.HOUR24) {
                                 profileViewModel.updateTime24Hours(
                                     time24Hours = true
                                 )
@@ -928,7 +933,7 @@ fun TransactionContent(
                                         oldMeridiem = meridiem,
                                         currentMeridiem = Meridiem.HOUR24,
                                         time = {
-                                            timeTransactionModel = it.first.timeConvert()+minute
+                                            timeTransactionModel = it.first.timeConvert() + minute
                                         }
                                     )
                                 }

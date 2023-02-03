@@ -37,6 +37,8 @@ import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.components.DisplayAlertDialog
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants
+import com.developerstring.financesapp.util.Constants.OTHER
+import com.developerstring.financesapp.util.Constants.TRANSACTION
 import com.developerstring.financesapp.util.TransactionAction
 import com.developerstring.financesapp.util.convertStringToAlphabets
 import com.developerstring.financesapp.util.state.RequestState
@@ -134,6 +136,12 @@ fun EditCategoryDetailContent(
     var deleteDisplay by remember {
         mutableStateOf(false)
     }
+
+    var requiredCategory by remember {
+        mutableStateOf(false)
+    }
+
+    requiredCategory = (newCategory == TRANSACTION || newCategory == OTHER || newCategory == Constants.INVESTMENT)
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
@@ -383,11 +391,21 @@ fun EditCategoryDetailContent(
                                                     sheetState.collapse()
                                                 }
                                             }
+
+                                            if (newCategory != TRANSACTION || newCategory != OTHER) {
+                                                Toast
+                                                    .makeText(
+                                                        context,
+                                                        "You cannot change name of $newCategory Category",
+                                                        Toast.LENGTH_SHORT
+                                                    )
+                                                    .show()
+                                            }
                                         }
                                     ),
                                 value = newCategory,
-                                onValueChange = {
-                                    newCategory = it.convertStringToAlphabets()
+                                onValueChange = { categoryNew ->
+                                    newCategory = categoryNew.convertStringToAlphabets()
                                 },
                                 colors = TextFieldDefaults.textFieldColors(
                                     backgroundColor = Color.Transparent,
@@ -407,7 +425,7 @@ fun EditCategoryDetailContent(
                                     imeAction = ImeAction.Next
                                 ),
                                 singleLine = false,
-                                enabled = sheetState.isCollapsed,
+                                enabled = (sheetState.isCollapsed && !(requiredCategory)),
                                 trailingIcon = {
                                     if (newCategory != category && newCategory != "") {
                                         addSubCategory = false
@@ -434,10 +452,26 @@ fun EditCategoryDetailContent(
                             modifier = Modifier
                                 .size(32.dp)
                                 .clickable {
-                                    if (categoriesSize>1) {
+                                    if ((categoriesSize > 1 && !(requiredCategory))) {
                                         deleteDisplay = true
                                     } else {
-                                        Toast.makeText(context, "Minimum 1 Category should remain", Toast.LENGTH_SHORT).show()
+                                        if (!(newCategory != TRANSACTION || newCategory != OTHER)) {
+                                            Toast
+                                                .makeText(
+                                                    context,
+                                                    "Minimum 1 Category should remain",
+                                                    Toast.LENGTH_SHORT
+                                                )
+                                                .show()
+                                        } else {
+                                            Toast
+                                                .makeText(
+                                                    context,
+                                                    "You cannot delete $newCategory Category",
+                                                    Toast.LENGTH_SHORT
+                                                )
+                                                .show()
+                                        }
                                     }
                                 },
                             imageVector = Icons.Rounded.Delete,
@@ -465,7 +499,8 @@ fun EditCategoryDetailContent(
 
                         DisplayAlertDialog(
                             title = "Are you sure to Delete $category?",
-                            message = "\"$category\" Category and all Sub-Categories in it will be permanently deleted. \nYou will not be able to undo it.",
+                            message = "\"$category\" Category and all Sub-Categories in it will be permanently deleted. " +
+                                    "\nYou will not be able to undo it.",
                             openDialog = deleteDisplay,
                             onCloseClicked = {
                                 deleteDisplay = false

@@ -55,7 +55,6 @@ fun TransactionDetailsScreen(
     val language by profileViewModel.profileLanguage.collectAsState()
     val languageText = LanguageText(language = language)
 
-
     var oldAmount by remember {
         mutableStateOf(0)
     }
