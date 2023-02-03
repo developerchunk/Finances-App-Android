@@ -36,14 +36,14 @@ fun TransactionDetailsScreen(
     publicSharedViewModel: PublicSharedViewModel,
 ) {
 
-    val id = sharedViewModel.id.value
+    val id by sharedViewModel.id
 
     profileViewModel.getTime24Hours()
 
     val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
     val time24Hours by profileViewModel.profileTime24Hours.collectAsState()
 
-    val getTransactionModel by sharedViewModel.selectedTransaction.collectAsState()
+    val getTransactionModel by sharedViewModel.selectTransaction
     val categoryModel by profileViewModel.allCategories.collectAsState()
 
     var transactionModel by remember {
@@ -60,7 +60,7 @@ fun TransactionDetailsScreen(
         mutableStateOf(0)
     }
     try {
-        oldAmount = getTransactionModel!!.amount
+        oldAmount = getTransactionModel.amount
     } catch (e: Exception) {
 //        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
     }
@@ -69,10 +69,12 @@ fun TransactionDetailsScreen(
         mutableStateOf<String?>("")
     }
     try {
-        oldTransactionType = getTransactionModel!!.transaction_type
+        oldTransactionType = getTransactionModel.transaction_type
     } catch (_: Exception) {
 
     }
+
+
 
     Column(
         modifier = Modifier
@@ -111,13 +113,13 @@ fun TransactionDetailsScreen(
             IconButton(onClick = {
                 profileViewModel.saveTotalAmount(
                     amount = settleDeleteTransaction(
-                        transactionType = getTransactionModel!!.transaction_type,
+                        transactionType = getTransactionModel.transaction_type,
                         totalAmount = totalAmount,
                         oldAmount = oldAmount
                     )
                 )
                 sharedViewModel.transactionAction(action = TransactionAction.DELETE)
-                sharedViewModel.transactionModel.value = getTransactionModel!!
+                sharedViewModel.transactionModel.value = getTransactionModel
                 navController.popBackStack()
             }) {
                 Icon(
@@ -135,48 +137,46 @@ fun TransactionDetailsScreen(
                 .padding(start = 20.dp, end = 20.dp, top = 10.dp)
                 .fillMaxSize()
         ) {
-            if (getTransactionModel!=null) {
-                TransactionContent(
-                    modifier = Modifier,
-                    categoryModel = categoryModel,
-                    transactionModel = getTransactionModel!!,
-                    publicSharedViewModel = publicSharedViewModel,
-                    navController = navController,
-                    onSaveClicked = {
+            TransactionContent(
+                modifier = Modifier,
+                categoryModel = categoryModel,
+                transactionModel = getTransactionModel,
+                publicSharedViewModel = publicSharedViewModel,
+                navController = navController,
+                onSaveClicked = {
 //                    Toast.makeText(context, id.toString(), Toast.LENGTH_SHORT).show()
-                        transactionModel = TransactionModel(
-                            id = id,
-                            amount = it.amount,
-                            transaction_type = it.transaction_type,
-                            category = it.category,
-                            subCategory = it.subCategory,
-                            date = it.date,
-                            day = it.day,
-                            time = it.time,
-                            month = it.month,
-                            year = it.year,
-                            info = it.info,
-                            place = it.place,
-                            categoryOther = it.categoryOther,
-                            subCategoryOther = it.subCategoryOther,
+                    transactionModel = TransactionModel(
+                        id = id,
+                        amount = it.amount,
+                        transaction_type = it.transaction_type,
+                        category = it.category,
+                        subCategory = it.subCategory,
+                        date = it.date,
+                        day = it.day,
+                        time = it.time,
+                        month = it.month,
+                        year = it.year,
+                        info = it.info,
+                        place = it.place,
+                        categoryOther = it.categoryOther,
+                        subCategoryOther = it.subCategoryOther,
+                    )
+                    sharedViewModel.updateTransaction(transactionModel = transactionModel)
+                    profileViewModel.getProfileAmount()
+                    profileViewModel.saveTotalAmount(
+                        amount = settleTransactionAmount(
+                            totalAmount = totalAmount,
+                            oldAmount = oldAmount,
+                            newAmount = transactionModel.amount,
+                            oldTransactionType = oldTransactionType!!,
+                            newTransactionType = transactionModel.transaction_type
                         )
-                        sharedViewModel.updateTransaction(transactionModel = transactionModel)
-                        profileViewModel.getProfileAmount()
-                        profileViewModel.saveTotalAmount(
-                            amount = settleTransactionAmount(
-                                totalAmount = totalAmount,
-                                oldAmount = oldAmount,
-                                newAmount = transactionModel.amount,
-                                oldTransactionType = oldTransactionType!!,
-                                newTransactionType = transactionModel.transaction_type
-                            )
-                        )
-                        navController.popBackStack()
-                    },
-                    time24Hours = time24Hours,
-                    profileViewModel = profileViewModel
-                )
-            }
+                    )
+                    navController.popBackStack()
+                },
+                time24Hours = time24Hours,
+                profileViewModel = profileViewModel
+            )
         }
     }
 }

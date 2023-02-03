@@ -32,7 +32,7 @@ import com.developerstring.financesapp.util.transactionTypeToSymbol
 fun TransactionsItemView(
     transactionModel: TransactionModel,
     currency: String,
-    navigateToDetails: (id: Int) -> Unit,
+    navigateToDetails: (TransactionModel) -> Unit,
     time24Hours: Boolean
 ) {
 
@@ -112,7 +112,7 @@ fun TransactionsItemView(
                         interactionSource = interactionSource,
                         indication = null,
                         onClick = {
-                            navigateToDetails(transactionModel.id)
+                            navigateToDetails(transactionModel)
                         }),
                 color = Color.Transparent,
             ) {

@@ -38,7 +38,7 @@ fun TimePicker(
     onCanceled: () -> Unit
 ) {
 
-    var format24 by remember {
+    val format24 by remember {
         mutableStateOf(currentMeridiem == Meridiem.HOUR24)
     }
 
@@ -84,7 +84,7 @@ fun TimePicker(
 
     val scope = rememberCoroutineScope()
 
-    val meridiemList = listOf(Meridiem.HOUR24, Meridiem.AM, Meridiem.PM)
+    val meridiemList = listOf(Meridiem.AM, Meridiem.PM)
 
     LaunchedEffect(key1 = true) {
         launched = true
@@ -147,26 +147,26 @@ fun TimePicker(
 
                     }
 
-                    MeridiemPick(
-                        meridiem = meridiemList,
-                        selected = meridiem,
-                        interactionSource = interactionSource,
-                        paddingValues = PaddingValues(vertical = 10.dp),
-                        onSelected = {
-                            convertToMeridiemTime(
-                                hours = hour,
-                                oldMeridiem = meridiem,
-                                currentMeridiem = it,
-                                time = { time ->
-                                    hour = time.first
-                                    meridiem = time.second
-                                }
-                            )
-                            format24 = meridiem == Meridiem.HOUR24
-                            hourChanged = true
-                        }
-                    )
-
+                    if(meridiem != Meridiem.HOUR24) {
+                        MeridiemPick(
+                            meridiem = meridiemList,
+                            selected = meridiem,
+                            interactionSource = interactionSource,
+                            paddingValues = PaddingValues(vertical = 10.dp),
+                            onSelected = {
+                                convertToMeridiemTime(
+                                    hours = hour,
+                                    oldMeridiem = meridiem,
+                                    currentMeridiem = it,
+                                    time = { time ->
+                                        hour = time.first
+                                        meridiem = time.second
+                                    }
+                                )
+                                hourChanged = true
+                            }
+                        )
+                    }
 
                     Column(
                         modifier = Modifier
@@ -406,7 +406,7 @@ fun MeridiemPick(
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 
                         Text(
-                            text = if (it == Meridiem.HOUR24) "24Hr" else it.name,
+                            text = it.name,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
                             color = if (selected == it) UIBlue else textColorBW
@@ -416,10 +416,10 @@ fun MeridiemPick(
                 }
             }
 
-            if (index % 2 != 0 || index == 0) {
+            if (index % 2 == 0) {
                 Text(
                     modifier = Modifier.padding(horizontal = 10.dp),
-                    text = if (it == Meridiem.HOUR24) "|" else "/",
+                    text = "/",
                     color = textColorBW,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold

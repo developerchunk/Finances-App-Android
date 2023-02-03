@@ -30,6 +30,8 @@ class SharedViewModel @Inject constructor(
 
     var id: MutableState<Int> = mutableStateOf(0)
 
+    val selectTransaction: MutableState<TransactionModel> = mutableStateOf(TransactionModel())
+
     val transactionAction: MutableState<TransactionAction> =
         mutableStateOf(TransactionAction.NO_ACTION)
 

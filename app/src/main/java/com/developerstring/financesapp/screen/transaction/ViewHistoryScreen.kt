@@ -71,15 +71,18 @@ fun ViewHistoryScreen(
                 .background(backgroundColor)
         ) {
             TransactionHistoryContain(
-                sharedViewModel = sharedViewModel,
-                navController = navController,
                 allTransactions = allTransactions,
                 searchTransactions = searchedTransactions,
                 filterSearchTransactions = filterSearchedTransactions,
                 searchBarState = searchBarState,
                 filterState = filterState,
                 currency = currency,
-                time24Hours = time24Hours
+                time24Hours = time24Hours,
+                onClicked = {transaction ->
+                    sharedViewModel.id.value = transaction.id
+                    sharedViewModel.selectTransaction.value = transaction
+                    navController.navigate(route = NavRoute.TransactionDetailsScreen.route)
+                }
             )
         }
 
@@ -90,15 +93,14 @@ fun ViewHistoryScreen(
 
 @Composable
 fun TransactionHistoryContain(
-    sharedViewModel: SharedViewModel,
-    navController: NavController,
     allTransactions: RequestState<List<TransactionModel>>,
     searchTransactions: RequestState<List<TransactionModel>>,
     filterSearchTransactions: RequestState<List<TransactionModel>>,
     searchBarState: SearchBarState,
     filterState: FilterTransactionState,
     currency: String,
-    time24Hours: Boolean
+    time24Hours: Boolean,
+    onClicked: (TransactionModel) -> Unit
 ) {
 
     if (searchBarState == SearchBarState.TRIGGERED && filterState == FilterTransactionState.OPENED) {
@@ -106,9 +108,10 @@ fun TransactionHistoryContain(
             HistoryTransactionContent(
                 allTransactions = filterSearchTransactions.data,
                 currency = currency,
-                sharedViewModel = sharedViewModel,
-                navController = navController,
-                time24Hours = time24Hours
+                time24Hours = time24Hours,
+                onClicked = {transaction ->
+                    onClicked(transaction)
+                }
             )
         }
     } else if (searchBarState == SearchBarState.TRIGGERED) {
@@ -116,9 +119,10 @@ fun TransactionHistoryContain(
             HistoryTransactionContent(
                 allTransactions = searchTransactions.data,
                 currency = currency,
-                sharedViewModel = sharedViewModel,
-                navController = navController,
-                time24Hours = time24Hours
+                time24Hours = time24Hours,
+                onClicked = {transaction ->
+                    onClicked(transaction)
+                }
             )
         }
     } else if (filterState == FilterTransactionState.OPENED) {
@@ -126,9 +130,10 @@ fun TransactionHistoryContain(
             HistoryTransactionContent(
                 allTransactions = searchTransactions.data,
                 currency = currency,
-                sharedViewModel = sharedViewModel,
-                navController = navController,
-                time24Hours = time24Hours
+                time24Hours = time24Hours,
+                onClicked = {transaction ->
+                    onClicked(transaction)
+                }
             )
         }
     } else {
@@ -136,9 +141,10 @@ fun TransactionHistoryContain(
             HistoryTransactionContent(
                 allTransactions = allTransactions.data,
                 currency = currency,
-                sharedViewModel = sharedViewModel,
-                navController = navController,
-                time24Hours = time24Hours
+                time24Hours = time24Hours,
+                onClicked = {transaction ->
+                    onClicked(transaction)
+                }
             )
         }
     }
@@ -150,10 +156,11 @@ fun TransactionHistoryContain(
 fun HistoryTransactionContent(
     allTransactions: List<TransactionModel>,
     currency: String,
-    sharedViewModel: SharedViewModel,
-    navController: NavController,
-    time24Hours: Boolean
+    time24Hours: Boolean,
+    onClicked: (TransactionModel) -> Unit
 ) {
+
+
 
     LazyColumn {
         items(
@@ -167,10 +174,8 @@ fun HistoryTransactionContent(
             TransactionsItemView(
                 transactionModel = it,
                 currency = currency,
-                navigateToDetails = { id ->
-                    sharedViewModel.id.value = id
-                    sharedViewModel.getSelectedTransaction(transactionID = id)
-                    navController.navigate(route = NavRoute.TransactionDetailsScreen.route)
+                navigateToDetails = { transaction ->
+                    onClicked(transaction)
                 },
                 time24Hours = time24Hours
             )
