@@ -14,7 +14,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
-import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.components.ActivityCardItems
 import com.developerstring.financesapp.ui.theme.backgroundColor
 import com.developerstring.financesapp.util.LanguageText
@@ -24,7 +23,6 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 
 @Composable
 fun ActivityScreen(
-    sharedViewModel: SharedViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavController,
 ) {

@@ -44,7 +44,6 @@ fun BottomNavGraph(
         composable(route = BottomNavRoute.Activity.route) {
             ActivityScreen(
                 profileViewModel = profileViewModel,
-                sharedViewModel = sharedViewModel,
                 navController = navController
             )
         }

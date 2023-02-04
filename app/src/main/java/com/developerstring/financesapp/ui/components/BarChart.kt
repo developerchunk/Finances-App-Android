@@ -13,17 +13,15 @@ import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
-import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.ui.theme.LightGreen
+import com.developerstring.financesapp.ui.theme.fontInter
+import com.developerstring.financesapp.ui.theme.textColorBW
 import com.developerstring.financesapp.util.state.RoundTypeBarChart
 
 @Composable

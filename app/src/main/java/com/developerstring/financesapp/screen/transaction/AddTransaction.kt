@@ -279,8 +279,6 @@ fun TransactionContent(
     // Initializing a Calendar
     val mCalendar = Calendar.getInstance()
 
-//    var moreClicked by rememberSaveable { mutableStateOf(false) }
-
     // time data
     var hour by rememberSaveable { mutableStateOf(0) }
     var minute by rememberSaveable {
@@ -995,56 +993,6 @@ fun TransactionContent(
                 }
             }
 
-//            // more
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(50.dp),
-//            ) {
-//                Row(
-//                    modifier = Modifier
-//                        .padding(top = 20.dp, start = 20.dp, end = 20.dp)
-//                        .fillMaxWidth()
-//                        .clickable(onClick = {
-//                            moreClicked = !moreClicked
-//                        }),
-//                    verticalAlignment = Alignment.CenterVertically,
-//                    horizontalArrangement = Arrangement.spacedBy(5.dp)
-//                ) {
-//                    Box(
-//                        modifier = modifier
-//                            .fillMaxWidth(0.43f)
-//                            .height(4.dp)
-//                            .clip(RoundedCornerShape(5.dp))
-//                            .background(
-//                                LighterGray
-//                            )
-//                    )
-//                    Text(
-//                        text = stringResource(id = if (moreClicked) R.string.less else R.string.more),
-//                        fontFamily = fontInter,
-//                        fontWeight = FontWeight.Normal,
-//                        fontSize = 16.sp,
-//                        color = LightGray
-//                    )
-//                    Box(
-//                        modifier = modifier
-//                            .fillMaxWidth()
-//                            .height(4.dp)
-//                            .clip(RoundedCornerShape(5.dp))
-//                            .background(
-//                                LighterGray
-//                            )
-//                    )
-//                }
-//            }
-//
-//            AnimatedVisibility(visible = moreClicked) {
-
-//                Column(
-//                    modifier = modifier.fillMaxWidth(),
-//                    verticalArrangement = Arrangement.spacedBy(10.dp)
-//                ) {
             // group of Time textField
             Column(
                 modifier = Modifier
@@ -1234,8 +1182,6 @@ fun TransactionContent(
                     singleLine = true
                 )
             }
-//                }
-//            }
 
             Spacer(
                 modifier = Modifier
