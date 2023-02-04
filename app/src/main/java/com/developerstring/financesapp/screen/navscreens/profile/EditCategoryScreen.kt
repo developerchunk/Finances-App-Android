@@ -115,9 +115,13 @@ fun EditCategoryScreen(
             CategoryScreenContent(
                 categoryModel = categoryModel,
                 profileViewModel = profileViewModel,
-                navController = navController,
                 interactionSource = interactionSource,
-                scrollState = scrollState
+                scrollState = scrollState,
+                onClick = {id ->
+                    profileViewModel.categoryId.value = id
+                    profileViewModel.getSelectedCategories(id = id)
+                    navController.navigate(route = NavRoute.EditCategoryDetailScreen.route)
+                }
             )
 
         }
@@ -133,7 +137,7 @@ fun AddCategoryIcon(
     categoryModel: RequestState<List<CategoryModel>>,
     profileViewModel: ProfileViewModel,
     navController: NavController,
-    addError: (Boolean) -> Unit
+    addError: (Boolean) -> Unit,
 ) {
 
     IconButton(onClick = {
@@ -167,9 +171,9 @@ fun AddCategoryIcon(
 fun CategoryScreenContent(
     categoryModel: RequestState<List<CategoryModel>>,
     profileViewModel: ProfileViewModel,
-    navController: NavController,
     interactionSource: MutableInteractionSource,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    onClick: (Int) -> Unit
 ) {
 
     Column(
@@ -196,9 +200,7 @@ fun CategoryScreenContent(
                         categoryModel = value,
                         interactionSource = interactionSource,
                         onClick = { id ->
-                            profileViewModel.categoryId.value = id
-                            profileViewModel.getSelectedCategories(id = id)
-                            navController.navigate(route = NavRoute.EditCategoryDetailScreen.route)
+                            onClick(id)
                         }
                     )
                 }

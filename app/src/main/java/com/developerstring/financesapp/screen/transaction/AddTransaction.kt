@@ -295,6 +295,10 @@ fun TransactionContent(
 
     val saveButtonBackground = listOf(Color.Transparent, backgroundColor, backgroundColor)
 
+    var bottomHeight by remember {
+        mutableStateOf(Size.Zero)
+    }
+
     // Fetching current year, month and day
     if (date == "") {
         mYear = mCalendar.get(Calendar.YEAR)
@@ -1236,7 +1240,7 @@ fun TransactionContent(
             Spacer(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.2f)
+                    .height(bottomHeight.height.dp/2f+10.dp)
                     .background(Color.Transparent)
 
             )
@@ -1254,14 +1258,15 @@ fun TransactionContent(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.2f)
+                    .height(100.dp)
                     .background(brush = Brush.verticalGradient(colors = saveButtonBackground))
-                    .padding(top = 40.dp),
+                    .onGloballyPositioned {
+                        bottomHeight = it.size.toSize()
+                    },
                 contentAlignment = Alignment.TopCenter
             ) {
                 Surface(
                     modifier = Modifier
-
                         .width(220.dp)
                         .height(45.dp),
                     shape = CircleShape,
