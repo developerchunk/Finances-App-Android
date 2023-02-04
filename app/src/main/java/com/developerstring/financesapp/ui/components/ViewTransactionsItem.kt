@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -23,6 +24,7 @@ import com.developerstring.financesapp.ui.components.timepicker.stringToTime
 import com.developerstring.financesapp.ui.components.timepicker.timeConvert
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants
+import com.developerstring.financesapp.util.Constants.OTHER
 import com.developerstring.financesapp.util.simplifyAmount
 import com.developerstring.financesapp.util.simplifyAmountIndia
 import com.developerstring.financesapp.util.transactionTypeToSymbol
@@ -175,24 +177,26 @@ fun TransactionsItemView(
 
                                 val (text, text1, text2, text3) = createRefs()
 
-                                Text(
-                                    modifier = Modifier
-                                        .padding(start = 20.dp)
-                                        .fillMaxWidth(0.5f)
-                                        .constrainAs(text) {
-                                            start.linkTo(parent.start)
-                                            top.linkTo(parent.top)
-                                        },
-                                    text =
-                                    if (transactionModel.category == Constants.OTHER) transactionModel.categoryOther
-                                    else transactionModel.category,
-                                    fontFamily = fontInter,
-                                    fontWeight = FontWeight.Medium,
-                                    fontSize = EXTRA_SMALL_TEXT_SIZE,
-                                    color = colorGray,
-                                    overflow = TextOverflow.Ellipsis,
-                                    maxLines = 2
-                                )
+                                if (transactionModel.category!="") {
+                                    Text(
+                                        modifier = Modifier
+                                            .padding(start = 20.dp)
+                                            .fillMaxWidth(0.5f)
+                                            .constrainAs(text) {
+                                                start.linkTo(parent.start)
+                                                top.linkTo(parent.top)
+                                            },
+                                        text =
+                                        if (transactionModel.category == OTHER) transactionModel.categoryOther
+                                        else transactionModel.category,
+                                        fontFamily = fontInter,
+                                        fontWeight = FontWeight.Medium,
+                                        fontSize = EXTRA_SMALL_TEXT_SIZE,
+                                        color = colorGray,
+                                        overflow = TextOverflow.Ellipsis,
+                                        maxLines = 2
+                                    )
+                                }
 
                                 Text(
                                     modifier = Modifier
@@ -203,8 +207,13 @@ fun TransactionsItemView(
                                             top.linkTo(text.bottom)
                                         },
                                     text =
-                                    if (transactionModel.subCategory == Constants.OTHER) transactionModel.subCategoryOther
-                                    else transactionModel.subCategory,
+                                    if (transactionModel.subCategory != "") {
+                                        if (transactionModel.subCategory == OTHER) transactionModel.subCategoryOther
+                                        else transactionModel.subCategory
+                                    } else {
+                                        if (transactionModel.transactionMode == OTHER) transactionModel.transactionModeOther
+                                        else transactionModel.transactionMode
+                                    },
                                     fontFamily = fontInter,
                                     fontWeight = FontWeight.Medium,
                                     fontSize = TEXT_FIELD_SIZE,
@@ -251,6 +260,20 @@ fun TransactionsItemView(
                                     color = textColorBW,
                                 )
 
+                            }
+
+                            if (transactionModel.category != "" && transactionModel.subCategory !="") {
+                                Text(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 20.dp, top = 5.dp),
+                                    text = "via: ${if (transactionModel.transactionMode == OTHER) transactionModel.transactionModeOther else transactionModel.transactionMode}",
+                                    fontSize = SMALLEST_TEXT_SIZE,
+                                    fontFamily = fontInter,
+                                    fontWeight = FontWeight.Medium,
+                                    color = textColorBW,
+                                    textAlign = TextAlign.Start
+                                )
                             }
 
                         }

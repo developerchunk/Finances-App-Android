@@ -54,9 +54,11 @@
     <string name="no">No</string>
 
     <string name="amount_text_field">Amount*</string>
-    <string name="category_text_field">Category*</string>
+    <string name="transaction_mode_text_field">Payment Mode*</string>
+    <string name="other_transaction_mode_text_field">Specify Payment Mode (Optional)</string>
+    <string name="category_text_field">Category</string>
     <string name="other_category_text_field">Specify Category (Optional)</string>
-    <string name="sub_category_text_field">Sub Category*</string>
+    <string name="sub_category_text_field">Sub Category</string>
     <string name="other_sub_category_text_field">Specify Sub Category (Optional)</string>
     <string name="date_text_field">Date*</string>
     <string name="time_text_field">Time (Optional)</string>

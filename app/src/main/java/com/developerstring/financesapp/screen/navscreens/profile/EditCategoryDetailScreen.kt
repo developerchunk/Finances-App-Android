@@ -583,7 +583,6 @@ fun SubCategoryItem(
     onClick: (Int) -> Unit,
 ) {
 
-
     Column(
         modifier = Modifier
             .fillMaxWidth()

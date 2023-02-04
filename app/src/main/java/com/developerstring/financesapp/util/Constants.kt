@@ -82,6 +82,7 @@ object Constants {
     const val OTHER = "Other"
     const val TRANSACTION = "Transaction"
     const val INVESTMENT = "Investment"
+    const val CASH = "Cash"
 
     val SUB_CATEGORY = mapOf(
         "Food" to listOf(

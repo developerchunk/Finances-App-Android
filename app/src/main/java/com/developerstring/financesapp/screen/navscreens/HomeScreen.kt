@@ -32,6 +32,7 @@ import com.developerstring.financesapp.ui.components.DisplayAlertDialog
 import com.developerstring.financesapp.ui.components.MessageBar
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.*
+import com.developerstring.financesapp.util.Constants.ENGLISH
 import com.developerstring.financesapp.util.Constants.INDIAN_CURRENCY
 import com.developerstring.financesapp.util.Constants.OTHER
 import com.developerstring.financesapp.util.dataclass.ActivityCardData
@@ -49,8 +50,8 @@ fun HomeScreen(
 
     val profileModel by profileViewModel.selectedProfile.collectAsState()
 
-    val month = SimpleDateFormat("M").format(Date())
-    val year = SimpleDateFormat("yyyy").format(Date())
+    val month = SimpleDateFormat("M", Locale(ENGLISH) ).format(Date())
+    val year = SimpleDateFormat("yyyy", Locale(ENGLISH)).format(Date())
 
     // get current month spending
     sharedViewModel.searchMonthSpent(
@@ -82,7 +83,7 @@ fun HomeScreen(
     spentPercent = (totalSpent.toFloat() / profileModel.month_spent.toFloat())
     savingsPercent = (totalSavings.toFloat() / profileModel.month_saving.toFloat())
 
-    val day = SimpleDateFormat("d").format(Date()).toInt()
+    val day = SimpleDateFormat("d",Locale(ENGLISH)).format(Date()).toInt()
 
     var openDialog by remember {
         mutableStateOf(false)
@@ -136,7 +137,9 @@ fun HomeScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             modifier = Modifier.wrapContentSize(unbounded = true),
-                            text = if (profileModel.currency.last().toString() == INDIAN_CURRENCY) simplifyAmountIndia(totalSpent.toInt()) else simplifyAmount(
+                            text = if (profileModel.currency.last()
+                                    .toString() == INDIAN_CURRENCY
+                            ) simplifyAmountIndia(totalSpent.toInt()) else simplifyAmount(
                                 totalSpent.toInt()
                             ),
                             fontSize = TEXT_FIELD_SIZE,
@@ -168,7 +171,9 @@ fun HomeScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             modifier = Modifier.wrapContentSize(unbounded = true),
-                            text = if (profileModel.currency.last().toString() == INDIAN_CURRENCY) simplifyAmountIndia(totalSavings.toInt()) else simplifyAmount(
+                            text = if (profileModel.currency.last()
+                                    .toString() == INDIAN_CURRENCY
+                            ) simplifyAmountIndia(totalSavings.toInt()) else simplifyAmount(
                                 totalSavings.toInt()
                             ),
                             fontSize = TEXT_FIELD_SIZE,
@@ -287,6 +292,10 @@ fun HomeScreen(
                 if (transactionModel.subCategory == OTHER)
                     transactionModel.subCategoryOther.take(20)
                 else transactionModel.subCategory,
+                transactionMode =
+                if (transactionModel.transactionMode == OTHER)
+                    transactionModel.transactionModeOther
+                else transactionModel.transactionMode,
                 day = transactionModel.day,
                 month = transactionModel.month,
                 year = transactionModel.year
@@ -318,7 +327,13 @@ fun MessageBarContent(
         MessageBar(
             message = it.subCategory,
             publicSharedViewModel = publicSharedViewModel,
-            action_type = it.transaction_type.keyToTransactionType()
+            action_type =
+            if (it.transaction_type == "") {
+                if (it.transactionMode=="") { it.transactionModeOther }
+                else { it.transactionMode }
+            } else {
+                it.transaction_type.keyToTransactionType()
+            }
         ) {
             onClicked(it)
         }

@@ -10,6 +10,8 @@ data class TransactionModel(
     val id: Int = 0,
     val amount: Int = 0,
     val transaction_type: String = "",
+    val transactionMode: String = "",
+    val transactionModeOther: String = "",
     val category: String = "",
     val date: String = "",
     val day: Short = 0,
@@ -21,5 +23,5 @@ data class TransactionModel(
     val eventID: String = "",
     val subCategory: String = "",
     val categoryOther: String = "",
-    val subCategoryOther: String = ""
+    val subCategoryOther: String = "",
 )

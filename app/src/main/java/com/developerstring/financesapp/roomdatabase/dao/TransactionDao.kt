@@ -1,14 +1,8 @@
 package com.developerstring.financesapp.roomdatabase.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.developerstring.financesapp.roomdatabase.models.TransactionModel
 import kotlinx.coroutines.flow.Flow
-import java.math.BigDecimal
 
 @Dao
 interface TransactionDao {
@@ -40,10 +34,10 @@ interface TransactionDao {
     @Query("SELECT SUM(amount) FROM transaction_table WHERE month = :month AND year = :year AND transaction_type = :transaction_type")
     fun getMonthSum(month: String,year: String,transaction_type: String): Flow<Long?>
 
-    @Query("SELECT * FROM transaction_table WHERE info LIKE :searchQuery OR amount LIKE :searchQuery OR category LIKE :searchQuery OR place LIKE :searchQuery OR date LIKE :searchQuery OR subCategory LIKE :searchQuery OR categoryOther LIKE :searchQuery OR subCategoryOther LIKE :searchQuery ORDER BY date DESC")
+    @Query("SELECT * FROM transaction_table WHERE info LIKE :searchQuery OR amount LIKE :searchQuery OR category LIKE :searchQuery OR place LIKE :searchQuery OR date LIKE :searchQuery OR subCategory LIKE :searchQuery OR categoryOther LIKE :searchQuery OR subCategoryOther LIKE :searchQuery OR time LIKE :searchQuery OR transactionMode LIKE :searchQuery ORDER BY date DESC")
     fun searchAllTransactions(searchQuery: String): Flow<List<TransactionModel>>
 
-    @Query("SELECT * FROM transaction_table WHERE (info LIKE :searchQuery OR amount LIKE :searchQuery OR category LIKE :searchQuery OR place LIKE :searchQuery OR date LIKE :searchQuery OR subCategory LIKE :searchQuery OR categoryOther LIKE :searchQuery OR subCategoryOther LIKE :searchQuery) AND (info LIKE :filterQuery OR category LIKE :filterQuery OR amount LIKE :filterQuery OR date LIKE :filterQuery OR place LIKE :filterQuery OR transaction_type LIKE :filterQuery OR subCategory LIKE :filterQuery OR categoryOther LIKE :filterQuery OR subCategoryOther LIKE :filterQuery) ORDER BY date DESC")
+    @Query("SELECT * FROM transaction_table WHERE (info LIKE :searchQuery OR amount LIKE :searchQuery OR category LIKE :searchQuery OR place LIKE :searchQuery OR date LIKE :searchQuery OR subCategory LIKE :searchQuery OR categoryOther LIKE :searchQuery OR subCategoryOther LIKE :searchQuery OR time LIKE :searchQuery OR transactionMode LIKE :searchQuery) AND (info LIKE :filterQuery OR category LIKE :filterQuery OR amount LIKE :filterQuery OR date LIKE :filterQuery OR place LIKE :filterQuery OR transaction_type LIKE :filterQuery OR subCategory LIKE :filterQuery OR categoryOther LIKE :filterQuery OR subCategoryOther LIKE :filterQuery OR time LIKE :filterQuery OR transactionMode LIKE :filterQuery) ORDER BY date DESC")
     fun filterSearchTransactions(searchQuery: String, filterQuery: String): Flow<List<TransactionModel>>
 
     @Query("SELECT amount FROM transaction_table WHERE month=:month AND year=:year AND transaction_type=:transaction_type")

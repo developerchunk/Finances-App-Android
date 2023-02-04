@@ -3,7 +3,6 @@ package com.developerstring.financesapp.screen.transaction
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -79,7 +78,6 @@ fun TransactionDetailsScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(backgroundColor)
-            .verticalScroll(state = scrollState)
     ) {
 
         Row(
@@ -159,6 +157,8 @@ fun TransactionDetailsScreen(
                         place = it.place,
                         categoryOther = it.categoryOther,
                         subCategoryOther = it.subCategoryOther,
+                        transactionMode = it.transactionMode,
+                        transactionModeOther = it.transactionModeOther
                     )
                     sharedViewModel.updateTransaction(transactionModel = transactionModel)
                     profileViewModel.getProfileAmount()

@@ -237,12 +237,14 @@ class MessageBarContentLastTransaction {
     fun message(
         category: String,
         subCategory: String,
+        transactionMode: String,
         day: Short,
         month: Short,
         year: Short,
     ): String {
 
         return "Are you sure you want to delete \n\n" +
+                "Payment Mode: $transactionMode\n" +
                 "Category: $category\n" +
                 "Sub Category: $subCategory\n" +
                 "Date: $day/$month/$year\n"
@@ -307,7 +309,7 @@ fun String.textToCategorySort(): CategorySortState {
 }
 
 fun String.convertStringToAlphabets(length: Int = 35): String {
-    return this.filterNot { it == '<' || it == '>' || it == '/' || it == '#' || it == '\'' || it == '"' || it == '\\' || it == '{' || it == '}' || it == '[' || it == ']' || it == '!' || it == '%' || it == '$' || it == '?' || it == '.' }
+    return this.filterNot { it == '<' || it == '>' || it == '/' || it == '#' || it == '\'' || it == '"' || it == '\\' || it == '{' || it == '}' || it == '[' || it == ']' || it == '!' || it == '%' || it == '$' || it == '?' || it == '.' || it == '=' || it == '~' }
         .take(length)
 }
 

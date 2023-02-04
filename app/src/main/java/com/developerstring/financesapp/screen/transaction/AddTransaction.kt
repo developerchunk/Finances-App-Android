@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -53,6 +54,7 @@ import com.developerstring.financesapp.ui.components.timepicker.*
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.ADD_TRANSACTION_TYPE
+import com.developerstring.financesapp.util.Constants.CASH
 import com.developerstring.financesapp.util.Constants.INVESTMENT
 import com.developerstring.financesapp.util.Constants.OTHER
 import com.developerstring.financesapp.util.Constants.SAVINGS
@@ -86,14 +88,11 @@ fun AddTransaction(
     val categoryModel by profileViewModel.allCategories.collectAsState()
     val time24Hours by profileViewModel.profileTime24Hours.collectAsState()
 
-    val scrollState = rememberScrollState()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(backgroundColor)
             .padding(start = 10.dp, end = 20.dp, top = 10.dp)
-            .verticalScroll(state = scrollState)
     ) {
         Row(
             modifier = Modifier
@@ -183,6 +182,8 @@ fun TransactionContent(
     onSaveClicked: (TransactionModel) -> Unit,
 ) {
 
+    val scrollState = rememberScrollState()
+
     val configuration = LocalConfiguration.current
 
     var amount by rememberSaveable {
@@ -211,6 +212,22 @@ fun TransactionContent(
             }
         )
     }
+    var transactionMode by rememberSaveable {
+        mutableStateOf(
+            if (transactionModel.transactionMode == "") {
+                CASH
+            } else {
+                transactionModel.transactionMode
+            }
+        )
+    }
+
+    var otherTransactionModel by rememberSaveable {
+        mutableStateOf(transactionModel.transactionModeOther)
+    }
+
+    var transactionModelList = mutableListOf<String>()
+
     var date by rememberSaveable { mutableStateOf("") }
     var time by rememberSaveable { mutableStateOf("") }
     var dateClicked by rememberSaveable { mutableStateOf(false) }
@@ -222,6 +239,7 @@ fun TransactionContent(
     val interactionSource = remember { MutableInteractionSource() }
     var categoriesExpanded by rememberSaveable { mutableStateOf(false) }
     var subCategoriesExpanded by rememberSaveable { mutableStateOf(false) }
+    var transactionModeExpanded by rememberSaveable { mutableStateOf(false) }
 
     // Chip Selection
     val chipList = ADD_TRANSACTION_TYPE
@@ -235,7 +253,16 @@ fun TransactionContent(
                 value.subCategory.split(SEPARATOR_LIST).toList().plus(OTHER)
         }
         otherSubCategories.addAll(subCategories.mapListToList())
+        transactionModelList = subCategories.getOrElse(
+            TRANSACTION,
+            defaultValue = { listOf(OTHER) }).plus(OTHER).distinct().toMutableList()
     }
+
+    var transactionModelID by remember {
+        mutableStateOf(1)
+    }
+
+    transactionModelID = categories.keys.find { categories.getValue(it) == TRANSACTION } ?: 1
 
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -252,7 +279,7 @@ fun TransactionContent(
     // Initializing a Calendar
     val mCalendar = Calendar.getInstance()
 
-    var moreClicked by rememberSaveable { mutableStateOf(false) }
+//    var moreClicked by rememberSaveable { mutableStateOf(false) }
 
     // time data
     var hour by rememberSaveable { mutableStateOf(0) }
@@ -265,6 +292,8 @@ fun TransactionContent(
     var timePickerVisible by remember {
         mutableStateOf(false)
     }
+
+    val saveButtonBackground = listOf(Color.Transparent, backgroundColor, backgroundColor)
 
     // Fetching current year, month and day
     if (date == "") {
@@ -327,205 +356,25 @@ fun TransactionContent(
 
     val buttonColor = Brush.horizontalGradient(colors = listOf(UIBlue, LightUIBlue))
 
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
 
-    Column(
-        modifier = modifier
-            .padding(top = 30.dp)
-            .fillMaxSize()
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = {
-                    categoriesExpanded = false
-                    subCategoriesExpanded = false
-                }
-            ),
-        verticalArrangement = Arrangement.spacedBy(15.dp)
-    ) {
-
-        // group of Amount textField
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(start = 3.dp, bottom = 2.dp),
-                text = stringResource(id = R.string.amount_text_field),
-                fontSize = TEXT_FIELD_SIZE,
-                color = textColorBLG,
-                fontFamily = fontInter,
-                fontWeight = FontWeight.Medium
-            )
-
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(heightTextFields)
-                    .border(
-                        width = 1.8.dp,
-                        color = textColorBLG,
-                        shape = RoundedCornerShape(15.dp)
-                    ),
-                value = amount,
-                onValueChange = {
-                    amount = it.convertStringToInt()
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = textColorBW,
-                ),
-                textStyle = TextStyle(
-                    color = textColorBW,
-                    fontSize = TEXT_FIELD_SIZE
-                ),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                ),
-                singleLine = true
-            )
-        }
-
-        // Select Transaction Type
-        FlowRow(
-            modifier = Modifier
-                .fillMaxWidth(),
-            mainAxisSpacing = 10.dp,
-            crossAxisSpacing = 10.dp
-        ) {
-            chipList.forEach { it ->
-                CustomChip(
-                    title = it,
-                    selected = transactionType,
-                    onSelected = {
-                        transactionType = it
-                        when(transactionType) {
-                            ADD_FUND -> category = TRANSACTION
-                            SAVINGS -> category = INVESTMENT
-                        }
-                    },
-                    image = Icons.Filled.Check,
-                    key = true,
-                    selectedColor = UIBlue,
-                    color = colorDarkGray,
-                    selectedTextColor = Color.White,
-                    textColor = textColorBW,
-                    iconColor = Color.White
+            modifier = modifier
+                .fillMaxSize()
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = {
+                        categoriesExpanded = false
+                        subCategoriesExpanded = false
+                    }
                 )
-            }
-        }
-
-        // group of Category textField
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
+                .verticalScroll(scrollState)
+                .padding(top = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-            Text(
-                modifier = Modifier
-                    .padding(start = 3.dp, bottom = 2.dp),
-                text = stringResource(id = R.string.category_text_field),
-                fontSize = TEXT_FIELD_SIZE,
-                color = textColorBLG,
-                fontFamily = fontInter,
-                fontWeight = FontWeight.Medium
-            )
 
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(heightTextFields)
-                    .border(
-                        width = 1.8.dp,
-                        color = textColorBLG,
-                        shape = RoundedCornerShape(15.dp)
-                    )
-                    .onGloballyPositioned { coordinates ->
-                        textFieldSize = coordinates.size.toSize()
-                    }
-                    .clickable(
-                        indication = null,
-                        interactionSource = interactionSource,
-                        onClick = {
-                            categoriesExpanded = !categoriesExpanded
-                        }),
-                value = category,
-                onValueChange = {
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = textColorBW,
-                    disabledIndicatorColor = Color.Transparent
-                ),
-                textStyle = TextStyle(
-                    color = textColorBW,
-                    fontSize = TEXT_FIELD_SIZE
-                ),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                enabled = false,
-                singleLine = true,
-                trailingIcon = {
-
-                    Row {
-                        Icon(
-                            imageVector =
-                            if (!categoriesExpanded) Icons.Filled.KeyboardArrowDown
-                            else Icons.Rounded.KeyboardArrowUp,
-                            contentDescription = "currency_icon",
-                            Modifier
-                                .padding(end = 15.dp)
-                                .size(28.dp),
-                            tint = textColorBLG
-                        )
-                        Icon(
-                            imageVector = Icons.Filled.Edit,
-                            contentDescription = "currency_icon",
-                            Modifier
-                                .padding(end = 15.dp)
-                                .size(28.dp)
-                                .clickable {
-                                    navController.navigate(NavRoute.EditCategoryScreen.route)
-                                },
-                            tint = UIBlue
-                        )
-                    }
-
-                }
-            )
-            AnimatedVisibility(visible = categoriesExpanded) {
-                Card(
-                    modifier = Modifier
-                        .padding(horizontal = 5.dp)
-                        .width(textFieldSize.width.dp),
-                    backgroundColor = backgroundColorCard,
-                    elevation = 10.dp
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .heightIn(max = 200.dp)
-                            .verticalScroll(rememberScrollState()),
-                    ) {
-                        categories.values.forEach {
-                            SubCategoryItems(it) { title ->
-                                category = title
-                                categoriesExpanded = false
-                            }
-                        }
-                    }
-                }
-
-            }
-        }
-
-        // group of Other Category
-        AnimatedVisibility(visible = category == OTHER) {
+            // group of Amount textField
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -533,7 +382,7 @@ fun TransactionContent(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.other_category_text_field),
+                    text = stringResource(id = R.string.amount_text_field),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -543,15 +392,98 @@ fun TransactionContent(
                 TextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(min = heightTextFields)
+                        .height(heightTextFields)
                         .border(
                             width = 1.8.dp,
                             color = textColorBLG,
                             shape = RoundedCornerShape(15.dp)
                         ),
-                    value = otherCategory,
+                    value = amount,
                     onValueChange = {
-                        otherCategory = it.convertStringToAlphabets()
+                        amount = it.convertStringToInt()
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = textColorBW,
+                    ),
+                    textStyle = TextStyle(
+                        color = textColorBW,
+                        fontSize = TEXT_FIELD_SIZE
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done
+                    ),
+                    singleLine = true
+                )
+            }
+
+            // Select Transaction Type
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                mainAxisSpacing = 10.dp,
+                crossAxisSpacing = 10.dp
+            ) {
+                chipList.forEach { it ->
+                    CustomChip(
+                        title = it,
+                        selected = transactionType,
+                        onSelected = {
+                            transactionType = it
+                            when (transactionType) {
+                                ADD_FUND -> category = TRANSACTION
+                                SAVINGS -> category = INVESTMENT
+                            }
+                        },
+                        image = Icons.Filled.Check,
+                        key = true,
+                        selectedColor = UIBlue,
+                        color = colorDarkGray,
+                        selectedTextColor = Color.White,
+                        textColor = textColorBW,
+                        iconColor = Color.White
+                    )
+                }
+            }
+
+            // group of Transaction Mode textField
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 3.dp, bottom = 2.dp),
+                    text = stringResource(id = R.string.transaction_mode_text_field),
+                    fontSize = TEXT_FIELD_SIZE,
+                    color = textColorBLG,
+                    fontFamily = fontInter,
+                    fontWeight = FontWeight.Medium
+                )
+
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(heightTextFields)
+                        .border(
+                            width = 1.8.dp,
+                            color = textColorBLG,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                        .onGloballyPositioned { coordinates ->
+                            textFieldSize = coordinates.size.toSize()
+                        }
+                        .clickable(
+                            indication = null,
+                            interactionSource = interactionSource,
+                            onClick = {
+                                transactionModeExpanded = !transactionModeExpanded
+                            }),
+                    value = transactionMode,
+                    onValueChange = {
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
@@ -568,113 +500,117 @@ fun TransactionContent(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     ),
-                    singleLine = false
-                )
-            }
-        }
+                    enabled = false,
+                    singleLine = true,
+                    trailingIcon = {
 
-        // group of SubCategory textField
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(start = 3.dp, bottom = 2.dp),
-                text = stringResource(id = R.string.sub_category_text_field),
-                fontSize = TEXT_FIELD_SIZE,
-                color = textColorBLG,
-                fontFamily = fontInter,
-                fontWeight = FontWeight.Medium
-            )
+                        Row {
 
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(heightTextFields)
-                    .border(
-                        width = 1.8.dp,
-                        color = textColorBLG,
-                        shape = RoundedCornerShape(15.dp)
-                    )
-                    .onGloballyPositioned { coordinates ->
-                        textFieldSize = coordinates.size.toSize()
+                            Icon(
+                                imageVector =
+                                if (!transactionModeExpanded) Icons.Filled.KeyboardArrowDown
+                                else Icons.Rounded.KeyboardArrowUp,
+                                contentDescription = "currency_icon",
+                                Modifier
+                                    .padding(end = 15.dp)
+                                    .size(28.dp),
+                                tint = textColorBLG
+                            )
+
+                            Icon(
+                                imageVector = Icons.Rounded.Edit,
+                                contentDescription = "currency_icon",
+                                Modifier
+                                    .padding(end = 15.dp)
+                                    .size(28.dp)
+                                    .clickable {
+                                        profileViewModel.categoryId.value = transactionModelID
+                                        profileViewModel.getSelectedCategories(
+                                            id = transactionModelID
+                                        )
+                                        navController.navigate(NavRoute.EditCategoryDetailScreen.route)
+                                    },
+                                tint = UIBlue
+                            )
+
+                        }
                     }
-                    .clickable(
-                        indication = null,
-                        interactionSource = interactionSource,
-                        onClick = {
-                            subCategoriesExpanded = !subCategoriesExpanded
-                        }),
-                value = subCategory,
-                onValueChange = {
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = textColorBW,
-                    disabledIndicatorColor = Color.Transparent
-                ),
-                textStyle = TextStyle(
-                    color = textColorBW,
-                    fontSize = TEXT_FIELD_SIZE
-                ),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                enabled = false,
-                singleLine = true,
-                trailingIcon = {
-
-                    Icon(
-                        imageVector =
-                        if (!subCategoriesExpanded) Icons.Filled.KeyboardArrowDown
-                        else Icons.Rounded.KeyboardArrowUp,
-                        contentDescription = "currency_icon",
-                        Modifier
-                            .padding(end = 15.dp)
-                            .size(28.dp),
-                        tint = textColorBLG
-                    )
-
-                }
-            )
-            AnimatedVisibility(visible = subCategoriesExpanded) {
-                Card(
-                    modifier = Modifier
-                        .padding(horizontal = 5.dp)
-                        .width(textFieldSize.width.dp),
-                    backgroundColor = backgroundColorCard,
-                    elevation = 10.dp
-                ) {
-                    LazyColumn(
-                        modifier = Modifier.heightIn(max = 200.dp),
-                        userScrollEnabled = true
+                )
+                AnimatedVisibility(visible = transactionModeExpanded) {
+                    Card(
+                        modifier = Modifier
+                            .padding(horizontal = 5.dp)
+                            .width(textFieldSize.width.dp),
+                        backgroundColor = backgroundColorCard,
+                        elevation = 10.dp
                     ) {
-                        items(
-                            if (category != OTHER) {
-
-                                subCategories.getOrElse(
-                                    category,
-                                    defaultValue = { otherSubCategories })
-
-                            } else otherSubCategories.distinct()
+                        LazyColumn(
+                            modifier = Modifier.heightIn(max = 200.dp),
+                            userScrollEnabled = true
                         ) {
-                            SubCategoryItems(title = it) { title ->
-                                subCategory = title
-                                subCategoriesExpanded = false
+                            items(
+                                transactionModelList
+                            ) {
+                                SubCategoryItems(title = it) { title ->
+                                    transactionMode = title
+                                    transactionModeExpanded = false
+                                }
                             }
                         }
                     }
+
                 }
-
             }
-        }
 
-        // group of Other Sub Category
-        AnimatedVisibility(visible = subCategory == OTHER) {
+            // group of Other Transaction Mode
+            AnimatedVisibility(visible = transactionMode == OTHER) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(start = 3.dp, bottom = 2.dp),
+                        text = stringResource(id = R.string.other_transaction_mode_text_field),
+                        fontSize = TEXT_FIELD_SIZE,
+                        color = textColorBLG,
+                        fontFamily = fontInter,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = heightTextFields)
+                            .border(
+                                width = 1.8.dp,
+                                color = textColorBLG,
+                                shape = RoundedCornerShape(15.dp)
+                            ),
+                        value = otherTransactionModel,
+                        onValueChange = {
+                            otherTransactionModel = it.convertStringToAlphabets()
+                        },
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            cursorColor = textColorBW,
+                        ),
+                        textStyle = TextStyle(
+                            color = textColorBW,
+                            fontSize = TEXT_FIELD_SIZE
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Done
+                        ),
+                        singleLine = false
+                    )
+                }
+            }
+
+            // group of Category textField
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -682,7 +618,536 @@ fun TransactionContent(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.other_sub_category_text_field),
+                    text = stringResource(id = R.string.category_text_field),
+                    fontSize = TEXT_FIELD_SIZE,
+                    color = textColorBLG,
+                    fontFamily = fontInter,
+                    fontWeight = FontWeight.Medium
+                )
+
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(heightTextFields)
+                        .border(
+                            width = 1.8.dp,
+                            color = textColorBLG,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                        .onGloballyPositioned { coordinates ->
+                            textFieldSize = coordinates.size.toSize()
+                        }
+                        .clickable(
+                            indication = null,
+                            interactionSource = interactionSource,
+                            onClick = {
+                                categoriesExpanded = !categoriesExpanded
+                            }),
+                    value = category,
+                    onValueChange = {
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = textColorBW,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    textStyle = TextStyle(
+                        color = textColorBW,
+                        fontSize = TEXT_FIELD_SIZE
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    enabled = false,
+                    singleLine = true,
+                    trailingIcon = {
+
+                        Row {
+                            Icon(
+                                imageVector =
+                                if (!categoriesExpanded) Icons.Filled.KeyboardArrowDown
+                                else Icons.Rounded.KeyboardArrowUp,
+                                contentDescription = "currency_icon",
+                                Modifier
+                                    .padding(end = 15.dp)
+                                    .size(28.dp),
+                                tint = textColorBLG
+                            )
+                            Icon(
+                                imageVector = Icons.Filled.Edit,
+                                contentDescription = "currency_icon",
+                                Modifier
+                                    .padding(end = 15.dp)
+                                    .size(28.dp)
+                                    .clickable {
+                                        navController.navigate(NavRoute.EditCategoryScreen.route)
+                                    },
+                                tint = UIBlue
+                            )
+                        }
+
+                    }
+                )
+                AnimatedVisibility(visible = categoriesExpanded) {
+                    Card(
+                        modifier = Modifier
+                            .padding(horizontal = 5.dp)
+                            .width(textFieldSize.width.dp),
+                        backgroundColor = backgroundColorCard,
+                        elevation = 10.dp
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .heightIn(max = 200.dp)
+                                .verticalScroll(rememberScrollState()),
+                        ) {
+                            categories.values.forEach {
+                                SubCategoryItems(it) { title ->
+                                    category = title
+                                    categoriesExpanded = false
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            // group of Other Category
+            AnimatedVisibility(visible = category == OTHER) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(start = 3.dp, bottom = 2.dp),
+                        text = stringResource(id = R.string.other_category_text_field),
+                        fontSize = TEXT_FIELD_SIZE,
+                        color = textColorBLG,
+                        fontFamily = fontInter,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = heightTextFields)
+                            .border(
+                                width = 1.8.dp,
+                                color = textColorBLG,
+                                shape = RoundedCornerShape(15.dp)
+                            ),
+                        value = otherCategory,
+                        onValueChange = {
+                            otherCategory = it.convertStringToAlphabets()
+                        },
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            cursorColor = textColorBW,
+                            disabledIndicatorColor = Color.Transparent
+                        ),
+                        textStyle = TextStyle(
+                            color = textColorBW,
+                            fontSize = TEXT_FIELD_SIZE
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Done
+                        ),
+                        singleLine = false
+                    )
+                }
+            }
+
+            // group of SubCategory textField
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 3.dp, bottom = 2.dp),
+                    text = stringResource(id = R.string.sub_category_text_field),
+                    fontSize = TEXT_FIELD_SIZE,
+                    color = textColorBLG,
+                    fontFamily = fontInter,
+                    fontWeight = FontWeight.Medium
+                )
+
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(heightTextFields)
+                        .border(
+                            width = 1.8.dp,
+                            color = textColorBLG,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                        .onGloballyPositioned { coordinates ->
+                            textFieldSize = coordinates.size.toSize()
+                        }
+                        .clickable(
+                            indication = null,
+                            interactionSource = interactionSource,
+                            onClick = {
+                                subCategoriesExpanded = !subCategoriesExpanded
+                            }),
+                    value = subCategory,
+                    onValueChange = {
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = textColorBW,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    textStyle = TextStyle(
+                        color = textColorBW,
+                        fontSize = TEXT_FIELD_SIZE
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    enabled = false,
+                    singleLine = true,
+                    trailingIcon = {
+
+                        Icon(
+                            imageVector =
+                            if (!subCategoriesExpanded) Icons.Filled.KeyboardArrowDown
+                            else Icons.Rounded.KeyboardArrowUp,
+                            contentDescription = "currency_icon",
+                            Modifier
+                                .padding(end = 15.dp)
+                                .size(28.dp),
+                            tint = textColorBLG
+                        )
+
+                    }
+                )
+                AnimatedVisibility(visible = subCategoriesExpanded) {
+                    Card(
+                        modifier = Modifier
+                            .padding(horizontal = 5.dp)
+                            .width(textFieldSize.width.dp),
+                        backgroundColor = backgroundColorCard,
+                        elevation = 10.dp
+                    ) {
+                        LazyColumn(
+                            modifier = Modifier.heightIn(max = 200.dp),
+                            userScrollEnabled = true
+                        ) {
+                            items(
+                                if (category != OTHER) {
+
+                                    subCategories.getOrElse(
+                                        category,
+                                        defaultValue = { otherSubCategories })
+
+                                } else otherSubCategories.distinct()
+                            ) {
+                                SubCategoryItems(title = it) { title ->
+                                    subCategory = title
+                                    subCategoriesExpanded = false
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            // group of Other Sub Category
+            AnimatedVisibility(visible = subCategory == OTHER) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(start = 3.dp, bottom = 2.dp),
+                        text = stringResource(id = R.string.other_sub_category_text_field),
+                        fontSize = TEXT_FIELD_SIZE,
+                        color = textColorBLG,
+                        fontFamily = fontInter,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = heightTextFields)
+                            .border(
+                                width = 1.8.dp,
+                                color = textColorBLG,
+                                shape = RoundedCornerShape(15.dp)
+                            ),
+                        value = otherSubCategory,
+                        onValueChange = {
+                            otherSubCategory = it.convertStringToAlphabets()
+                        },
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            cursorColor = textColorBW,
+                        ),
+                        textStyle = TextStyle(
+                            color = textColorBW,
+                            fontSize = TEXT_FIELD_SIZE
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Done
+                        ),
+                        singleLine = false
+                    )
+                }
+            }
+
+            // Date TextField
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 3.dp, bottom = 2.dp),
+                    text = stringResource(id = R.string.date_text_field),
+                    fontSize = TEXT_FIELD_SIZE,
+                    color = textColorBLG,
+                    fontFamily = fontInter,
+                    fontWeight = FontWeight.Medium
+                )
+
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(55.dp)
+                        .border(
+                            width = 1.8.dp,
+                            color = textColorBLG,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                        .onGloballyPositioned { coordinates ->
+                            textFieldSize = coordinates.size.toSize()
+                        }
+                        .clickable {
+                            dateClicked = true
+                        },
+                    shape = RoundedCornerShape(15.dp),
+                    backgroundColor = backgroundColor
+                ) {
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(start = 20.dp),
+                            text = date,
+                            fontSize = TEXT_FIELD_SIZE,
+                            color = textColorBW
+                        )
+                    }
+
+                    LaunchedEffect(key1 = false) {
+                        if (transactionModel.date == "" && date == "") {
+                            date = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(Date())
+                            time = SimpleDateFormat("HHmmss", Locale.ENGLISH).format(Date())
+                            day = SimpleDateFormat("dd", Locale.ENGLISH).format(Date()).toShort()
+                            month = SimpleDateFormat("MM", Locale.ENGLISH).format(Date()).toShort()
+                            year = SimpleDateFormat("yyyy", Locale.ENGLISH).format(Date()).toShort()
+                        } else {
+                            date = "$day/$month/$year"
+                        }
+                    }
+
+                    if (dateClicked) {
+
+                        // Declaring DatePickerDialog and setting
+                        // initial values as current values (present year, month and day)
+                        DatePickerDialog(
+                            context,
+                            { _: DatePicker, mYear_: Int, mMonth_: Int, mDayOfMonth: Int ->
+                                date = "$mDayOfMonth/${mMonth_ + 1}/$mYear_"
+                                year = mYear_.toShort()
+                                month = (mMonth_ + 1).toShort()
+                                day = mDayOfMonth.toShort()
+                            },
+                            if (year.toInt() != 0) year.toInt() else mYear,
+                            if (month.toInt() != 0) month.toInt() - 1 else mMonth,
+                            if (day.toInt() != 0) day.toInt() else mDay
+                        ).show()
+
+                        dateClicked = false
+                    }
+                }
+            }
+
+//            // more
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(50.dp),
+//            ) {
+//                Row(
+//                    modifier = Modifier
+//                        .padding(top = 20.dp, start = 20.dp, end = 20.dp)
+//                        .fillMaxWidth()
+//                        .clickable(onClick = {
+//                            moreClicked = !moreClicked
+//                        }),
+//                    verticalAlignment = Alignment.CenterVertically,
+//                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+//                ) {
+//                    Box(
+//                        modifier = modifier
+//                            .fillMaxWidth(0.43f)
+//                            .height(4.dp)
+//                            .clip(RoundedCornerShape(5.dp))
+//                            .background(
+//                                LighterGray
+//                            )
+//                    )
+//                    Text(
+//                        text = stringResource(id = if (moreClicked) R.string.less else R.string.more),
+//                        fontFamily = fontInter,
+//                        fontWeight = FontWeight.Normal,
+//                        fontSize = 16.sp,
+//                        color = LightGray
+//                    )
+//                    Box(
+//                        modifier = modifier
+//                            .fillMaxWidth()
+//                            .height(4.dp)
+//                            .clip(RoundedCornerShape(5.dp))
+//                            .background(
+//                                LighterGray
+//                            )
+//                    )
+//                }
+//            }
+//
+//            AnimatedVisibility(visible = moreClicked) {
+
+//                Column(
+//                    modifier = modifier.fillMaxWidth(),
+//                    verticalArrangement = Arrangement.spacedBy(10.dp)
+//                ) {
+            // group of Time textField
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 3.dp, bottom = 2.dp),
+                    text = stringResource(id = R.string.time_text_field),
+                    fontSize = TEXT_FIELD_SIZE,
+                    color = textColorBLG,
+                    fontFamily = fontInter,
+                    fontWeight = FontWeight.Medium
+                )
+
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = heightTextFields)
+                        .border(
+                            width = 1.8.dp,
+                            color = textColorBLG,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                        .clickable(
+                            indication = null,
+                            interactionSource = interactionSource,
+                            onClick = {
+                                timePickerVisible = true
+                            }
+                        ),
+                    value = "$hour:$minute ${if (meridiem == Meridiem.HOUR24) "" else meridiem.name}",
+                    onValueChange = {
+                    },
+//                        "${hour.timeConvert()}:$minute ${if (meridiem == Meridiem.HOUR24) "" else meridiem.name}"
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = textColorBW,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    textStyle = TextStyle(
+                        color = textColorBW,
+                        fontSize = TEXT_FIELD_SIZE
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    enabled = false,
+                    singleLine = false
+                )
+            }
+
+            if (timePickerVisible) {
+                TimePicker(
+                    visible = true,
+                    currentMeridiem = meridiem,
+                    interactionSource = interactionSource,
+                    configuration = configuration,
+                    currentHour = hour,
+                    currentMinute1 = minute.first().digitToInt(),
+                    currentMinute2 = minute.last().digitToInt(),
+                    onSelected = { it, m ->
+                        if (m == Meridiem.HOUR24) {
+                            profileViewModel.updateTime24Hours(
+                                time24Hours = true
+                            )
+                        } else {
+                            profileViewModel.updateTime24Hours(
+                                time24Hours = false
+                            )
+                        }
+                        it.stringToTime(
+                            returnTime = { time ->
+                                hour = time.first.toInt()
+                                minute = time.second
+                                meridiem = m
+                                convertToMeridiemTime(
+                                    hours = hour,
+                                    oldMeridiem = meridiem,
+                                    currentMeridiem = Meridiem.HOUR24,
+                                    time = {
+                                        timeTransactionModel =
+                                            it.first.timeConvert() + minute
+                                    }
+                                )
+                            }
+                        )
+                        timePickerVisible = false
+                    },
+                    onCanceled = {
+                        timePickerVisible = false
+                    }
+                )
+            }
+
+            // group of Extra Info textField
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 3.dp, bottom = 2.dp),
+                    text = stringResource(id = R.string.extra_info_text_field),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -698,9 +1163,9 @@ fun TransactionContent(
                             color = textColorBLG,
                             shape = RoundedCornerShape(15.dp)
                         ),
-                    value = otherSubCategory,
+                    value = extraInfo,
                     onValueChange = {
-                        otherSubCategory = it.convertStringToAlphabets()
+                        extraInfo = it.convertStringToAlphabets()
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
@@ -719,412 +1184,154 @@ fun TransactionContent(
                     singleLine = false
                 )
             }
-        }
 
-        // Date TextField
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Text(
-                modifier = Modifier
-                    .padding(start = 3.dp, bottom = 2.dp),
-                text = stringResource(id = R.string.date_text_field),
-                fontSize = TEXT_FIELD_SIZE,
-                color = textColorBLG,
-                fontFamily = fontInter,
-                fontWeight = FontWeight.Medium
-            )
-
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp)
-                    .border(
-                        width = 1.8.dp,
-                        color = textColorBLG,
-                        shape = RoundedCornerShape(15.dp)
-                    )
-                    .onGloballyPositioned { coordinates ->
-                        textFieldSize = coordinates.size.toSize()
-                    }
-                    .clickable {
-                        dateClicked = true
-                    },
-                shape = RoundedCornerShape(15.dp),
-                backgroundColor = backgroundColor
-            ) {
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        modifier = Modifier.padding(start = 20.dp),
-                        text = date,
-                        fontSize = TEXT_FIELD_SIZE,
-                        color = textColorBW
-                    )
-                }
-
-                LaunchedEffect(key1 = false) {
-                    if (transactionModel.date == "" && date == "") {
-                        date = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(Date())
-                        time = SimpleDateFormat("HHmmss", Locale.ENGLISH).format(Date())
-                        day = SimpleDateFormat("dd", Locale.ENGLISH).format(Date()).toShort()
-                        month = SimpleDateFormat("MM", Locale.ENGLISH).format(Date()).toShort()
-                        year = SimpleDateFormat("yyyy", Locale.ENGLISH).format(Date()).toShort()
-                    } else {
-                        date = "$day/$month/$year"
-                    }
-                }
-
-                if (dateClicked) {
-
-                    // Declaring DatePickerDialog and setting
-                    // initial values as current values (present year, month and day)
-                    DatePickerDialog(
-                        context,
-                        { _: DatePicker, mYear_: Int, mMonth_: Int, mDayOfMonth: Int ->
-                            date = "$mDayOfMonth/${mMonth_ + 1}/$mYear_"
-                            year = mYear_.toShort()
-                            month = (mMonth_ + 1).toShort()
-                            day = mDayOfMonth.toShort()
-                        },
-                        if (year.toInt() != 0) year.toInt() else mYear,
-                        if (month.toInt() != 0) month.toInt() - 1 else mMonth,
-                        if (day.toInt() != 0) day.toInt() else mDay
-                    ).show()
-
-                    dateClicked = false
-                }
-            }
-        }
-
-        // more
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(top = 20.dp, start = 20.dp, end = 20.dp)
-                    .fillMaxWidth()
-                    .clickable(onClick = {
-                        moreClicked = !moreClicked
-                    }),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                Box(
-                    modifier = modifier
-                        .fillMaxWidth(0.43f)
-                        .height(4.dp)
-                        .clip(RoundedCornerShape(5.dp))
-                        .background(
-                            LighterGray
-                        )
-                )
-                Text(
-                    text = stringResource(id = if (moreClicked) R.string.less else R.string.more),
-                    fontFamily = fontInter,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp,
-                    color = LightGray
-                )
-                Box(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .height(4.dp)
-                        .clip(RoundedCornerShape(5.dp))
-                        .background(
-                            LighterGray
-                        )
-                )
-            }
-        }
-
-        AnimatedVisibility(visible = moreClicked) {
-
+            // group of Place textField
             Column(
-                modifier = modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
-                // group of Time textField
-                Column(
+                Text(
+                    modifier = Modifier
+                        .padding(start = 3.dp, bottom = 2.dp),
+                    text = stringResource(id = R.string.place_info_text_field),
+                    fontSize = TEXT_FIELD_SIZE,
+                    color = textColorBLG,
+                    fontFamily = fontInter,
+                    fontWeight = FontWeight.Medium
+                )
+
+                TextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .padding(start = 3.dp, bottom = 2.dp),
-                        text = stringResource(id = R.string.time_text_field),
-                        fontSize = TEXT_FIELD_SIZE,
-                        color = textColorBLG,
-                        fontFamily = fontInter,
-                        fontWeight = FontWeight.Medium
-                    )
-
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = heightTextFields)
-                            .border(
-                                width = 1.8.dp,
-                                color = textColorBLG,
-                                shape = RoundedCornerShape(15.dp)
-                            )
-                            .clickable(
-                                indication = null,
-                                interactionSource = interactionSource,
-                                onClick = {
-                                    timePickerVisible = true
-                                }
-                            ),
-                        value = "$hour:$minute ${if (meridiem == Meridiem.HOUR24) "" else meridiem.name}",
-                        onValueChange = {
-                        },
-//                        "${hour.timeConvert()}:$minute ${if (meridiem == Meridiem.HOUR24) "" else meridiem.name}"
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = textColorBW,
-                            disabledIndicatorColor = Color.Transparent
+                        .height(heightTextFields)
+                        .border(
+                            width = 1.8.dp,
+                            color = textColorBLG,
+                            shape = RoundedCornerShape(15.dp)
                         ),
-                        textStyle = TextStyle(
-                            color = textColorBW,
-                            fontSize = TEXT_FIELD_SIZE
-                        ),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next
-                        ),
-                        enabled = false,
-                        singleLine = false
-                    )
-                }
-
-                if (timePickerVisible) {
-                    TimePicker(
-                        visible = true,
-                        currentMeridiem = meridiem,
-                        interactionSource = interactionSource,
-                        configuration = configuration,
-                        currentHour = hour,
-                        currentMinute1 = minute.first().digitToInt(),
-                        currentMinute2 = minute.last().digitToInt(),
-                        onSelected = { it, m ->
-                            if (m == Meridiem.HOUR24) {
-                                profileViewModel.updateTime24Hours(
-                                    time24Hours = true
-                                )
-                            } else {
-                                profileViewModel.updateTime24Hours(
-                                    time24Hours = false
-                                )
-                            }
-                            it.stringToTime(
-                                returnTime = { time ->
-                                    hour = time.first.toInt()
-                                    minute = time.second
-                                    meridiem = m
-                                    convertToMeridiemTime(
-                                        hours = hour,
-                                        oldMeridiem = meridiem,
-                                        currentMeridiem = Meridiem.HOUR24,
-                                        time = {
-                                            timeTransactionModel = it.first.timeConvert() + minute
-                                        }
-                                    )
-                                }
-                            )
-                            timePickerVisible = false
-                        },
-                        onCanceled = {
-                            timePickerVisible = false
-                        }
-                    )
-                }
-
-                // group of Extra Info textField
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .padding(start = 3.dp, bottom = 2.dp),
-                        text = stringResource(id = R.string.extra_info_text_field),
-                        fontSize = TEXT_FIELD_SIZE,
-                        color = textColorBLG,
-                        fontFamily = fontInter,
-                        fontWeight = FontWeight.Medium
-                    )
-
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = heightTextFields)
-                            .border(
-                                width = 1.8.dp,
-                                color = textColorBLG,
-                                shape = RoundedCornerShape(15.dp)
-                            ),
-                        value = extraInfo,
-                        onValueChange = {
-                            extraInfo = it.convertStringToAlphabets()
-                        },
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = textColorBW,
-                        ),
-                        textStyle = TextStyle(
-                            color = textColorBW,
-                            fontSize = TEXT_FIELD_SIZE
-                        ),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next
-                        ),
-                        singleLine = false
-                    )
-                }
-
-                // group of Place textField
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .padding(start = 3.dp, bottom = 2.dp),
-                        text = stringResource(id = R.string.place_info_text_field),
-                        fontSize = TEXT_FIELD_SIZE,
-                        color = textColorBLG,
-                        fontFamily = fontInter,
-                        fontWeight = FontWeight.Medium
-                    )
-
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(heightTextFields)
-                            .border(
-                                width = 1.8.dp,
-                                color = textColorBLG,
-                                shape = RoundedCornerShape(15.dp)
-                            ),
-                        value = place,
-                        onValueChange = {
-                            place = it.convertStringToAlphabets()
-                        },
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = textColorBW,
-                        ),
-                        textStyle = TextStyle(
-                            color = textColorBW,
-                            fontSize = TEXT_FIELD_SIZE
-                        ),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Done
-                        ),
-                        singleLine = true
-                    )
-                }
+                    value = place,
+                    onValueChange = {
+                        place = it.convertStringToAlphabets()
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = textColorBW,
+                    ),
+                    textStyle = TextStyle(
+                        color = textColorBW,
+                        fontSize = TEXT_FIELD_SIZE
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    singleLine = true
+                )
             }
+//                }
+//            }
+
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.2f)
+                    .background(Color.Transparent)
+
+            )
         }
 
         // Save Button
         Column(
             modifier = Modifier
-                .padding(top = 30.dp, bottom = 30.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .fillMaxHeight(),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Surface(
+            Box(
                 modifier = Modifier
-                    .padding(start = 5.dp)
-                    .width(220.dp)
-                    .height(45.dp),
-                shape = CircleShape,
-                elevation = 4.dp, color = Color.Transparent
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.2f)
+                    .background(brush = Brush.verticalGradient(colors = saveButtonBackground))
+                    .padding(top = 40.dp),
+                contentAlignment = Alignment.TopCenter
             ) {
-                Box(
+                Surface(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(brush = buttonColor)
-                        .clickable(
-                            interactionSource = interactionSource,
-                            indication = null,
-                            onClick = {
-                                if (
-                                    amount.isNotEmpty() &&
-                                    category.isNotEmpty() &&
-                                    transactionType.isNotEmpty() &&
-                                    date.isNotEmpty()
-                                ) {
-                                    onSaveClicked(
-                                        TransactionModel(
-                                            amount = amount.toInt(),
-                                            transaction_type = transactionType,
-                                            category = category,
-                                            subCategory = subCategory,
-                                            date = "$year${month.addZeroToStart()}${day.addZeroToStart()}$time",
-                                            day = day,
-                                            month = month,
-                                            time = timeTransactionModel,
-                                            year = year,
-                                            info = extraInfo,
-                                            place = place,
-                                            categoryOther = if (category == OTHER) otherCategory else "",
-                                            subCategoryOther = if (subCategory == OTHER) otherSubCategory else ""
-                                        )
-                                    )
 
-                                    if (transactionModel == TransactionModel()) {
-                                        publicSharedViewModel.messageBarState.value =
-                                            MessageBarState.OPENED
-                                    }
-
-                                } else {
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            "Please fill all details",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                        .show()
-                                }
-                            }
-                        ),
-                    contentAlignment = Alignment.Center
+                        .width(220.dp)
+                        .height(45.dp),
+                    shape = CircleShape,
+                    elevation = 4.dp, color = Color.Transparent,
                 ) {
-                    Text(
-                        text = "Save",
-                        fontFamily = fontInter,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = LARGE_TEXT_SIZE,
-                        color = Color.White
-                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(brush = buttonColor)
+                            .clickable(
+                                interactionSource = interactionSource,
+                                indication = null,
+                                onClick = {
+                                    if (
+                                        amount.isNotEmpty() &&
+                                        transactionMode.isNotEmpty() &&
+                                        transactionType.isNotEmpty() &&
+                                        date.isNotEmpty()
+                                    ) {
+                                        onSaveClicked(
+                                            TransactionModel(
+                                                amount = amount.toInt(),
+                                                transaction_type = transactionType,
+                                                category = category,
+                                                subCategory = subCategory,
+                                                date = "$year${month.addZeroToStart()}${day.addZeroToStart()}$time",
+                                                day = day,
+                                                month = month,
+                                                time = timeTransactionModel,
+                                                year = year,
+                                                info = extraInfo,
+                                                place = place,
+                                                categoryOther = if (category == OTHER) otherCategory else "",
+                                                subCategoryOther = if (subCategory == OTHER) otherSubCategory else "",
+                                                transactionMode = transactionMode,
+                                                transactionModeOther = if (transactionMode == OTHER) otherTransactionModel else ""
+                                            )
+                                        )
+
+                                        if (transactionModel == TransactionModel()) {
+                                            publicSharedViewModel.messageBarState.value =
+                                                MessageBarState.OPENED
+                                        }
+
+                                    } else {
+                                        Toast
+                                            .makeText(
+                                                context,
+                                                "Please fill all details",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                            .show()
+                                    }
+                                }
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Save",
+                            fontFamily = fontInter,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = LARGE_TEXT_SIZE,
+                            color = Color.White
+                        )
+                    }
                 }
             }
 
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.15f)
-            )
 
         }
-
     }
 
 }
