@@ -34,6 +34,7 @@ fun SplashScreen(
     profileViewModel: ProfileViewModel,
     sharedViewModel: SharedViewModel
 ) {
+
     val context = LocalContext.current
 
     SplashScreenContent()
