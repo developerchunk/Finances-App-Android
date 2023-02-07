@@ -291,7 +291,7 @@ fun TransactionContent(
         mutableStateOf(false)
     }
 
-    val saveButtonBackground = listOf(Color.Transparent, backgroundColor, backgroundColor)
+    val saveButtonBackground = listOf(Color.Transparent, backgroundColor, backgroundColor, backgroundColor)
 
     var bottomHeight by remember {
         mutableStateOf(Size.Zero)
@@ -1204,7 +1204,7 @@ fun TransactionContent(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(100.dp)
+                    .height(120.dp)
                     .background(brush = Brush.verticalGradient(colors = saveButtonBackground))
                     .onGloballyPositioned {
                         bottomHeight = it.size.toSize()
@@ -1213,6 +1213,7 @@ fun TransactionContent(
             ) {
                 Surface(
                     modifier = Modifier
+                        .padding(top = 20.dp)
                         .width(220.dp)
                         .height(45.dp),
                     shape = CircleShape,

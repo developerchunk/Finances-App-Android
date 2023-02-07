@@ -50,7 +50,7 @@ fun HomeScreen(
 
     val profileModel by profileViewModel.selectedProfile.collectAsState()
 
-    val month = SimpleDateFormat("M", Locale(ENGLISH) ).format(Date())
+    val month = SimpleDateFormat("M", Locale(ENGLISH)).format(Date())
     val year = SimpleDateFormat("yyyy", Locale(ENGLISH)).format(Date())
 
     // get current month spending
@@ -83,7 +83,7 @@ fun HomeScreen(
     spentPercent = (totalSpent.toFloat() / profileModel.month_spent.toFloat())
     savingsPercent = (totalSavings.toFloat() / profileModel.month_saving.toFloat())
 
-    val day = SimpleDateFormat("d",Locale(ENGLISH)).format(Date()).toInt()
+    val day = SimpleDateFormat("d", Locale(ENGLISH)).format(Date()).toInt()
 
     var openDialog by remember {
         mutableStateOf(false)
@@ -325,12 +325,24 @@ fun MessageBarContent(
 
     getTransactionModel?.let {
         MessageBar(
-            message = it.subCategory,
+            message =
+            if (it.subCategory != "") {
+                it.subCategory
+            } else {
+                if (it.category != "") it.category
+                else {
+                    if (it.transactionMode != "") it.transactionMode
+                    else it.transactionModeOther
+                }
+            },
             publicSharedViewModel = publicSharedViewModel,
             action_type =
             if (it.transaction_type == "") {
-                if (it.transactionMode=="") { it.transactionModeOther }
-                else { it.transactionMode }
+                if (it.transactionMode == "") {
+                    it.transactionModeOther
+                } else {
+                    it.transactionMode
+                }
             } else {
                 it.transaction_type.keyToTransactionType()
             }
