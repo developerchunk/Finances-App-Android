@@ -51,6 +51,14 @@ fun EditCategoryScreen(
         MutableInteractionSource()
     }
 
+    var launched by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = true) {
+        launched = true
+    }
+
     val scrollState = rememberScrollState()
 
     Scaffold(topBar = {
@@ -112,17 +120,19 @@ fun EditCategoryScreen(
                 .fillMaxSize()
         ) {
 
-            CategoryScreenContent(
-                categoryModel = categoryModel,
-                profileViewModel = profileViewModel,
-                interactionSource = interactionSource,
-                scrollState = scrollState,
-                onClick = {id ->
-                    profileViewModel.categoryId.value = id
-                    profileViewModel.getSelectedCategories(id = id)
-                    navController.navigate(route = NavRoute.EditCategoryDetailScreen.route)
-                }
-            )
+            if (launched) {
+                CategoryScreenContent(
+                    categoryModel = categoryModel,
+                    profileViewModel = profileViewModel,
+                    interactionSource = interactionSource,
+                    scrollState = scrollState,
+                    onClick = {id ->
+                        profileViewModel.categoryId.value = id
+                        profileViewModel.getSelectedCategories(id = id)
+                        navController.navigate(route = NavRoute.EditCategoryDetailScreen.route)
+                    }
+                )
+            }
 
         }
 
@@ -195,20 +205,35 @@ fun CategoryScreenContent(
 
                 profileViewModel.categoriesSize.value = categoryModel.data.size
 
-                categoryModel.data.forEach { value ->
-                    CategoryItem(
-                        categoryModel = value,
-                        interactionSource = interactionSource,
-                        onClick = { id ->
-                            onClick(id)
-                        }
-                    )
-                }
+                CategoryScreenContent(
+                    categories = categoryModel.data,
+                    interactionSource = interactionSource,
+                    onClick = {
+                        onClick(it)
+                    }
+                )
 
             }
         }
     }
 
+}
+
+@Composable
+fun CategoryScreenContent(
+    categories: List<CategoryModel>,
+    interactionSource: MutableInteractionSource,
+    onClick: (Int) -> Unit,
+) {
+    categories.forEach { value ->
+        CategoryItem(
+            categoryModel = value,
+            interactionSource = interactionSource,
+            onClick = { id ->
+                onClick(id)
+            }
+        )
+    }
 }
 
 @Composable

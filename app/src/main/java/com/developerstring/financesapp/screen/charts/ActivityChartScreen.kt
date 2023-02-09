@@ -43,6 +43,7 @@ fun ActivityChartScreen(
     navController: NavController
 ) {
 
+
     val calender = Calendar.getInstance()
     val month = calender.get(Calendar.MONTH) + 1
     val year = calender.get(Calendar.YEAR)
@@ -96,7 +97,7 @@ fun ActivityChartScreen(
                     }
                     Text(
                         modifier = Modifier.padding(start = 10.dp),
-                        text = stringResource(id = languageText.myActivity),
+                        text = stringResource(id = languageText.activityChart),
                         fontFamily = fontInter,
                         fontWeight = FontWeight.Medium,
                         fontSize = LARGE_TEXT_SIZE,

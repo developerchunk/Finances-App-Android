@@ -2,7 +2,6 @@ package com.developerstring.financesapp.screen.transaction
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -10,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -35,6 +35,10 @@ fun TransactionDetailsScreen(
     publicSharedViewModel: PublicSharedViewModel,
 ) {
 
+    var categoriesExpanded by rememberSaveable { mutableStateOf(false) }
+    var subCategoriesExpanded by rememberSaveable { mutableStateOf(false) }
+    var transactionModeExpanded by rememberSaveable { mutableStateOf(false) }
+
     val id by sharedViewModel.id
 
     profileViewModel.getTime24Hours()
@@ -48,8 +52,6 @@ fun TransactionDetailsScreen(
     var transactionModel by remember {
         mutableStateOf(TransactionModel())
     }
-
-    val scrollState = rememberScrollState()
 
     val language by profileViewModel.profileLanguage.collectAsState()
     val languageText = LanguageText(language = language)
@@ -174,7 +176,14 @@ fun TransactionDetailsScreen(
                     navController.popBackStack()
                 },
                 time24Hours = time24Hours,
-                profileViewModel = profileViewModel
+                profileViewModel = profileViewModel,
+                languageText = languageText,
+                transactionModeExpanded = transactionModeExpanded,
+                categoriesExpanded = categoriesExpanded,
+                subCategoriesExpanded = subCategoriesExpanded,
+                onTransactionModeChange = {transactionModeExpanded = it},
+                onCategoryChange = {categoriesExpanded=it},
+                onSubCategoryChange = {subCategoriesExpanded=it},
             )
         }
     }

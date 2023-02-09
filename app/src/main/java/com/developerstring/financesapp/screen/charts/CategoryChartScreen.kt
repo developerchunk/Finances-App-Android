@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -34,6 +33,7 @@ import com.developerstring.financesapp.ui.components.PieChart
 import com.developerstring.financesapp.ui.components.SimpleChipButton
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.*
+import com.developerstring.financesapp.util.Constants.LANGUAGE
 import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.state.CategorySortState
 import com.developerstring.financesapp.util.state.RequestState
@@ -48,6 +48,8 @@ fun CategoryChartScreen(
     navController: NavController,
     profileViewModel: ProfileViewModel
 ) {
+
+    val language = LanguageText(language = LANGUAGE)
 
     val categories by profileViewModel.allCategories.collectAsState()
     val currency = profileViewModel.profileCurrency.collectAsState().value.last().toString()
@@ -93,7 +95,7 @@ fun CategoryChartScreen(
                     )
                 }
                 Text(
-                    text = stringResource(id = R.string.categories_chart),
+                    text = stringResource(id = language.categoriesChart),
                     fontFamily = fontInter,
                     fontWeight = FontWeight.Medium,
                     fontSize = LARGE_TEXT_SIZE,
@@ -134,7 +136,8 @@ fun CategoryChartScreen(
                 month_ = month,
                 year_ = year,
                 currency = currency,
-                menuExpanded = menuExpanded
+                menuExpanded = menuExpanded,
+                languageText = language
             )
 
         }
@@ -149,7 +152,8 @@ fun CategoryChartContent(
     month_: Int,
     year_: Int,
     currency: String,
-    menuExpanded: Boolean
+    menuExpanded: Boolean,
+    languageText: LanguageText
 ) {
 
     var data by remember {
@@ -257,7 +261,7 @@ fun CategoryChartContent(
     val brushBackground = Brush.horizontalGradient(
         colors = listOf(
             Color.Transparent,
-            backgroundColor,
+            backgroundColorBW,
         ),
     )
 
@@ -303,14 +307,14 @@ fun CategoryChartContent(
 
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 10.dp, end = 10.dp, top = 15.dp, bottom = 15.dp),
+                        .padding(start = 30.dp, end = 10.dp, top = 15.dp, bottom = 15.dp)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
 
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 20.dp)
                     ) {
                         Text(
                             text = stringResource(id = R.string.filter),
@@ -335,8 +339,7 @@ fun CategoryChartContent(
 
                     FlowRow(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 20.dp),
+                            .fillMaxWidth(),
                         mainAxisSpacing = 16.dp,
                         crossAxisSpacing = 16.dp,
                         mainAxisAlignment = MainAxisAlignment.Center,
@@ -354,6 +357,74 @@ fun CategoryChartContent(
 
                         }
                     }
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+
+                        Text(
+                            text = stringResource(id = languageText.sortBy),
+                            fontFamily = fontInter,
+                            fontSize = MEDIUM_TEXT_SIZE,
+                            fontWeight = FontWeight.Medium,
+                            color = textColorBW
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(end = 20.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .horizontalScroll(rememberScrollState()),
+                            ) {
+                                FlowRow(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 10.dp, end = 30.dp),
+                                    mainAxisSpacing = 14.dp,
+                                    crossAxisSpacing = 14.dp
+                                ) {
+                                    categorySortList.forEach {
+                                        CustomChip(
+                                            title = it.categorySortToText(),
+                                            selected = categorySortState.categorySortToText(),
+                                            image = Icons.Rounded.Check,
+                                            key = false,
+                                            onSelected = { selected ->
+                                                categorySortState = selected.textToCategorySort()
+                                            },
+                                            selectedColor = UIBlue,
+                                            color = colorDarkGray,
+                                            textColor = textColorBW,
+                                            selectedTextColor = Color.White,
+                                            iconColor = Color.White
+                                        )
+                                    }
+                                }
+
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .width(50.dp)
+                                        .height(40.dp)
+                                        .background(brushBackground)
+                                )
+                            }
+                        }
+
+
+                    }
+
 
                 }
 
@@ -455,76 +526,6 @@ fun CategoryChartContent(
             )
         }
 
-
-        Row(
-            modifier = Modifier
-                .padding(top = 5.dp, start = 20.dp)
-                .fillMaxWidth()
-                .height(TOP_APP_BAR_HEIGHT),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Text(
-                text = stringResource(id = R.string.sort_by),
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Medium,
-                fontFamily = fontInter,
-                fontSize = TEXT_FIELD_SIZE,
-                color = textColorBW
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 20.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState()),
-                ) {
-                    FlowRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 10.dp, end = 30.dp),
-                        mainAxisSpacing = 14.dp,
-                        crossAxisSpacing = 14.dp
-                    ) {
-                        categorySortList.forEach {
-                            CustomChip(
-                                title = it.categorySortToText(),
-                                selected = categorySortState.categorySortToText(),
-                                image = Icons.Rounded.Check,
-                                key = false,
-                                onSelected = { selected ->
-                                    categorySortState = selected.textToCategorySort()
-                                },
-                                selectedColor = UIBlue,
-                                color = colorDarkGray,
-                                textColor = textColorBW,
-                                selectedTextColor = Color.White,
-                                iconColor = Color.White
-                            )
-                        }
-                    }
-
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .width(50.dp)
-                            .height(40.dp)
-                            .background(brushBackground)
-                    )
-                }
-            }
-
-
-        }
 
         Column(
             modifier = Modifier

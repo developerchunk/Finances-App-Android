@@ -119,7 +119,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun profileCreatedStatus(context: Context,value: String) {
+    fun profileCreatedStatus(context: Context) {
         val profileDataStore = ProfileDataStore(context)
         viewModelScope.launch {
             profileDataStore.saveProfileCreatedStatus(NO)
@@ -331,7 +331,7 @@ class ProfileViewModel @Inject constructor(
     // delete all categories
     fun deleteAllCategories() {
         viewModelScope.launch {
-            repositoryCategory.deleteAllProfiles()
+            repositoryCategory.deleteAllCategories()
         }
     }
 

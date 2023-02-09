@@ -128,16 +128,6 @@ class LanguageText(
         MARATHI -> R.string.sort_by_marathi
         else -> R.string.sort_by
     }
-    val less = when (language) {
-        ENGLISH -> R.string.less
-        MARATHI -> R.string.less_marathi
-        else -> R.string.less
-    }
-    val more = when (language) {
-        ENGLISH -> R.string.more
-        MARATHI -> R.string.more_marathi
-        else -> R.string.more
-    }
     val yes = when (language) {
         ENGLISH -> R.string.yes
         MARATHI -> R.string.yes_marathi
@@ -191,6 +181,24 @@ class LanguageText(
         else -> R.string.place_info_text_field
     }
 
+    val transactionModeTextField = when (language) {
+        ENGLISH -> R.string.transaction_mode_text_field
+        MARATHI -> R.string.transaction_mode_text_field_marathi
+        else -> R.string.transaction_mode_text_field
+    }
+
+    val transactionModeOptionalTextField = when (language) {
+        ENGLISH -> R.string.other_transaction_mode_text_field
+        MARATHI -> R.string.other_transaction_mode_text_field_marathi
+        else -> R.string.other_transaction_mode_text_field
+    }
+
+    val timeTextField = when (language) {
+        ENGLISH -> R.string.time_text_field
+        MARATHI -> R.string.time_text_field_marathi
+        else -> R.string.time_text_field
+    }
+
     //
     val search = when (language) {
         ENGLISH -> R.string.search
@@ -227,6 +235,12 @@ class LanguageText(
         ENGLISH -> R.string.quarter
         MARATHI -> R.string.quarter_marathi
         else -> R.string.quarter
+    }
+
+    val save = when (language) {
+        ENGLISH -> R.string.finish
+        MARATHI -> R.string.finish_marathi
+        else -> R.string.finish
     }
 
     // ActivityScreen Charts

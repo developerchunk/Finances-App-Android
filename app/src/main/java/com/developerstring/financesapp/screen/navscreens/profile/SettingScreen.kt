@@ -22,16 +22,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.setupnav.SetUpNavRoute
+import com.developerstring.financesapp.roomdatabase.models.CategoryModel
 import com.developerstring.financesapp.screen.navscreens.content.profilescreen.CustomSwitchButton
-import com.developerstring.financesapp.screen.profilecreate.addCategoriesToDB
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.components.DisplayAlertDialog
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.Constants
 import com.developerstring.financesapp.util.Constants.DARK_THEME_ENABLE
 import com.developerstring.financesapp.util.Constants.DELETE_ALL_TRANSACTIONS
 import com.developerstring.financesapp.util.Constants.DELETE_PROFILE
-import com.developerstring.financesapp.util.Constants.NO
 import com.developerstring.financesapp.util.Constants.RESET_CATEGORIES
 import com.developerstring.financesapp.util.Constants.SETTINGS
 import com.developerstring.financesapp.util.Constants.TIME_FORMAT
@@ -168,7 +168,6 @@ fun SettingScreen(
                         onYesClicked = {
                             profileViewModel.profileCreatedStatus(
                                 context = context,
-                                value = NO
                             )
                             profileViewModel.deleteAllProfiles()
                             Toast.makeText(context, deleteAllProfilesToast, Toast.LENGTH_LONG).show()
@@ -203,11 +202,15 @@ fun SettingScreen(
     }
 
     if (deleteAllCategories) {
-        val categories by profileViewModel.allCategories.collectAsState()
-        addCategoriesToDB(
-            categories = categories,
-            profileViewModel = profileViewModel
-        )
+        val separator = ","
+        Constants.SUB_CATEGORY.forEach {
+            profileViewModel.addCategory(
+                CategoryModel(
+                    category = it.key,
+                    subCategory = it.value.joinToString(separator)
+                )
+            )
+        }
         Toast.makeText(context, resetAllCategoriesToast, Toast.LENGTH_LONG).show()
         deleteAllCategories = false
     }

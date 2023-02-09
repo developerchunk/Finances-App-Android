@@ -52,19 +52,17 @@ import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.components.CustomChip
 import com.developerstring.financesapp.ui.components.timepicker.*
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.*
 import com.developerstring.financesapp.util.Constants.ADD_FUND
 import com.developerstring.financesapp.util.Constants.ADD_TRANSACTION_TYPE
 import com.developerstring.financesapp.util.Constants.CASH
 import com.developerstring.financesapp.util.Constants.INVESTMENT
+import com.developerstring.financesapp.util.Constants.LANGUAGE
 import com.developerstring.financesapp.util.Constants.OTHER
 import com.developerstring.financesapp.util.Constants.SAVINGS
 import com.developerstring.financesapp.util.Constants.SEPARATOR_LIST
 import com.developerstring.financesapp.util.Constants.SPENT
 import com.developerstring.financesapp.util.Constants.TRANSACTION
-import com.developerstring.financesapp.util.addZeroToStart
-import com.developerstring.financesapp.util.convertStringToAlphabets
-import com.developerstring.financesapp.util.convertStringToInt
-import com.developerstring.financesapp.util.mapListToList
 import com.developerstring.financesapp.util.state.MessageBarState
 import com.developerstring.financesapp.util.state.RequestState
 import com.google.accompanist.flowlayout.FlowRow
@@ -79,6 +77,10 @@ fun AddTransaction(
     publicSharedViewModel: PublicSharedViewModel
 ) {
 
+    var categoriesExpanded by rememberSaveable { mutableStateOf(false) }
+    var subCategoriesExpanded by rememberSaveable { mutableStateOf(false) }
+    var transactionModeExpanded by rememberSaveable { mutableStateOf(false) }
+
     val shape: Shape = RoundedCornerShape(10.dp)
 
     profileViewModel.getAllCategories()
@@ -87,6 +89,8 @@ fun AddTransaction(
     val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
     val categoryModel by profileViewModel.allCategories.collectAsState()
     val time24Hours by profileViewModel.profileTime24Hours.collectAsState()
+
+    val languageText = LanguageText(LANGUAGE)
 
     Column(
         modifier = Modifier
@@ -150,19 +154,27 @@ fun AddTransaction(
                 publicSharedViewModel = publicSharedViewModel,
                 navController = navController,
                 time24Hours = time24Hours,
-                profileViewModel = profileViewModel
-            ) {
-                profileViewModel.getProfileAmount()
-                sharedViewModel.addTransaction(transactionModel = it)
-                profileViewModel.saveTotalAmount(
-                    amount = when (it.transaction_type) {
-                        SPENT -> (totalAmount - it.amount)
-                        ADD_FUND -> (totalAmount + it.amount)
-                        else -> totalAmount
-                    }
-                )
-                navController.popBackStack()
-            }
+                profileViewModel = profileViewModel,
+                languageText = languageText,
+                transactionModeExpanded = transactionModeExpanded,
+                categoriesExpanded = categoriesExpanded,
+                subCategoriesExpanded = subCategoriesExpanded,
+                onTransactionModeChange = {transactionModeExpanded = it},
+                onCategoryChange = {categoriesExpanded=it},
+                onSubCategoryChange = {subCategoriesExpanded=it},
+                onSaveClicked = {
+                    profileViewModel.getProfileAmount()
+                    sharedViewModel.addTransaction(transactionModel = it)
+                    profileViewModel.saveTotalAmount(
+                        amount = when (it.transaction_type) {
+                            SPENT -> (totalAmount - it.amount)
+                            ADD_FUND -> (totalAmount + it.amount)
+                            else -> totalAmount
+                        }
+                    )
+                    navController.popBackStack()
+                }
+            )
 
         }
     }
@@ -179,6 +191,13 @@ fun TransactionContent(
     navController: NavController,
     time24Hours: Boolean,
     profileViewModel: ProfileViewModel,
+    languageText: LanguageText,
+    transactionModeExpanded: Boolean,
+    categoriesExpanded: Boolean,
+    subCategoriesExpanded: Boolean,
+    onTransactionModeChange: (Boolean) -> Unit,
+    onCategoryChange: (Boolean) -> Unit,
+    onSubCategoryChange: (Boolean) -> Unit,
     onSaveClicked: (TransactionModel) -> Unit,
 ) {
 
@@ -237,9 +256,7 @@ fun TransactionContent(
     val heightTextFields by remember { mutableStateOf(55.dp) }
 
     val interactionSource = remember { MutableInteractionSource() }
-    var categoriesExpanded by rememberSaveable { mutableStateOf(false) }
-    var subCategoriesExpanded by rememberSaveable { mutableStateOf(false) }
-    var transactionModeExpanded by rememberSaveable { mutableStateOf(false) }
+
 
     // Chip Selection
     val chipList = ADD_TRANSACTION_TYPE
@@ -354,6 +371,8 @@ fun TransactionContent(
         }
     }
 
+    Toast.makeText(context, transactionModeExpanded.toString(), Toast.LENGTH_SHORT).show()
+
     mCalendar.time = Date()
 
     val buttonColor = Brush.horizontalGradient(colors = listOf(UIBlue, LightUIBlue))
@@ -367,8 +386,9 @@ fun TransactionContent(
                     interactionSource = interactionSource,
                     indication = null,
                     onClick = {
-                        categoriesExpanded = false
-                        subCategoriesExpanded = false
+                        onCategoryChange(false)
+                        onSubCategoryChange(false)
+                        onTransactionModeChange(false)
                     }
                 )
                 .verticalScroll(scrollState)
@@ -384,7 +404,7 @@ fun TransactionContent(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.amount_text_field),
+                    text = stringResource(id = languageText.amountTextField),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -459,7 +479,7 @@ fun TransactionContent(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.transaction_mode_text_field),
+                    text = stringResource(id = languageText.transactionModeTextField),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -482,7 +502,7 @@ fun TransactionContent(
                             indication = null,
                             interactionSource = interactionSource,
                             onClick = {
-                                transactionModeExpanded = !transactionModeExpanded
+                                onTransactionModeChange(!transactionModeExpanded)
                             }),
                     value = transactionMode,
                     onValueChange = {
@@ -538,7 +558,7 @@ fun TransactionContent(
                         }
                     }
                 )
-                AnimatedVisibility(visible = transactionModeExpanded) {
+                if (transactionModeExpanded) {
                     Card(
                         modifier = Modifier
                             .padding(horizontal = 5.dp)
@@ -555,7 +575,7 @@ fun TransactionContent(
                             ) {
                                 SubCategoryItems(title = it) { title ->
                                     transactionMode = title
-                                    transactionModeExpanded = false
+                                    onTransactionModeChange(false)
                                 }
                             }
                         }
@@ -573,7 +593,7 @@ fun TransactionContent(
                     Text(
                         modifier = Modifier
                             .padding(start = 3.dp, bottom = 2.dp),
-                        text = stringResource(id = R.string.other_transaction_mode_text_field),
+                        text = stringResource(id = languageText.transactionModeOptionalTextField),
                         fontSize = TEXT_FIELD_SIZE,
                         color = textColorBLG,
                         fontFamily = fontInter,
@@ -620,7 +640,7 @@ fun TransactionContent(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.category_text_field),
+                    text = stringResource(id = languageText.categoryTextField),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -643,7 +663,7 @@ fun TransactionContent(
                             indication = null,
                             interactionSource = interactionSource,
                             onClick = {
-                                categoriesExpanded = !categoriesExpanded
+                                onCategoryChange(!categoriesExpanded)
                             }),
                     value = category,
                     onValueChange = {
@@ -693,7 +713,7 @@ fun TransactionContent(
 
                     }
                 )
-                AnimatedVisibility(visible = categoriesExpanded) {
+                if (categoriesExpanded) {
                     Card(
                         modifier = Modifier
                             .padding(horizontal = 5.dp)
@@ -709,7 +729,7 @@ fun TransactionContent(
                             categories.values.forEach {
                                 SubCategoryItems(it) { title ->
                                     category = title
-                                    categoriesExpanded = false
+                                    onCategoryChange(false)
                                 }
                             }
                         }
@@ -727,7 +747,7 @@ fun TransactionContent(
                     Text(
                         modifier = Modifier
                             .padding(start = 3.dp, bottom = 2.dp),
-                        text = stringResource(id = R.string.other_category_text_field),
+                        text = stringResource(id = languageText.otherCategoryTextField),
                         fontSize = TEXT_FIELD_SIZE,
                         color = textColorBLG,
                         fontFamily = fontInter,
@@ -775,7 +795,7 @@ fun TransactionContent(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.sub_category_text_field),
+                    text = stringResource(id = languageText.subCategoryTextField),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -798,7 +818,7 @@ fun TransactionContent(
                             indication = null,
                             interactionSource = interactionSource,
                             onClick = {
-                                subCategoriesExpanded = !subCategoriesExpanded
+                                onSubCategoryChange(!subCategoriesExpanded)
                             }),
                     value = subCategory,
                     onValueChange = {
@@ -835,16 +855,16 @@ fun TransactionContent(
 
                     }
                 )
-                AnimatedVisibility(visible = subCategoriesExpanded) {
+                if (subCategoriesExpanded) {
                     Card(
                         modifier = Modifier
                             .padding(horizontal = 5.dp)
+                            .heightIn(max = 200.dp)
                             .width(textFieldSize.width.dp),
                         backgroundColor = backgroundColorCard,
                         elevation = 10.dp
                     ) {
                         LazyColumn(
-                            modifier = Modifier.heightIn(max = 200.dp),
                             userScrollEnabled = true
                         ) {
                             items(
@@ -858,7 +878,7 @@ fun TransactionContent(
                             ) {
                                 SubCategoryItems(title = it) { title ->
                                     subCategory = title
-                                    subCategoriesExpanded = false
+                                    onSubCategoryChange(false)
                                 }
                             }
                         }
@@ -876,7 +896,7 @@ fun TransactionContent(
                     Text(
                         modifier = Modifier
                             .padding(start = 3.dp, bottom = 2.dp),
-                        text = stringResource(id = R.string.other_sub_category_text_field),
+                        text = stringResource(id = languageText.otherSubCategoryTextField),
                         fontSize = TEXT_FIELD_SIZE,
                         color = textColorBLG,
                         fontFamily = fontInter,
@@ -920,7 +940,7 @@ fun TransactionContent(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.date_text_field),
+                    text = stringResource(id = languageText.dateTextField),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -1001,7 +1021,7 @@ fun TransactionContent(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.time_text_field),
+                    text = stringResource(id = languageText.timeTextField),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -1099,7 +1119,7 @@ fun TransactionContent(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.extra_info_text_field),
+                    text = stringResource(id = languageText.extraInfoTextField),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -1145,7 +1165,7 @@ fun TransactionContent(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.place_info_text_field),
+                    text = stringResource(id = languageText.placeInfoTextField),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -1186,7 +1206,7 @@ fun TransactionContent(
             Spacer(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(bottomHeight.height.dp/2f+10.dp)
+                    .height(bottomHeight.height.dp / 2f + 10.dp)
                     .background(Color.Transparent)
 
             )
@@ -1272,7 +1292,7 @@ fun TransactionContent(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "Save",
+                            text = stringResource(id = languageText.finish),
                             fontFamily = fontInter,
                             fontWeight = FontWeight.Medium,
                             fontSize = LARGE_TEXT_SIZE,

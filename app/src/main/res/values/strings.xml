@@ -31,6 +31,7 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="setting">Setting</string>
+    <string name="save">Save</string>
 
     <string name="enter_captcha">Enter the captcha</string>
 
@@ -138,12 +139,14 @@
     <string name="profile_marathi">प्रोफाइल</string>
 
     <string name="amount_text_field_marathi">रक्कम*</string>
+    <string name="transaction_mode_text_field_marathi">पेमेंट पद्धती*</string>
+    <string name="other_transaction_mode_text_field_marathi">पेमेंट पद्धती निर्दिष्ट करा (इच्छेप्रमाणे)</string>
     <string name="category_text_field_marathi">श्रेणी*</string>
     <string name="other_category_text_field_marathi">श्रेणी निर्दिष्ट करा (इच्छेप्रमाणे)</string>
     <string name="sub_category_text_field_marathi">उप श्रेणी*</string>
     <string name="other_sub_category_text_field_marathi">उप श्रेण निर्दिष्ट करा (इच्छेप्रमाणे)</string>
     <string name="date_text_field_marathi">तारीख*</string>
-    <string name="time_text_field_marathi">Time (इच्छेप्रमाणे)</string>
+    <string name="time_text_field_marathi">वेळ (इच्छेप्रमाणे)</string>
     <string name="extra_info_text_field_marathi">अतिरिक्त माहिती (इच्छेप्रमाणे)</string>
     <string name="place_info_text_field_marathi">ठिकाण (इच्छेप्रमाणे)</string>
 
@@ -167,6 +170,9 @@
     <string name="payment_marathi">पेमेंट</string>
     <string name="month_marathi">महिना</string>
     <string name="quarter_marathi">3 महिने</string>
+
+    <string name="save_marathi">Save</string>
+
 
 
 </resources>
