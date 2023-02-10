@@ -97,13 +97,13 @@ fun ActivityChartScreen(
                     }
                     Text(
                         modifier = Modifier.padding(start = 10.dp),
-                        text = stringResource(id = languageText.activityChart),
+                        text = stringResource(id = languageText.activityChartText),
                         fontFamily = fontInter,
                         fontWeight = FontWeight.Medium,
                         fontSize = LARGE_TEXT_SIZE,
                         color = textColorBW,
                         overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
+                        maxLines = 2
                     )
                 }
 

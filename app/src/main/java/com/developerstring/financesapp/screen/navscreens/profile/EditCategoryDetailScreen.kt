@@ -96,7 +96,6 @@ fun EditCategoryDetailContent(
     var subCategorySelected by remember { mutableStateOf(0) }
     var subCategory by remember { mutableStateOf("") }
 
-    var newCategory by remember { mutableStateOf("") }
     var newSubCategory by remember { mutableStateOf("") }
     var addSubCategory by remember { mutableStateOf(false) }
 
@@ -105,14 +104,18 @@ fun EditCategoryDetailContent(
         MutableInteractionSource()
     }
 
+    var newCategory by remember { mutableStateOf(category) }
 
     try {
         subCategories =
             (categoryModel!!.subCategory.split(Constants.SEPARATOR_LIST) as MutableList<String>).toMutableList()
         category = categoryModel.category
         id = categoryModel.id
-        newCategory = category
     } catch (_: Exception) {
+    }
+
+    LaunchedEffect(key1 = category) {
+        newCategory = category
     }
 
     val scrollState = rememberScrollState()

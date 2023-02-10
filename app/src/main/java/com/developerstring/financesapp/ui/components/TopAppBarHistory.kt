@@ -33,6 +33,7 @@ import com.developerstring.financesapp.roomdatabase.models.CategoryModel
 import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.FILTER_NAME
+import com.developerstring.financesapp.util.LanguageText
 import com.developerstring.financesapp.util.filterListText
 import com.developerstring.financesapp.util.state.FilterTransactionState
 import com.developerstring.financesapp.util.state.RequestState
@@ -47,6 +48,7 @@ fun TopAppBarHistory(
     navController: NavController,
     searchBarState: SearchBarState,
     searchBarText: String,
+    languageText: LanguageText
 ) {
 
     var categories by remember {
@@ -83,7 +85,8 @@ fun TopAppBarHistory(
                 SearchBarState.DELETE -> {
                     DefaultTopAppBarHistory(
                         navController = navController,
-                        sharedViewModel = sharedViewModel
+                        sharedViewModel = sharedViewModel,
+                        languageText = languageText
                     )
                 }
 
@@ -110,7 +113,8 @@ fun TopAppBarHistory(
                                 sharedViewModel.getSearchedTransactions(searchQuery = "%${filterText.filterListText()}%")
                             }
                             sharedViewModel.searchBarState.value = SearchBarState.DELETE
-                        }
+                        },
+                        languageText = languageText
                     )
                 }
             }
@@ -277,7 +281,8 @@ fun TopAppBarFilterContent(
 @Composable
 fun DefaultTopAppBarHistory(
     navController: NavController,
-    sharedViewModel: SharedViewModel
+    sharedViewModel: SharedViewModel,
+    languageText: LanguageText
 ) {
 
     Row(
@@ -300,7 +305,7 @@ fun DefaultTopAppBarHistory(
         }
 
         Text(
-            text = stringResource(id = R.string.history),
+            text = stringResource(id = languageText.history),
             fontFamily = fontInter,
             fontWeight = FontWeight.Medium,
             fontSize = EXTRA_LARGE_TEXT_SIZE,
@@ -327,7 +332,8 @@ fun SearchedTopAppBarHistory(
     text: String,
     onTextChange: (String) -> Unit,
     onSearchClicked: (String) -> Unit,
-    onCloseClicked: () -> Unit
+    onCloseClicked: () -> Unit,
+    languageText: LanguageText
 ) {
 
     var trailingIconStateSearch by remember {
@@ -352,7 +358,7 @@ fun SearchedTopAppBarHistory(
                 Text(
                     modifier = Modifier
                         .alpha(ContentAlpha.medium),
-                    text = stringResource(id = R.string.search_placeholder),
+                    text = stringResource(id = languageText.searchPlaceholder),
                     color = textColorBW,
                     fontSize = TEXT_FIELD_SIZE
                 )
@@ -370,7 +376,7 @@ fun SearchedTopAppBarHistory(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Search,
-                        contentDescription = stringResource(id = R.string.search_icon),
+                        contentDescription = null,
                         tint = textColorBW
                     )
                 }

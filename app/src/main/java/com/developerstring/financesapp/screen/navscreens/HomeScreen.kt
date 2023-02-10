@@ -225,7 +225,7 @@ fun HomeScreen(
                 // History
                 ActivityCardItems(
                     activityCardData = ActivityCardData(
-                        text = languageText.history,
+                        text = languageText.paymentHistory,
                         icon = R.drawable.history_icon,
                         bgColor = DarkGreen,
                         cardColor = Green,

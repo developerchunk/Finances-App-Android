@@ -31,7 +31,7 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="setting">Setting</string>
-    <string name="save">Save</string>
+    <string name="activity_chart_text">Activity Chart</string>
 
     <string name="enter_captcha">Enter the captcha</string>
 
@@ -76,6 +76,7 @@
     <string name="search">Search</string>
     <string name="next">Next</string>
     <string name="finish">Finish</string>
+    <string name="save">Finish</string>
 
 
     <string name="search_icon">search icon</string>
@@ -118,7 +119,8 @@
 
     <!--    Marathi Text-->
     <string name="add_payment_marathi">पेमेंट\nलिहा</string>
-    <string name="history_marathi">पेमेंट\nइतिहास</string>
+    <string name="payment_history_marathi">पेमेंट\nइतिहास</string>
+    <string name="history_marathi">इतिहास</string>
     <string name="total_balance_marathi">एकूण शिल्लक</string>
     <string name="spent_marathi">खर्च केला</string>
     <string name="saving_marathi">बचत</string>
@@ -171,8 +173,7 @@
     <string name="month_marathi">महिना</string>
     <string name="quarter_marathi">3 महिने</string>
 
-    <string name="save_marathi">Save</string>
-
+    <string name="save_marathi">सेव</string>
 
 
 </resources>

@@ -371,8 +371,6 @@ fun TransactionContent(
         }
     }
 
-    Toast.makeText(context, transactionModeExpanded.toString(), Toast.LENGTH_SHORT).show()
-
     mCalendar.time = Date()
 
     val buttonColor = Brush.horizontalGradient(colors = listOf(UIBlue, LightUIBlue))
@@ -1292,7 +1290,7 @@ fun TransactionContent(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = stringResource(id = languageText.finish),
+                            text = stringResource(id = languageText.save),
                             fontFamily = fontInter,
                             fontWeight = FontWeight.Medium,
                             fontSize = LARGE_TEXT_SIZE,

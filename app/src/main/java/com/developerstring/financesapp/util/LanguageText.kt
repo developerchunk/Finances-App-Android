@@ -83,6 +83,11 @@ class LanguageText(
         MARATHI -> R.string.add_payment_marathi
         else -> R.string.add_payment
     }
+    val paymentHistory = when (language) {
+        ENGLISH -> R.string.history
+        MARATHI -> R.string.payment_history_marathi
+        else -> R.string.history
+    }
     val history = when (language) {
         ENGLISH -> R.string.history
         MARATHI -> R.string.history_marathi
@@ -103,7 +108,7 @@ class LanguageText(
         MARATHI -> R.string.my_activity_marathi
         else -> R.string.my_activity
     }
-    val activityChart = when (language) {
+    private val activityChart = when (language) {
         ENGLISH -> R.string.activity_chart
         MARATHI -> R.string.activity_chart_marathi
         else -> R.string.my_activity
@@ -137,6 +142,12 @@ class LanguageText(
         ENGLISH -> R.string.no
         MARATHI -> R.string.no_marathi
         else -> R.string.no
+    }
+
+    val activityChartText = when (language) {
+        ENGLISH -> R.string.activity_chart_text
+        MARATHI -> R.string.activity_chart_marathi
+        else -> R.string.activity_chart
     }
 
     //
@@ -238,9 +249,9 @@ class LanguageText(
     }
 
     val save = when (language) {
-        ENGLISH -> R.string.finish
-        MARATHI -> R.string.finish_marathi
-        else -> R.string.finish
+        ENGLISH -> R.string.save
+        MARATHI -> R.string.save_marathi
+        else -> R.string.save
     }
 
     // ActivityScreen Charts

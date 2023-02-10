@@ -19,7 +19,9 @@ import com.developerstring.financesapp.sharedviewmodel.SharedViewModel
 import com.developerstring.financesapp.ui.components.TopAppBarHistory
 import com.developerstring.financesapp.ui.components.TransactionsItemView
 import com.developerstring.financesapp.ui.theme.backgroundColor
+import com.developerstring.financesapp.util.Constants
 import com.developerstring.financesapp.util.Constants.oldFirstFilter
+import com.developerstring.financesapp.util.LanguageText
 import com.developerstring.financesapp.util.state.FilterTransactionState
 import com.developerstring.financesapp.util.state.RequestState
 import com.developerstring.financesapp.util.state.SearchBarState
@@ -52,6 +54,8 @@ fun ViewHistoryScreen(
 
     val categories by profileViewModel.allCategories.collectAsState()
 
+    val languageText = LanguageText(Constants.LANGUAGE)
+
     Scaffold(
         topBar = {
             TopAppBarHistory(
@@ -59,7 +63,8 @@ fun ViewHistoryScreen(
                 navController = navController,
                 searchBarState = searchBarState,
                 searchBarText = searchBarText,
-                categoriesModels = categories
+                categoriesModels = categories,
+                languageText = languageText
             )
         }
     ) {
