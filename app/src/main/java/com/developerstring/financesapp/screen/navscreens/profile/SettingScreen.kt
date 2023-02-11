@@ -30,11 +30,8 @@ import com.developerstring.financesapp.ui.components.DisplayAlertDialog
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants
 import com.developerstring.financesapp.util.Constants.DARK_THEME_ENABLE
-import com.developerstring.financesapp.util.Constants.DELETE_ALL_TRANSACTIONS
-import com.developerstring.financesapp.util.Constants.DELETE_PROFILE
-import com.developerstring.financesapp.util.Constants.RESET_CATEGORIES
-import com.developerstring.financesapp.util.Constants.SETTINGS
-import com.developerstring.financesapp.util.Constants.TIME_FORMAT
+import com.developerstring.financesapp.util.Constants.LANGUAGE
+import com.developerstring.financesapp.util.LanguageText
 
 @Composable
 fun SettingScreen(
@@ -64,6 +61,17 @@ fun SettingScreen(
     val deleteAllTransactionToast = stringResource(id = R.string.delete_all_transactions_toast)
     val deleteAllProfilesToast = stringResource(id = R.string.delete_all_profiles_toast)
     val resetAllCategoriesToast = stringResource(id = R.string.reset_categories_toast)
+
+    val languageText = LanguageText(LANGUAGE)
+
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
+
+    val timeFormat = stringResource(id = languageText.timeFormat)
+    val resetCategories = stringResource(id = languageText.resetCategories)
+    val deleteAllTransactions = stringResource(id = languageText.deleteAllTransaction)
+    val deleteProfile = stringResource(id = languageText.deleteProfile)
 
     Scaffold(topBar = {
 
@@ -110,27 +118,28 @@ fun SettingScreen(
         ) {
 
 
-            SETTINGS.forEach { setting ->
+            languageText.settingsList.forEach { setting ->
                 SettingsItems(
                     title = setting.key,
                     icon = setting.value,
-                    enableTitle = TIME_FORMAT,
+                    enableTitle = stringResource(id = languageText.timeFormat),
                     enable = time24Hours,
+                    interactionSource = interactionSource,
                     onClick = { value, enableValue ->
                         settingSelected = value
                         when (value) {
-                            TIME_FORMAT -> {
+                            timeFormat -> {
                                 profileViewModel.updateTime24Hours(
                                     time24Hours = enableValue
                                 )
                             }
-                            DELETE_ALL_TRANSACTIONS -> {
+                            deleteAllTransactions -> {
                                 alertDialogShow = true
                             }
-                            DELETE_PROFILE -> {
+                            deleteProfile -> {
                                 alertDialogShow = true
                             }
-                            RESET_CATEGORIES -> {
+                            resetCategories -> {
                                 alertDialogShow = true
                             }
                         }
@@ -140,7 +149,7 @@ fun SettingScreen(
 
 
             when (settingSelected) {
-                DELETE_ALL_TRANSACTIONS -> {
+                deleteAllTransactions -> {
                     DisplayAlertDialog(
                         title = stringResource(id = R.string.delete_all_transaction_title),
                         message = stringResource(id = R.string.delete_all_transaction_message),
@@ -153,9 +162,11 @@ fun SettingScreen(
                         onYesClicked = {
                             sharedViewModel.deleteAllTransactions()
                             Toast.makeText(context, deleteAllTransactionToast, Toast.LENGTH_LONG).show()
-                        })
+                        },
+                        languageText = languageText
+                    )
                 }
-                DELETE_PROFILE -> {
+                deleteProfile -> {
                     DisplayAlertDialog(
                         title = stringResource(id = R.string.delete_all_profiles_title),
                         message = stringResource(id = R.string.delete_all_profiles_message),
@@ -174,12 +185,13 @@ fun SettingScreen(
                             navController.popBackStack()
                             navController.navigate(route = SetUpNavRoute.SplashScreenSetUpNavRoute.route)
                             DARK_THEME_ENABLE = true
-                        }
+                        },
+                        languageText = languageText
                     )
 
                 }
 
-                RESET_CATEGORIES -> {
+                resetCategories -> {
                     DisplayAlertDialog(
                         title = stringResource(id = R.string.reset_categories_title),
                         message = stringResource(id = R.string.reset_categories_message),
@@ -192,7 +204,8 @@ fun SettingScreen(
                         onYesClicked = {
                             profileViewModel.deleteAllCategories()
                             deleteAllCategories = true
-                        }
+                        },
+                        languageText = languageText
                     )
                 }
             }
@@ -219,16 +232,15 @@ fun SettingScreen(
 
 @Composable
 fun SettingsItems(
-    title: String,
+    title: Int,
     icon: Int,
     enableTitle: String,
     enable: Boolean = false,
+    interactionSource: MutableInteractionSource,
     onClick: (value: String, enableValue: Boolean) -> Unit
 ) {
 
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
+    val text = stringResource(id = title)
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -241,8 +253,8 @@ fun SettingsItems(
                     indication = null,
                     interactionSource = interactionSource,
                     onClick = {
-                        if (title != enableTitle) {
-                            onClick(title, enable)
+                        if (text != enableTitle) {
+                            onClick(text, enable)
                         }
                     }
                 ),
@@ -250,21 +262,21 @@ fun SettingsItems(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = title,
+                text = text,
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium,
                 fontSize = TEXT_FIELD_SIZE,
                 color = textColorBW
             )
 
-            if (title == enableTitle) {
+            if (text == enableTitle) {
                 CustomSwitchButton(
                     switchPadding = 3.dp,
                     buttonSizeWidth = 60.dp,
                     buttonSizeHeight = 35.dp,
                     darkThemeEnable = enable
                 ) {
-                    onClick(title, it)
+                    onClick(text, it)
                 }
             } else {
                 Image(

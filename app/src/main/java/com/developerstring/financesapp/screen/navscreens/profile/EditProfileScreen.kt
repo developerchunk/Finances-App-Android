@@ -35,7 +35,9 @@ import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.roomdatabase.models.ProfileModel
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.Constants
 import com.developerstring.financesapp.util.Constants.PROFILE_ID
+import com.developerstring.financesapp.util.LanguageText
 import com.developerstring.financesapp.util.convertStringToAlphabets
 import com.developerstring.financesapp.util.convertStringToInt
 
@@ -46,6 +48,8 @@ fun EditProfileScreen(
 ) {
 
     val profileModel by profileViewModel.selectedProfile.collectAsState()
+
+    val languageText = LanguageText(Constants.LANGUAGE)
 
     var amount by rememberSaveable {
         mutableStateOf(
@@ -103,7 +107,7 @@ fun EditProfileScreen(
             }
 
             Text(
-                text = stringResource(id = R.string.profile),
+                text = stringResource(id = languageText.profile),
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium,
                 fontSize = EXTRA_LARGE_TEXT_SIZE,
@@ -161,7 +165,7 @@ fun EditProfileScreen(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.create_profile_screen_name),
+                    text = stringResource(id = languageText.createProfileScreenName),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -207,7 +211,7 @@ fun EditProfileScreen(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.create_profile_screen_currency),
+                    text = stringResource(id = languageText.createProfileScreenCurrency),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -289,7 +293,7 @@ fun EditProfileScreen(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.create_profile_screen_amount),
+                    text = stringResource(id = languageText.createProfileScreenAmount),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -334,7 +338,7 @@ fun EditProfileScreen(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.create_profile_screen_2_spending),
+                    text = stringResource(id = languageText.createProfileScreen2Spending),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -379,7 +383,7 @@ fun EditProfileScreen(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.create_profile_screen_2_savings),
+                    text = stringResource(id = languageText.createProfileScreen2Saving),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,
@@ -425,7 +429,7 @@ fun EditProfileScreen(
                 Text(
                     modifier = Modifier
                         .padding(start = 3.dp, bottom = 2.dp),
-                    text = stringResource(id = R.string.category_text_field),
+                    text = stringResource(id = languageText.categoryTextField),
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBLG,
                     fontFamily = fontInter,

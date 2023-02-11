@@ -37,8 +37,10 @@ import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.components.DisplayAlertDialog
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants
+import com.developerstring.financesapp.util.Constants.LANGUAGE
 import com.developerstring.financesapp.util.Constants.OTHER
 import com.developerstring.financesapp.util.Constants.TRANSACTION
+import com.developerstring.financesapp.util.LanguageText
 import com.developerstring.financesapp.util.TransactionAction
 import com.developerstring.financesapp.util.convertStringToAlphabets
 import com.developerstring.financesapp.util.state.RequestState
@@ -61,13 +63,16 @@ fun EditCategoryDetailScreen(
 
     val context = LocalContext.current
 
+    val languageText = LanguageText(LANGUAGE)
+
     EditCategoryDetailContent(
         categories = categories,
         profileViewModel = profileViewModel,
         navController = navController,
         categoryModel = categoryModel,
         categoriesSize = categoriesSize,
-        context = context
+        context = context,
+        languageText = languageText
     )
 
 }
@@ -80,7 +85,8 @@ fun EditCategoryDetailContent(
     navController: NavController,
     categoryModel: CategoryModel?,
     categoriesSize: Int,
-    context: Context
+    context: Context,
+    languageText: LanguageText
 ) {
 
     if (profileViewModel.categoryId.value == 0) {
@@ -514,7 +520,8 @@ fun EditCategoryDetailContent(
                                 profileViewModel.deleteCategoryModel.value = categoryModel!!
                                 navController.popBackStack()
                                 deleteDisplay = false
-                            }
+                            },
+                            languageText = languageText
                         )
 
                         Column(

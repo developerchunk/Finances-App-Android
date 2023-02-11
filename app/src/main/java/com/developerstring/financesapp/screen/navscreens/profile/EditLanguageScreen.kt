@@ -16,12 +16,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.developerstring.financesapp.R
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.components.LanguageScreenItem
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.LANGUAGE
 import com.developerstring.financesapp.util.Constants.LANGUAGES
+import com.developerstring.financesapp.util.LanguageText
 
 @Composable
 fun EditLanguageScreen(
@@ -38,6 +38,8 @@ fun EditLanguageScreen(
     val interactionSource = remember {
         MutableInteractionSource()
     }
+
+    val languageText = LanguageText(LANGUAGE)
 
     Column(
         modifier = Modifier
@@ -66,7 +68,7 @@ fun EditLanguageScreen(
             }
 
             Text(
-                text = stringResource(id = R.string.language),
+                text = stringResource(id = languageText.languageText),
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium,
                 fontSize = EXTRA_LARGE_TEXT_SIZE,
@@ -79,6 +81,7 @@ fun EditLanguageScreen(
                         language_ = selected,
                         updateLanguage = true
                     )
+                    LANGUAGE = selected
                 }
                 navController.popBackStack()
             }) {
@@ -107,7 +110,6 @@ fun EditLanguageScreen(
                     interactionSource = interactionSource,
                     onClick = { value ->
                         selected = value
-                        LANGUAGE = value
                     })
             }
 

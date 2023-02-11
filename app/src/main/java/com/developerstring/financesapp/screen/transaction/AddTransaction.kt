@@ -556,7 +556,7 @@ fun TransactionContent(
                         }
                     }
                 )
-                if (transactionModeExpanded) {
+                AnimatedVisibility(transactionModeExpanded) {
                     Card(
                         modifier = Modifier
                             .padding(horizontal = 5.dp)
@@ -711,7 +711,7 @@ fun TransactionContent(
 
                     }
                 )
-                if (categoriesExpanded) {
+                AnimatedVisibility(categoriesExpanded) {
                     Card(
                         modifier = Modifier
                             .padding(horizontal = 5.dp)
@@ -853,7 +853,7 @@ fun TransactionContent(
 
                     }
                 )
-                if (subCategoriesExpanded) {
+                AnimatedVisibility(subCategoriesExpanded) {
                     Card(
                         modifier = Modifier
                             .padding(horizontal = 5.dp)

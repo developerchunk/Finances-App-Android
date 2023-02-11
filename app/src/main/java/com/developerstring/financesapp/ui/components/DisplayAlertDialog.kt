@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.developerstring.financesapp.R
 import com.developerstring.financesapp.ui.theme.*
+import com.developerstring.financesapp.util.LanguageText
 import com.developerstring.financesapp.util.convertStringToAlphabets
 import com.developerstring.financesapp.util.randomCaptcha
 
@@ -30,7 +31,8 @@ fun DisplayAlertDialog(
     openDialog: Boolean,
     captchaVerification: Boolean = false,
     onCloseClicked: () -> Unit,
-    onYesClicked: () -> Unit
+    onYesClicked: () -> Unit,
+    languageText: LanguageText
 ) {
 
     var confirmEnable by remember {
@@ -178,7 +180,7 @@ fun DisplayAlertDialog(
                     }
                 ) {
                     Text(
-                        text = stringResource(id = R.string.yes),
+                        text = stringResource(id = languageText.yes),
                         color = if (confirmEnable) {
                             UIBlue
                         } else Color.Black.copy(alpha = 0.4f),
@@ -200,7 +202,7 @@ fun DisplayAlertDialog(
                     elevation = ButtonDefaults.elevation(0.dp)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.no),
+                        text = stringResource(id = languageText.no),
                         fontFamily = fontOpenSans,
                         fontWeight = FontWeight.Bold,
                         fontSize = LARGE_TEXT_SIZE,

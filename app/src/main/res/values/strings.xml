@@ -76,7 +76,14 @@
     <string name="search">Search</string>
     <string name="next">Next</string>
     <string name="finish">Finish</string>
-    <string name="save">Finish</string>
+    <string name="save">Save</string>
+    <string name="time_format">24 Hours Format</string>
+    <string name="reset_categories">Reset Categories</string>
+    <string name="delete_all_transactions">Delete All Transactions</string>
+    <string name="delete_profile">Delete Profile</string>
+
+    <string name="settings">Settings</string>
+    <string name="dark_theme">Dark Theme</string>
 
 
     <string name="search_icon">search icon</string>
@@ -175,5 +182,99 @@
 
     <string name="save_marathi">सेव</string>
 
+    <string name="settings_marathi">सेटिंग</string>
+    <string name="dark_theme_marathi">डार्क थीम</string>
+    <string name="language_marathi">भाषा</string>
+
+    <string name="time_format_marathi">24 तास स्वरूप</string>
+    <string name="reset_categories_marathi">श्रेणी रीसेट करा</string>
+    <string name="delete_all_transactions_marathi">सर्व पेमेंट हटवा</string>
+    <string name="delete_profile_marathi">प्रोफाइल हटवा</string>
+
+<!--    Telugu-->
+    <string name="create_profile_screen_text_1_telugu">ప్రాథమిక వివరాలతో ప్రారంభిద్దాం</string>
+    <string name="create_profile_screen_text_2_telugu"> నెలవారీ మొత్తాన్ని సెట్ చేయండి</string>
+    <string name="create_profile_screen_name_telugu">పేరు</string>
+    <string name="create_profile_screen_amount_telugu">మొత్తం మొత్తం</string>
+    <string name="create_profile_screen_currency_telugu">కరెన్సీ</string>
+    <string name="create_profile_screen_2_spending_telugu">ఖర్చు చేయడం</string>
+    <string name="create_profile_screen_2_savings_telugu">పొదుపులు (ఐచ్ఛికం)</string>
+    <string name="profile_telugu">ప్రొఫైల్</string>
+    <string name="total_balance_telugu">మొత్తం బ్యాలెన్స్</string>
+    <string name="add_payment_telugu">చెల్లింపును జోడించండి</string>
+    <string name="history_telugu">చరిత్ర</string>
+    <string name="spent_telugu">గడిపారు</string>
+    <string name="saving_telugu">పొదుపు</string>
+    <string name="my_activity_telugu">నా కార్యాచరణ</string>
+    <string name="activity_chart_telugu">కార్యాచరణ చార్ట్</string>
+    <string name="categories_chart_telugu">వర్గాలు చార్ట్</string>
+    <string name="last_week_telugu">గత 7 రోజులు</string>
+    <string name="spent_this_week_telugu">ఈ వారం గడిపారు</string>
+    <string name="sort_by_telugu">క్రమబద్ధీకరించు:</string>
+    <string name="select_language_telugu">ఒక భాషను ఎంచుకోండి</string>
+    <string name="select_language_desc_telugu">మీరు దీనితో కొనసాగించాలనుకుంటున్నారు…</string>
+    <string name="language_telugu">భాష</string>
+    <string name="payment_telugu">చెల్లింపు</string>
+    <string name="category_edit_telugu">వర్గాన్ని సవరించండి</string>
+    <string name="categories_telugu">వర్గాలు</string>
+    <string name="enter_subcategory_telugu">ఉప వర్గాన్ని నమోదు చేయండి</string>
+    <string name="cancel_telugu">రద్దు చేయండి</string>
+    <string name="ok_telugu">సరే</string>
+    <string name="setting_telugu">అమరిక</string>
+    <string name="activity_chart_text_telugu">కార్యాచరణ చార్ట్</string>
+
+    <string name="enter_captcha_telugu">Enter the captcha</string>
+
+    <string name="delete_all_transaction_title_telugu">Sure to DELETE all Transactions?</string>
+    <string name="delete_all_transaction_message_telugu">You are just one step away from deleting all your transactions from the app. You cannot undo the action afterward.</string>
+
+    <string name="delete_all_profiles_title_telugu">Sure to DELETE your Profile?</string>
+    <string name="delete_all_profiles_message_telugu">You are just one step away from deleting your profile in the app. You cannot undo the action afterward.</string>
+
+    <string name="reset_categories_title_telugu">Sure to RESET All your Categories?</string>
+    <string name="reset_categories_message_telugu">You are just one step away from resetting your all categories in the app. You cannot undo the action afterward.</string>
+
+    <string name="delete_all_transactions_toast_telugu">All Your Transactions are Deleted.</string>
+    <string name="delete_all_profiles_toast_telugu">Your Profile Details are Deleted.</string>
+    <string name="reset_categories_toast_telugu">All your Categories are Reset.</string>
+
+    <string name="yes_telugu">అవును</string>
+    <string name="no_telugu">నం</string>
+
+    <string name="amount_text_field_telugu">మొత్తం*</string>
+    <string name="transaction_mode_text_field_telugu">చెల్లింపు మోడ్*</string>
+    <string name="other_transaction_mode_text_field_telugu">చెల్లింపు మోడ్‌ను పేర్కొనండి (ఐచ్ఛికం)</string>
+    <string name="category_text_field_telugu">వర్గం</string>
+    <string name="other_category_text_field_telugu">వర్గాన్ని పేర్కొనండి (ఐచ్ఛికం)</string>
+    <string name="sub_category_text_field_telugu">ఉప వర్గం</string>
+    <string name="other_sub_category_text_field_telugu">ఉప వర్గాన్ని పేర్కొనండి (ఐచ్ఛికం)</string>
+    <string name="date_text_field_telugu">తేదీ*</string>
+    <string name="time_text_field_telugu">సమయం (ఐచ్ఛికం)</string>
+    <string name="extra_info_text_field_telugu">అదనపు సమాచారం (ఐచ్ఛికం)</string>
+    <string name="place_info_text_field_telugu">స్థలం (ఐచ్ఛికం)</string>
+
+    <string name="home_bottom_nav_telugu">హోమ్</string>
+    <string name="activity_bottom_nav_telugu">కార్యాచరణ</string>
+    <string name="profile_bottom_nav_telugu">ప్రొఫైల్</string>
+
+    <string name="month_telugu">నెల</string>
+    <string name="quarter_telugu">క్వార్టర్</string>
+
+    <string name="search_telugu">శోధన</string>
+    <string name="next_telugu">తదుపరి</string>
+    <string name="finish_telugu">ముగించు</string>
+    <string name="save_telugu">సేవ్</string>
+
+    <string name="settings_telugu">సెట్టింగ్‌లు</string>
+    <string name="dark_theme_telugu">డార్క్ థీమ్</string>
+
+    <string name="search_placeholder_telugu">ఇక్కడ వెతకండి</string>
+
+    <string name="filter_telugu">ఫిల్టర్</string>
+
+    <string name="time_format_telugu">24 గంటల ఫార్మాట్</string>
+    <string name="reset_categories_telugu">వర్గాలను రీసెట్ చేయండి</string>
+    <string name="delete_all_transactions_telugu">అన్ని చెల్లింపులను తొలగించండి</string>
+    <string name="delete_profile_telugu">ప్రొఫైల్‌ను తొలగించండి</string>
 
 </resources>

@@ -33,9 +33,11 @@ fun ClockTimePicker(
 
     val hours = 1..12
 
-    val hours24 = 13..24
+    val hours24 = listOf(0).plus(13..23)
 
     val rotation = mutableListOf<Float>()
+
+    val singleRotate = (360f/12f)
 
     hours.forEachIndexed { index, value ->
         rotation.add(index = index, element = ((360f / 12f) * value)+180f)
@@ -138,7 +140,7 @@ fun ClockTimePicker(
                 Box(
                     modifier = Modifier
                         .width(radius/1.6f)
-                        .rotate(rotation[index]),
+                        .rotate(rotation[index]-singleRotate),
                     contentAlignment = Alignment.CenterEnd
                 ) {
 
@@ -191,8 +193,8 @@ fun ClockTimePicker(
                             )
                             Text(
                                 modifier = Modifier
-                                    .rotate(-rotation[index] - 90f),
-                                text = value.toString(),
+                                    .rotate(-rotation[index]+singleRotate - 90f),
+                                text = if (value==0) value.timeConvert() else value.toString(),
                                 color = if (selectedHour==value) Color.White else textColorBW,
                                 fontSize = 12.sp
                             )

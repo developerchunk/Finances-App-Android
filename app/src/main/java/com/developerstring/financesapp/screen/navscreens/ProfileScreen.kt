@@ -27,19 +27,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
-import com.developerstring.financesapp.R
 import com.developerstring.financesapp.navigation.navgraph.NavRoute
 import com.developerstring.financesapp.screen.navscreens.content.profilescreen.CustomSwitchButton
 import com.developerstring.financesapp.sharedviewmodel.ProfileViewModel
 import com.developerstring.financesapp.ui.theme.*
 import com.developerstring.financesapp.util.Constants.DARK_THEME
 import com.developerstring.financesapp.util.Constants.DARK_THEME_ENABLE
-import com.developerstring.financesapp.util.Constants.DARK_THEME_TEXT
-import com.developerstring.financesapp.util.Constants.LANGUAGE_TEXT
+import com.developerstring.financesapp.util.Constants.LANGUAGE
 import com.developerstring.financesapp.util.Constants.LIGHT_THEME
-import com.developerstring.financesapp.util.Constants.PROFILE_CONTENT_LIST
-import com.developerstring.financesapp.util.Constants.PROFILE_TEXT
-import com.developerstring.financesapp.util.Constants.SETTING
+import com.developerstring.financesapp.util.LanguageText
 
 @Composable
 fun ProfileScreen(
@@ -50,6 +46,8 @@ fun ProfileScreen(
     profileViewModel.getProfileDetails()
     profileViewModel.getAllCategories()
     profileViewModel.getTime24Hours()
+
+    val languageText = LanguageText(LANGUAGE)
 
     val profileName by profileViewModel.profileName.collectAsState()
     val darkThemeEnable by profileViewModel.profileTheme.collectAsState()
@@ -80,7 +78,7 @@ fun ProfileScreen(
                 modifier = Modifier
                     .padding(start = 30.dp, top = 20.dp)
                     .fillMaxWidth(),
-                text = stringResource(id = R.string.profile),
+                text = stringResource(id = languageText.profile),
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Bold,
                 color = textColorBW,
@@ -168,7 +166,7 @@ fun ProfileScreen(
                 .padding(top = 30.dp)
                 .fillMaxWidth()
         ) {
-            PROFILE_CONTENT_LIST.forEach {
+            languageText.profileContentList.forEach {
                 ProfileOptionsContent(
                     title = it.key,
                     icon = it.value,
@@ -177,16 +175,17 @@ fun ProfileScreen(
                         DARK_THEME -> true
                         LIGHT_THEME -> false
                         else -> true
-                    }
+                    },
+                    darkThemeSection = it.key==languageText.darkTheme
                 ) { title ->
                     when (title) {
-                        PROFILE_TEXT -> {
+                        languageText.profile -> {
                             navController.navigate(NavRoute.EditProfileScreen.route)
                         }
-                        LANGUAGE_TEXT -> {
+                        languageText.languageText -> {
                             navController.navigate(NavRoute.EditLanguageScreen.route)
                         }
-                        SETTING -> {
+                        languageText.settings -> {
                             navController.navigate(NavRoute.SettingScreen.route)
                         }
                     }
@@ -200,11 +199,12 @@ fun ProfileScreen(
 
 @Composable
 fun ProfileOptionsContent(
-    title: String,
+    title: Int,
     icon: Int,
     profileViewModel: ProfileViewModel,
     darkThemeEnable: Boolean,
-    onClick: (String) -> Unit
+    darkThemeSection: Boolean,
+    onClick: (Int) -> Unit,
 ) {
 
     val interactionSource = remember {
@@ -229,14 +229,14 @@ fun ProfileOptionsContent(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = title,
+                text = stringResource(id = title),
                 fontFamily = fontInter,
                 fontWeight = FontWeight.Medium,
                 fontSize = TEXT_FIELD_SIZE,
                 color = textColorBW
             )
 
-            if (title == DARK_THEME_TEXT) {
+            if (darkThemeSection) {
                 CustomSwitchButton(
                     switchPadding = 3.dp,
                     buttonSizeWidth = 60.dp,

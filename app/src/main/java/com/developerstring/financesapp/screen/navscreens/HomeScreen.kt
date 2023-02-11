@@ -282,7 +282,7 @@ fun HomeScreen(
                 currency = profileModel.currency,
                 amount = transactionModel.amount
             ),
-
+            languageText = languageText,
             message = MessageBarContentLastTransaction().message(
                 category =
                 if (transactionModel.category == OTHER)

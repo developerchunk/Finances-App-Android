@@ -4,7 +4,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.developerstring.financesapp.R
 
 object Constants {
 
@@ -41,18 +40,6 @@ object Constants {
 
     const val DARK_THEME = "dark_theme"
     const val LIGHT_THEME = "light_theme"
-
-    const val DARK_THEME_TEXT = "Dark Theme"
-    const val LANGUAGE_TEXT = "Language"
-    const val PROFILE_TEXT = "Profile"
-    const val SETTING = "Setting"
-
-    val PROFILE_CONTENT_LIST = mapOf(
-        PROFILE_TEXT to R.drawable.profile_edit,
-        SETTING to R.drawable.setting_icon,
-        DARK_THEME_TEXT to R.drawable.themes_icon,
-        LANGUAGE_TEXT to R.drawable.language_icon,
-    )
 
     const val INDIAN_CURRENCY = "₹"
 
@@ -205,18 +192,6 @@ object Constants {
         "OCT",
         "NOV",
         "DEC",
-    )
-
-    const val TIME_FORMAT = "24 Hours Format"
-    const val RESET_CATEGORIES = "Reset Categories"
-    const val DELETE_ALL_TRANSACTIONS = "Delete all Transactions"
-    const val DELETE_PROFILE = "Delete Profile"
-
-    val SETTINGS = mapOf(
-        TIME_FORMAT to R.drawable.profile_edit,
-        RESET_CATEGORIES to R.drawable.reset_icon,
-        DELETE_ALL_TRANSACTIONS to R.drawable.delete_outline_icon,
-        DELETE_PROFILE to R.drawable.profile_delete,
     )
 
 }

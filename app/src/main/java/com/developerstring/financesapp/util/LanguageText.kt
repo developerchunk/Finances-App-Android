@@ -7,6 +7,7 @@ import com.developerstring.financesapp.ui.theme.Green
 import com.developerstring.financesapp.ui.theme.UIBlue
 import com.developerstring.financesapp.util.Constants.ENGLISH
 import com.developerstring.financesapp.util.Constants.MARATHI
+import com.developerstring.financesapp.util.Constants.TELUGU
 import com.developerstring.financesapp.util.dataclass.ActivityCardData
 
 class LanguageText(
@@ -17,16 +18,19 @@ class LanguageText(
     val homeBottomNav = when (Constants.LANGUAGE) {
         ENGLISH -> R.string.home_bottom_nav
         MARATHI -> R.string.home_bottom_nav_marathi
+        TELUGU -> R.string.home_bottom_nav_telugu
         else -> R.string.home_bottom_nav
     }
     val activityBottomNav = when (Constants.LANGUAGE) {
         ENGLISH -> R.string.activity_bottom_nav
         MARATHI -> R.string.activity_bottom_nav_marathi
+        TELUGU -> R.string.activity_bottom_nav_telugu
         else -> R.string.activity_bottom_nav
     }
     val profileBottomNav = when (Constants.LANGUAGE) {
         ENGLISH -> R.string.profile_bottom_nav
         MARATHI -> R.string.profile_bottom_nav_marathi
+        TELUGU -> R.string.profile_bottom_nav_telugu
         else -> R.string.profile_bottom_nav
     }
 
@@ -34,36 +38,43 @@ class LanguageText(
     val createProfileScreenText1 = when (language) {
         ENGLISH -> R.string.create_profile_screen_text_1
         MARATHI -> R.string.create_profile_screen_text_1_marathi
+        TELUGU -> R.string.create_profile_screen_text_1_telugu
         else -> R.string.create_profile_screen_text_1
     }
     val createProfileScreenText2 = when (language) {
         ENGLISH -> R.string.create_profile_screen_text_2
         MARATHI -> R.string.create_profile_screen_text_2_marathi
+        TELUGU -> R.string.create_profile_screen_text_2_telugu
         else -> R.string.create_profile_screen_text_2
     }
     val createProfileScreenName = when (language) {
         ENGLISH -> R.string.create_profile_screen_name
         MARATHI -> R.string.create_profile_screen_name_marathi
+        TELUGU -> R.string.create_profile_screen_name_telugu
         else -> R.string.create_profile_screen_name
     }
     val createProfileScreenAmount = when (language) {
         ENGLISH -> R.string.create_profile_screen_amount
         MARATHI -> R.string.create_profile_screen_amount_marathi
+        TELUGU -> R.string.create_profile_screen_amount_telugu
         else -> R.string.create_profile_screen_amount
     }
     val createProfileScreenCurrency = when (language) {
         ENGLISH -> R.string.create_profile_screen_currency
         MARATHI -> R.string.create_profile_screen_currency_marathi
+        TELUGU -> R.string.create_profile_screen_currency_telugu
         else -> R.string.create_profile_screen_currency
     }
     val createProfileScreen2Spending = when (language) {
         ENGLISH -> R.string.create_profile_screen_2_spending
         MARATHI -> R.string.create_profile_screen_2_spending_marathi
+        TELUGU -> R.string.create_profile_screen_2_spending_telugu
         else -> R.string.create_profile_screen_2_spending
     }
     val createProfileScreen2Saving = when (language) {
         ENGLISH -> R.string.create_profile_screen_2_savings
         MARATHI -> R.string.create_profile_screen_2_savings_marathi
+        TELUGU -> R.string.create_profile_screen_2_savings_telugu
         else -> R.string.create_profile_screen_2_savings
     }
 
@@ -71,82 +82,98 @@ class LanguageText(
     val profile = when (language) {
         ENGLISH -> R.string.profile
         MARATHI -> R.string.profile_marathi
+        TELUGU -> R.string.profile_telugu
         else -> R.string.profile
     }
     val totalBalance = when (language) {
         ENGLISH -> R.string.total_balance
         MARATHI -> R.string.total_balance_marathi
+        TELUGU -> R.string.total_balance_telugu
         else -> R.string.total_balance
     }
     val addPayment = when (language) {
         ENGLISH -> R.string.add_payment
         MARATHI -> R.string.add_payment_marathi
+        TELUGU -> R.string.add_payment_telugu
         else -> R.string.add_payment
     }
     val paymentHistory = when (language) {
         ENGLISH -> R.string.history
         MARATHI -> R.string.payment_history_marathi
+        TELUGU -> R.string.payment_telugu
         else -> R.string.history
     }
     val history = when (language) {
         ENGLISH -> R.string.history
         MARATHI -> R.string.history_marathi
+        TELUGU -> R.string.history_telugu
         else -> R.string.history
     }
     val spent = when (language) {
         ENGLISH -> R.string.spent
         MARATHI -> R.string.spent_marathi
+        TELUGU -> R.string.spent_telugu
         else -> R.string.spent
     }
     val saving = when (language) {
         ENGLISH -> R.string.saving
         MARATHI -> R.string.saving_marathi
+        TELUGU -> R.string.saving_telugu
         else -> R.string.saving
     }
     val myActivity = when (language) {
         ENGLISH -> R.string.my_activity
         MARATHI -> R.string.my_activity_marathi
+        TELUGU -> R.string.my_activity_telugu
         else -> R.string.my_activity
     }
     private val activityChart = when (language) {
         ENGLISH -> R.string.activity_chart
         MARATHI -> R.string.activity_chart_marathi
+        TELUGU -> R.string.activity_chart_telugu
         else -> R.string.my_activity
     }
     val categoriesChart = when (language) {
         ENGLISH -> R.string.categories_chart
         MARATHI -> R.string.categories_chart_marathi
+        TELUGU -> R.string.categories_chart_telugu
         else -> R.string.categories_chart
     }
     val lastWeek = when (language) {
         ENGLISH -> R.string.last_week
         MARATHI -> R.string.last_week_marathi
+        TELUGU -> R.string.last_week_telugu
         else -> R.string.last_week
     }
     val spentThisWeek = when (language) {
         ENGLISH -> R.string.spent_this_week
         MARATHI -> R.string.spent_this_week_marathi
+        TELUGU -> R.string.spent_this_week_telugu
         else -> R.string.spent_this_week
     }
     val sortBy = when (language) {
         ENGLISH -> R.string.sort_by
         MARATHI -> R.string.sort_by_marathi
+        TELUGU -> R.string.sort_by_telugu
         else -> R.string.sort_by
     }
     val yes = when (language) {
         ENGLISH -> R.string.yes
         MARATHI -> R.string.yes_marathi
+        TELUGU -> R.string.yes_telugu
         else -> R.string.yes
     }
     val no = when (language) {
         ENGLISH -> R.string.no
         MARATHI -> R.string.no_marathi
+        TELUGU -> R.string.no_telugu
         else -> R.string.no
     }
 
     val activityChartText = when (language) {
         ENGLISH -> R.string.activity_chart_text
         MARATHI -> R.string.activity_chart_marathi
+        TELUGU -> R.string.activity_chart_text_telugu
         else -> R.string.activity_chart
     }
 
@@ -154,104 +181,171 @@ class LanguageText(
     val amountTextField = when (language) {
         ENGLISH -> R.string.amount_text_field
         MARATHI -> R.string.amount_text_field_marathi
+        TELUGU -> R.string.amount_text_field_telugu
         else -> R.string.amount_text_field
     }
     val categoryTextField = when (language) {
         ENGLISH -> R.string.category_text_field
         MARATHI -> R.string.category_text_field_marathi
+        TELUGU -> R.string.category_text_field_telugu
         else -> R.string.category_text_field
     }
     val otherCategoryTextField = when (language) {
         ENGLISH -> R.string.other_category_text_field
         MARATHI -> R.string.other_category_text_field_marathi
+        TELUGU -> R.string.other_category_text_field_telugu
         else -> R.string.other_category_text_field
     }
     val subCategoryTextField = when (language) {
         ENGLISH -> R.string.sub_category_text_field
         MARATHI -> R.string.sub_category_text_field_marathi
+        TELUGU -> R.string.sub_category_text_field_telugu
         else -> R.string.sub_category_text_field
     }
     val otherSubCategoryTextField = when (language) {
         ENGLISH -> R.string.other_sub_category_text_field
         MARATHI -> R.string.other_sub_category_text_field_marathi
+        TELUGU -> R.string.other_sub_category_text_field_telugu
         else -> R.string.other_sub_category_text_field
     }
     val dateTextField = when (language) {
         ENGLISH -> R.string.date_text_field
         MARATHI -> R.string.date_text_field_marathi
+        TELUGU -> R.string.date_text_field_telugu
         else -> R.string.date_text_field
     }
     val extraInfoTextField = when (language) {
         ENGLISH -> R.string.extra_info_text_field
         MARATHI -> R.string.extra_info_text_field_marathi
+        TELUGU -> R.string.extra_info_text_field_telugu
         else -> R.string.extra_info_text_field
     }
     val placeInfoTextField = when (language) {
         ENGLISH -> R.string.place_info_text_field
         MARATHI -> R.string.place_info_text_field_marathi
+        TELUGU -> R.string.place_info_text_field_telugu
         else -> R.string.place_info_text_field
     }
 
     val transactionModeTextField = when (language) {
         ENGLISH -> R.string.transaction_mode_text_field
         MARATHI -> R.string.transaction_mode_text_field_marathi
+        TELUGU -> R.string.transaction_mode_text_field_telugu
         else -> R.string.transaction_mode_text_field
     }
 
     val transactionModeOptionalTextField = when (language) {
         ENGLISH -> R.string.other_transaction_mode_text_field
         MARATHI -> R.string.other_transaction_mode_text_field_marathi
+        TELUGU -> R.string.other_transaction_mode_text_field_telugu
         else -> R.string.other_transaction_mode_text_field
     }
 
     val timeTextField = when (language) {
         ENGLISH -> R.string.time_text_field
         MARATHI -> R.string.time_text_field_marathi
+        TELUGU -> R.string.time_text_field_telugu
         else -> R.string.time_text_field
     }
 
     //
-    val search = when (language) {
-        ENGLISH -> R.string.search
-        MARATHI -> R.string.search_marathi
-        else -> R.string.search
-    }
+//    val search = when (language) {
+//        ENGLISH -> R.string.search
+//        MARATHI -> R.string.search_marathi
+//        else -> R.string.search
+//    }
     val next = when (language) {
         ENGLISH -> R.string.next
         MARATHI -> R.string.next_marathi
+        TELUGU -> R.string.next_telugu
         else -> R.string.next
     }
     val searchPlaceholder = when (language) {
         ENGLISH -> R.string.search_placeholder
         MARATHI -> R.string.search_placeholder_marathi
+        TELUGU -> R.string.search_placeholder_telugu
         else -> R.string.search_placeholder
     }
     val finish = when (language) {
         ENGLISH -> R.string.finish
         MARATHI -> R.string.finish_marathi
+        TELUGU -> R.string.finish_telugu
         else -> R.string.finish
     }
     val payment = when (language) {
         ENGLISH -> R.string.payment
         MARATHI -> R.string.payment_marathi
+        TELUGU -> R.string.payment_telugu
         else -> R.string.payment
     }
 
     val month = when (language) {
         ENGLISH -> R.string.month
         MARATHI -> R.string.month_marathi
+        TELUGU -> R.string.month_telugu
         else -> R.string.month
     }
     val quarter = when (language) {
         ENGLISH -> R.string.quarter
         MARATHI -> R.string.quarter_marathi
+        TELUGU -> R.string.quarter_telugu
         else -> R.string.quarter
     }
 
     val save = when (language) {
         ENGLISH -> R.string.save
         MARATHI -> R.string.save_marathi
+        TELUGU -> R.string.save_telugu
         else -> R.string.save
+    }
+
+    val darkTheme = when (language) {
+        ENGLISH -> R.string.dark_theme
+        MARATHI -> R.string.dark_theme_marathi
+        TELUGU -> R.string.dark_theme_telugu
+        else -> R.string.dark_theme
+    }
+
+    val settings = when (language) {
+        ENGLISH -> R.string.settings
+        MARATHI -> R.string.settings_marathi
+        TELUGU -> R.string.settings_telugu
+        else -> R.string.settings
+    }
+
+    val timeFormat = when (language) {
+        ENGLISH -> R.string.time_format
+        MARATHI -> R.string.time_format_marathi
+        TELUGU -> R.string.time_format_telugu
+        else -> R.string.time_format
+    }
+
+    val resetCategories = when (language) {
+        ENGLISH -> R.string.reset_categories
+        MARATHI -> R.string.reset_categories_marathi
+        TELUGU -> R.string.reset_categories_telugu
+        else -> R.string.reset_categories
+    }
+
+    val deleteAllTransaction = when (language) {
+        ENGLISH -> R.string.delete_all_transactions
+        MARATHI -> R.string.delete_all_transactions_marathi
+        TELUGU -> R.string.delete_all_transactions_telugu
+        else -> R.string.delete_all_transactions
+    }
+
+    val deleteProfile = when (language) {
+        ENGLISH -> R.string.delete_profile
+        MARATHI -> R.string.delete_profile_marathi
+        TELUGU -> R.string.delete_profile_telugu
+        else -> R.string.delete_profile
+    }
+
+    val languageText = when (language) {
+        ENGLISH -> R.string.language
+        MARATHI -> R.string.language_marathi
+        TELUGU -> R.string.language_telugu
+        else -> R.string.language
     }
 
     // ActivityScreen Charts
@@ -272,5 +366,18 @@ class LanguageText(
         ),
     )
 
+    var profileContentList = mapOf(
+        profile to R.drawable.profile_edit,
+        settings to R.drawable.setting_icon,
+        darkTheme to R.drawable.themes_icon,
+        languageText to R.drawable.language_icon,
+    )
+
+    val settingsList = mapOf(
+        timeFormat to R.drawable.profile_edit,
+        resetCategories to R.drawable.reset_icon,
+        deleteAllTransaction to R.drawable.delete_outline_icon,
+        deleteProfile to R.drawable.profile_delete,
+    )
 
 }
