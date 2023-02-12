@@ -77,7 +77,7 @@
     <string name="next">Next</string>
     <string name="finish">Finish</string>
     <string name="save">Save</string>
-    <string name="time_format">24 Hours Format</string>
+    <string name="time_format">24 Hour Format</string>
     <string name="reset_categories">Reset Categories</string>
     <string name="delete_all_transactions">Delete All Transactions</string>
     <string name="delete_profile">Delete Profile</string>
@@ -107,11 +107,11 @@
     <string name="on_boarding_button_1">Next</string>
     <!--    onBoarding 2-->
     <string name="on_boarding_title_2">Track Finances</string>
-    <string name="on_boarding_text_2">Get detailed track report of your finances \nright from your mobile</string>
+    <string name="on_boarding_text_2">Get a detailed track report of your finances \nright from your mobile</string>
     <string name="on_boarding_button_2">Next</string>
     <!--    onBoarding 3-->
     <string name="on_boarding_title_3">Manage Finances</string>
-    <string name="on_boarding_text_3">It helps to manage your finances and \nview them any time</string>
+    <string name="on_boarding_text_3">It helps to manage your finances and \nview them at any time</string>
     <string name="on_boarding_button_3">Next</string>
     <!--    onBoarding 4-->
     <string name="on_boarding_title_4">Let\'s Started</string>
@@ -194,10 +194,10 @@
 <!--    Telugu-->
     <string name="create_profile_screen_text_1_telugu">ప్రాథమిక వివరాలతో ప్రారంభిద్దాం</string>
     <string name="create_profile_screen_text_2_telugu"> నెలవారీ మొత్తాన్ని సెట్ చేయండి</string>
-    <string name="create_profile_screen_name_telugu">పేరు</string>
-    <string name="create_profile_screen_amount_telugu">మొత్తం మొత్తం</string>
-    <string name="create_profile_screen_currency_telugu">కరెన్సీ</string>
-    <string name="create_profile_screen_2_spending_telugu">ఖర్చు చేయడం</string>
+    <string name="create_profile_screen_name_telugu">పేరు*</string>
+    <string name="create_profile_screen_amount_telugu">మొత్తం మొత్తం*</string>
+    <string name="create_profile_screen_currency_telugu">కరెన్సీ*</string>
+    <string name="create_profile_screen_2_spending_telugu">ఖర్చు చేయడం*</string>
     <string name="create_profile_screen_2_savings_telugu">పొదుపులు (ఐచ్ఛికం)</string>
     <string name="profile_telugu">ప్రొఫైల్</string>
     <string name="total_balance_telugu">మొత్తం బ్యాలెన్స్</string>
@@ -276,5 +276,180 @@
     <string name="reset_categories_telugu">వర్గాలను రీసెట్ చేయండి</string>
     <string name="delete_all_transactions_telugu">అన్ని చెల్లింపులను తొలగించండి</string>
     <string name="delete_profile_telugu">ప్రొఫైల్‌ను తొలగించండి</string>
+
+
+<!--    Gujarati-->
+    <string name="create_profile_screen_text_1_gujarati">તમારી મૂળભૂત વિગતો</string>
+    <string name="create_profile_screen_text_2_gujarati">માસિક ધોરણે રકમ સેટ કરો</string>
+    <string name="create_profile_screen_name_gujarati">નામ*</string>
+    <string name="create_profile_screen_amount_gujarati">કુલ રકમ*</string>
+    <string name="create_profile_screen_currency_gujarati">ચલણ (રૂપિયો)*</string>
+    <string name="create_profile_screen_2_spending_gujarati">ખર્ચ*</string>
+    <string name="create_profile_screen_2_savings_gujarati">બચત (વૈકલ્પિક)</string>
+    <string name="profile_gujarati">પ્રોફાઇલ</string>
+    <string name="total_balance_gujarati">કુલ બેલેન્સ</string>
+    <string name="add_payment_gujarati">પેમેન્ટ \nઉમેરો</string>
+    <string name="history_gujarati">ઇતિહાસ</string>
+    <string name="spent_gujarati">ખર્ચ્યા</string>
+    <string name="saving_gujarati">બચત</string>
+    <string name="my_activity_gujarati">મારી પ્રવૃત્તિ</string>
+    <string name="activity_chart_gujarati">એકટીવીટી ચાર્ટ</string>
+    <string name="categories_chart_gujarati">શ્રેણીઓ ચાર્ટ</string>
+    <string name="last_week_gujarati">છેલ્લા 7 દિવસ</string>
+    <string name="spent_this_week_gujarati">આ અઠવાડિયું વિતાવ્યું</string>
+    <string name="sort_by_gujarati">સૉર્ટ: </string>
+    <string name="select_language_gujarati">ભાષા પસંદ કરો</string>
+    <string name="select_language_desc_gujarati">તમે ચાલુ રાખવા માંગો છો…</string>
+    <string name="language_gujarati">ભાષા</string>
+    <string name="payment_gujarati">પેમેન્ટ</string>
+    <string name="category_edit_gujarati">શ્રેણી ફેરફાર કરો</string>
+    <string name="categories_gujarati">શ્રેણીઓ</string>
+    <string name="enter_subcategory_gujarati">ઉપશ્રેણી દાખલ કરો</string>
+    <string name="cancel_gujarati">રદ કરો</string>
+    <string name="ok_gujarati">ઓકે</string>
+    <string name="setting_gujarati">સેટિંગ્સ</string>
+    <string name="activity_chart_text_gujarati">પ્રવૃત્તિ ચાર્ટ</string>
+
+    <string name="enter_captcha_gujarati">Enter the captcha</string>
+
+    <string name="delete_all_transaction_title_gujarati">Sure to DELETE all Transactions?</string>
+    <string name="delete_all_transaction_message_gujarati">You are just one step away from deleting all your transactions from the app. You cannot undo the action afterward.</string>
+
+    <string name="delete_all_profiles_title_gujarati">Sure to DELETE your Profile?</string>
+    <string name="delete_all_profiles_message_gujarati">You are just one step away from deleting your profile in the app. You cannot undo the action afterward.</string>
+
+    <string name="reset_categories_title_gujarati">Sure to RESET All your Categories?</string>
+    <string name="reset_categories_message_gujarati">You are just one step away from resetting your all categories in the app. You cannot undo the action afterward.</string>
+
+    <string name="delete_all_transactions_toast_gujarati">All Your Transactions are Deleted.</string>
+    <string name="delete_all_profiles_toast_gujarati">Your Profile Details are Deleted.</string>
+    <string name="reset_categories_toast_gujarati">All your Categories are Reset.</string>
+
+    <string name="yes_gujarati">હા</string>
+    <string name="no_gujarati">ના</string>
+
+    <string name="amount_text_field_gujarati">રકમ*</string>
+    <string name="transaction_mode_text_field_gujarati">પેમેન્ટ મોડ*</string>
+    <string name="other_transaction_mode_text_field_gujarati">પેમેન્ટ મોડ સ્પષ્ટ કરો (વૈકલ્પિક)</string>
+    <string name="category_text_field_gujarati">શ્રેણી</string>
+    <string name="other_category_text_field_gujarati">શ્રેણી સ્પષ્ટ કરો (વૈકલ્પિક)</string>
+    <string name="sub_category_text_field_gujarati">ઉપશ્રેણી</string>
+    <string name="other_sub_category_text_field_gujarati">ઉપશ્રેણી સ્પષ્ટ કરો (વૈકલ્પિક)</string>
+    <string name="date_text_field_gujarati">તારીખ*</string>
+    <string name="time_text_field_gujarati">સમય (વૈકલ્પિક)</string>
+    <string name="extra_info_text_field_gujarati">વધારાની માહિતી (વૈકલ્પિક)</string>
+    <string name="place_info_text_field_gujarati">સ્થળ (વૈકલ્પિક)</string>
+
+    <string name="home_bottom_nav_gujarati">હોમમાં</string>
+    <string name="activity_bottom_nav_gujarati">એકટીવીટી</string>
+    <string name="profile_bottom_nav_gujarati">પ્રોફાઇલ</string>
+
+    <string name="month_gujarati">માસ</string>
+    <string name="quarter_gujarati">3 મહિના</string>
+
+    <string name="search_gujarati">શોધો</string>
+    <string name="next_gujarati">આગળ</string>
+    <string name="finish_gujarati">સમાપ્ત કરો</string>
+    <string name="save_gujarati">સેવ</string>
+
+    <string name="time_format_gujarati">24-કલાકનું ફોર્મેટ</string>
+    <string name="reset_categories_gujarati">શ્રેણીઓ રીસેટ કરો</string>
+    <string name="delete_all_transactions_gujarati">બધા પેમેન્ટ કાઢી નાખો</string>
+    <string name="delete_profile_gujarati">પ્રોફાઇલ કાઢી નાખો</string>
+
+    <string name="settings_gujarati">સેટિંગ્સ</string>
+    <string name="dark_theme_gujarati">ડાર્ક થીમ</string>
+
+    <string name="search_placeholder_gujarati">અહીં શોધો</string>
+
+    <string name="filter_gujarati">ફિલ્ટર</string>
+
+
+
+<!--    Hindi-->
+    <string name="create_profile_screen_text_1_hindi">आपके बारे में छोटी \nसी जानकारी</string>
+    <string name="create_profile_screen_text_2_hindi">मासिक आधार पर राशि निर्धारित करें</string>
+    <string name="create_profile_screen_name_hindi">नाम*</string>
+    <string name="create_profile_screen_amount_hindi">कुल राशि*</string>
+    <string name="create_profile_screen_currency_hindi">मुद्रा (रुपया)*</string>
+    <string name="create_profile_screen_2_spending_hindi">खर्च*</string>
+    <string name="create_profile_screen_2_savings_hindi">बचत (वैकल्पिक)</string>
+    <string name="profile_hindi">प्रोफ़ाइल</string>
+    <string name="total_balance_hindi">टोटल बैलेंस</string>
+    <string name="add_payment_hindi">पेमेंट \nलिखें</string>
+    <string name="history_hindi">इतिहास</string>
+    <string name="spent_hindi">खर्च</string>
+    <string name="saving_hindi">बचत</string>
+    <string name="my_activity_hindi">एक्टिविटी</string>
+    <string name="activity_chart_hindi">एक्टिविटी \nचार्ट</string>
+    <string name="categories_chart_hindi">श्रेणी चार्ट</string>
+    <string name="last_week_hindi">पिछले 7 दिन</string>
+    <string name="spent_this_week_hindi">इस सप्ताह का खर्चा</string>
+    <string name="sort_by_hindi">सॉर्ट करें: </string>
+    <string name="select_language_hindi">भाषा चुनें</string>
+    <string name="select_language_desc_hindi"> </string>
+    <string name="language_hindi">भाषा</string>
+    <string name="payment_hindi">पेमेंट</string>
+    <string name="category_edit_hindi">श्रेणी संपादित करें</string>
+    <string name="categories_hindi">श्रेणी</string>
+    <string name="enter_subcategory_hindi">उप श्रेणी दर्ज करें</string>
+    <string name="cancel_hindi">रद्दं</string>
+    <string name="ok_hindi">ठीक</string>
+    <string name="setting_hindi">सेटिंग</string>
+    <string name="activity_chart_text_hindi">एक्टिविटी चार्ट</string>
+
+    <string name="enter_captcha_hindi">Enter the captcha</string>
+
+    <string name="delete_all_transaction_title_hindi">Sure to DELETE all Transactions?</string>
+    <string name="delete_all_transaction_message_hindi">You are just one step away from deleting all your transactions from the app. You cannot undo the action afterward.</string>
+
+    <string name="delete_all_profiles_title_hindi">Sure to DELETE your Profile?</string>
+    <string name="delete_all_profiles_message_hindi">You are just one step away from deleting your profile in the app. You cannot undo the action afterward.</string>
+
+    <string name="reset_categories_title_hindi">Sure to RESET All your Categories?</string>
+    <string name="reset_categories_message_hindi">You are just one step away from resetting your all categories in the app. You cannot undo the action afterward.</string>
+
+    <string name="delete_all_transactions_toast_hindi">All Your Transactions are Deleted.</string>
+    <string name="delete_all_profiles_toast_hindi">Your Profile Details are Deleted.</string>
+    <string name="reset_categories_toast_hindi">All your Categories are Reset.</string>
+
+    <string name="yes_hindi">हाँ</string>
+    <string name="no_hindi">नहीं</string>
+
+    <string name="amount_text_field_hindi">रकम*</string>
+    <string name="transaction_mode_text_field_hindi">पेमेंट मोड*</string>
+    <string name="other_transaction_mode_text_field_hindi">पेमेंट मोड निर्दिष्ट करें (वैकल्पिक)</string>
+    <string name="category_text_field_hindi">श्रेणी</string>
+    <string name="other_category_text_field_hindi">श्रेणी निर्दिष्ट करें (वैकल्पिक)</string>
+    <string name="sub_category_text_field_hindi">उप श्रेणी</string>
+    <string name="other_sub_category_text_field_hindi">निर्दिष्ट करें (वैकल्पिक)</string>
+    <string name="date_text_field_hindi">तारीख*</string>
+    <string name="time_text_field_hindi">समय (वैकल्पिक)</string>
+    <string name="extra_info_text_field_hindi">अतिरिक्त जानकारी (वैकल्पिक)</string>
+    <string name="place_info_text_field_hindi">जगह (वैकल्पिक)</string>
+
+    <string name="home_bottom_nav_hindi">होम</string>
+    <string name="activity_bottom_nav_hindi">एक्टिविटी</string>
+    <string name="profile_bottom_nav_hindi">प्रोफाइल</string>
+
+    <string name="month_hindi">महीना</string>
+    <string name="quarter_hindi">3 महीने</string>
+
+    <string name="search_hindi">सर्च करें</string>
+    <string name="next_hindi">अगला</string>
+    <string name="finish_hindi">खत्म करें</string>
+    <string name="save_hindi">सेव</string>
+    <string name="time_format_hindi">24 घंटे का प्रारूप</string>
+    <string name="reset_categories_hindi">श्रेणियाँ रीसेट करें</string>
+    <string name="delete_all_transactions_hindi">सभी पेमेंट हटाएं</string>
+    <string name="delete_profile_hindi">प्रोफ़ाइल हटाएं</string>
+
+    <string name="settings_hindi">सेटिंग</string>
+    <string name="dark_theme_hindi">डार्क थीम</string>
+
+    <string name="search_placeholder_hindi">यहां सर्च करें</string>
+
+    <string name="filter_hindi">फ़िल्टर</string>
+
 
 </resources>
