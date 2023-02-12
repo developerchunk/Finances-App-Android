@@ -22,6 +22,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.developerstring.finspare.ui.theme.*
 import com.developerstring.finspare.util.Constants.LANGUAGE
+import com.developerstring.finspare.util.Constants.TERMS_AND_CONDITION_URL
 import com.developerstring.finspare.util.LanguageText
 
 @Composable
@@ -29,7 +30,6 @@ fun TermsAndConditionsScreen(
     navController: NavController
 ) {
 
-    val mUrl = "https://terms.finspare.com"
     val languageText = LanguageText(LANGUAGE)
 
     Scaffold(topBar = {
@@ -69,17 +69,17 @@ fun TermsAndConditionsScreen(
         Column(modifier = Modifier.padding(it).fillMaxSize()) {
             // Adding a WebView inside AndroidView
             // with layout as full screen
-            AndroidView(factory = {
-                WebView(it).apply {
+            AndroidView(factory = { context ->
+                WebView(context).apply {
                     layoutParams = ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT
                     )
                     webViewClient = WebViewClient()
-                    loadUrl(mUrl)
+                    loadUrl(TERMS_AND_CONDITION_URL)
                 }
-            }, update = {
-                it.loadUrl(mUrl)
+            }, update = { web ->
+                web.loadUrl(TERMS_AND_CONDITION_URL)
             })
         }
     }

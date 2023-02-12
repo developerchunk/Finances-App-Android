@@ -190,6 +190,6 @@ object Constants {
         "DEC",
     )
 
-    const val TERMS_AND_CONDITION_URL = ""
+    const val TERMS_AND_CONDITION_URL = "https://term.finspare.com"
 
 }
