@@ -84,7 +84,7 @@
 
     <string name="settings">Settings</string>
     <string name="dark_theme">Dark Theme</string>
-
+    <string name="about">About</string>
 
     <string name="search_icon">search icon</string>
     <string name="close_icon">close icon</string>
@@ -93,6 +93,7 @@
     <string name="search_placeholder">Search here</string>
 
     <string name="filter">Filter</string>
+    <string name="terms_and_conditions">Terms And Conditions</string>
 
     <!--    Currencies-->
     <string-array name="currencies">
@@ -170,7 +171,7 @@
 
     <string name="search_marathi">शोधा</string>
     <string name="search_placeholder_marathi">येथे शोधा</string>
-    <string name="filter_marathi">फिल्टर</string>
+
 
     <string name="yes_marathi">हो</string>
     <string name="no_marathi">नाही</string>
@@ -185,11 +186,15 @@
     <string name="settings_marathi">सेटिंग</string>
     <string name="dark_theme_marathi">डार्क थीम</string>
     <string name="language_marathi">भाषा</string>
+    <string name="about_marathi">अबाऊट</string>
 
     <string name="time_format_marathi">24 तास स्वरूप</string>
     <string name="reset_categories_marathi">श्रेणी रीसेट करा</string>
     <string name="delete_all_transactions_marathi">सर्व पेमेंट हटवा</string>
     <string name="delete_profile_marathi">प्रोफाइल हटवा</string>
+
+    <string name="filter_marathi">फिल्टर</string>
+    <string name="terms_and_conditions_marathi">नियम आणि अटी</string>
 
 <!--    Telugu-->
     <string name="create_profile_screen_text_1_telugu">ప్రాథమిక వివరాలతో ప్రారంభిద్దాం</string>
@@ -267,10 +272,12 @@
 
     <string name="settings_telugu">సెట్టింగ్‌లు</string>
     <string name="dark_theme_telugu">డార్క్ థీమ్</string>
+    <string name="about_telugu">అబౌట్</string>
 
     <string name="search_placeholder_telugu">ఇక్కడ వెతకండి</string>
 
     <string name="filter_telugu">ఫిల్టర్</string>
+    <string name="terms_and_conditions_telugu">నిబంధనలు మరియు షరతులు</string>
 
     <string name="time_format_telugu">24 గంటల ఫార్మాట్</string>
     <string name="reset_categories_telugu">వర్గాలను రీసెట్ చేయండి</string>
@@ -359,10 +366,12 @@
 
     <string name="settings_gujarati">સેટિંગ્સ</string>
     <string name="dark_theme_gujarati">ડાર્ક થીમ</string>
+    <string name="about_gujarati">અબૌત</string>
 
     <string name="search_placeholder_gujarati">અહીં શોધો</string>
 
     <string name="filter_gujarati">ફિલ્ટર</string>
+    <string name="terms_and_conditions_gujarati">નિયમો અને શરત</string>
 
 
 
@@ -446,10 +455,12 @@
 
     <string name="settings_hindi">सेटिंग</string>
     <string name="dark_theme_hindi">डार्क थीम</string>
+    <string name="about_hindi">अबाउट</string>
 
     <string name="search_placeholder_hindi">यहां सर्च करें</string>
 
     <string name="filter_hindi">फ़िल्टर</string>
+    <string name="terms_and_conditions_hindi">नियम और शर्तें</string>
 
 
 </resources>
