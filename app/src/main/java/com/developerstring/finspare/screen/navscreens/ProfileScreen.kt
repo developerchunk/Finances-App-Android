@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.developerstring.finspare.navigation.navgraph.NavRoute
-import com.developerstring.finspare.screen.navscreens.content.profilescreen.CustomSwitchButton
+import com.developerstring.finspare.ui.components.CustomSwitchButton
 import com.developerstring.finspare.sharedviewmodel.ProfileViewModel
 import com.developerstring.finspare.ui.theme.*
 import com.developerstring.finspare.util.Constants.DARK_THEME

@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.developerstring.finspare.screen.navscreens.content.homescreen.MonthTransactions
+import com.developerstring.finspare.ui.components.MonthTransactions
 import com.developerstring.finspare.sharedviewmodel.ProfileViewModel
 import com.developerstring.finspare.sharedviewmodel.SharedViewModel
 import com.developerstring.finspare.ui.components.*

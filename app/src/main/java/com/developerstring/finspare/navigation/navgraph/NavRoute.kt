@@ -13,6 +13,7 @@ sealed class NavRoute(val route: String) {
     object EditCategoryDetailScreen : NavRoute("edit_category_detail_screen")
     object SettingScreen : NavRoute("setting_screen")
     object AboutScreen : NavRoute("about_screen")
+    object TermsAndConditionsScreen : NavRoute("terms_and_conditions_screen")
 
     object ActivityChartScreen : NavRoute(ACTIVITY_CHART_SCREEN_KEY)
     object CategoryChartScreen : NavRoute(CATEGORY_CHART_SCREEN_KEY)

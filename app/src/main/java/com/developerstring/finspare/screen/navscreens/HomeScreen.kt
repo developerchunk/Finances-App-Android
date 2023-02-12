@@ -23,7 +23,7 @@ import androidx.navigation.NavController
 import com.developerstring.finspare.R
 import com.developerstring.finspare.navigation.navgraph.NavRoute
 import com.developerstring.finspare.roomdatabase.models.TransactionModel
-import com.developerstring.finspare.screen.navscreens.content.homescreen.MyActivityContent
+import com.developerstring.finspare.ui.components.MyActivityContent
 import com.developerstring.finspare.sharedviewmodel.ProfileViewModel
 import com.developerstring.finspare.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.finspare.sharedviewmodel.SharedViewModel

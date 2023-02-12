@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.finspare.R
+import com.developerstring.finspare.navigation.navgraph.NavRoute
 import com.developerstring.finspare.ui.theme.*
 import com.developerstring.finspare.util.Constants.LANGUAGE
 import com.developerstring.finspare.util.LanguageText
@@ -88,7 +89,7 @@ fun AboutScreen(
                             indication = null,
                             interactionSource = interactionSource,
                             onClick = {
-
+                                navController.navigate(route = NavRoute.TermsAndConditionsScreen.route)
                             }
                         ),
                     verticalAlignment = Alignment.CenterVertically,

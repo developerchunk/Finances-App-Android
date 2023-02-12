@@ -1,4 +1,4 @@
-package com.developerstring.finspare.screen.navscreens.content.profilescreen
+package com.developerstring.finspare.ui.components
 
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState

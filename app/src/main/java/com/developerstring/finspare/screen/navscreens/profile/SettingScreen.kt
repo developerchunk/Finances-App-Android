@@ -23,7 +23,7 @@ import androidx.navigation.NavController
 import com.developerstring.finspare.R
 import com.developerstring.finspare.navigation.setupnav.SetUpNavRoute
 import com.developerstring.finspare.roomdatabase.models.CategoryModel
-import com.developerstring.finspare.screen.navscreens.content.profilescreen.CustomSwitchButton
+import com.developerstring.finspare.ui.components.CustomSwitchButton
 import com.developerstring.finspare.sharedviewmodel.ProfileViewModel
 import com.developerstring.finspare.sharedviewmodel.SharedViewModel
 import com.developerstring.finspare.ui.components.DisplayAlertDialog

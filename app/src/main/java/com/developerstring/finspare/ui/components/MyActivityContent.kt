@@ -1,4 +1,4 @@
-package com.developerstring.finspare.screen.navscreens.content.homescreen
+package com.developerstring.finspare.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.finspare.navigation.navgraph.NavRoute
 import com.developerstring.finspare.sharedviewmodel.SharedViewModel
-import com.developerstring.finspare.ui.components.BarChart
 import com.developerstring.finspare.ui.theme.*
 import com.developerstring.finspare.util.*
 import com.developerstring.finspare.util.Constants.INDIAN_CURRENCY

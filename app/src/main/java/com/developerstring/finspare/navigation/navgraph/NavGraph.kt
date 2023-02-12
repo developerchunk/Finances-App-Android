@@ -128,6 +128,14 @@ fun NavGraphBuilder.navGraph(
                 navController = navController
             )
         }
+
+        composable(
+            route = NavRoute.TermsAndConditionsScreen.route
+        ) {
+            TermsAndConditionsScreen(
+                navController = navController
+            )
+        }
     }
 
 }
