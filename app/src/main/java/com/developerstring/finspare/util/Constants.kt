@@ -170,7 +170,6 @@ object Constants {
         GUJARATI,
     ).sorted()
 
-
     const val HOME_ROUTE = "home"
     const val ACTIVITY_ROUTE = "activity"
     const val PROFILE_ROUTE = "profile"
