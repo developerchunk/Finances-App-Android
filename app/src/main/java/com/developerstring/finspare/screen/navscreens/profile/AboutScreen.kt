@@ -30,7 +30,7 @@ fun AboutScreen(
     navController: NavController
 ) {
 
-    val scrollState = rememberScrollState()
+    val verticalScrollState = rememberScrollState()
     val languageText = LanguageText(LANGUAGE)
     val interactionSource = remember {
         MutableInteractionSource()
@@ -73,7 +73,7 @@ fun AboutScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(backgroundColor)
-                .verticalScroll(scrollState)
+                .verticalScroll(verticalScrollState)
                 .padding(it)
                 .padding(top = 20.dp)
         ) {
