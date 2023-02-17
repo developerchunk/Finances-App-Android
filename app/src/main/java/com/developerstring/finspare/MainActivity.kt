@@ -32,6 +32,8 @@ class MainActivity : ComponentActivity() {
             FinancesAppTheme {
 
 
+                profileViewModel.getAllCategories()
+
                 val darkThemeEnable by profileViewModel.profileTheme.collectAsState()
                 DARK_THEME_ENABLE = when(darkThemeEnable) {
                     DARK_THEME -> true

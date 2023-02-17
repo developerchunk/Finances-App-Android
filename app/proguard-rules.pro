@@ -21,3 +21,11 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class com.developerstring.finspare.roomdatabase.models.* { *; }
+
+-keep class **.R$mipmap {
+    public static final int ic_launcher;
+}
+
+-keep class **.R$mipmap {
+    public static final int ic_launcher_round;
+}

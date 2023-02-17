@@ -106,7 +106,7 @@ fun CreateProfileScreen2(
                 TextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(55.dp)
+                        .heightIn(min = 55.dp)
                         .border(
                             width = 1.8.dp,
                             color = textColorBLG,
@@ -152,7 +152,7 @@ fun CreateProfileScreen2(
                 TextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(55.dp)
+                        .heightIn(min = 55.dp)
                         .border(
                             width = 1.8.dp,
                             color = textColorBLG,

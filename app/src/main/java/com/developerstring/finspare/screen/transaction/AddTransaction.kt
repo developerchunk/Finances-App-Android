@@ -60,7 +60,6 @@ import com.developerstring.finspare.util.Constants.INVESTMENT
 import com.developerstring.finspare.util.Constants.LANGUAGE
 import com.developerstring.finspare.util.Constants.OTHER
 import com.developerstring.finspare.util.Constants.SAVINGS
-import com.developerstring.finspare.util.Constants.SEPARATOR_LIST
 import com.developerstring.finspare.util.Constants.SPENT
 import com.developerstring.finspare.util.Constants.TRANSACTION
 import com.developerstring.finspare.util.state.MessageBarState
@@ -82,8 +81,6 @@ fun AddTransaction(
     var transactionModeExpanded by rememberSaveable { mutableStateOf(false) }
 
     val shape: Shape = RoundedCornerShape(10.dp)
-
-    profileViewModel.getAllCategories()
     profileViewModel.getTime24Hours()
 
     val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
@@ -159,9 +156,9 @@ fun AddTransaction(
                 transactionModeExpanded = transactionModeExpanded,
                 categoriesExpanded = categoriesExpanded,
                 subCategoriesExpanded = subCategoriesExpanded,
-                onTransactionModeChange = {transactionModeExpanded = it},
-                onCategoryChange = {categoriesExpanded=it},
-                onSubCategoryChange = {subCategoriesExpanded=it},
+                onTransactionModeChange = { transactionModeExpanded = it },
+                onCategoryChange = { categoriesExpanded = it },
+                onSubCategoryChange = { subCategoriesExpanded = it },
                 onSaveClicked = {
                     profileViewModel.getProfileAmount()
                     sharedViewModel.addTransaction(transactionModel = it)
@@ -199,6 +196,99 @@ fun TransactionContent(
     onCategoryChange: (Boolean) -> Unit,
     onSubCategoryChange: (Boolean) -> Unit,
     onSaveClicked: (TransactionModel) -> Unit,
+    launched_: Boolean = false
+) {
+
+    val otherSubCategories = mutableListOf(OTHER)
+    var transactionModelList = mutableListOf<String>()
+    val categories = mutableMapOf<Int, String>()
+    val subCategories = mutableMapOf<String, List<String>>()
+
+    var launched by remember {
+        mutableStateOf(launched_)
+    }
+
+    if (launched) {
+        CategoryListReturn(
+            categories = categoryModel,
+            categoryList = {
+                it.forEach { value ->
+                    categories[value.id] = value.category
+                    subCategories[value.category] =
+                        value.subCategory.split(Constants.SEPARATOR_LIST).toList().plus(OTHER)
+                }
+                otherSubCategories.addAll(subCategories.mapListToList())
+                transactionModelList = subCategories.getOrElse(
+                    TRANSACTION,
+                    defaultValue = { listOf(OTHER) }).plus(OTHER).distinct().toMutableList()
+            }
+        )
+    }
+
+    LaunchedEffect(key1 = true) {
+        launched = true
+    }
+
+    AddTransactionContent(
+        modifier = modifier,
+        categories,
+        subCategories,
+        otherSubCategories,
+        transactionModelList,
+        publicSharedViewModel,
+        transactionModel,
+        navController,
+        time24Hours,
+        profileViewModel,
+        languageText,
+        transactionModeExpanded,
+        categoriesExpanded,
+        subCategoriesExpanded,
+        onTransactionModeChange,
+        onCategoryChange,
+        onSubCategoryChange,
+        onSaveClicked
+    )
+
+}
+
+@Composable
+fun SubCategoryItems(
+    title: String,
+    onSelect: (String) -> Unit
+) {
+    Row(modifier = Modifier
+        .clickable { onSelect(title) }
+        .padding(horizontal = 10.dp, vertical = 10.dp)) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = title,
+            fontSize = 16.sp,
+            color = textColorBW
+        )
+    }
+}
+
+@Composable
+fun AddTransactionContent(
+    modifier: Modifier,
+    categories: MutableMap<Int, String>,
+    subCategories: MutableMap<String, List<String>>,
+    otherSubCategories: MutableList<String>,
+    transactionModelList: MutableList<String>,
+    publicSharedViewModel: PublicSharedViewModel,
+    transactionModel: TransactionModel,
+    navController: NavController,
+    time24Hours: Boolean,
+    profileViewModel: ProfileViewModel,
+    languageText: LanguageText,
+    transactionModeExpanded: Boolean,
+    categoriesExpanded: Boolean,
+    subCategoriesExpanded: Boolean,
+    onTransactionModeChange: (Boolean) -> Unit,
+    onCategoryChange: (Boolean) -> Unit,
+    onSubCategoryChange: (Boolean) -> Unit,
+    onSaveClicked: (TransactionModel) -> Unit,
 ) {
 
     val scrollState = rememberScrollState()
@@ -218,7 +308,7 @@ fun TransactionContent(
     var otherCategory by rememberSaveable { mutableStateOf(transactionModel.categoryOther) }
     var subCategory by rememberSaveable { mutableStateOf(transactionModel.subCategory) }
     var otherSubCategory by rememberSaveable { mutableStateOf(transactionModel.subCategoryOther) }
-    val otherSubCategories = mutableListOf(OTHER)
+//    val otherSubCategories = mutableListOf(OTHER)
     var timeTransactionModel by rememberSaveable { mutableStateOf(transactionModel.time) }
     var extraInfo by rememberSaveable { mutableStateOf(transactionModel.info) }
     var place by rememberSaveable { mutableStateOf(transactionModel.place) }
@@ -245,7 +335,7 @@ fun TransactionContent(
         mutableStateOf(transactionModel.transactionModeOther)
     }
 
-    var transactionModelList = mutableListOf<String>()
+//    var transactionModelList = mutableListOf<String>()
 
     var date by rememberSaveable { mutableStateOf("") }
     var time by rememberSaveable { mutableStateOf("") }
@@ -253,27 +343,13 @@ fun TransactionContent(
 
     val context = LocalContext.current
 
-    val heightTextFields by remember { mutableStateOf(55.dp) }
+    val heightTextFields by remember { mutableStateOf(60.dp) }
 
     val interactionSource = remember { MutableInteractionSource() }
 
 
     // Chip Selection
     val chipList = ADD_TRANSACTION_TYPE
-
-    val categories = mutableMapOf<Int, String>()
-    val subCategories = mutableMapOf<String, List<String>>()
-    if (categoryModel is RequestState.Success) {
-        categoryModel.data.forEach { value ->
-            categories[value.id] = value.category
-            subCategories[value.category] =
-                value.subCategory.split(SEPARATOR_LIST).toList().plus(OTHER)
-        }
-        otherSubCategories.addAll(subCategories.mapListToList())
-        transactionModelList = subCategories.getOrElse(
-            TRANSACTION,
-            defaultValue = { listOf(OTHER) }).plus(OTHER).distinct().toMutableList()
-    }
 
     var transactionModelID by remember {
         mutableStateOf(1)
@@ -308,7 +384,8 @@ fun TransactionContent(
         mutableStateOf(false)
     }
 
-    val saveButtonBackground = listOf(Color.Transparent, backgroundColor, backgroundColor, backgroundColor)
+    val saveButtonBackground =
+        listOf(Color.Transparent, backgroundColor, backgroundColor, backgroundColor)
 
     var bottomHeight by remember {
         mutableStateOf(Size.Zero)
@@ -557,6 +634,7 @@ fun TransactionContent(
                     }
                 )
                 AnimatedVisibility(transactionModeExpanded) {
+
                     Card(
                         modifier = Modifier
                             .padding(horizontal = 5.dp)
@@ -565,7 +643,7 @@ fun TransactionContent(
                         elevation = 10.dp
                     ) {
                         LazyColumn(
-                            modifier = Modifier.heightIn(max = 200.dp),
+                            modifier = Modifier.height(200.dp),
                             userScrollEnabled = true
                         ) {
                             items(
@@ -1280,7 +1358,7 @@ fun TransactionContent(
                                         Toast
                                             .makeText(
                                                 context,
-                                                "Please fill all details",
+                                                "Please enter the Amount",
                                                 Toast.LENGTH_SHORT
                                             )
                                             .show()
@@ -1304,21 +1382,4 @@ fun TransactionContent(
         }
     }
 
-}
-
-@Composable
-fun SubCategoryItems(
-    title: String,
-    onSelect: (String) -> Unit
-) {
-    Row(modifier = Modifier
-        .clickable { onSelect(title) }
-        .padding(horizontal = 10.dp, vertical = 10.dp)) {
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = title,
-            fontSize = 16.sp,
-            color = textColorBW
-        )
-    }
 }

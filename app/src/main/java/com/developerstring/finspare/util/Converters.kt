@@ -1,5 +1,7 @@
 package com.developerstring.finspare.util
 
+import androidx.compose.runtime.Composable
+import com.developerstring.finspare.roomdatabase.models.CategoryModel
 import com.developerstring.finspare.util.Constants.ACTIVITY_ROUTE
 import com.developerstring.finspare.util.Constants.ADD_FUND
 import com.developerstring.finspare.util.Constants.HOME_ROUTE
@@ -11,6 +13,7 @@ import com.developerstring.finspare.util.Constants.SPENT
 import com.developerstring.finspare.util.Constants.THIS_MONTH
 import com.developerstring.finspare.util.Constants.oldFirstFilter
 import com.developerstring.finspare.util.state.CategorySortState
+import com.developerstring.finspare.util.state.RequestState
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.math.abs
@@ -336,4 +339,21 @@ fun randomCaptcha(
     return (1..length)
         .map { allowedChars.random() }
         .joinToString("")
+}
+
+@Composable
+fun CategoryListReturn(
+    categories: RequestState<List<CategoryModel>>,
+    categoryList: (List<CategoryModel>) -> Unit
+) {
+
+
+    if (
+        categories is RequestState.Success
+    ) {
+
+         categoryList(categories.data)
+
+    }
+
 }

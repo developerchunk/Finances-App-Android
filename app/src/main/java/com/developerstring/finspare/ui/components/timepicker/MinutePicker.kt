@@ -3,11 +3,14 @@ package com.developerstring.finspare.ui.components.timepicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,15 +40,21 @@ fun MinutePicker(
         (0..0),
     )
 
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Transparent)
+            .fillMaxWidth()
+            .verticalScroll(scrollState),
+        horizontalAlignment = CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(spacing)
+            verticalArrangement = Arrangement.spacedBy(spacing),
+            horizontalAlignment = CenterHorizontally
         ) {
 
             numbers.forEach {
@@ -83,18 +92,19 @@ fun MinutePickerButtons(
     selected: (Int) -> Unit,
 ) {
 
+
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier,
         verticalAlignment = CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(
             spacing,
-            alignment = Alignment.CenterHorizontally
+            alignment = CenterHorizontally
         ),
     ) {
         (range).forEach {
             Card(
                 modifier = Modifier
-                    .size(size),
+                    .size(if (size>=70.dp) 70.dp else size),
                 shape = CircleShape,
                 backgroundColor =
                 if (disableMinutes.contains(it) && disable) disableColor.copy(alpha = 0.15f)

@@ -7,7 +7,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -51,11 +53,14 @@ fun ClockTimePicker(
         MutableInteractionSource()
     }
 
+    val scrollState = rememberScrollState()
+
     Box(
         modifier = Modifier
             .size(radius+10.dp)
             .rotate(90f)
-            .background(backgroundColorTimePicker, shape = CircleShape),
+            .background(backgroundColorTimePicker, shape = CircleShape)
+            .verticalScroll(scrollState),
         contentAlignment = Alignment.Center
     ) {
 

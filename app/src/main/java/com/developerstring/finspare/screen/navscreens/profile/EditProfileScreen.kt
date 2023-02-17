@@ -75,7 +75,7 @@ fun EditProfileScreen(
     var selectedCurrency by rememberSaveable { mutableStateOf(profileModel.currency) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
-    val heightTextFields by remember { mutableStateOf(55.dp) }
+    val heightTextFields by remember { mutableStateOf(60.dp) }
 
     val scrollState = rememberScrollState()
 

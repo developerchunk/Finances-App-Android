@@ -7,6 +7,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -17,7 +18,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.developerstring.finspare.ui.theme.UIBlue
 import com.developerstring.finspare.ui.theme.backgroundColor
 import com.developerstring.finspare.ui.theme.backgroundColorTimePicker
@@ -91,61 +91,61 @@ fun TimePicker(
     }
 
     if (visible) {
-        Dialog(
+        AlertDialog(
+             backgroundColor =  backgroundColor,
+            shape = RoundedCornerShape(20.dp),
             onDismissRequest = {
                                onCanceled()
             },
-            content = {
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .fillMaxWidth()
-                        .background(color = backgroundColor, shape = RoundedCornerShape(20.dp))
-                        .padding(vertical = 20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+            title = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        10.dp,
+                        alignment = Alignment.CenterHorizontally
+                    )
                 ) {
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(
-                            10.dp,
-                            alignment = Alignment.CenterHorizontally
-                        )
-                    ) {
+                    TimePickerText(
+                        hour = hour,
+                        minute = Pair(minute1, minute2),
+                        timePicked = TimePick.HOUR,
+                        selected = timePicked == TimePick.HOUR,
+                        interactionSource = interactionSource,
+                        onClick = {
+                            timePicked = TimePick.HOUR
+                        },
+                    )
 
-                        TimePickerText(
-                            hour = hour,
-                            minute = Pair(minute1, minute2),
-                            timePicked = TimePick.HOUR,
-                            selected = timePicked == TimePick.HOUR,
-                            interactionSource = interactionSource,
-                            onClick = {
-                                timePicked = TimePick.HOUR
-                            },
-                        )
+                    Text(
+                        text = ":",
+                        fontSize = 35.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        color = textColorBW
+                    )
 
-                        Text(
-                            text = ":",
-                            fontSize = 35.sp,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center,
-                            color = textColorBW
-                        )
+                    TimePickerText(
+                        hour = hour,
+                        minute = Pair(minute1, minute2),
+                        timePicked = TimePick.MINUTE,
+                        minuteSelected = minuteSelect,
+                        selected = timePicked == TimePick.MINUTE,
+                        interactionSource = interactionSource,
+                        onClick = {
+                            timePicked = TimePick.MINUTE
+                            launched = false
+                        }
+                    )
 
-                        TimePickerText(
-                            hour = hour,
-                            minute = Pair(minute1, minute2),
-                            timePicked = TimePick.MINUTE,
-                            minuteSelected = minuteSelect,
-                            selected = timePicked == TimePick.MINUTE,
-                            interactionSource = interactionSource,
-                            onClick = {
-                                timePicked = TimePick.MINUTE
-                                launched = false
-                            }
-                        )
-
-                    }
+                }
+            },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
 
                     if(meridiem != Meridiem.HOUR24) {
                         MeridiemPick(
@@ -193,7 +193,7 @@ fun TimePicker(
                                             }
                                         }
                                     )
-                                    hourChanged = false
+                                    hourChanged = true
                                 } else {
                                     ClockTimePicker(
                                         hour = hour,
@@ -237,62 +237,63 @@ fun TimePicker(
                         }
                     }
 
-                    Row(
+                }
+
+            },
+            buttons = {
+                Row(
+                    modifier = Modifier
+                        .padding(end = 30.dp, bottom = 20.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Text(
                         modifier = Modifier
-                            .padding(end = 30.dp)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
+                            .padding(horizontal = 20.dp)
+                            .clickable(
+                                indication = null,
+                                interactionSource = interactionSource,
+                                onClick = {
+                                    onCanceled()
+                                }
+                            ),
+                        text = "Cancel",
+                        color = UIBlue,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .clickable(
+                                indication = null,
+                                interactionSource = interactionSource,
+                                onClick = {
+
+                                    onSelected(hour.timeConvert() + minute1 + minute2, meridiem)
+
+                                }
+                            )
+                            .background(
+                                color = backgroundColorTimePicker,
+                                shape = CircleShape
+                            )
+                            .padding(vertical = 7.dp, horizontal = 16.dp)
                     ) {
 
                         Text(
-                            modifier = Modifier
-                                .padding(horizontal = 20.dp)
-                                .clickable(
-                                    indication = null,
-                                    interactionSource = interactionSource,
-                                    onClick = {
-                                        onCanceled()
-                                    }
-                                ),
-                            text = "Cancel",
+                            text = "OK",
                             color = UIBlue,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Medium
+                            fontSize = 19.sp,
+                            fontWeight = FontWeight.Bold
                         )
-
-                        Box(
-                            modifier = Modifier
-                                .clickable(
-                                    indication = null,
-                                    interactionSource = interactionSource,
-                                    onClick = {
-
-                                        onSelected(hour.timeConvert()+minute1+minute2, meridiem)
-
-                                    }
-                                )
-                                .background(
-                                    color = backgroundColorTimePicker,
-                                    shape = CircleShape
-                                )
-                                .padding(vertical = 7.dp, horizontal = 16.dp)
-                        ) {
-
-                            Text(
-                                text = "OK",
-                                color = UIBlue,
-                                fontSize = 19.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-
-                        }
 
                     }
 
                 }
-
-            },
+            }
         )
     }
 

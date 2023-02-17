@@ -37,7 +37,7 @@ fun LanguageScreen(
     var selected by remember {
         mutableStateOf(ENGLISH)
     }
-    val interactionSource = remember{
+    val interactionSource = remember {
         MutableInteractionSource()
     }
 
@@ -46,12 +46,17 @@ fun LanguageScreen(
 
     val buttonHeight = 45.dp
 
-    Column(modifier = Modifier.fillMaxSize().background(backgroundColor), verticalArrangement = Arrangement.Top) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor),
+        contentAlignment = Alignment.TopCenter
+    ) {
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(screenHeight-(105.dp))
+                .height(screenHeight - (105.dp))
                 .verticalScroll(scrollState)
         ) {
 
@@ -93,15 +98,20 @@ fun LanguageScreen(
 
         }
 
-        Column(
+        Box(
             modifier = Modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(bottom = 20.dp),
+            contentAlignment = Alignment.BottomCenter
         ) {
             Button(
                 onClick = {
                     navController.popBackStack()
-                    profileViewModel.saveProfileLanguage(language_ = selected, updateLanguage = false)
+                    profileViewModel.saveProfileLanguage(
+                        language_ = selected,
+                        updateLanguage = false
+                    )
                     navController.navigate(route = SetUpNavRoute.CreateProfileSetUpNavRoute.route)
                 },
                 modifier = Modifier
@@ -109,7 +119,7 @@ fun LanguageScreen(
                     .height(buttonHeight),
                 colors = ButtonDefaults.buttonColors(contentBackgroundColor),
                 shape = RoundedCornerShape(25.dp),
-            ){
+            ) {
                 Text(text = "Continue", color = Color.White, fontSize = 20.sp)
             }
         }
