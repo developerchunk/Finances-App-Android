@@ -497,5 +497,4 @@ fun BasicTextBox(
             enabled = fieldEnable,
         )
     }
-
 }
