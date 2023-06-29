@@ -104,4 +104,9 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
     // accompanist library https://google.github.io/accompanist/flowlayout/
     implementation "com.google.accompanist:accompanist-flowlayout:0.27.0"
+
+    // google play auto update
+    implementation "com.google.android.play:app-update:2.1.0"
+    implementation "com.google.android.play:app-update-ktx:2.1.0"
+
 }
