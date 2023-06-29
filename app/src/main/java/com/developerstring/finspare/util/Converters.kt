@@ -238,7 +238,7 @@ class MessageBarContentLastTransaction {
         return "Delete ${
             transactionType.keyToTransactionType().uppercase()
         } ${
-            if (currency.last().toString() == Constants.INDIAN_CURRENCY)
+            if (currency.last().toString() == INDIAN_CURRENCY)
                 simplifyAmountIndia(amount)
             else simplifyAmount(
                 amount
@@ -522,6 +522,10 @@ fun String.formatNumberingStyleToInt(): Int {
 }
 
 fun profilesToPieChartData(profiles: List<ProfileModel>): MutableMap<String, Long> {
+
+    if (profiles.isEmpty()) {
+        return mutableMapOf()
+    }
 
     val map = mutableMapOf<String, Long>()
 

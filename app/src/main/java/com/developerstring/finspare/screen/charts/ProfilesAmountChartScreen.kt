@@ -76,11 +76,11 @@ fun ProfileAmountChartScreen(
     val profilesMapData: MutableMap<String, Long> = profilesToPieChartData(profiles)
 
     val totalAmount by remember {
-        mutableStateOf(profiles.sumOf { it.total_amount })
+        mutableStateOf(if (profileEmpty) 0 else profiles.sumOf { it.total_amount })
     }
 
     val amountType by remember {
-        mutableStateOf(profiles.first().amount_type)
+        mutableStateOf(if (profileEmpty) "" else profiles.first().amount_type)
     }
 
     Scaffold(topBar = {

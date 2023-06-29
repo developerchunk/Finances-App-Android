@@ -175,7 +175,11 @@ fun TopAppBarHistory(
                             }
                             sharedViewModel.searchBarState.value = SearchBarState.DELETE
                         },
-                        languageText = languageText
+                        languageText = languageText,
+                        menuExpanded = menuExpanded,
+                        onMenuIconCLicked = { value ->
+                            menuExpanded =  value
+                        }
                     )
                 }
             }
@@ -473,7 +477,9 @@ fun SearchedTopAppBarHistory(
     onTextChange: (String) -> Unit,
     onSearchClicked: (String) -> Unit,
     onCloseClicked: () -> Unit,
-    languageText: LanguageText
+    languageText: LanguageText,
+    menuExpanded: Boolean,
+    onMenuIconCLicked: (Boolean) -> Unit
 ) {
 
     var trailingIconStateSearch by remember {
@@ -522,6 +528,10 @@ fun SearchedTopAppBarHistory(
                 }
             },
             trailingIcon = {
+
+                Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+
+
                 IconButton(
                     onClick = {
 
@@ -553,6 +563,18 @@ fun SearchedTopAppBarHistory(
                         contentDescription = stringResource(id = R.string.close_icon),
                         tint = textColorBW
                     )
+                }
+
+                IconButton(onClick = {
+                    onMenuIconCLicked(!menuExpanded)
+                }) {
+                    Icon(
+                        modifier = Modifier.size(26.dp),
+                        painter = painterResource(id = R.drawable.filter_menu_icon),
+                        contentDescription = "menu",
+                        tint = textColorBW
+                    )
+                }
                 }
             },
             keyboardOptions = KeyboardOptions(
