@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.developerstring.finspare.util.state.ProfileAmountType
 
 object Constants {
 
@@ -50,6 +51,9 @@ object Constants {
         SAVINGS
     )
 
+    val PROFILE_AMOUNT_TYPE = ProfileAmountType.values().toList()
+
+    const val LEND = "Lend"
     const val THIS_MONTH = "This Month"
     const val LATEST_FIRST = "Latest First"
     const val OLD_FIRST = "Old First"
@@ -57,6 +61,7 @@ object Constants {
     var oldFirstFilter: MutableState<Boolean> = mutableStateOf(false)
 
     val FILTER_NAME = mutableListOf(
+        LEND,
         THIS_MONTH,
         LATEST_FIRST,
         OLD_FIRST

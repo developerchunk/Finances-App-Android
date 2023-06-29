@@ -171,7 +171,7 @@ class LanguageText(
         TELUGU -> R.string.activity_chart_telugu
         GUJARATI -> R.string.activity_chart_gujarati
         HINDI -> R.string.activity_chart_hindi
-        else -> R.string.my_activity
+        else -> R.string.activity_chart
     }
     val categoriesChart = when (language) {
         ENGLISH -> R.string.categories_chart
@@ -228,7 +228,7 @@ class LanguageText(
         TELUGU -> R.string.activity_chart_text_telugu
         GUJARATI -> R.string.activity_chart_text_gujarati
         HINDI -> R.string.activity_chart_text_hindi
-        else -> R.string.activity_chart
+        else -> R.string.activity_chart_text
     }
 
     //
@@ -468,6 +468,78 @@ class LanguageText(
         GUJARATI -> R.string.terms_and_conditions_gujarati
         HINDI -> R.string.terms_and_conditions_hindi
         else -> R.string.terms_and_conditions
+    }
+
+    val contactText = when (language) {
+        ENGLISH -> R.string.contact_text
+        MARATHI -> R.string.contact_text_marathi
+        TELUGU -> R.string.contact_text_telugu
+        GUJARATI -> R.string.contact_text_gujarati
+        HINDI -> R.string.contact_text_hindi
+        else -> R.string.contact_text
+    }
+
+    val contacts = when (language) {
+        ENGLISH -> R.string.contacts
+        MARATHI -> R.string.contacts_marathi
+        TELUGU -> R.string.contacts_telugu
+        GUJARATI -> R.string.contacts_gujarati
+        HINDI -> R.string.contacts_hindi
+        else -> R.string.contacts
+    }
+
+    val editContacts = when (language) {
+        ENGLISH -> R.string.edit_contact
+        MARATHI -> R.string.edit_contact_marathi
+        TELUGU -> R.string.edit_contact_telugu
+        GUJARATI -> R.string.edit_contact_gujarati
+        HINDI -> R.string.edit_contact_hindi
+        else -> R.string.edit_contact
+    }
+
+    val lend = when (language) {
+        ENGLISH -> R.string.lend
+        MARATHI -> R.string.lend_marathi
+        TELUGU -> R.string.lend_telugu
+        GUJARATI -> R.string.lend_gujarati
+        HINDI -> R.string.lend_hindi
+        else -> R.string.lend
+    }
+
+    val moneyTaken = when (language) {
+        ENGLISH -> R.string.money_taken
+        MARATHI -> R.string.money_taken_marathi
+        TELUGU -> R.string.money_taken_telugu
+        GUJARATI -> R.string.money_taken_gujarati
+        HINDI -> R.string.money_taken_hindi
+        else -> R.string.money_taken
+    }
+
+    val moneyGiven = when (language) {
+        ENGLISH -> R.string.money_given
+        MARATHI -> R.string.money_given_marathi
+        TELUGU -> R.string.money_given_telugu
+        GUJARATI -> R.string.money_given_gujarati
+        HINDI -> R.string.money_given_hindi
+        else -> R.string.money_given
+    }
+
+    val phoneNo = when (language) {
+        ENGLISH -> R.string.phone_no
+        MARATHI -> R.string.phone_no_marathi
+        TELUGU -> R.string.phone_no_telugu
+        GUJARATI -> R.string.phone_no_gujarati
+        HINDI -> R.string.phone_no_hindi
+        else -> R.string.phone_no
+    }
+
+    val email = when (language) {
+        ENGLISH -> R.string.email
+        MARATHI -> R.string.email_marathi
+        TELUGU -> R.string.email_telugu
+        GUJARATI -> R.string.email_gujarati
+        HINDI -> R.string.email_hindi
+        else -> R.string.email
     }
 
     // ActivityScreen Charts

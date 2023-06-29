@@ -32,10 +32,13 @@ import com.developerstring.finspare.util.transactionTypeToSymbol
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun TransactionsItemView(
+    profileName: String = "",
     transactionModel: TransactionModel,
     currency: String,
     navigateToDetails: (TransactionModel) -> Unit,
-    time24Hours: Boolean
+    time24Hours: Boolean,
+    launched: Boolean,
+    expandedLaunched: Boolean
 ) {
 
 //    val sameDate = TRANS == transactionModel.date
@@ -49,7 +52,7 @@ fun TransactionsItemView(
     }
 
     var expanded by remember {
-        mutableStateOf(false)
+        mutableStateOf(expandedLaunched)
     }
 
     var hour by remember {
@@ -84,7 +87,7 @@ fun TransactionsItemView(
 
 
     LaunchedEffect(key1 = true) {
-        expanded = true
+        expanded = launched
     }
 
     val extraInfoStatus = transactionModel.info != ""
@@ -160,10 +163,9 @@ fun TransactionsItemView(
                     }
 
                     Surface(
-                        elevation = 5.dp,
                         modifier = Modifier.padding(10.dp),
                         shape = RoundedCornerShape(10.dp),
-                        color = contentColorCard
+                        color = textBoxBackColor
                     ) {
                         Column(
                             modifier = Modifier
@@ -177,7 +179,7 @@ fun TransactionsItemView(
 
                                 val (text, text1, text2, text3) = createRefs()
 
-                                if (transactionModel.category!="") {
+                                if (transactionModel.category != "") {
                                     Text(
                                         modifier = Modifier
                                             .padding(start = 20.dp)
@@ -207,12 +209,16 @@ fun TransactionsItemView(
                                             top.linkTo(text.bottom)
                                         },
                                     text =
-                                    if (transactionModel.subCategory != "") {
-                                        if (transactionModel.subCategory == OTHER) transactionModel.subCategoryOther
-                                        else transactionModel.subCategory
+                                    if (transactionModel.amount_type.isNotEmpty()) {
+                                        profileName
                                     } else {
-                                        if (transactionModel.transactionMode == OTHER) transactionModel.transactionModeOther
-                                        else transactionModel.transactionMode
+                                        if (transactionModel.subCategory != "") {
+                                            if (transactionModel.subCategory == OTHER) transactionModel.subCategoryOther
+                                            else transactionModel.subCategory
+                                        } else {
+                                            if (transactionModel.transactionMode == OTHER) transactionModel.transactionModeOther
+                                            else transactionModel.transactionMode
+                                        }
                                     },
                                     fontFamily = fontInter,
                                     fontWeight = FontWeight.Medium,
@@ -262,7 +268,7 @@ fun TransactionsItemView(
 
                             }
 
-                            if (transactionModel.category != "" && transactionModel.subCategory !="") {
+                            if (transactionModel.category != "" && transactionModel.subCategory != "") {
                                 Text(
                                     modifier = Modifier
                                         .fillMaxWidth()

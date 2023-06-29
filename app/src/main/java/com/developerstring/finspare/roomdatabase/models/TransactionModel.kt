@@ -1,5 +1,6 @@
 package com.developerstring.finspare.roomdatabase.models
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.developerstring.finspare.util.Constants.TRANSACTION_DB_TABLE
@@ -24,4 +25,12 @@ data class TransactionModel(
     val subCategory: String = "",
     val categoryOther: String = "",
     val subCategoryOther: String = "",
+    @ColumnInfo(name = "profile_id", defaultValue = "0")
+    val profile_id: String = "0",
+    @ColumnInfo(name = "profile_name", defaultValue = "")
+    val profile_name: String = "",
+    @ColumnInfo(name = "amount_type", defaultValue = "")
+    val amount_type: String = "",
+    @ColumnInfo(name = "lend", defaultValue = "")
+    val lend: String = "",
 )

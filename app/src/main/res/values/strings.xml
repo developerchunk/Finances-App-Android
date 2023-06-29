@@ -124,6 +124,16 @@
     <string name="delete_error_category">At least 1 sub category should be there</string>
     <string name="add_error_category">Max 30 Categories can be added</string>
 
+<!--    Contacts-->
+    <string name="contact_text">Contact*</string>
+    <string name="contacts">Contacts</string>
+    <string name="lend">Lend</string>
+    <string name="money_taken">Money Taken</string>
+    <string name="money_given">Money Given</string>
+    <string name="edit_contact">Edit Contact</string>
+    <string name="email">Email</string>
+    <string name="phone_no">Phone No</string>
+
 
     <!--    Marathi Text-->
     <string name="add_payment_marathi">पेमेंट\nलिहा</string>
@@ -195,6 +205,16 @@
 
     <string name="filter_marathi">फिल्टर</string>
     <string name="terms_and_conditions_marathi">टर्म्स एंड प्राइवेसी पॉलिसी</string>
+
+    <!--    Contacts Marathi-->
+    <string name="contact_text_marathi">कॉन्टॅक्ट*</string>
+    <string name="contacts_marathi">कॉन्टॅक्ट</string>
+    <string name="lend_marathi">उधार</string>
+    <string name="money_taken_marathi">पैसे घेतले</string>
+    <string name="money_given_marathi">पैसे दिले</string>
+    <string name="edit_contact_marathi">एडिट कॉन्टॅक्ट</string>
+    <string name="email_marathi">ईमेल</string>
+    <string name="phone_no_marathi">फ़ोन नंबर</string>
 
 <!--    Telugu-->
     <string name="create_profile_screen_text_1_telugu">ప్రాథమిక వివరాలతో ప్రారంభిద్దాం</string>
@@ -284,6 +304,15 @@
     <string name="delete_all_transactions_telugu">అన్ని చెల్లింపులను తొలగించండి</string>
     <string name="delete_profile_telugu">ప్రొఫైల్‌ను తొలగించండి</string>
 
+    <!--    Contacts Telugu-->
+    <string name="contact_text_telugu">సంప్రదించండి*</string>
+    <string name="contacts_telugu">పరిచయాలు</string>
+    <string name="lend_telugu">అప్పిచ్చు</string>
+    <string name="money_taken_telugu">డబ్బులు తీసుకున్నారు</string>
+    <string name="money_given_telugu">డబ్బులు ఇచ్చారు</string>
+    <string name="edit_contact_telugu">పరిచయాలను సవరించండి</string>
+    <string name="email_telugu">ఇమెయిల్</string>
+    <string name="phone_no_telugu">ఫోను నంబరు</string>
 
 <!--    Gujarati-->
     <string name="create_profile_screen_text_1_gujarati">તમારી મૂળભૂત વિગતો</string>
@@ -373,6 +402,16 @@
     <string name="filter_gujarati">ફિલ્ટર</string>
     <string name="terms_and_conditions_gujarati">ટર્મ્સ એન્ડ પ્રાઇવસી પોલિસી</string>
 
+    <!--    Contacts Gujarati-->
+    <string name="contact_text_gujarati">કોન્ટેક્ટ*</string>
+    <string name="contacts_gujarati">કોન્ટેક્ટ</string>
+    <string name="lend_gujarati">ઉધાર</string>
+    <string name="money_taken_gujarati">પૈસા લીધા</string>
+    <string name="money_given_gujarati">પૈસા આપ્યા</string>
+    <string name="edit_contact_gujarati">એડિટ કોન્ટેક્ટ</string>
+    <string name="email_gujarati">ઇમેઇલ</string>
+    <string name="phone_no_gujarati">ફોન નંબર</string>
+
 <!--    Hindi-->
     <string name="create_profile_screen_text_1_hindi">आपके बारे में छोटी \nसी जानकारी</string>
     <string name="create_profile_screen_text_2_hindi">मासिक आधार पर राशि निर्धारित करें</string>
@@ -459,6 +498,16 @@
 
     <string name="filter_hindi">फ़िल्टर</string>
     <string name="terms_and_conditions_hindi">टर्म्स एंड प्राइवेसी पॉलिसी</string>
+
+    <!--    Contacts Hindi-->
+    <string name="contact_text_hindi">कॉन्टैक्ट*</string>
+    <string name="contacts_hindi">कॉन्टैक्ट</string>
+    <string name="lend_hindi">उधार</string>
+    <string name="money_taken_hindi">पैसे लिए</string>
+    <string name="money_given_hindi">पैसे दिए</string>
+    <string name="edit_contact_hindi">एडिट कॉन्टैक्ट</string>
+    <string name="email_hindi">ईमेल</string>
+    <string name="phone_no_hindi">फ़ोन नंबर</string>
 
 
 </resources>

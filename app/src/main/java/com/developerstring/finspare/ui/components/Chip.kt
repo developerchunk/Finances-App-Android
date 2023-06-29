@@ -2,10 +2,13 @@ package com.developerstring.finspare.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -21,7 +24,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.developerstring.finspare.ui.theme.*
+import com.developerstring.finspare.ui.theme.UIBlue
+import com.developerstring.finspare.ui.theme.colorDarkGray
+import com.developerstring.finspare.ui.theme.fontInter
+import com.developerstring.finspare.ui.theme.textColorBW
 import com.developerstring.finspare.util.keyToTransactionType
 
 @Composable
@@ -52,7 +58,6 @@ fun CustomChip(
             .height(35.dp)
             .clip(CircleShape)
             .background(background)
-            .border(width = 1.dp, color = colorGray, shape = CircleShape)
             .clickable(
                 onClick = {
                     onSelected(title)
@@ -106,7 +111,6 @@ fun SearchChip(
             .height(35.dp)
             .clip(CircleShape)
             .background(background)
-            .border(width = 1.dp, color = colorGray, shape = CircleShape)
             .clickable(
                 onClick = {
                     onSelected(title)

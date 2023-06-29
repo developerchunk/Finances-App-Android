@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
 
 
                 profileViewModel.getAllCategories()
+                profileViewModel.getAllProfiles()
 
                 val darkThemeEnable by profileViewModel.profileTheme.collectAsState()
                 DARK_THEME_ENABLE = when(darkThemeEnable) {

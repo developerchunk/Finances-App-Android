@@ -2,14 +2,32 @@ package com.developerstring.finspare.screen.charts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -19,22 +37,42 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.developerstring.finspare.ui.components.MonthTransactions
 import com.developerstring.finspare.sharedviewmodel.ProfileViewModel
 import com.developerstring.finspare.sharedviewmodel.SharedViewModel
-import com.developerstring.finspare.ui.components.*
-import com.developerstring.finspare.ui.theme.*
-import com.developerstring.finspare.util.*
+import com.developerstring.finspare.ui.components.ActivityBarChart
+import com.developerstring.finspare.ui.components.LineChart
+import com.developerstring.finspare.ui.components.MonthTransactions
+import com.developerstring.finspare.ui.components.MonthYearPickerCalender
+import com.developerstring.finspare.ui.components.SimpleChipButton
+import com.developerstring.finspare.ui.components.TabLayoutChartScreen
+import com.developerstring.finspare.ui.theme.LARGE_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.LightGreen
+import com.developerstring.finspare.ui.theme.MEDIUM_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.SMALL_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.TEXT_FIELD_SIZE
+import com.developerstring.finspare.ui.theme.TOP_APP_BAR_ELEVATION
+import com.developerstring.finspare.ui.theme.TOP_APP_BAR_HEIGHT
+import com.developerstring.finspare.ui.theme.UIBlue
+import com.developerstring.finspare.ui.theme.backgroundColor
+import com.developerstring.finspare.ui.theme.backgroundColorBW
+import com.developerstring.finspare.ui.theme.colorGray
+import com.developerstring.finspare.ui.theme.fontInter
+import com.developerstring.finspare.ui.theme.textColorBW
 import com.developerstring.finspare.util.Constants.ADD_TRANSACTION_TYPE
 import com.developerstring.finspare.util.Constants.DARK_THEME_ENABLE
 import com.developerstring.finspare.util.Constants.INDIAN_CURRENCY
 import com.developerstring.finspare.util.Constants.SPENT
+import com.developerstring.finspare.util.LanguageText
 import com.developerstring.finspare.util.dataclass.LineChartData
+import com.developerstring.finspare.util.keyToTransactionType
+import com.developerstring.finspare.util.monthToName
+import com.developerstring.finspare.util.simplifyAmount
+import com.developerstring.finspare.util.simplifyAmountIndia
 import com.developerstring.finspare.util.state.RoundTypeBarChart
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
-import java.util.*
+import java.util.Calendar
 
 @Composable
 fun ActivityChartScreen(
@@ -548,9 +586,10 @@ fun QuarterActivityChart(
             }
 
             Column(
-                modifier = Modifier.clickable {
-                    monthPickerClicked = true
-                },
+//                modifier = Modifier
+//                    .clickable {
+//                    monthPickerClicked = true
+//                },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -598,21 +637,21 @@ fun QuarterActivityChart(
 
         }
 
-        if (monthPickerClicked) {
-            MonthYearPickerCalender(
-                visible = true,
-                month_ = month,
-                year_ = year,
-                confirmClicked = { m,y ->
-                    monthPickerClicked = false
-                    month = m
-                    year = y
-                },
-                cancelClicked = {
-                    monthPickerClicked = false
-                }
-            )
-        }
+//        if (monthPickerClicked) {
+//            MonthYearPickerCalender(
+//                visible = true,
+//                month_ = month,
+//                year_ = year,
+//                confirmClicked = { m,y ->
+//                    monthPickerClicked = false
+//                    month = m
+//                    year = 2022
+//                },
+//                cancelClicked = {
+//                    monthPickerClicked = false
+//                }
+//            )
+//        }
 
         Column(
             modifier = Modifier

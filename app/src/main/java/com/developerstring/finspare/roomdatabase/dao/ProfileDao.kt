@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ProfileDao {
 
+    @Query("SELECT * FROM profile_table")
+    fun getAllProfile(): Flow<List<ProfileModel>>
+
     @Query("SELECT * FROM profile_table WHERE id=:profileId")
     fun getSelectedProfile(profileId: Int): Flow<ProfileModel>
 
@@ -34,7 +37,13 @@ interface ProfileDao {
     @Query("UPDATE profile_table SET language=:language WHERE id=:profileId")
     suspend fun updateProfileLanguage(profileId: Int,language: String)
 
+    @Query("DELETE FROM profile_table WHERE id=:profileId")
+    suspend fun deleteProfile(profileId: Int)
+
     @Query("DELETE FROM profile_table")
     suspend fun deleteAllProfiles()
+
+    @Query("UPDATE profile_table SET total_amount=:amount, amount_type=:amountType WHERE id=:profileId")
+    suspend fun updateContactAmount(amount: Int, amountType: String, profileId: Int)
 
 }

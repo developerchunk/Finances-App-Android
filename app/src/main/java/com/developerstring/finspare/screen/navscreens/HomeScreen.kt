@@ -2,10 +2,30 @@ package com.developerstring.finspare.screen.navscreens
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -23,22 +43,43 @@ import androidx.navigation.NavController
 import com.developerstring.finspare.R
 import com.developerstring.finspare.navigation.navgraph.NavRoute
 import com.developerstring.finspare.roomdatabase.models.TransactionModel
-import com.developerstring.finspare.ui.components.MyActivityContent
+import com.developerstring.finspare.screen.transaction.settleDeleteTransaction
 import com.developerstring.finspare.sharedviewmodel.ProfileViewModel
 import com.developerstring.finspare.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.finspare.sharedviewmodel.SharedViewModel
 import com.developerstring.finspare.ui.components.ActivityCardItems
 import com.developerstring.finspare.ui.components.DisplayAlertDialog
 import com.developerstring.finspare.ui.components.MessageBar
-import com.developerstring.finspare.ui.theme.*
-import com.developerstring.finspare.util.*
+import com.developerstring.finspare.ui.components.MyActivityContent
+import com.developerstring.finspare.ui.theme.Dark
+import com.developerstring.finspare.ui.theme.DarkGreen
+import com.developerstring.finspare.ui.theme.EXTRA_LARGE_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.EXTRA_SMALL_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.Green
+import com.developerstring.finspare.ui.theme.LightGreen
+import com.developerstring.finspare.ui.theme.MEDIUM_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.TEXT_FIELD_SIZE
+import com.developerstring.finspare.ui.theme.UIBlue
+import com.developerstring.finspare.ui.theme.backgroundColor
+import com.developerstring.finspare.ui.theme.fontInter
+import com.developerstring.finspare.ui.theme.greenIconColor
+import com.developerstring.finspare.ui.theme.lightBlueGraphColor
+import com.developerstring.finspare.ui.theme.lightGreenGraphColor
+import com.developerstring.finspare.ui.theme.textColorBW
 import com.developerstring.finspare.util.Constants.ENGLISH
 import com.developerstring.finspare.util.Constants.INDIAN_CURRENCY
 import com.developerstring.finspare.util.Constants.OTHER
+import com.developerstring.finspare.util.LanguageText
+import com.developerstring.finspare.util.MessageBarContentLastTransaction
+import com.developerstring.finspare.util.TransactionAction
 import com.developerstring.finspare.util.dataclass.ActivityCardData
+import com.developerstring.finspare.util.keyToTransactionType
+import com.developerstring.finspare.util.simplifyAmount
+import com.developerstring.finspare.util.simplifyAmountIndia
 import com.developerstring.finspare.util.state.MessageBarState
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun HomeScreen(
@@ -49,9 +90,12 @@ fun HomeScreen(
 ) {
 
     val profileModel by profileViewModel.selectedProfile.collectAsState()
-
     val month = SimpleDateFormat("M", Locale(ENGLISH)).format(Date())
     val year = SimpleDateFormat("yyyy", Locale(ENGLISH)).format(Date())
+
+    LaunchedEffect(key1 = true) {
+        profileViewModel.getProfileDetails()
+    }
 
     // get current month spending
     sharedViewModel.searchMonthSpent(
@@ -116,7 +160,8 @@ fun HomeScreen(
                     spentPercent = if (spentPercent <= 1f) spentPercent else 1f,
                     savingPercent = if (savingsPercent <= 1f) savingsPercent else 1f,
                     currency = profileModel.currency.last().toString(),
-                    text = stringResource(id = languageText.totalBalance)
+                    text = stringResource(id = languageText.totalBalance),
+                    navController = navController
                 )
             }
 
@@ -263,13 +308,15 @@ fun HomeScreen(
                 MessageBarContent(
                     id = lastTransactionID.value!!,
                     publicSharedViewModel = publicSharedViewModel,
-                    sharedViewModel = sharedViewModel
+                    sharedViewModel = sharedViewModel,
+                    profileViewModel = profileViewModel
                 ) {
                     transactionModel = it
                     openDialog = true
                 }
 
             }
+
             else -> {
                 publicSharedViewModel.messageBarState.value = MessageBarState.CLOSED
             }
@@ -305,9 +352,19 @@ fun HomeScreen(
                 openDialog = false
             },
             onYesClicked = {
+                profileViewModel.saveTotalAmount(
+                    amount = settleDeleteTransaction(
+                        transactionType = transactionModel.transaction_type,
+                        totalAmount = profileModel.total_amount,
+                        oldAmount = transactionModel.amount
+                    )
+                )
                 publicSharedViewModel.messageBarState.value = MessageBarState.CLOSED
                 sharedViewModel.transactionModel.value = transactionModel
-                sharedViewModel.transactionAction(action = TransactionAction.DELETE)
+                sharedViewModel.transactionAction(
+                    action = TransactionAction.DELETE,
+                    id = transactionModel.id
+                )
             })
     }
 }
@@ -317,22 +374,29 @@ fun MessageBarContent(
     id: Int,
     publicSharedViewModel: PublicSharedViewModel,
     sharedViewModel: SharedViewModel,
+    profileViewModel: ProfileViewModel,
     onClicked: (TransactionModel) -> Unit
 ) {
 
     sharedViewModel.getSelectedTransaction(transactionID = id)
     val getTransactionModel by sharedViewModel.selectedTransaction.collectAsState()
+    val selectedContact by profileViewModel.selectedContact.collectAsState()
+
 
     getTransactionModel?.let {
         MessageBar(
             message =
-            if (it.subCategory != "") {
-                it.subCategory
+            if (it.amount_type.isNotEmpty()) {
+                selectedContact.name
             } else {
-                if (it.category != "") it.category
-                else {
-                    if (it.transactionMode != "") it.transactionMode
-                    else it.transactionModeOther
+                if (it.subCategory != "") {
+                    it.subCategory
+                } else {
+                    if (it.category != "") it.category
+                    else {
+                        if (it.transactionMode != "") it.transactionMode
+                        else it.transactionModeOther
+                    }
                 }
             },
             publicSharedViewModel = publicSharedViewModel,
@@ -345,7 +409,8 @@ fun MessageBarContent(
                 }
             } else {
                 it.transaction_type.keyToTransactionType()
-            }
+            },
+            profileAmountType = it.amount_type
         ) {
             onClicked(it)
         }
@@ -353,6 +418,7 @@ fun MessageBarContent(
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TopGraphMainScreen(
     total_amount: Int,
@@ -363,7 +429,8 @@ fun TopGraphMainScreen(
     strokeWidth: Dp = 12.dp,
     animDuration: Int = 1000,
     currency: String,
-    text: String
+    text: String,
+    navController: NavController
 ) {
 
     var animationPlayed by remember { mutableStateOf(false) }
@@ -391,7 +458,16 @@ fun TopGraphMainScreen(
         contentAlignment = Alignment.Center
     ) {
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.combinedClickable(
+                onClick = {
+                    navController.navigate(NavRoute.AmountChartScreen.route)
+                },
+                onLongClick = {
+                    navController.navigate(NavRoute.EditProfileScreen.route)
+                }
+            )) {
             Text(
                 text = "$currency " +
                         if (currency == INDIAN_CURRENCY) simplifyAmountIndia(amount = total_amount)

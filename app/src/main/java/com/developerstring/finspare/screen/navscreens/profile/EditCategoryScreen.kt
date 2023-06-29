@@ -4,16 +4,40 @@ import android.widget.Toast
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,7 +52,14 @@ import com.developerstring.finspare.R
 import com.developerstring.finspare.navigation.navgraph.NavRoute
 import com.developerstring.finspare.roomdatabase.models.CategoryModel
 import com.developerstring.finspare.sharedviewmodel.ProfileViewModel
-import com.developerstring.finspare.ui.theme.*
+import com.developerstring.finspare.ui.theme.EXTRA_LARGE_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.TEXT_FIELD_SIZE
+import com.developerstring.finspare.ui.theme.TOP_APP_BAR_HEIGHT
+import com.developerstring.finspare.ui.theme.backgroundColor
+import com.developerstring.finspare.ui.theme.colorList
+import com.developerstring.finspare.ui.theme.fontInter
+import com.developerstring.finspare.ui.theme.textBoxBackColor
+import com.developerstring.finspare.ui.theme.textColorBW
 import com.developerstring.finspare.util.state.RequestState
 import kotlinx.coroutines.delay
 
@@ -279,7 +310,7 @@ fun CategoryItem(
                 onClick = {
                     onClick(categoryModel.id)
                 }),
-        elevation = 5.dp,
+//        elevation = 5.dp,
         color = Color.Transparent,
         shape = RoundedCornerShape(20.dp)
     ) {
@@ -290,7 +321,7 @@ fun CategoryItem(
                     shape = RoundedCornerShape(20.dp),
                 )
                 .fillMaxWidth()
-                .background(contentColorCard),
+                .background(textBoxBackColor),
             verticalAlignment = Alignment.CenterVertically
         ) {
 

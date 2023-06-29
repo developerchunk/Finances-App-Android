@@ -9,6 +9,8 @@ import javax.inject.Inject
 @ViewModelScoped
 class ProfileRepository @Inject constructor(private val profileDao: ProfileDao) {
 
+    val getAllProfiles: Flow<List<ProfileModel>> = profileDao.getAllProfile()
+
     fun getSelectedProfile(profileId: Int): Flow<ProfileModel?> {
         return profileDao.getSelectedProfile(profileId = profileId)
     }
@@ -47,6 +49,14 @@ class ProfileRepository @Inject constructor(private val profileDao: ProfileDao) 
 
     suspend fun deleteAllProfiles() {
         profileDao.deleteAllProfiles()
+    }
+
+    suspend fun deleteProfile(profileId: Int) {
+        profileDao.deleteProfile(profileId)
+    }
+
+    suspend fun updateContactAmount(profileId: Int, amount: Int, amountType: String) {
+        profileDao.updateContactAmount(amount = amount, amountType = amountType, profileId = profileId)
     }
 
 }

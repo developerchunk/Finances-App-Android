@@ -1,5 +1,6 @@
 package com.developerstring.finspare.roomdatabase.database
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.developerstring.finspare.roomdatabase.dao.CategoryDao
@@ -12,8 +13,11 @@ import com.developerstring.finspare.roomdatabase.models.TransactionModel
 // we can add our database tables here
 @Database(
     entities = [TransactionModel::class, ProfileModel::class, CategoryModel::class],
-    version = 1,
+    version = 2,
     exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+    ]
 )
 abstract class TransactionDatabase : RoomDatabase() {
 

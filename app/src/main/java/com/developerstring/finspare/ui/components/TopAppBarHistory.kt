@@ -1,27 +1,54 @@
 package com.developerstring.finspare.ui.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -30,11 +57,20 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.finspare.R
 import com.developerstring.finspare.roomdatabase.models.CategoryModel
+import com.developerstring.finspare.roomdatabase.models.ProfileModel
 import com.developerstring.finspare.sharedviewmodel.SharedViewModel
-import com.developerstring.finspare.ui.theme.*
+import com.developerstring.finspare.ui.theme.EXTRA_LARGE_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.TEXT_FIELD_SIZE
+import com.developerstring.finspare.ui.theme.TOP_APP_BAR_HEIGHT
+import com.developerstring.finspare.ui.theme.backgroundColorBW
+import com.developerstring.finspare.ui.theme.fontInter
+import com.developerstring.finspare.ui.theme.textColorBW
+import com.developerstring.finspare.util.Constants
 import com.developerstring.finspare.util.Constants.FILTER_NAME
 import com.developerstring.finspare.util.LanguageText
+import com.developerstring.finspare.util.ProfileListReturn
 import com.developerstring.finspare.util.filterListText
+import com.developerstring.finspare.util.refineProfileModel
 import com.developerstring.finspare.util.state.FilterTransactionState
 import com.developerstring.finspare.util.state.RequestState
 import com.developerstring.finspare.util.state.SearchBarState
@@ -45,13 +81,22 @@ import com.google.accompanist.flowlayout.FlowRow
 fun TopAppBarHistory(
     sharedViewModel: SharedViewModel,
     categoriesModels: RequestState<List<CategoryModel>>,
+    allProfiles: RequestState<List<ProfileModel>>,
     navController: NavController,
     searchBarState: SearchBarState,
     searchBarText: String,
-    languageText: LanguageText
+    languageText: LanguageText,
 ) {
 
+    var menuExpanded by rememberSaveable {
+        mutableStateOf(false)
+    }
+
     var categories by remember {
+        mutableStateOf(listOf<String>())
+    }
+
+    var profiles by remember {
         mutableStateOf(listOf<String>())
     }
 
@@ -59,9 +104,20 @@ fun TopAppBarHistory(
         categories = categoriesModels.data.map { it.category }.sorted()
     }
 
+    ProfileListReturn(
+        profiles = allProfiles,
+        profileList = { profileModels ->
+            profiles = profileModels.refineProfileModel().map { it.name }.sorted()
+        }
+    )
+
     var filter by sharedViewModel.filterState
-    var filterText by remember {
+    var filterText by rememberSaveable {
         mutableStateOf("")
+    }
+
+    var topAppBarHistoryFilter by rememberSaveable {
+        mutableStateOf(TopAppBarHistoryFilter.NONE)
     }
 
     LaunchedEffect(key1 = true) {
@@ -71,7 +127,8 @@ fun TopAppBarHistory(
     }
 
     Surface(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth(),
         color = backgroundColorBW
     ) {
         Column(
@@ -86,7 +143,11 @@ fun TopAppBarHistory(
                     DefaultTopAppBarHistory(
                         navController = navController,
                         sharedViewModel = sharedViewModel,
-                        languageText = languageText
+                        languageText = languageText,
+                        menuExpanded = menuExpanded,
+                        onMenuIconCLicked = {
+                            menuExpanded = it
+                        }
                     )
                 }
 
@@ -119,28 +180,80 @@ fun TopAppBarHistory(
                 }
             }
 
+            AnimatedVisibility(
+                visible = menuExpanded,
+                enter = expandVertically(
+                    animationSpec = tween(durationMillis = 1000)
+                )
+                        + fadeIn(
+                    animationSpec = tween(durationMillis = 1000)
+                ),
+                exit = shrinkVertically(
+                    animationSpec = tween(durationMillis = 1000)
+                )
+                        + fadeOut(
+                    animationSpec = tween(durationMillis = 1000)
+                )
+            ) {
 
+                Column(modifier = Modifier.fillMaxWidth()) {
 
-            TopAppBarFilterContent(
-                categories = categories,
-                selectedList = {
-                    filterText = it
-                    if (filterText.isNotEmpty()) {
-                        filter = FilterTransactionState.OPENED
-                        if (filter == FilterTransactionState.OPENED && searchBarState == SearchBarState.TRIGGERED) {
-                            sharedViewModel.getFilterSearchedTransactions(
-                                searchQuery = "%$searchBarText%",
-                                filterQuery = "%${filterText.filterListText()}%"
-                            )
-                        } else {
-                            sharedViewModel.getSearchedTransactions(searchQuery = "%${filterText.filterListText()}%")
-                            sharedViewModel.searchBarState.value = SearchBarState.DELETE
+                    // category
+                    TopAppBarFilterContent(
+                        categories = categories,
+                        topAppBarHistoryFilter = topAppBarHistoryFilter,
+                        topAppBarHistoryFilterChanged = TopAppBarHistoryFilter.CATEGORY,
+                        filterText = filterText,
+                        selectedList = {
+                            topAppBarHistoryFilter = TopAppBarHistoryFilter.CATEGORY
+                            filterText = it
+                            if (filterText.isNotEmpty()) {
+                                filter = FilterTransactionState.OPENED
+                                if (filter == FilterTransactionState.OPENED && searchBarState == SearchBarState.TRIGGERED) {
+                                    sharedViewModel.getFilterSearchedTransactions(
+                                        searchQuery = "%$searchBarText%",
+                                        filterQuery = "%${filterText.filterListText()}%"
+                                    )
+                                } else {
+                                    sharedViewModel.getSearchedTransactions(searchQuery = "%${filterText.filterListText()}%")
+                                    sharedViewModel.searchBarState.value = SearchBarState.DELETE
+                                }
+                            } else {
+                                filter = FilterTransactionState.CLOSED
+                            }
                         }
-                    } else {
-                        filter = FilterTransactionState.CLOSED
+                    )
+
+                    // contact
+                    if (profiles.isNotEmpty()) {
+                        TopAppBarFilterContent(
+                            categories = profiles,
+                            topAppBarHistoryFilter = topAppBarHistoryFilter,
+                            topAppBarHistoryFilterChanged = TopAppBarHistoryFilter.CONTACT,
+                            profiles = true,
+                            filterText = filterText,
+                            selectedList = {
+                                topAppBarHistoryFilter = TopAppBarHistoryFilter.CONTACT
+                                filterText = it
+                                if (filterText.isNotEmpty()) {
+                                    filter = FilterTransactionState.OPENED
+                                    if (filter == FilterTransactionState.OPENED && searchBarState == SearchBarState.TRIGGERED) {
+                                        sharedViewModel.getFilterSearchedTransactions(
+                                            searchQuery = "%$searchBarText%",
+                                            filterQuery = "%${filterText.filterListText()}%"
+                                        )
+                                    } else {
+                                        sharedViewModel.getSearchedTransactions(searchQuery = "%${filterText.filterListText()}%")
+                                        sharedViewModel.searchBarState.value = SearchBarState.DELETE
+                                    }
+                                } else {
+                                    filter = FilterTransactionState.CLOSED
+                                }
+                            }
+                        )
                     }
                 }
-            )
+            }
 
         }
     }
@@ -150,11 +263,14 @@ fun TopAppBarHistory(
 @Composable
 fun TopAppBarFilterContent(
     categories: List<String>,
+    profiles: Boolean = false,
+    topAppBarHistoryFilter: TopAppBarHistoryFilter,
+    topAppBarHistoryFilterChanged: TopAppBarHistoryFilter,
+    filterText: String,
     selectedList: (String) -> Unit,
 ) {
 
-    val filterList = FILTER_NAME.plus(categories)
-
+    val filterList = if (profiles) categories else FILTER_NAME.plus(categories)
 
     val expandBackground = Brush.horizontalGradient(
         colors = listOf(
@@ -168,7 +284,11 @@ fun TopAppBarFilterContent(
     }
 
     var selected by remember {
-        mutableStateOf("")
+        mutableStateOf(filterText)
+    }
+
+    if (topAppBarHistoryFilterChanged != topAppBarHistoryFilter) {
+        selected = ""
     }
 
 
@@ -206,6 +326,9 @@ fun TopAppBarFilterContent(
                                 selected = selected,
                                 onSelected = { text ->
                                     selected = if (text == selected) "" else text
+                                    if (text == selected) {
+                                        Constants.oldFirstFilter.value = false
+                                    }
                                     selectedList(selected)
                                 })
                         }
@@ -282,16 +405,20 @@ fun TopAppBarFilterContent(
 fun DefaultTopAppBarHistory(
     navController: NavController,
     sharedViewModel: SharedViewModel,
-    languageText: LanguageText
+    languageText: LanguageText,
+    menuExpanded: Boolean,
+    onMenuIconCLicked: (Boolean) -> Unit
 ) {
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(TOP_APP_BAR_HEIGHT),
+            .height(TOP_APP_BAR_HEIGHT)
+            .padding(end = 10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
+
 
         IconButton(onClick = {
             navController.popBackStack()
@@ -312,15 +439,28 @@ fun DefaultTopAppBarHistory(
             color = textColorBW
         )
 
-        IconButton(onClick = {
-            sharedViewModel.searchBarState.value = SearchBarState.OPENED
-        }) {
-            Icon(
-                modifier = Modifier.size(28.dp),
-                imageVector = Icons.Rounded.Search,
-                contentDescription = "search",
-                tint = textColorBW
-            )
+
+        Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+            IconButton(onClick = {
+                sharedViewModel.searchBarState.value = SearchBarState.OPENED
+            }) {
+                Icon(
+                    modifier = Modifier.size(28.dp),
+                    imageVector = Icons.Rounded.Search,
+                    contentDescription = "search",
+                    tint = textColorBW
+                )
+            }
+            IconButton(onClick = {
+                onMenuIconCLicked(!menuExpanded)
+            }) {
+                Icon(
+                    modifier = Modifier.size(26.dp),
+                    painter = painterResource(id = R.drawable.filter_menu_icon),
+                    contentDescription = "menu",
+                    tint = textColorBW
+                )
+            }
         }
 
     }
@@ -396,6 +536,7 @@ fun SearchedTopAppBarHistory(
                                     TrailingIconStateSearch.DELETE_TEXT
                                 }
                             }
+
                             TrailingIconStateSearch.CLOSE_TOP_BAR -> {
                                 if (text.isNotEmpty()) {
                                     onTextChange("")
@@ -433,4 +574,10 @@ fun SearchedTopAppBarHistory(
 
     }
 
+}
+
+enum class TopAppBarHistoryFilter {
+    CATEGORY,
+    CONTACT,
+    NONE
 }

@@ -7,8 +7,18 @@ import androidx.navigation.navigation
 import com.developerstring.finspare.navigation.Graph
 import com.developerstring.finspare.navigation.setupnav.onStartNavGraph
 import com.developerstring.finspare.screen.charts.ActivityChartScreen
+import com.developerstring.finspare.screen.charts.AmountChartScreen
 import com.developerstring.finspare.screen.charts.CategoryChartScreen
-import com.developerstring.finspare.screen.navscreens.profile.*
+import com.developerstring.finspare.screen.charts.ProfileAmountChartScreen
+import com.developerstring.finspare.screen.navscreens.profile.AboutScreen
+import com.developerstring.finspare.screen.navscreens.profile.EditCategoryDetailScreen
+import com.developerstring.finspare.screen.navscreens.profile.EditCategoryScreen
+import com.developerstring.finspare.screen.navscreens.profile.EditContactsDetailScreen
+import com.developerstring.finspare.screen.navscreens.profile.EditContactsScreen
+import com.developerstring.finspare.screen.navscreens.profile.EditLanguageScreen
+import com.developerstring.finspare.screen.navscreens.profile.EditProfileScreen
+import com.developerstring.finspare.screen.navscreens.profile.SettingScreen
+import com.developerstring.finspare.screen.navscreens.profile.TermsAndConditionsScreen
 import com.developerstring.finspare.screen.transaction.AddTransaction
 import com.developerstring.finspare.screen.transaction.TransactionDetailsScreen
 import com.developerstring.finspare.screen.transaction.ViewHistoryScreen
@@ -46,7 +56,7 @@ fun NavGraphBuilder.navGraph(
             ViewHistoryScreen(
                 sharedViewModel = sharedViewModel,
                 profileViewModel = profileViewModel,
-                navController = navController
+                navController = navController,
             )
         }
 
@@ -72,6 +82,22 @@ fun NavGraphBuilder.navGraph(
             route = NavRoute.EditLanguageScreen.route
         ) {
             EditLanguageScreen(
+                profileViewModel = profileViewModel,
+                navController = navController,
+            )
+        }
+        composable(
+            route = NavRoute.EditContactsScreen.route
+        ) {
+            EditContactsScreen(
+                profileViewModel = profileViewModel,
+                navController = navController,
+            )
+        }
+        composable(
+            route = NavRoute.EditContactsDetailScreen.route
+        ) {
+            EditContactsDetailScreen(
                 profileViewModel = profileViewModel,
                 navController = navController,
             )
@@ -134,6 +160,25 @@ fun NavGraphBuilder.navGraph(
         ) {
             TermsAndConditionsScreen(
                 navController = navController
+            )
+        }
+
+        composable(
+            route = NavRoute.AmountChartScreen.route
+        ) {
+            AmountChartScreen(
+                navController = navController,
+                sharedViewModel = sharedViewModel,
+                profileViewModel = profileViewModel
+            )
+        }
+
+        composable(
+            route = NavRoute.ProfileAmountChartScreen.route
+        ) {
+            ProfileAmountChartScreen(
+                navController = navController,
+                profileViewModel = profileViewModel
             )
         }
     }

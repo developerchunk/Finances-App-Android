@@ -3,7 +3,14 @@ package com.developerstring.finspare.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -33,6 +40,7 @@ import com.developerstring.finspare.sharedviewmodel.SharedViewModel
 import com.developerstring.finspare.ui.theme.UIBlue
 import com.developerstring.finspare.ui.theme.backgroundColorBW
 import com.developerstring.finspare.ui.theme.fontInter
+import com.developerstring.finspare.ui.theme.textBoxBackColor
 import com.developerstring.finspare.ui.theme.textColorBW
 import com.developerstring.finspare.util.Constants.LANGUAGE
 import com.developerstring.finspare.util.bottomNavText
@@ -46,6 +54,7 @@ fun MainScreen(
 
     profileViewModel.getProfileDetails()
     profileViewModel.getTime24Hours()
+//    profileViewModel.getContactDetails(2)
 
     val nav = rememberNavController()
     val language by profileViewModel.profileLanguage.collectAsState()
@@ -144,11 +153,23 @@ fun AddItem(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                painter = painterResource(id = if (selected) screen.icon_focused else screen.icon),
-                contentDescription = "icon",
-                tint = contentColor
-            )
+            Box(
+                modifier = Modifier
+                    .widthIn(min = 20.dp)
+                    .background(
+                        if (selected) textBoxBackColor else Color.Transparent,
+                        shape = RoundedCornerShape(100)
+                    )
+                    .padding(horizontal = 24.dp, vertical = 5.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = if (selected) screen.icon_focused else screen.icon),
+                    contentDescription = "icon",
+                    tint = contentColor
+                )
+            }
+
             Text(
                 text = stringResource(id = screen.route.bottomNavText(language = language)),
                 color = contentColor,

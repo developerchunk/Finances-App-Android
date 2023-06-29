@@ -27,8 +27,8 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
         transactionDao.updateTransaction(transactionModel = transactionModel)
     }
 
-    suspend fun deleteTransaction(transactionModel: TransactionModel) {
-        transactionDao.deleteTransaction(transactionModel = transactionModel)
+    suspend fun deleteTransaction(id: Int) {
+        transactionDao.deleteTransaction(id = id)
     }
 
     suspend fun deleteAllTransaction() {
@@ -54,7 +54,7 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
         return transactionDao.getCategorySum(
             month = month,
             year = year,
-            category = category,
+            category = "%$category%",
             transaction_type = transaction_type
         )
     }

@@ -4,7 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -25,9 +30,22 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.developerstring.finspare.navigation.navgraph.NavRoute
 import com.developerstring.finspare.sharedviewmodel.SharedViewModel
-import com.developerstring.finspare.ui.theme.*
-import com.developerstring.finspare.util.*
+import com.developerstring.finspare.ui.theme.EXTRA_SMALL_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.LightGray
+import com.developerstring.finspare.ui.theme.SMALL_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.TEXT_FIELD_SIZE
+import com.developerstring.finspare.ui.theme.UIBlue
+import com.developerstring.finspare.ui.theme.contentColorLBLD
+import com.developerstring.finspare.ui.theme.fontInter
+import com.developerstring.finspare.ui.theme.textColorBW
+import com.developerstring.finspare.util.Constants
 import com.developerstring.finspare.util.Constants.INDIAN_CURRENCY
+import com.developerstring.finspare.util.GetLastWeekTransactions
+import com.developerstring.finspare.util.LanguageText
+import com.developerstring.finspare.util.lastWeekDateCalculator
+import com.developerstring.finspare.util.monthDateCalculator
+import com.developerstring.finspare.util.simplifyAmount
+import com.developerstring.finspare.util.simplifyAmountIndia
 import com.developerstring.finspare.util.state.RoundTypeBarChart
 
 @Composable
@@ -87,7 +105,7 @@ fun MyActivityContent(
                     navController.navigate(NavRoute.ActivityChartScreen.route)
                 }
             ),
-        elevation = 5.dp,
+        elevation = 2.dp,
         color = contentColorLBLD,
         shape = RoundedCornerShape(20.dp)
     ) {

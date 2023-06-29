@@ -1,17 +1,30 @@
 package com.developerstring.finspare.screen.transaction
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -20,12 +33,20 @@ import com.developerstring.finspare.roomdatabase.models.TransactionModel
 import com.developerstring.finspare.sharedviewmodel.ProfileViewModel
 import com.developerstring.finspare.sharedviewmodel.PublicSharedViewModel
 import com.developerstring.finspare.sharedviewmodel.SharedViewModel
-import com.developerstring.finspare.ui.theme.*
+import com.developerstring.finspare.ui.theme.EXTRA_LARGE_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.TOP_APP_BAR_HEIGHT
+import com.developerstring.finspare.ui.theme.backgroundColor
+import com.developerstring.finspare.ui.theme.fontInter
+import com.developerstring.finspare.ui.theme.textColorBW
 import com.developerstring.finspare.util.Constants.ADD_FUND
 import com.developerstring.finspare.util.Constants.SAVINGS
 import com.developerstring.finspare.util.Constants.SPENT
 import com.developerstring.finspare.util.LanguageText
 import com.developerstring.finspare.util.TransactionAction
+import com.developerstring.finspare.util.calculateContactAmountOld
+import com.developerstring.finspare.util.state.AddTransactionMenu
+import com.developerstring.finspare.util.state.ProfileAmountType
+import com.developerstring.finspare.util.stringToProfileAmountType
 
 @Composable
 fun TransactionDetailsScreen(
@@ -48,6 +69,7 @@ fun TransactionDetailsScreen(
 
     val getTransactionModel by sharedViewModel.selectTransaction
     val categoryModel by profileViewModel.allCategories.collectAsState()
+    val profileModel by profileViewModel.allProfiles.collectAsState()
 
     var transactionModel by remember {
         mutableStateOf(TransactionModel())
@@ -59,6 +81,7 @@ fun TransactionDetailsScreen(
     var oldAmount by remember {
         mutableStateOf(0)
     }
+
     try {
         oldAmount = getTransactionModel.amount
     } catch (e: Exception) {
@@ -74,7 +97,31 @@ fun TransactionDetailsScreen(
 
     }
 
+    if (getTransactionModel.profile_id.isNotEmpty()) {
+        profileViewModel.getContactDetails(getTransactionModel.profile_id.toInt())
+    }
 
+    val contact by profileViewModel.selectedContact.collectAsState()
+
+    val context = LocalContext.current
+
+    var contactAmount by rememberSaveable {
+        mutableStateOf(0)
+    }
+
+    var contactAmountType by rememberSaveable {
+        mutableStateOf(ProfileAmountType.MONEY_TAKEN)
+    }
+
+    var oldContactAmountType by rememberSaveable {
+        mutableStateOf(ProfileAmountType.MONEY_TAKEN)
+    }
+
+    try {
+        oldContactAmountType = getTransactionModel.amount_type.stringToProfileAmountType()
+    } catch (_: Exception) {
+
+    }
 
     Column(
         modifier = Modifier
@@ -112,13 +159,33 @@ fun TransactionDetailsScreen(
             IconButton(onClick = {
                 profileViewModel.saveTotalAmount(
                     amount = settleDeleteTransaction(
-                        transactionType = getTransactionModel.transaction_type,
+                        transactionType = if (getTransactionModel.amount_type.isNotEmpty()) {
+                            when (getTransactionModel.amount_type) {
+                                ProfileAmountType.MONEY_TAKEN.name -> ADD_FUND
+                                ProfileAmountType.MONEY_GIVEN.name -> SPENT
+                                else -> SPENT
+                            }
+                        } else getTransactionModel.transaction_type,
                         totalAmount = totalAmount,
                         oldAmount = oldAmount
                     )
                 )
-                sharedViewModel.transactionAction(action = TransactionAction.DELETE)
+                if (getTransactionModel.amount_type.isNotEmpty()) {
+                    profileViewModel.updateContactAmount(
+                        profileId = getTransactionModel.profile_id.toInt(),
+                        amount = getTransactionModel.amount,
+                        amountType = when (getTransactionModel.amount_type.stringToProfileAmountType()) {
+                            ProfileAmountType.MONEY_TAKEN -> ProfileAmountType.MONEY_GIVEN
+                            ProfileAmountType.MONEY_GIVEN -> ProfileAmountType.MONEY_TAKEN
+                        },
+                        context = context
+                    )
+                }
                 sharedViewModel.transactionModel.value = getTransactionModel
+                sharedViewModel.transactionAction(
+                    action = TransactionAction.DELETE,
+                    id = getTransactionModel.id
+                )
                 navController.popBackStack()
             }) {
                 Icon(
@@ -139,29 +206,13 @@ fun TransactionDetailsScreen(
             TransactionContent(
                 modifier = Modifier,
                 categoryModel = categoryModel,
+                profileModel = profileModel,
                 transactionModel = getTransactionModel,
                 publicSharedViewModel = publicSharedViewModel,
                 navController = navController,
                 onSaveClicked = {
 //                    Toast.makeText(context, id.toString(), Toast.LENGTH_SHORT).show()
-                    transactionModel = TransactionModel(
-                        id = id,
-                        amount = it.amount,
-                        transaction_type = it.transaction_type,
-                        category = it.category,
-                        subCategory = it.subCategory,
-                        date = it.date,
-                        day = it.day,
-                        time = it.time,
-                        month = it.month,
-                        year = it.year,
-                        info = it.info,
-                        place = it.place,
-                        categoryOther = it.categoryOther,
-                        subCategoryOther = it.subCategoryOther,
-                        transactionMode = it.transactionMode,
-                        transactionModeOther = it.transactionModeOther
-                    )
+                    transactionModel = it.copy(id = id)
                     sharedViewModel.updateTransaction(transactionModel = transactionModel)
                     profileViewModel.getProfileAmount()
                     profileViewModel.saveTotalAmount(
@@ -170,9 +221,42 @@ fun TransactionDetailsScreen(
                             oldAmount = oldAmount,
                             newAmount = transactionModel.amount,
                             oldTransactionType = oldTransactionType!!,
-                            newTransactionType = transactionModel.transaction_type
+                            newTransactionType = if (getTransactionModel.amount_type == "") {
+                                transactionModel.transaction_type
+                            } else {
+                                when (it.amount_type) {
+                                    ProfileAmountType.MONEY_TAKEN.name -> ADD_FUND
+                                    ProfileAmountType.MONEY_GIVEN.name -> SPENT
+                                    else -> {
+                                        SPENT
+                                    }
+                                }
+                            }
                         )
                     )
+
+                    if (it.amount_type.isNotEmpty()) {
+                        calculateContactAmountOld(
+                            profileAmount = contact.total_amount,
+                            oldAmount = oldAmount,
+                            newAmount = it.amount,
+                            profileAmountType = contact.amount_type.stringToProfileAmountType(),
+                            oldAmountType = oldContactAmountType,
+                            newAmountType = it.amount_type.stringToProfileAmountType(),
+                            values = { newContactValues ->
+                                contactAmount = newContactValues.first
+                                contactAmountType = newContactValues.second
+                            }
+                        )
+
+                        profileViewModel.saveContactAmount(
+                            profileId = contact.id,
+                            amount = contactAmount,
+                            amountType = contactAmountType.name,
+                            context = context
+                        )
+                    }
+
                     navController.popBackStack()
                 },
                 time24Hours = time24Hours,
@@ -181,9 +265,10 @@ fun TransactionDetailsScreen(
                 transactionModeExpanded = transactionModeExpanded,
                 categoriesExpanded = categoriesExpanded,
                 subCategoriesExpanded = subCategoriesExpanded,
-                onTransactionModeChange = {transactionModeExpanded = it},
-                onCategoryChange = {categoriesExpanded=it},
-                onSubCategoryChange = {subCategoriesExpanded=it},
+                onTransactionModeChange = { transactionModeExpanded = it },
+                onCategoryChange = { categoriesExpanded = it },
+                onSubCategoryChange = { subCategoriesExpanded = it },
+                transactionMenu = if (getTransactionModel.amount_type == "") AddTransactionMenu.Regular else AddTransactionMenu.Lend
             )
         }
     }
@@ -217,6 +302,7 @@ fun settleTransactionAmount(
                 } else {
                     totalAmount - oldAmount
                 }
+
                 else -> totalAmount
             }
         } else {

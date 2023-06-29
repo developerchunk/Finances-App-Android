@@ -46,6 +46,9 @@ val Green = Color(0xFF04B6A5)
 val LightGreen = Color(0xFF03DAC5)
 val WhiteGreen = Color(0xFFADFFF7)
 val LightWhiteBlue = Color(0xFFF9FCFF)
+val LightestGrayBlue = Color(0xFFE1E9F1)
+val SlightGrayDark = Color(0xFF1C3042)
+
 
 val textColorBW: Color
     get() = if (!DARK_THEME_ENABLE) SlightDark else UIWhite
@@ -94,6 +97,9 @@ val lightGreenGraphColor: Color
 
 val lightBlueGraphColor: Color
     get() = if (!DARK_THEME_ENABLE) LightBlue else LightBlue.copy(alpha = 0.3f)
+
+val textBoxBackColor: Color
+    get() = if (!DARK_THEME_ENABLE) LightestGrayBlue else SlightGrayDark
 
 val colorList = listOf(
     UIBlue,

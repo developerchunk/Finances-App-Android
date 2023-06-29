@@ -3,14 +3,20 @@ package com.developerstring.finspare.ui.components
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -19,12 +25,17 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.developerstring.finspare.sharedviewmodel.PublicSharedViewModel
-import com.developerstring.finspare.ui.theme.*
+import com.developerstring.finspare.ui.theme.TEXT_FIELD_SIZE
+import com.developerstring.finspare.ui.theme.TOP_APP_BAR_ELEVATION
+import com.developerstring.finspare.ui.theme.TOP_APP_BAR_HEIGHT
+import com.developerstring.finspare.ui.theme.UIBlue
+import com.developerstring.finspare.ui.theme.fontInter
 import com.developerstring.finspare.util.state.MessageBarState
 import kotlinx.coroutines.delay
 
 @Composable
 fun MessageBar(
+    profileAmountType: String = "",
     height: Dp = TOP_APP_BAR_HEIGHT,
     message: String,
     publicSharedViewModel: PublicSharedViewModel,
@@ -71,16 +82,20 @@ fun MessageBar(
                     bottom.linkTo(parent.bottom)
                 },
                 onClick = {
-                    action()
+                    if (profileAmountType.isEmpty()) {
+                        action()
+                    }
                 }
             ) {
-                Icon(
-                    modifier = Modifier
-                        .size(28.dp),
-                    imageVector = Icons.Rounded.Delete,
-                    contentDescription = "delete",
-                    tint = Color.White,
-                )
+                if (profileAmountType.isEmpty()) {
+                    Icon(
+                        modifier = Modifier
+                            .size(28.dp),
+                        imageVector = Icons.Rounded.Delete,
+                        contentDescription = "delete",
+                        tint = Color.White,
+                    )
+                }
             }
 
             Text(

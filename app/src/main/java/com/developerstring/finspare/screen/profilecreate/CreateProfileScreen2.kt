@@ -3,13 +3,30 @@ package com.developerstring.finspare.screen.profilecreate
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +43,16 @@ import androidx.navigation.NavController
 import com.developerstring.finspare.navigation.setupnav.SetUpNavRoute
 import com.developerstring.finspare.roomdatabase.models.CategoryModel
 import com.developerstring.finspare.sharedviewmodel.ProfileViewModel
-import com.developerstring.finspare.ui.theme.*
+import com.developerstring.finspare.ui.theme.MAX_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.MEDIUM_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.TEXT_FIELD_SIZE
+import com.developerstring.finspare.ui.theme.backgroundColor
+import com.developerstring.finspare.ui.theme.colorGray
+import com.developerstring.finspare.ui.theme.contentBackgroundColor
+import com.developerstring.finspare.ui.theme.fontInter
+import com.developerstring.finspare.ui.theme.fontOpenSans
+import com.developerstring.finspare.ui.theme.textColorBLG
+import com.developerstring.finspare.ui.theme.textColorBW
 import com.developerstring.finspare.util.Constants
 import com.developerstring.finspare.util.LanguageText
 import com.developerstring.finspare.util.convertStringToInt
@@ -245,15 +271,13 @@ fun addCategoriesToDB(
     profileViewModel: ProfileViewModel
 ) {
 
-    val separator = ","
-
     if (categories is RequestState.Success) {
         if (categories.data.isEmpty())
             Constants.SUB_CATEGORY.forEach {
                 profileViewModel.addCategory(
                     CategoryModel(
                         category = it.key,
-                        subCategory = it.value.joinToString(separator)
+                        subCategory = it.value.joinToString(Constants.SEPARATOR_LIST)
                     )
                 )
             }

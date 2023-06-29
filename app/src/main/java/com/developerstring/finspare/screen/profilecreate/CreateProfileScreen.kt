@@ -1,15 +1,42 @@
 package com.developerstring.finspare.screen.profilecreate
 
 import android.widget.Toast
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -31,10 +58,22 @@ import androidx.navigation.NavController
 import com.developerstring.finspare.R
 import com.developerstring.finspare.navigation.setupnav.SetUpNavRoute
 import com.developerstring.finspare.sharedviewmodel.ProfileViewModel
-import com.developerstring.finspare.ui.theme.*
+import com.developerstring.finspare.ui.theme.MAX_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.MEDIUM_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.TEXT_FIELD_SIZE
+import com.developerstring.finspare.ui.theme.backgroundColor
+import com.developerstring.finspare.ui.theme.backgroundColorCard
+import com.developerstring.finspare.ui.theme.colorGray
+import com.developerstring.finspare.ui.theme.contentBackgroundColor
+import com.developerstring.finspare.ui.theme.fontInter
+import com.developerstring.finspare.ui.theme.fontOpenSans
+import com.developerstring.finspare.ui.theme.textColorBLG
+import com.developerstring.finspare.ui.theme.textColorBW
 import com.developerstring.finspare.util.LanguageText
 import com.developerstring.finspare.util.convertStringToAlphabets
 import com.developerstring.finspare.util.convertStringToInt
+import com.developerstring.finspare.util.formatNumberingStyle
+import com.developerstring.finspare.util.formatNumberingStyleToInt
 
 @Composable
 fun CreateProfileScreen(
@@ -50,8 +89,8 @@ fun CreateProfileScreen(
     var selectedCurrency by remember { mutableStateOf("") }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
-    val name = remember { mutableStateOf("") }
-    val amount = remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var amount by remember { mutableStateOf("") }
 
     val scrollState = rememberScrollState()
 
@@ -113,9 +152,9 @@ fun CreateProfileScreen(
                             color = textColorBLG,
                             shape = RoundedCornerShape(15.dp)
                         ),
-                    value = name.value,
+                    value = name,
                     onValueChange = {
-                        name.value = it.convertStringToAlphabets()
+                        name = it.convertStringToAlphabets()
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
@@ -160,9 +199,9 @@ fun CreateProfileScreen(
                             color = textColorBLG,
                             shape = RoundedCornerShape(15.dp)
                         ),
-                    value = amount.value,
+                    value = if (amount.isEmpty()) "" else amount.toInt().formatNumberingStyle("$"),
                     onValueChange = {
-                        amount.value = it.convertStringToInt()
+                        amount = it.convertStringToInt()
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
@@ -283,13 +322,13 @@ fun CreateProfileScreen(
                 shape = RoundedCornerShape(25.dp),
                 onClick = {
                     if (
-                        name.value.isNotEmpty() &&
-                        amount.value.isNotEmpty() &&
+                        name.isNotEmpty() &&
+                        amount.isNotEmpty() &&
                         selectedCurrency.isNotEmpty()
                     ) {
                         profileViewModel.saveProfileDetails1(
-                            name_ = name.value,
-                            amount_ = amount.value.toInt(),
+                            name_ = name,
+                            amount_ = amount.formatNumberingStyleToInt(),
                             currency_ = selectedCurrency
                         )
                         navController.popBackStack()

@@ -60,7 +60,6 @@ class SharedViewModel @Inject constructor(
     val filterState: MutableState<FilterTransactionState> =
         mutableStateOf(FilterTransactionState.CLOSED)
 
-
     private var _searchedTransactions =
         MutableStateFlow<RequestState<List<TransactionModel>>>(RequestState.Idle)
     val searchedTransactions: StateFlow<RequestState<List<TransactionModel>>> =
@@ -128,18 +127,19 @@ class SharedViewModel @Inject constructor(
         }
     }
 
-    private fun deleteTransaction() {
+    private fun deleteTransaction(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteTransaction(transactionModel = transactionModel.value)
+            repository.deleteTransaction(id = id)
         }
         this.transactionAction.value = TransactionAction.NO_ACTION
     }
 
     fun transactionAction(
         action: TransactionAction,
+        id: Int = 0
     ) {
         when (action) {
-            TransactionAction.DELETE -> deleteTransaction()
+            TransactionAction.DELETE -> deleteTransaction(id)
             else -> {
 
             }
@@ -157,7 +157,7 @@ class SharedViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getMonthSum(month = month, year = year, transaction_type = SPENT)
                 .collect {
-                    _monthSpent.value = it?:0
+                    _monthSpent.value = it ?: 0
                 }
         }
     }
@@ -173,7 +173,7 @@ class SharedViewModel @Inject constructor(
             viewModelScope.launch {
                 repository.getMonthSum(month = month, year = year, transaction_type = SAVINGS)
                     .collect {
-                        _monthSavings.value = it?:0
+                        _monthSavings.value = it ?: 0
                     }
             }
         } catch (_: Exception) {
@@ -186,10 +186,10 @@ class SharedViewModel @Inject constructor(
         try {
             viewModelScope.launch {
                 repository.getLastTransaction().collect { id_ ->
-                    _lastTransactionID.value = id_?:0
+                    _lastTransactionID.value = id_ ?: 0
                 }
             }
-        } catch (_:Exception) {
+        } catch (_: Exception) {
 
         }
     }
@@ -284,7 +284,7 @@ class SharedViewModel @Inject constructor(
     }
 
     private val _quarterMonth1 = MutableStateFlow<Long>(0)
-    val quarterMonth1 : StateFlow<Long> = _quarterMonth1
+    val quarterMonth1: StateFlow<Long> = _quarterMonth1
     fun getQuarterMonth1(
         month: String,
         year: String,
@@ -293,12 +293,13 @@ class SharedViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getMonthSum(month = month, year = year, transaction_type = transaction_type)
                 .collect {
-                    _quarterMonth1.value = it?:0
+                    _quarterMonth1.value = it ?: 0
                 }
         }
     }
+
     private val _quarterMonth2 = MutableStateFlow<Long>(0)
-    val quarterMonth2 : StateFlow<Long> = _quarterMonth2
+    val quarterMonth2: StateFlow<Long> = _quarterMonth2
     fun getQuarterMonth2(
         month: String,
         year: String,
@@ -307,12 +308,13 @@ class SharedViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getMonthSum(month = month, year = year, transaction_type = transaction_type)
                 .collect {
-                    _quarterMonth2.value = it?:0
+                    _quarterMonth2.value = it ?: 0
                 }
         }
     }
+
     private val _quarterMonth3 = MutableStateFlow<Long>(0)
-    val quarterMonth3 : StateFlow<Long> = _quarterMonth3
+    val quarterMonth3: StateFlow<Long> = _quarterMonth3
     fun getQuarterMonth3(
         month: String,
         year: String,
@@ -321,7 +323,7 @@ class SharedViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getMonthSum(month = month, year = year, transaction_type = transaction_type)
                 .collect {
-                    _quarterMonth3.value = it?:0
+                    _quarterMonth3.value = it ?: 0
                 }
         }
     }
@@ -351,7 +353,7 @@ class SharedViewModel @Inject constructor(
                 category = category,
                 transaction_type = transaction_type
             ).collect {
-                _categorySum.value.set(index = month_no, element = it?:0)
+                _categorySum.value.set(index = month_no, element = it ?: 0)
             }
         }
     }

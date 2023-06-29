@@ -1,6 +1,7 @@
 package com.developerstring.finspare.sharedviewmodel
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,7 +19,11 @@ import com.developerstring.finspare.util.Constants.NO
 import com.developerstring.finspare.util.Constants.PROFILE_ID
 import com.developerstring.finspare.util.Constants.YES
 import com.developerstring.finspare.util.TransactionAction
+import com.developerstring.finspare.util.calculateContactAmount
+import com.developerstring.finspare.util.state.ContactActionState
+import com.developerstring.finspare.util.state.ProfileAmountType
 import com.developerstring.finspare.util.state.RequestState
+import com.developerstring.finspare.util.stringToProfileAmountType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +36,29 @@ class ProfileViewModel @Inject constructor(
     private val repository: ProfileRepository,
     private val repositoryCategory: CategoryRepository
 ) : ViewModel() {
+
+    private var _allProfiles =
+        MutableStateFlow<RequestState<List<ProfileModel>>>(RequestState.Idle)
+    val allProfiles: StateFlow<RequestState<List<ProfileModel>>> = _allProfiles
+
+    private val _selectedContact: MutableStateFlow<ProfileModel> =
+        MutableStateFlow(ProfileModel(currency = "$"))
+    val selectedContact: StateFlow<ProfileModel> = _selectedContact
+
+    fun getAllProfiles() {
+        _allProfiles.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                repository.getAllProfiles.collect {
+                    _allProfiles.value = RequestState.Success(it)
+                }
+            }
+        } catch (e: Exception) {
+            _allProfiles.value = RequestState.Error(e)
+        }
+    }
+
+    var sortedProfiles: MutableList<ProfileModel> = mutableListOf()
 
     private var name by mutableStateOf("")
     private var totalAmount by mutableStateOf(0)
@@ -162,9 +190,25 @@ class ProfileViewModel @Inject constructor(
         _profileTime24Hours.value = _selectedProfile.value.time24Hours
     }
 
-    fun getProfileAmount() {
+    fun contactAction(
+        action: ContactActionState,
+    ) {
+        when (action) {
+            ContactActionState.DELETE -> {
+                deleteProfile(profileId = contactID.value)
+                this.contactActionState.value = ContactActionState.NONE
+            }
+
+            else -> {
+
+            }
+        }
+
+    }
+
+    fun getProfileAmount(profileId: Int = PROFILE_ID) {
         viewModelScope.launch {
-            repository.getProfileAmount(profileId = PROFILE_ID).collect { amount ->
+            repository.getProfileAmount(profileId = profileId).collect { amount ->
                 _profileTotalAmount.value = amount ?: 0
             }
         }
@@ -198,7 +242,7 @@ class ProfileViewModel @Inject constructor(
 
     }
 
-    private fun addProfile(
+    fun addProfile(
         profileModel: ProfileModel
     ) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -214,8 +258,21 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    // Category
+    private fun deleteProfile(profileId: Int) {
+        viewModelScope.launch {
+            repository.deleteProfile(profileId)
+        }
+    }
 
+    fun getContactDetails(id: Int) {
+        viewModelScope.launch {
+            repository.getSelectedProfile(profileId = id).collect { task ->
+                _selectedContact.value = task ?: ProfileModel(currency = "$")
+            }
+        }
+    }
+
+    // Category
     private var _allCategory =
         MutableStateFlow<RequestState<List<CategoryModel>>>(RequestState.Idle)
     val allCategories: StateFlow<RequestState<List<CategoryModel>>> =
@@ -333,6 +390,46 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             repositoryCategory.deleteAllCategories()
         }
+    }
+
+    var contact: MutableState<ProfileModel> = mutableStateOf(ProfileModel())
+    var contactID: MutableState<Int> = mutableStateOf(1)
+    var contactActionState: MutableState<ContactActionState> =
+        mutableStateOf(ContactActionState.NONE)
+
+    fun saveContactAmount(
+        profileId: Int,amount: Int,amountType: String, context: Context
+    ) {
+        try {
+            viewModelScope.launch {
+                repository.updateContactAmount(profileId = profileId, amount = amount, amountType= amountType)
+            }
+        } catch (e: Exception) {
+           Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun updateContactAmount(
+        profileId: Int,
+        amount: Int,
+        amountType: ProfileAmountType,
+        context: Context
+    ) {
+
+        val contactValues = calculateContactAmount(
+            profileAmount = _selectedContact.value.total_amount,
+            amount = amount,
+            profileAmountType = _selectedContact.value.amount_type.stringToProfileAmountType(),
+            amountType = amountType
+        )
+
+        saveContactAmount(
+            profileId = profileId,
+            amount = contactValues.first,
+            amountType = contactValues.second.name,
+            context = context
+        )
+
     }
 
 }

@@ -165,11 +165,7 @@ fun EditCategoryDetailContent(
                     modifier = Modifier
                         .padding(top = 30.dp, start = 20.dp, end = 20.dp)
                         .fillMaxWidth()
-                        .border(
-                            width = 1.8.dp,
-                            color = textColorBLG,
-                            shape = RoundedCornerShape(15.dp)
-                        ),
+                        .background(shape = RoundedCornerShape(15.dp), color = textBoxBackColor),
                     value = subCategory,
                     onValueChange = {
                         subCategory = it
@@ -383,9 +379,9 @@ fun EditCategoryDetailContent(
                             modifier = Modifier
                                 .padding(end = 50.dp)
                                 .fillMaxWidth(),
-                            elevation = 5.dp,
+                            elevation = 0.dp,
                             shape = RoundedCornerShape(10.dp),
-                            backgroundColor = contentColorCard
+                            backgroundColor = textBoxBackColor
                         ) {
 
                             TextField(

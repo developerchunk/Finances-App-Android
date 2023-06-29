@@ -8,10 +8,23 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -24,19 +37,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.developerstring.finspare.R
-import com.developerstring.finspare.ui.theme.*
+import com.developerstring.finspare.ui.theme.COLORS_LIST_30
+import com.developerstring.finspare.ui.theme.MEDIUM_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.TEXT_FIELD_SIZE
+import com.developerstring.finspare.ui.theme.colorGray
+import com.developerstring.finspare.ui.theme.fontInter
+import com.developerstring.finspare.ui.theme.textColorBW
 import com.developerstring.finspare.util.Constants.INDIAN_CURRENCY
+import com.developerstring.finspare.util.Constants.LANGUAGE
+import com.developerstring.finspare.util.LanguageText
 import com.developerstring.finspare.util.simplifyAmount
 import com.developerstring.finspare.util.simplifyAmountIndia
 
 @Composable
 fun PieChart(
     data: Map<String, Long>,
+    pieChartDetails: Boolean = true,
     radiusOuter: Dp = 90.dp,
     chartBarWidth: Dp = 20.dp,
     animDuration: Int = 1000,
-    currency: String
+    currency: String,
+    subTextEdit: Boolean = false,
+    subText: String = "",
+    onItemClick: (String) -> Unit
 ) {
 
     val totalSum = data.values.sum()
@@ -114,22 +137,27 @@ fun PieChart(
 
         }
 
-        AnimatedVisibility(
-            visible = animationPlayed,
-            enter = fadeIn(
-                animationSpec = tween(
-                    durationMillis = 2000,
-                    easing = LinearOutSlowInEasing
+        if (pieChartDetails) {
+            AnimatedVisibility(
+                visible = animationPlayed,
+                enter = fadeIn(
+                    animationSpec = tween(
+                        durationMillis = 2000,
+                        easing = LinearOutSlowInEasing
+                    )
                 )
-            )
-        ) {
-            DetailsPieChart(
-                data = data,
-                floatValue = dataPercentage,
-                color = COLORS_LIST_30,
-                screenWidth = screenWidth,
-                currency = currency
-            )
+            ) {
+                DetailsPieChart(
+                    data = data,
+                    floatValue = dataPercentage,
+                    color = COLORS_LIST_30,
+                    screenWidth = screenWidth,
+                    currency = currency,
+                    subTextEdit = subTextEdit,
+                    subText = subText,
+                    onItemClick = onItemClick
+                )
+            }
         }
 
 
@@ -147,7 +175,10 @@ fun DetailsPieChart(
     floatValue: List<Float>,
     color: List<Color>,
     screenWidth: Dp,
-    currency: String
+    currency: String,
+    subTextEdit: Boolean = false,
+    subText: String = "",
+    onItemClick: (String) -> Unit
 ) {
 
     Column(
@@ -163,7 +194,10 @@ fun DetailsPieChart(
                 color = color[index],
                 floatValue = floatValue[index],
                 screenWidth = screenWidth,
-                currency = currency
+                currency = currency,
+                subTextEdit = subTextEdit,
+                subText = subText,
+                onItemClick = onItemClick
             )
 
         }
@@ -179,7 +213,10 @@ fun PieChartDetailItem(
     color: Color,
     boxSize: Dp = 35.dp,
     screenWidth: Dp,
-    currency: String
+    currency: String,
+    subTextEdit: Boolean = false,
+    subText: String = "",
+    onItemClick: (String) -> Unit
 ) {
 
     Row(
@@ -200,9 +237,16 @@ fun PieChartDetailItem(
                 )
         )
 
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onItemClick(data.first)
+            }) {
 
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
                     modifier = Modifier
                         .padding(start = 20.dp)
@@ -211,7 +255,7 @@ fun PieChartDetailItem(
                     fontFamily = fontInter,
                     fontSize = TEXT_FIELD_SIZE,
                     color = textColorBW,
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
 
@@ -227,7 +271,7 @@ fun PieChartDetailItem(
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     modifier = Modifier.padding(start = 20.dp),
-                    text = stringResource(id = R.string.spent) + ":",
+                    text = if (subTextEdit) subText else {stringResource(id = LanguageText(LANGUAGE).spent)} + ":",
                     fontFamily = fontInter,
                     fontSize = MEDIUM_TEXT_SIZE,
                     color = colorGray,

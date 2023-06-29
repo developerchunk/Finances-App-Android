@@ -1,6 +1,5 @@
 package com.developerstring.finspare.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -17,7 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.developerstring.finspare.ui.theme.*
+import com.developerstring.finspare.ui.theme.DarkBlue
+import com.developerstring.finspare.ui.theme.LightestBlue
+import com.developerstring.finspare.ui.theme.MEDIUM_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.colorLightGray
+import com.developerstring.finspare.ui.theme.fontInter
+import com.developerstring.finspare.ui.theme.textBoxBackColor
 import com.developerstring.finspare.util.keyToTransactionType
 
 @Composable
@@ -43,11 +47,7 @@ fun SimpleChipButton(
                 }
             )
             .padding(vertical = 5.dp),
-        color = if (selected) LightestBlue else contentColorCard,
-        border = BorderStroke(
-            width = if (selected) 0.dp else 1.dp,
-            color = if (selected) Color.Transparent else SlightGray
-        ),
+        color = if (selected) LightestBlue else textBoxBackColor,
         shape = RoundedCornerShape(5.dp),
     ) {
 

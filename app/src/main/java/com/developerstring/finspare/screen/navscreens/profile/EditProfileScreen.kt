@@ -1,18 +1,42 @@
 package com.developerstring.finspare.screen.navscreens.profile
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Card
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -34,12 +58,22 @@ import com.developerstring.finspare.R
 import com.developerstring.finspare.navigation.navgraph.NavRoute
 import com.developerstring.finspare.roomdatabase.models.ProfileModel
 import com.developerstring.finspare.sharedviewmodel.ProfileViewModel
-import com.developerstring.finspare.ui.theme.*
+import com.developerstring.finspare.ui.theme.EXTRA_LARGE_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.TEXT_FIELD_SIZE
+import com.developerstring.finspare.ui.theme.TOP_APP_BAR_HEIGHT
+import com.developerstring.finspare.ui.theme.backgroundColor
+import com.developerstring.finspare.ui.theme.backgroundColorCard
+import com.developerstring.finspare.ui.theme.fontInter
+import com.developerstring.finspare.ui.theme.textBoxBackColor
+import com.developerstring.finspare.ui.theme.textColorBLG
+import com.developerstring.finspare.ui.theme.textColorBW
 import com.developerstring.finspare.util.Constants
 import com.developerstring.finspare.util.Constants.PROFILE_ID
 import com.developerstring.finspare.util.LanguageText
 import com.developerstring.finspare.util.convertStringToAlphabets
 import com.developerstring.finspare.util.convertStringToInt
+import com.developerstring.finspare.util.formatNumberingStyle
+import com.developerstring.finspare.util.formatNumberingStyleToInt
 
 @Composable
 fun EditProfileScreen(
@@ -78,6 +112,10 @@ fun EditProfileScreen(
     val heightTextFields by remember { mutableStateOf(60.dp) }
 
     val scrollState = rememberScrollState()
+
+    val currency = profileModel.currency.last().toString()
+
+    profileViewModel.getAllProfiles()
 
     Column(
         modifier = Modifier
@@ -128,9 +166,14 @@ fun EditProfileScreen(
                             id = PROFILE_ID,
                             name = newName,
                             currency = selectedCurrency,
-                            total_amount = amount.toInt(),
+                            total_amount = amount.formatNumberingStyleToInt(),
                             month_spent = newSpending.toInt(),
-                            month_saving = newSavings.toInt()
+                            month_saving =
+                                if (newSavings.isEmpty()) {
+                                    (newSpending.toInt() / 3)
+                                } else {
+                                    newSavings.toInt()
+                                }
                         )
                     )
 
@@ -176,11 +219,7 @@ fun EditProfileScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(heightTextFields)
-                        .border(
-                            width = 1.8.dp,
-                            color = textColorBLG,
-                            shape = RoundedCornerShape(15.dp)
-                        ),
+                        .background(shape = RoundedCornerShape(15.dp), color = textBoxBackColor),
                     value = newName,
                     onValueChange = {
                         newName = it.convertStringToAlphabets()
@@ -222,17 +261,13 @@ fun EditProfileScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(55.dp)
-                        .border(
-                            width = 1.8.dp,
-                            color = textColorBLG,
-                            shape = RoundedCornerShape(15.dp)
-                        )
                         .onGloballyPositioned { coordinates ->
                             textFieldSize = coordinates.size.toSize()
                         }
                         .clickable { expanded = !expanded },
                     shape = RoundedCornerShape(15.dp),
-                    backgroundColor = backgroundColor
+                    backgroundColor = textBoxBackColor,
+                    elevation = 0.dp
                 ) {
 
                     Row(
@@ -304,12 +339,8 @@ fun EditProfileScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(heightTextFields)
-                        .border(
-                            width = 1.8.dp,
-                            color = textColorBLG,
-                            shape = RoundedCornerShape(15.dp)
-                        ),
-                    value = amount,
+                        .background(shape = RoundedCornerShape(15.dp), color = textBoxBackColor),
+                    value = if (amount.isEmpty()) "" else amount.toInt().formatNumberingStyle(currency),
                     onValueChange = {
                         amount = it.convertStringToInt()
                     },
@@ -349,11 +380,7 @@ fun EditProfileScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(heightTextFields)
-                        .border(
-                            width = 1.8.dp,
-                            color = textColorBLG,
-                            shape = RoundedCornerShape(15.dp)
-                        ),
+                        .background(shape = RoundedCornerShape(15.dp), color = textBoxBackColor),
                     value = newSpending,
                     onValueChange = {
                         newSpending = it.convertStringToInt()
@@ -394,11 +421,7 @@ fun EditProfileScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(heightTextFields)
-                        .border(
-                            width = 1.8.dp,
-                            color = textColorBLG,
-                            shape = RoundedCornerShape(15.dp)
-                        ),
+                        .background(shape = RoundedCornerShape(15.dp), color = textBoxBackColor),
                     value = newSavings,
                     onValueChange = {
                         newSavings = it.convertStringToInt()
@@ -440,11 +463,6 @@ fun EditProfileScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = 55.dp)
-                        .border(
-                            width = 1.8.dp,
-                            color = textColorBLG,
-                            shape = RoundedCornerShape(15.dp)
-                        )
                         .onGloballyPositioned { coordinates ->
                             textFieldSize = coordinates.size.toSize()
                         }
@@ -452,7 +470,8 @@ fun EditProfileScreen(
                             navController.navigate(route = NavRoute.EditCategoryScreen.route)
                         },
                     shape = RoundedCornerShape(15.dp),
-                    backgroundColor = backgroundColor
+                    backgroundColor = textBoxBackColor,
+                    elevation = 0.dp
                 ) {
 
                     Row(
@@ -465,6 +484,64 @@ fun EditProfileScreen(
                                 .fillMaxWidth(0.8f)
                                 .padding(start = 20.dp),
                             text = "Edit Category List",
+                            fontSize = TEXT_FIELD_SIZE,
+                            color = textColorBW,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+
+                        Icon(
+                            imageVector = Icons.Rounded.Edit,
+                            contentDescription = "currency_icon",
+                            Modifier
+                                .padding(end = 15.dp)
+                                .size(24.dp),
+                            tint = textColorBW
+                        )
+                    }
+
+
+                }
+
+            }
+
+            // group of Contacts textField
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 3.dp, bottom = 2.dp),
+                    text = stringResource(id = languageText.contacts),
+                    fontSize = TEXT_FIELD_SIZE,
+                    color = textColorBLG,
+                    fontFamily = fontInter,
+                    fontWeight = FontWeight.Medium
+                )
+
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 55.dp)
+                        .clickable {
+                            navController.navigate(route = NavRoute.EditContactsScreen.route)
+                        },
+                    shape = RoundedCornerShape(15.dp),
+                    backgroundColor = textBoxBackColor,
+                    elevation = 0.dp
+                ) {
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth(0.8f)
+                                .padding(start = 20.dp),
+                            text = stringResource(id = languageText.editContacts),
                             fontSize = TEXT_FIELD_SIZE,
                             color = textColorBW,
                             maxLines = 2,

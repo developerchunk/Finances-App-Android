@@ -277,7 +277,7 @@ fun CategoryChartContent(
             enter = slideInVertically(
                 // Start the slide from 40 (pixels) above where the content is supposed to go, to
                 // produce a parallax effect
-                initialOffsetY = { -100 },
+                initialOffsetY = { -0 },
                 animationSpec = tween(durationMillis = 1000)
             ) + expandVertically(
                 expandFrom = Alignment.Top,
@@ -533,11 +533,12 @@ fun CategoryChartContent(
                 .fillMaxWidth()
         ) {
 
-
             PieChart(
                 data = chartData,
                 currency = currency
-            )
+            ) {
+
+            }
 
         }
 
