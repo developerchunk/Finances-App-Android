@@ -550,17 +550,17 @@ fun AddTransactionContent(
 
     LaunchedEffect(key1 = true) {
 
-        if (otherTransactionMode.isNotEmpty()) {
-            otherTransactionMode = ""
-        }
-
-        if (otherCategory.isNotEmpty()) {
-            otherCategory = ""
-        }
-
-        if (otherSubCategory.isNotEmpty()) {
-            otherSubCategory = ""
-        }
+//        if (otherTransactionMode.isNotEmpty()) {
+//            otherTransactionMode = ""
+//        }
+//
+//        if (otherCategory.isNotEmpty()) {
+//            otherCategory = ""
+//        }
+//
+//        if (otherSubCategory.isNotEmpty()) {
+//            otherSubCategory = ""
+//        }
 
         if (timeTransactionModel == "") {
             hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
@@ -795,7 +795,7 @@ fun AddTransactionContent(
                         category = category,
                         onMainTextFieldChanged = { onSubCategoryChange(it) },
                         onMainTextFieldTextChanged = { subCategory = it },
-                        onOtherMainTextFieldTextChanged = { subCategory = it },
+                        onOtherMainTextFieldTextChanged = { otherSubCategory = it },
                         trailingIconClicked = {
 
                         }
