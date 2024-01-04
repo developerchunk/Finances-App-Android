@@ -14,14 +14,14 @@ android {
             keyPassword 'Aditya@1095'
         }
     }
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.developerstring.finspare"
         minSdk 21
-        targetSdk 33
-        versionCode 4
-        versionName "1.1.1"
+        targetSdk 34
+        versionCode 5
+        versionName "1.1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

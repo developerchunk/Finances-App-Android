@@ -89,7 +89,7 @@ fun TopAppBarHistory(
 ) {
 
     var menuExpanded by rememberSaveable {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
 
     var categories by remember {

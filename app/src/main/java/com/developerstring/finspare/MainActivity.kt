@@ -67,7 +67,6 @@ class MainActivity : ComponentActivity() {
                     else -> true
                 }
 
-                // A surface container using the 'background' color from the theme
                 navController = rememberNavController()
                 RootNavGraph(
                     navController = navController,
