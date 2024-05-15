@@ -33,6 +33,11 @@ object Constants {
     const val PROFILE_DATA = "profileData"
     const val PROFILE_CREATED_STATUS_KEY = "profile_created"
 
+    // message last scan details
+    const val MESSAGE_SCAN_ENABLE_KEY = "message_scan_enable"
+//    const val MESSAGE_LAST_SCAN_KEY = "message_last_scan"
+    const val MESSAGE_ID_LAST_SCAN_KEY = "message_id_last_scan"
+
 //    var LAST_TRANSACTION = ""
 
     const val DARK_THEME = "dark_theme"
@@ -51,7 +56,7 @@ object Constants {
         SAVINGS
     )
 
-    val PROFILE_AMOUNT_TYPE = ProfileAmountType.values().toList()
+    val PROFILE_AMOUNT_TYPE = ProfileAmountType.entries.toList()
 
     const val LEND = "Lend"
     const val THIS_MONTH = "This Month"
@@ -70,7 +75,6 @@ object Constants {
     const val OTHER = "Other"
     const val TRANSACTION = "Transaction"
     const val INVESTMENT = "Investment"
-    const val CASH = "Cash"
 
     val SUB_CATEGORY = mapOf(
         "Food" to listOf(

@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -96,7 +97,7 @@ fun ActivityChartScreen(
         mutableStateOf(listOf(monthChart, quarterChart))
     }
     var chartTypeSelected by remember {
-        mutableStateOf(monthChart)
+        mutableIntStateOf(monthChart)
     }
 
     val currency = profileViewModel.profileCurrency.collectAsState().value.last().toString()
@@ -460,9 +461,9 @@ fun QuarterActivityChart(
         mutableStateOf(false)
     }
 
-    var monthPickerClicked by remember {
-        mutableStateOf(false)
-    }
+//    var monthPickerClicked by remember {
+//        mutableStateOf(false)
+//    }
 
     when (month2) {
         13 -> {

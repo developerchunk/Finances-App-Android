@@ -101,6 +101,9 @@ val lightBlueGraphColor: Color
 val textBoxBackColor: Color
     get() = if (!DARK_THEME_ENABLE) LightestGrayBlue else SlightGrayDark
 
+val messageToPaymentCard: Color
+    get() = if (!DARK_THEME_ENABLE) LighterBlue else LightDark
+
 val colorList = listOf(
     UIBlue,
     LightGreen,

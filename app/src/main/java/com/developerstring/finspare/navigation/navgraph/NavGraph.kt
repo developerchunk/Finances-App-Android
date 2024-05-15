@@ -6,6 +6,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.developerstring.finspare.navigation.Graph
 import com.developerstring.finspare.navigation.setupnav.onStartNavGraph
+import com.developerstring.finspare.screen.autopayment.AutoPaymentScreen
+import com.developerstring.finspare.screen.autopayment.MessagePaymentInfoScreen
 import com.developerstring.finspare.screen.charts.ActivityChartScreen
 import com.developerstring.finspare.screen.charts.AmountChartScreen
 import com.developerstring.finspare.screen.charts.CategoryChartScreen
@@ -164,6 +166,16 @@ fun NavGraphBuilder.navGraph(
         }
 
         composable(
+            route = NavRoute.AutoPaymentScreen.route
+        ) {
+            AutoPaymentScreen(
+                sharedViewModel = sharedViewModel,
+                profileViewModel = profileViewModel,
+                navController = navController
+            )
+        }
+
+        composable(
             route = NavRoute.AmountChartScreen.route
         ) {
             AmountChartScreen(
@@ -179,6 +191,14 @@ fun NavGraphBuilder.navGraph(
             ProfileAmountChartScreen(
                 navController = navController,
                 profileViewModel = profileViewModel
+            )
+        }
+
+        composable(
+            route = NavRoute.MessagePaymentInfoScreen.route
+        ) {
+            MessagePaymentInfoScreen(
+                navController = navController,
             )
         }
     }

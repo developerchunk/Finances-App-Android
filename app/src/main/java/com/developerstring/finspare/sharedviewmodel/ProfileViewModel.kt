@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -61,13 +62,13 @@ class ProfileViewModel @Inject constructor(
     var sortedProfiles: MutableList<ProfileModel> = mutableListOf()
 
     private var name by mutableStateOf("")
-    private var totalAmount by mutableStateOf(0)
+    private var totalAmount by mutableIntStateOf(0)
     private var currency by mutableStateOf("")
-    private var monthlySpent by mutableStateOf(0)
-    private var monthlySavings by mutableStateOf(0)
+    private var monthlySpent by mutableIntStateOf(0)
+    private var monthlySavings by mutableIntStateOf(0)
     var language by mutableStateOf("")
 
-    var categoriesSize: MutableState<Int> = mutableStateOf(0)
+    var categoriesSize: MutableState<Int> = mutableIntStateOf(0)
 
     // onBoarding
     fun saveOnBoardingStatus(context: Context) {
@@ -242,6 +243,51 @@ class ProfileViewModel @Inject constructor(
 
     }
 
+    // get the profileCreatedStatus from the data store
+//    private val _messageScanDate = MutableStateFlow("")
+    private val _messageScanID = MutableStateFlow("")
+//    val messageScanDate: StateFlow<String> = _messageScanDate
+    val messageScanIDs: StateFlow<String> = _messageScanID
+    fun messageScanDetails(context: Context) {
+        viewModelScope.launch {
+            val profileDataStore = ProfileDataStore(context = context)
+//            profileDataStore.getMessageScanDate.collect {
+//                _messageScanDate.value = it ?: ""
+//            }
+            profileDataStore.getMessageScanIDs.collect {
+                _messageScanID.value = it ?: emptyList<String>().toString()
+            }
+        }
+    }
+
+    private val _messageScanEnable = MutableStateFlow(false)
+    val messageScanEnable: StateFlow<Boolean> = _messageScanEnable
+//    fun getMessageScanEnable(context: Context) {
+//        viewModelScope.launch {
+//            ProfileDataStore(context = context).getMessageScanEnable.collect {
+//                _messageScanEnable.value = it?: false
+//            }
+//        }
+//    }
+
+    fun saveMessageScanEnable(context: Context, enable: Boolean) {
+        viewModelScope.launch {
+            ProfileDataStore(context = context).saveMessageScanEnable(enable)
+        }
+    }
+
+//    fun saveMessageScanDate(context: Context, date: String) {
+//        viewModelScope.launch {
+//            ProfileDataStore(context = context).saveMessageScanDate(date)
+//        }
+//    }
+
+    fun saveMessageScanID(context: Context, id: String) {
+        viewModelScope.launch {
+            ProfileDataStore(context = context).saveMessageScanIDs(id)
+        }
+    }
+
     fun addProfile(
         profileModel: ProfileModel
     ) {
@@ -294,7 +340,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     // Selected Category
-    var categoryId: MutableState<Int> = mutableStateOf(0)
+    var categoryId: MutableState<Int> = mutableIntStateOf(0)
     private var _selectedCategory = MutableStateFlow<CategoryModel?>(null)
     val selectedCategories: StateFlow<CategoryModel?> = _selectedCategory
 
@@ -393,19 +439,23 @@ class ProfileViewModel @Inject constructor(
     }
 
     var contact: MutableState<ProfileModel> = mutableStateOf(ProfileModel())
-    var contactID: MutableState<Int> = mutableStateOf(1)
+    var contactID: MutableState<Int> = mutableIntStateOf(1)
     var contactActionState: MutableState<ContactActionState> =
         mutableStateOf(ContactActionState.NONE)
 
     fun saveContactAmount(
-        profileId: Int,amount: Int,amountType: String, context: Context
+        profileId: Int, amount: Int, amountType: String, context: Context
     ) {
         try {
             viewModelScope.launch {
-                repository.updateContactAmount(profileId = profileId, amount = amount, amountType= amountType)
+                repository.updateContactAmount(
+                    profileId = profileId,
+                    amount = amount,
+                    amountType = amountType
+                )
             }
         } catch (e: Exception) {
-           Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show()
         }
     }
 

@@ -1,6 +1,7 @@
 package com.developerstring.finspare.sharedviewmodel
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,11 +25,14 @@ class SharedViewModel @Inject constructor(
     private val repository: TransactionRepository,
 ) : ViewModel() {
 
+    var addTransactionModel: MutableState<TransactionModel> = mutableStateOf(TransactionModel())
+    var messageID: MutableState<String> = mutableStateOf("")
+
     private var _allTransactions =
         MutableStateFlow<RequestState<List<TransactionModel>>>(RequestState.Idle)
     val allTransactions: StateFlow<RequestState<List<TransactionModel>>> = _allTransactions
 
-    var id: MutableState<Int> = mutableStateOf(0)
+    var id: MutableState<Int> = mutableIntStateOf(0)
 
     val selectTransaction: MutableState<TransactionModel> = mutableStateOf(TransactionModel())
 

@@ -6,28 +6,36 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
@@ -58,13 +66,16 @@ import com.developerstring.finspare.ui.theme.EXTRA_SMALL_TEXT_SIZE
 import com.developerstring.finspare.ui.theme.Green
 import com.developerstring.finspare.ui.theme.LightGreen
 import com.developerstring.finspare.ui.theme.MEDIUM_TEXT_SIZE
+import com.developerstring.finspare.ui.theme.SMALL_TEXT_SIZE
 import com.developerstring.finspare.ui.theme.TEXT_FIELD_SIZE
 import com.developerstring.finspare.ui.theme.UIBlue
 import com.developerstring.finspare.ui.theme.backgroundColor
+import com.developerstring.finspare.ui.theme.colorGray
 import com.developerstring.finspare.ui.theme.fontInter
 import com.developerstring.finspare.ui.theme.greenIconColor
 import com.developerstring.finspare.ui.theme.lightBlueGraphColor
 import com.developerstring.finspare.ui.theme.lightGreenGraphColor
+import com.developerstring.finspare.ui.theme.messageToPaymentCard
 import com.developerstring.finspare.ui.theme.textColorBW
 import com.developerstring.finspare.util.Constants.ENGLISH
 import com.developerstring.finspare.util.Constants.INDIAN_CURRENCY
@@ -117,11 +128,11 @@ fun HomeScreen(
     val scrollState = rememberScrollState()
 
     var spentPercent by remember {
-        mutableStateOf(0f)
+        mutableFloatStateOf(0f)
     }
 
     var savingsPercent by remember {
-        mutableStateOf(0f)
+        mutableFloatStateOf(0f)
     }
 
     spentPercent = (totalSpent.toFloat() / profileModel.month_spent.toFloat())
@@ -148,13 +159,15 @@ fun HomeScreen(
                 .verticalScroll(state = scrollState)
         ) {
 
-            Column(
+            Row(
                 modifier = Modifier
                     .padding(top = 30.dp)
+                    .padding(horizontal = 30.dp)
                     .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.Top
             ) {
+
                 TopGraphMainScreen(
                     total_amount = profileModel.total_amount,
                     spentPercent = if (spentPercent <= 1f) spentPercent else 1f,
@@ -163,6 +176,7 @@ fun HomeScreen(
                     text = stringResource(id = languageText.totalBalance),
                     navController = navController
                 )
+
             }
 
             Row(
@@ -264,6 +278,8 @@ fun HomeScreen(
                     imageScale = ContentScale.FillBounds,
                     iconCardTopPadding = 16.dp,
                     onClick = {
+                        sharedViewModel.messageID.value = ""
+                        sharedViewModel.addTransactionModel.value = TransactionModel()
                         navController.navigate(NavRoute.AddTransactionScreen.route)
                     }
                 )
@@ -288,6 +304,61 @@ fun HomeScreen(
                     }
                 )
             }
+
+            // auto pay button
+            Card(
+                modifier = Modifier
+                    .padding(top = 20.dp, start = 20.dp, end = 20.dp)
+                    .fillMaxWidth()
+                    .clickable {
+                               navController.navigate(NavRoute.AutoPaymentScreen.route)
+                    }
+                ,
+                shape = RoundedCornerShape(20.dp),
+                backgroundColor = messageToPaymentCard
+            ) {
+
+                    Column(modifier = Modifier.padding(15.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Add Payments directly from \nBank Messages you receive",
+                                fontSize = MEDIUM_TEXT_SIZE,
+                                color = textColorBW,
+                                fontFamily = fontInter,
+                                fontWeight = FontWeight.Normal
+                            )
+
+                            Box(
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .background(LightGreen)
+                                    .size(10.dp)
+                            )
+                        }
+
+                        Spacer(
+                            modifier = Modifier
+                                .height(10.dp)
+                                .fillMaxWidth()
+                        )
+
+                        Text(
+                            text = "Made an online payment? Add Payments Now! introducing effortless budgeting: Bank Messanges to Payments",
+                            fontSize = SMALL_TEXT_SIZE,
+                            color = colorGray,
+                            fontFamily = fontInter,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
+
+
+            }
+
+
             MyActivityContent(
                 sharedViewModel = sharedViewModel,
                 day_ = day,
@@ -439,14 +510,14 @@ fun TopGraphMainScreen(
         animationSpec = tween(
             durationMillis = animDuration,
             delayMillis = 0
-        )
+        ), label = ""
     )
     val savingsCurPercentage = animateFloatAsState(
         targetValue = if (animationPlayed) savingPercent else 0f,
         animationSpec = tween(
             durationMillis = animDuration,
             delayMillis = 0
-        )
+        ), label = ""
     )
     LaunchedEffect(key1 = true) {
         animationPlayed = true

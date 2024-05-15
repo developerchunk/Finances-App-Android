@@ -48,6 +48,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -123,6 +124,7 @@ import com.developerstring.finspare.util.state.MessageBarState
 import com.developerstring.finspare.util.state.ProfileAmountType
 import com.developerstring.finspare.util.state.RequestState
 import com.developerstring.finspare.util.stringToProfileAmountType
+import com.developerstring.finspare.util.stringToSet
 import com.google.accompanist.flowlayout.FlowRow
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -134,8 +136,16 @@ fun AddTransaction(
     navController: NavController,
     sharedViewModel: SharedViewModel,
     profileViewModel: ProfileViewModel,
-    publicSharedViewModel: PublicSharedViewModel
+    publicSharedViewModel: PublicSharedViewModel,
 ) {
+
+    val context = LocalContext.current
+
+    val transactionModel by sharedViewModel.addTransactionModel
+
+    val getAllMessageID by profileViewModel.messageScanIDs.collectAsState()
+    val allMessagesIDSet: MutableSet<String> = getAllMessageID.stringToSet().toMutableSet()
+    val messageID by sharedViewModel.messageID
 
     var categoriesExpanded by rememberSaveable { mutableStateOf(false) }
     var subCategoriesExpanded by rememberSaveable { mutableStateOf(false) }
@@ -143,6 +153,9 @@ fun AddTransaction(
 
     profileViewModel.getTime24Hours()
 
+    /**
+     * Collects the profile total amount as a state.
+     */
     val totalAmount by profileViewModel.profileTotalAmount.collectAsState()
     val categoryModel by profileViewModel.allCategories.collectAsState()
     val time24Hours by profileViewModel.profileTime24Hours.collectAsState()
@@ -151,7 +164,7 @@ fun AddTransaction(
 
     val languageText = LanguageText(LANGUAGE)
 
-    val menuList = AddTransactionMenu.values()
+    val menuList = AddTransactionMenu.entries
     var menuSelected by rememberSaveable {
         mutableStateOf(menuList.first())
     }
@@ -161,8 +174,6 @@ fun AddTransaction(
     }
 
     val scrollState = rememberScrollState()
-
-    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -213,7 +224,7 @@ fun AddTransaction(
                             animationSpec = tween(
                                 durationMillis = 300,
                                 easing = LinearOutSlowInEasing
-                            )
+                            ), label = ""
                         )
 
                         Text(
@@ -253,7 +264,7 @@ fun AddTransaction(
                 modifier = Modifier,
                 categoryModel = categoryModel,
                 profileModel = profileModel,
-                transactionModel = TransactionModel(),
+                transactionModel = transactionModel,
                 publicSharedViewModel = publicSharedViewModel,
                 navController = navController,
                 time24Hours = time24Hours,
@@ -285,6 +296,11 @@ fun AddTransaction(
                         )
                     }
 
+                    if (messageID.isNotEmpty() && transactionModel != TransactionModel()) {
+                        allMessagesIDSet.add(messageID)
+                        profileViewModel.saveMessageScanID(context, id = allMessagesIDSet.toString())
+                        sharedViewModel.messageID.value = ""
+                    }
                     navController.popBackStack()
                 },
                 transactionMenu = menuSelected
@@ -502,7 +518,7 @@ fun AddTransactionContent(
     val chipList = ADD_TRANSACTION_TYPE
 
     var transactionModelID by remember {
-        mutableStateOf(1)
+        mutableIntStateOf(1)
     }
 
     transactionModelID = categories.keys.find { categories.getValue(it) == TRANSACTION } ?: 1
@@ -515,15 +531,15 @@ fun AddTransactionContent(
     var day by rememberSaveable { mutableStateOf(transactionModel.day) }
 
     // for year, month, day and time temporary
-    var mYear by rememberSaveable { mutableStateOf(1) }
-    var mMonth by rememberSaveable { mutableStateOf(1) }
-    var mDay by rememberSaveable { mutableStateOf(1) }
+    var mYear by rememberSaveable { mutableIntStateOf(1) }
+    var mMonth by rememberSaveable { mutableIntStateOf(1) }
+    var mDay by rememberSaveable { mutableIntStateOf(1) }
 
     // Initializing a Calendar
     val mCalendar = Calendar.getInstance()
 
     // time data
-    var hour by rememberSaveable { mutableStateOf(0) }
+    var hour by rememberSaveable { mutableIntStateOf(0) }
     var minute by rememberSaveable {
         mutableStateOf("00")
     }
@@ -654,7 +670,8 @@ fun AddTransactionContent(
                         .fillMaxWidth()
                         .height(heightTextFields)
                         .background(shape = RoundedCornerShape(15.dp), color = textBoxBackColor),
-                    value = if (amount.isEmpty()) "" else amount.toInt().formatNumberingStyle(currency),
+                    value = if (amount.isEmpty()) "" else amount.toInt()
+                        .formatNumberingStyle(currency),
                     onValueChange = {
                         amount = it.convertStringToInt()
                     },
@@ -890,7 +907,7 @@ fun AddTransactionContent(
                                     userScrollEnabled = true
                                 ) {
                                     items(
-                                        profiles
+                                        if (profiles.isNotEmpty()) profiles.sortedBy { profileModel -> profileModel.name } else profiles
                                     ) { contact ->
 
                                         Row(modifier = Modifier

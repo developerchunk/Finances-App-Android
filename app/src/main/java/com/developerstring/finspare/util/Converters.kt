@@ -536,3 +536,5 @@ fun profilesToPieChartData(profiles: List<ProfileModel>): MutableMap<String, Lon
     return map
 
 }
+
+fun String.stringToSet(): Set<String> = this.filterNot { it == '[' || it == ']' }.split(",").map { it.trim() }.toSet()
